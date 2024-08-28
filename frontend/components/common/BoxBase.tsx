@@ -1,4 +1,5 @@
 const paddingClasses = {
+  xs: "px-4 py-4",
   sm: "px-4 py-12",
   md: "px-6 py-20",
   lg: "px-8 py-24",
