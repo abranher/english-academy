@@ -1,8 +1,8 @@
 "use client";
 
-import { Button } from "@nextui-org/react";
 import BoxBase from "../common/BoxBase";
 import { Image } from "@nextui-org/react";
+import { MyButton } from "../common/MyButton";
 
 export default function Hero() {
   return (
@@ -19,14 +19,9 @@ export default function Hero() {
                 es la mejor manera de aprender inglés en línea.
               </p>
               <div className="flex flex-col space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0">
-                <Button
-                  className="bg-zinc-900 text-white"
-                  radius="sm"
-                  variant="solid"
-                  size="lg"
-                >
+                <MyButton color="primary" radius="sm" variant="solid" size="lg">
                   Comienza hoy
-                </Button>
+                </MyButton>
               </div>
             </div>
 

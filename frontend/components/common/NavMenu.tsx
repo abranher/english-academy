@@ -10,7 +10,6 @@ import {
   NavbarMenu,
   NavbarMenuItem,
   Link,
-  Button,
   Dropdown,
   DropdownTrigger,
   Avatar,
@@ -21,6 +20,7 @@ import { signOut, useSession } from "next-auth/react";
 import NextLink from "next/link";
 import { ThemeSwitcher } from "./ThemeSwitcher";
 import { AcmeLogo } from "../icons/AcmeLogo";
+import { MyButton } from "@/components/common/MyButton";
 
 export default function NavMenu() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -108,14 +108,18 @@ export default function NavMenu() {
       ) : (
         <NavbarContent justify="end">
           <NavbarItem className="hidden lg:flex">
-            <NextLink href="/auth/signin">Iniciar sesión</NextLink>
+            <NextLink href="/auth/signin">
+              <MyButton color="default" variant="bordered" type="button">
+                Iniciar sesión
+              </MyButton>
+            </NextLink>
           </NavbarItem>
 
           <NavbarItem>
             <NextLink href="/auth/signup">
-              <Button color="primary" variant="flat" type="button">
+              <MyButton color="primary" variant="flat" type="button">
                 Crear cuenta
-              </Button>
+              </MyButton>
             </NextLink>
           </NavbarItem>
 
