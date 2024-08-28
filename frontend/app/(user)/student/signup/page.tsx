@@ -186,7 +186,7 @@ export default function SignupPage() {
             </form>
             <div className="mt-4 text-center text-sm">
               Ya tienes una cuenta?{" "}
-              <Link href="/auth/signin" className="underline">
+              <Link href="/student/auth/signin" className="underline">
                 Iniciar sesión
               </Link>
             </div>
