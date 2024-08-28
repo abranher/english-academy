@@ -13,7 +13,7 @@ export default function BoxBase({
   size?: keyof typeof paddingClasses;
 }>) {
   return (
-    <section className="overflow-hidden bg-white py-16 dark:bg-gray-dark md:py-[40px] xl:py-[70px] 2xl:py-[100px] flex justify-center items-center">
+    <section className="overflow-hidden py-16 md:py-[40px] xl:py-[70px] 2xl:py-[100px] flex justify-center items-center">
       <section className={`${paddingClasses[size]} w-full max-w-[1536px]`}>
         {children}
       </section>

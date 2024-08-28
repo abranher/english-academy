@@ -15,7 +15,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es">
-      <body className={`${fontInter.className} antialiased`}>
+      <body
+        className={`${fontInter.className} antialiased bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-50`}
+      >
         <Providers>{children}</Providers>
       </body>
     </html>
