@@ -3,6 +3,7 @@
 import BoxBase from "../common/BoxBase";
 import { Image } from "@nextui-org/react";
 import { MyButton } from "../common/MyButton";
+import Link from "next/link";
 
 export default function Hero() {
   return (
@@ -19,9 +20,16 @@ export default function Hero() {
                 es la mejor manera de aprender inglés en línea.
               </p>
               <div className="flex flex-col space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0">
-                <MyButton color="primary" radius="sm" variant="solid" size="lg">
-                  Comienza hoy
-                </MyButton>
+                <Link href="/student/signup">
+                  <MyButton
+                    color="primary"
+                    radius="sm"
+                    variant="solid"
+                    size="lg"
+                  >
+                    Comienza hoy
+                  </MyButton>
+                </Link>
               </div>
             </div>
 
