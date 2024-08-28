@@ -108,7 +108,7 @@ export default function NavMenu() {
       ) : (
         <NavbarContent justify="end">
           <NavbarItem className="hidden lg:flex">
-            <NextLink href="/auth/signin">
+            <NextLink href="/student/auth/signin">
               <MyButton color="default" variant="bordered" type="button">
                 Iniciar sesión
               </MyButton>
@@ -116,7 +116,7 @@ export default function NavMenu() {
           </NavbarItem>
 
           <NavbarItem>
-            <NextLink href="/auth/signup">
+            <NextLink href="/student/signup">
               <MyButton color="primary" variant="flat" type="button">
                 Crear cuenta
               </MyButton>
