@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "@/styles/globals.css";
 import { fontInter } from "@/libs/fonts/fonts";
+import { Providers } from "@/components/Providers/Providers";
 
 export const metadata: Metadata = {
   title: "English Academy",
@@ -14,7 +15,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es">
-      <body className={fontInter.className}>{children}</body>
+      <body className={`${fontInter.className} antialiased`}>
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }
