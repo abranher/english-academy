@@ -55,7 +55,7 @@ export default function SigninPage() {
 
   return (
     <>
-      <BoxBase>
+      <BoxBase size="xs">
         <Card className="mx-auto max-w-sm">
           <CardHeader>
             {error && (

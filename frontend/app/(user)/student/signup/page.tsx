@@ -59,7 +59,7 @@ export default function SignupPage() {
 
   return (
     <>
-      <BoxBase>
+      <BoxBase size="xs">
         <Card className="mx-auto max-w-sm">
           <CardHeader>
             <CardTitle className="text-xl">Crear cuenta</CardTitle>
