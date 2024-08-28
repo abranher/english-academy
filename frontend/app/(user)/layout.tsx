@@ -1,5 +1,5 @@
 import Footer from "@/components/common/Footer";
-import NavMenu from "@/components/common/Nav";
+import NavMenu from "@/components/common/NavMenu";
 import { Providers } from "@/components/Providers/Providers";
 
 export default function RootLayout({
