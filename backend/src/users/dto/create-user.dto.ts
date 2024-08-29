@@ -5,13 +5,13 @@ export class CreateUserDto {
   name: string;
 
   @IsString()
-  secondName: string;
+  secondName?: string;
 
   @IsString()
   lastName: string;
 
   @IsString()
-  secondLastName: string;
+  secondLastName?: string;
 
   @IsEmail()
   email: string;

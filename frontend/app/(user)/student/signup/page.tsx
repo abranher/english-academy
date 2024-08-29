@@ -17,6 +17,9 @@ import {
   CardTitle,
 } from "@/components/shadcn/ui/card";
 import BoxAuth from "@/components/auth/BoxAuth";
+import axios from "axios";
+import { NEXT_PUBLIC_APP_NAME, NEXT_PUBLIC_BACKEND_URL } from "@/config/app";
+import { route } from "@/libs/utils";
 
 type Inputs = {
   name: string;
@@ -36,26 +39,22 @@ export default function SignupPage() {
 
   const router = useRouter();
 
+  console.log(route("/api/auth/signup"));
+
   const onSubmit = handleSubmit(async (data) => {
     if (data.password !== data.confirmPassword)
       return alert("Password do not match");
 
-    const res = await fetch("/api/auth/signup", {
-      method: "POST",
-      body: JSON.stringify({
-        name: data.name,
-        lastName: data.lastName,
-        username: data.username,
-        email: data.email,
-        password: data.password,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
+    const response = await axios.post(route("/api/auth/signup"), {
+      name: data.name,
+      lastName: data.lastName,
+      username: data.username,
+      email: data.email,
+      password: data.password,
     });
 
-    if (res.ok) {
-      router.push("/auth/signin");
+    if (response.status === 201) {
+      router.push("/student/auth/signin");
     }
   });
 

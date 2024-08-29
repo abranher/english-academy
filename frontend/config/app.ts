@@ -1,1 +1,2 @@
-export const { NEXT_PUBLIC_BACKEND_URL, NEXT_PUBLIC_APP_NAME } = process.env;
+export const NEXT_PUBLIC_BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+export const NEXT_PUBLIC_APP_NAME = process.env.NEXT_PUBLIC_APP_NAME;
