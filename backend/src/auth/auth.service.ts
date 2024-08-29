@@ -23,7 +23,7 @@ export class AuthService {
     throw new UnauthorizedException();
   }
 
-  async login(signInDto: SignInDto) {
+  async signIn(signInDto: SignInDto) {
     const user = await this.validateUser(signInDto);
 
     const payload = {
