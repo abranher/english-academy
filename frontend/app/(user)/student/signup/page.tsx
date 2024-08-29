@@ -18,7 +18,6 @@ import {
 } from "@/components/shadcn/ui/card";
 import BoxAuth from "@/components/auth/BoxAuth";
 import axios from "axios";
-import { NEXT_PUBLIC_APP_NAME, NEXT_PUBLIC_BACKEND_URL } from "@/config/app";
 import { route } from "@/libs/utils";
 
 type Inputs = {
@@ -39,8 +38,6 @@ export default function SignupPage() {
 
   const router = useRouter();
 
-  console.log(route("/api/auth/signup"));
-
   const onSubmit = handleSubmit(async (data) => {
     if (data.password !== data.confirmPassword)
       return alert("Password do not match");
@@ -52,6 +49,8 @@ export default function SignupPage() {
       email: data.email,
       password: data.password,
     });
+
+    console.log(response);
 
     if (response.status === 201) {
       router.push("/student/auth/signin");
