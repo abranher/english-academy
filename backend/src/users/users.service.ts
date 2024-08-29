@@ -31,7 +31,7 @@ export class UsersService {
   async findByEmail(email: string) {
     return await this.prismaService.user.findUnique({
       where: {
-        email: email,
+        email,
       },
     });
   }
@@ -39,7 +39,7 @@ export class UsersService {
   async findById(id: number) {
     return await this.prismaService.user.findUnique({
       where: {
-        id: id,
+        id,
       },
     });
   }
