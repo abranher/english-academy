@@ -3,7 +3,8 @@ import { extendVariants, Button } from "@nextui-org/react";
 export const MyButton = extendVariants(Button, {
   variants: {
     color: {
-      primary: "bg-[#18181b] text-[#ffffff]",
+      primary:
+        "bg-[#18181b] text-[#fafafa] dark:bg-[#fafafa] dark:text-[#18181b] dark:hover:bg-[#fafafa96]",
     },
   },
 });
