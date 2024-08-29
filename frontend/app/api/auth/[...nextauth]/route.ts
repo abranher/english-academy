@@ -1,4 +1,5 @@
 import { NEXT_PUBLIC_BACKEND_URL } from "@/config/app";
+import axios from "axios";
 import NextAuth from "next-auth";
 import { NextAuthOptions } from "next-auth";
 import { JWT } from "next-auth/jwt";
@@ -11,7 +12,6 @@ async function refreshToken(token: JWT): Promise<JWT> {
       authorization: `Refresh ${token.backendTokens.refreshToken}`,
     },
   });
-  console.log("refreshed");
 
   const response = await res.json();
 
@@ -26,28 +26,31 @@ const authOptions: NextAuthOptions = {
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        email: { label: "Email", type: "text" },
-        password: { label: "Password", type: "password" },
+        email: {},
+        password: {},
       },
       async authorize(credentials, req) {
-        if (!credentials?.username || !credentials?.password) return null;
-        const { username, password } = credentials;
-        const res = await fetch(NEXT_PUBLIC_BACKEND_URL + "/auth/login", {
-          method: "POST",
-          body: JSON.stringify({
-            username,
+        if (!credentials?.email || !credentials?.password) return null;
+
+        const { email, password } = credentials;
+
+        const response = await axios.post(
+          `${NEXT_PUBLIC_BACKEND_URL}/api/auth/signin`,
+          {
+            email,
             password,
-          }),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        if (res.status == 401) {
-          console.log(res.statusText);
+          }
+        );
+
+        console.log(response.data)
+
+        if (response.status == 401) {
+          console.log(response.statusText);
 
           return null;
         }
-        const user = await res.json();
+
+        const user = await response.data;
         return user;
       },
     }),

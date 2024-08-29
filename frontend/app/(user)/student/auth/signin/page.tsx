@@ -89,7 +89,7 @@ export default function SigninPage() {
                   <Input
                     id="email"
                     type="email"
-                    placeholder="m@example.com"
+                    placeholder="example@example.com"
                     {...register("email", {
                       required: {
                         value: true,
