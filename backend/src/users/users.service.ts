@@ -9,7 +9,6 @@ export class UsersService {
 
   async create(createUserDto: CreateUserDto) {
     try {
-      // email
       const userFound = await this.findByEmail(createUserDto.email);
 
       if (userFound)
@@ -17,22 +16,22 @@ export class UsersService {
           'La dirección de correo electrónico ya está en uso.',
         );
 
-      // username
       const usernameFound = await this.findByUsername(createUserDto.username);
 
       if (usernameFound)
         throw new ConflictException('El nombre de usuario ya está en uso.');
 
-      const newUser = await this.prisma.user.create({
+      await this.prisma.user.create({
         data: {
           ...createUserDto,
           password: await hash(createUserDto.password, 10),
         },
       });
 
-      const { password, ...result } = newUser;
-
-      return result;
+      return {
+        message: 'Usuario creado exitosamente.',
+        status: 201,
+      };
     } catch (error) {
       console.error('Ocurrió un error inesperado:', error);
 
