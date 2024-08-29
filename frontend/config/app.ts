@@ -1,0 +1,1 @@
+export const { NEXT_PUBLIC_BACKEND_URL, NEXT_PUBLIC_APP_NAME } = process.env;
