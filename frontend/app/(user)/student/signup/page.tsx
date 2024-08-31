@@ -1,5 +1,6 @@
 "use client";
 
+import axios from "@/config/axios";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -17,8 +18,6 @@ import {
   CardTitle,
 } from "@/components/shadcn/ui/card";
 import BoxAuth from "@/components/auth/BoxAuth";
-import axios from "axios";
-import { route } from "@/libs/utils";
 
 type Inputs = {
   name: string;
@@ -42,7 +41,7 @@ export default function SignupPage() {
     if (data.password !== data.confirmPassword)
       return alert("Password do not match");
 
-    const response = await axios.post(route("/api/auth/signup"), {
+    const res = await axios.post("/api/auth/signup", {
       name: data.name,
       lastName: data.lastName,
       username: data.username,
@@ -50,9 +49,9 @@ export default function SignupPage() {
       password: data.password,
     });
 
-    console.log(response);
+    console.log(res);
 
-    if (response.status === 201) {
+    if (res.status === 201) {
       router.push("/student/auth/signin");
     }
   });
