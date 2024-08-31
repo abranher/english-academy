@@ -3,8 +3,11 @@
 import axios from "@/config/axios";
 import Link from "next/link";
 import web from "@/libs/routes/web";
+import { firstSignUpSchema } from "@/libs/validations/schemas/signup/firstSignUp";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { Button } from "@/components/shadcn/ui/button";
 import { Input } from "@/components/shadcn/ui/input";
 import { Label } from "@/components/shadcn/ui/label";
@@ -30,20 +33,19 @@ export default function SignUpForm() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<Inputs>();
+  } = useForm<z.infer<typeof firstSignUpSchema>>({
+    resolver: zodResolver(firstSignUpSchema),
+  });
 
   const router = useRouter();
 
-  const onSubmit = handleSubmit(async (data) => {
-    if (data.password !== data.confirmPassword)
-      return alert("Password do not match");
-
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
     const res = await axios.post("/api/auth/signup", {
       name: data.name,
       lastName: data.lastName,
       username: data.username,
       email: data.email,
-      password: data.password,
+      password: data.password
     });
 
     console.log(res);
@@ -51,7 +53,8 @@ export default function SignUpForm() {
     if (res.status === 201) {
       router.push("/student/auth/signin");
     }
-  });
+  };
+
   return (
     <>
       <Card className="mx-auto max-w-sm">
@@ -62,20 +65,11 @@ export default function SignUpForm() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={onSubmit} className="grid gap-4">
+          <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="grid gap-2">
                 <Label htmlFor="first-name">Nombre</Label>
-                <Input
-                  id="name"
-                  placeholder="Max"
-                  {...register("name", {
-                    required: {
-                      value: true,
-                      message: "El nombre es requerido!",
-                    },
-                  })}
-                />
+                <Input id="name" placeholder="Max" {...register("name")} />
                 {errors.name && (
                   <span className="text-red-500">{errors.name.message}</span>
                 )}
@@ -85,12 +79,7 @@ export default function SignUpForm() {
                 <Input
                   id="lastName"
                   placeholder="Robinson"
-                  {...register("lastName", {
-                    required: {
-                      value: true,
-                      message: "El apellido es requerido!",
-                    },
-                  })}
+                  {...register("lastName")}
                 />
                 {errors.lastName && (
                   <span className="text-red-500">
@@ -105,12 +94,7 @@ export default function SignUpForm() {
                 id="username"
                 type="text"
                 placeholder="max12"
-                {...register("username", {
-                  required: {
-                    value: true,
-                    message: "El nombre de usuario es requerido!",
-                  },
-                })}
+                {...register("username")}
               />
               {errors.username && (
                 <span className="text-red-500">{errors.username.message}</span>
@@ -123,12 +107,7 @@ export default function SignUpForm() {
                 id="email"
                 type="email"
                 placeholder="m@example.com"
-                {...register("email", {
-                  required: {
-                    value: true,
-                    message: "El correo es requerido!",
-                  },
-                })}
+                {...register("email")}
               />
               {errors.email && (
                 <span className="text-red-500">{errors.email.message}</span>
@@ -137,16 +116,7 @@ export default function SignUpForm() {
 
             <div className="grid gap-2">
               <Label htmlFor="password">Contraseña</Label>
-              <Input
-                id="password"
-                type="password"
-                {...register("password", {
-                  required: {
-                    value: true,
-                    message: "La contraseña es requerida!",
-                  },
-                })}
-              />
+              <Input id="password" type="password" {...register("password")} />
               {errors.password && (
                 <span className="text-red-500">{errors.password.message}</span>
               )}
@@ -157,12 +127,7 @@ export default function SignUpForm() {
               <Input
                 id="confirmPassword"
                 type="password"
-                {...register("confirmPassword", {
-                  required: {
-                    value: true,
-                    message: "La confirmación es requerida!",
-                  },
-                })}
+                {...register("confirmPassword")}
               />
               {errors.confirmPassword && (
                 <span className="text-red-500">
