@@ -1,7 +1,16 @@
-const routes = [
+interface Routes {
+  name: string;
+  pathname: string;
+}
+
+const routes: Routes[] = [
   {
     name: "signin",
     pathname: "/student/auth/signin",
+  },
+  {
+    name: "signup",
+    pathname: "/student/auth/signup",
   },
 ];
 

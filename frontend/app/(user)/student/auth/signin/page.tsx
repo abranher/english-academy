@@ -23,6 +23,7 @@ import {
 import { AlertCircle } from "lucide-react";
 import Image from "next/image";
 import BoxAuth from "@/components/auth/BoxAuth";
+import web from "@/libs/routes/web";
 
 type Inputs = {
   email: string;
@@ -133,7 +134,7 @@ export default function SigninPage() {
               </form>
               <div className="mt-4 text-center text-sm">
                 No tienes una cuenta?{" "}
-                <Link href="/student/signup" className="underline">
+                <Link href={web("signup")} className="underline">
                   Crear cuenta
                 </Link>
               </div>

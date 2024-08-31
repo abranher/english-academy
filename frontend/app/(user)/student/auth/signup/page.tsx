@@ -47,7 +47,7 @@ export default function SignupPage() {
       lastName: data.lastName,
       username: data.username,
       email: data.email,
-      password: data.password,
+      password: data.password
     });
 
     console.log(res);
@@ -56,8 +56,6 @@ export default function SignupPage() {
       router.push("/student/auth/signin");
     }
   });
-
-  console.log(web("signin"));
 
   return (
     <>
@@ -191,7 +189,7 @@ export default function SignupPage() {
               </form>
               <div className="mt-4 text-center text-sm">
                 Ya tienes una cuenta?{" "}
-                <Link href="/student/auth/signin" className="underline">
+                <Link href={web("signin")} className="underline">
                   Iniciar sesión
                 </Link>
               </div>
