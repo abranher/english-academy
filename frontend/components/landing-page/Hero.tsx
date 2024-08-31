@@ -20,7 +20,7 @@ export default function Hero() {
                 es la mejor manera de aprender inglés en línea.
               </p>
               <div className="flex flex-col space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0">
-                <Link href="/student/signup">
+                <Link href="/student/auth/signup">
                   <MyButton
                     color="primary"
                     radius="sm"

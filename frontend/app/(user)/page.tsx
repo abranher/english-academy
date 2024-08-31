@@ -1,4 +1,3 @@
-import React from "react";
 import Features from "@/components/landing-page/Features/Features";
 import AboutSection from "@/components/landing-page/AboutSection";
 import Hero from "@/components/landing-page/Hero";

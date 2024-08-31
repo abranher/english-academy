@@ -18,6 +18,7 @@ import {
   CardTitle,
 } from "@/components/shadcn/ui/card";
 import BoxAuth from "@/components/auth/BoxAuth";
+import web from "@/libs/routes/web";
 
 type Inputs = {
   name: string;
@@ -55,6 +56,8 @@ export default function SignupPage() {
       router.push("/student/auth/signin");
     }
   });
+
+  console.log(web("signin"));
 
   return (
     <>

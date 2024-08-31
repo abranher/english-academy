@@ -116,7 +116,7 @@ export default function NavMenu() {
           </NavbarItem>
 
           <NavbarItem>
-            <NextLink href="/student/signup">
+            <NextLink href="/student/auth/signup">
               <MyButton color="primary" variant="flat" type="button">
                 Crear cuenta
               </MyButton>
