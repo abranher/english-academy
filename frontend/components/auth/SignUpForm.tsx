@@ -7,7 +7,7 @@ import { firstSignUpSchema } from "@/libs/validations/schemas/signup/firstSignUp
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { Button } from "@/components/shadcn/ui/button";
 import { Input } from "@/components/shadcn/ui/input";
 import { Label } from "@/components/shadcn/ui/label";
@@ -18,15 +18,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/shadcn/ui/card";
-
-type Inputs = {
-  name: string;
-  lastName: string;
-  username: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-};
 
 export default function SignUpForm() {
   const {
@@ -39,7 +30,7 @@ export default function SignUpForm() {
 
   const router = useRouter();
 
-  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+  async function onSubmit(data: z.infer<typeof firstSignUpSchema>) {
     const res = await axios.post("/api/auth/signup", {
       name: data.name,
       lastName: data.lastName,
@@ -53,7 +44,7 @@ export default function SignUpForm() {
     if (res.status === 201) {
       router.push("/student/auth/signin");
     }
-  };
+  }
 
   return (
     <>
