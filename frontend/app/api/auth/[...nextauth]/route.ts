@@ -1,12 +1,12 @@
 import { NEXT_PUBLIC_BACKEND_URL } from "@/config/app";
-import axios from "axios";
+import axios from "@/config/axios";
 import NextAuth from "next-auth";
 import { NextAuthOptions } from "next-auth";
 import { JWT } from "next-auth/jwt";
 import CredentialsProvider from "next-auth/providers/credentials";
 
 async function refreshToken(token: JWT): Promise<JWT> {
-  const res = await fetch(NEXT_PUBLIC_BACKEND_URL + "/auth/refresh", {
+  const res = await fetch(NEXT_PUBLIC_BACKEND_URL + "/api/auth/refresh", {
     method: "POST",
     headers: {
       authorization: `Refresh ${token.backendTokens.refreshToken}`,
@@ -34,15 +34,12 @@ const authOptions: NextAuthOptions = {
 
         const { email, password } = credentials;
 
-        const response = await axios.post(
-          `${NEXT_PUBLIC_BACKEND_URL}/api/auth/signin`,
-          {
-            email,
-            password,
-          }
-        );
+        const response = await axios.post("/api/auth/signin", {
+          email,
+          password
+        });
 
-        console.log(response.data)
+        console.log(response.data);
 
         if (response.status == 401) {
           console.log(response.statusText);
