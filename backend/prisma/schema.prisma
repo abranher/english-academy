@@ -13,38 +13,111 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// Users Models
+
 model User {
-  id                Int       @id @default(autoincrement())
-  role              Roles     @default(STUDENT)
-  name              String
-  secondName        String?
-  lastName          String
-  secondLastName    String?
-  username          String    @unique
-  email             String    @unique
-  email_verified_at DateTime?
-  password          String
-  birthdate         DateTime
-  avatar            String?
-  account_status    String
-  last_connection   DateTime
-  secret_token      String
-  profile_complete  Boolean
-  gender            String?
-  country           Country   @relation(fields: [countryId], references: [id])
-  countryId         Int
-  createdAt         DateTime  @default(now())
-  updatedAt         DateTime  @updatedAt
+  id              Int       @id @default(autoincrement())
+  role            Roles     @default(STUDENT)
+  name            String
+  secondName      String?
+  lastName        String
+  secondLastName  String?
+  username        String    @unique
+  email           String    @unique
+  emailVerifiedAt DateTime?
+  password        String
+  birthdate       DateTime
+  avatar          String?
+  accountStatus   String
+  lastConnection  DateTime
+  secretToken     String?
+  profileComplete Boolean
+  gender          String?
+  country         Country   @relation(fields: [countryId], references: [id])
+  countryId       Int
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  Student         Student[]
+  Tutor           Tutor[]
 
   @@index([username, email])
+}
+
+model Student {
+  id      Int   @id @default(autoincrement())
+  userId  Int
+  levelId Int
+  User    User  @relation(fields: [userId], references: [id])
+  Level   Level @relation(fields: [levelId], references: [id])
+}
+
+model Tutor {
+  id             Int             @id @default(autoincrement())
+  userId         Int
+  biography      String
+  approved_at    DateTime
+  location       String
+  certifications Certification[]
+  curriculum     String
+  User           User            @relation(fields: [userId], references: [id])
+}
+
+model Certification {
+  id            Int      @id @default(autoincrement())
+  tutorId       Int
+  title         String
+  certification String
+  institution   String
+  issue_date    DateTime
+  language      String
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+  Tutor         Tutor    @relation(fields: [tutorId], references: [id])
 }
 
 model Country {
   id   Int    @id @default(autoincrement())
   name String
   code String @unique
-
   User User[]
+}
+
+// curriculum models
+
+// Modelo de Nivel
+model Level {
+  id          Int       @id @default(autoincrement())
+  levelCode   String    @unique
+  name        String
+  description String
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @updatedAt
+  courses     Course[]
+  Student     Student[]
+}
+
+// Modelo de Curso
+model Course {
+  id          Int      @id @default(autoincrement())
+  level_id    Int
+  name        String
+  description String
+  status      String
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+  Level       Level    @relation(fields: [level_id], references: [id])
+
+  lessons Lesson[]
+}
+
+// Modelo de Lección
+model Lesson {
+  id         Int      @id @default(autoincrement())
+  course_id  Int
+  status     String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  Course     Course   @relation(fields: [course_id], references: [id])
 }
 
 enum Roles {
