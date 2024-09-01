@@ -55,7 +55,7 @@ model Tutor {
   id             Int             @id @default(autoincrement())
   userId         Int
   biography      String
-  approved_at    DateTime
+  approvedAt     DateTime
   location       String
   certifications Certification[]
   curriculum     String
@@ -68,10 +68,10 @@ model Certification {
   title         String
   certification String
   institution   String
-  issue_date    DateTime
+  issueDate     DateTime
   language      String
-  created_at    DateTime @default(now())
-  updated_at    DateTime @updatedAt
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
   Tutor         Tutor    @relation(fields: [tutorId], references: [id])
 }
 
@@ -90,8 +90,8 @@ model Level {
   levelCode   String    @unique
   name        String
   description String
-  created_at  DateTime  @default(now())
-  updated_at  DateTime  @updatedAt
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
   courses     Course[]
   Student     Student[]
 }
@@ -99,25 +99,24 @@ model Level {
 // Modelo de Curso
 model Course {
   id          Int      @id @default(autoincrement())
-  level_id    Int
+  levelId     Int
   name        String
   description String
   status      String
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt
-  Level       Level    @relation(fields: [level_id], references: [id])
-
-  lessons Lesson[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  Level       Level    @relation(fields: [levelId], references: [id])
+  lessons     Lesson[]
 }
 
 // Modelo de Lección
 model Lesson {
-  id         Int      @id @default(autoincrement())
-  course_id  Int
-  status     String
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  Course     Course   @relation(fields: [course_id], references: [id])
+  id        Int      @id @default(autoincrement())
+  courseId  Int
+  status    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Course    Course   @relation(fields: [courseId], references: [id])
 }
 
 enum Roles {
