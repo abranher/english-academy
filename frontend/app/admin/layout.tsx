@@ -1,3 +1,5 @@
+import AsideAdmin from "@/components/admin/AsideAdmin";
+import HeaderAdmin from "@/components/admin/HeaderAdmin";
 import "@/styles/globals.css";
 
 export default function RootLayout({
@@ -5,5 +7,16 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return <div suppressHydrationWarning>{children}</div>;
+  return (
+    <div suppressHydrationWarning>
+      <div className="flex min-h-screen w-full flex-col bg-muted/40">
+        <AsideAdmin />
+        <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
+          <HeaderAdmin />
+
+          {children}
+        </div>
+      </div>
+    </div>
+  );
 }
