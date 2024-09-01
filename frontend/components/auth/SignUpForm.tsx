@@ -19,6 +19,7 @@ import {
   CardTitle,
 } from "@/components/shadcn/ui/card";
 import { toast } from "sonner";
+import { useMutation } from "@tanstack/react-query";
 
 export default function SignUpForm() {
   const {
@@ -31,29 +32,35 @@ export default function SignUpForm() {
 
   const router = useRouter();
 
-  async function onSubmit(data: z.infer<typeof firstSignUpSchema>) {
-    try {
-      const response = await axios.post("/api/auth/signup", {
-        name: data.name,
-        lastName: data.lastName,
-        username: data.username,
-        email: data.email,
-        password: data.password,
-      });
-
-      console.log(response);
-
+  const createUserMutation = useMutation({
+    mutationFn: (user: {
+      name: string;
+      lastName: string;
+      username: string;
+      email: string;
+      password: string;
+    }) => axios.post("/api/auth/signup", user),
+    onSuccess: (response) => {
       if (response.status === 201) {
-        toast.success(response.data.message, {
-          description: "Sunday, December 03, 2023 at 9:00 AM",
-        });
+        toast.success(response.data.message);
         router.push("/student/auth/signin");
       }
-    } catch (error: any) {
+    },
+    onError: (error) => {
       if (error.response.status === 409) {
         toast.error(error.response.data.message);
       }
-    }
+    },
+  });
+
+  async function onSubmit(data: z.infer<typeof firstSignUpSchema>) {
+    createUserMutation.mutate({
+      name: data.name,
+      lastName: data.lastName,
+      username: data.username,
+      email: data.email,
+      password: data.password,
+    });
   }
 
   return (
