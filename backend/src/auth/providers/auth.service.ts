@@ -3,6 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { compare } from 'bcrypt';
 import { UsersService } from 'src/users/providers/users.service';
 import { SignInDto } from '../dto/auth.dto';
+import { ConfigService } from '@nestjs/config';
 
 const EXPIRE_TIME = 20 * 1000;
 
@@ -11,6 +12,7 @@ export class AuthService {
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
+    private configService: ConfigService,
   ) {}
 
   async validateUser(signInDto: SignInDto) {
@@ -38,11 +40,11 @@ export class AuthService {
       backendTokens: {
         accessToken: await this.jwtService.signAsync(payload, {
           expiresIn: '20s',
-          secret: process.env.jwtSecretKey,
+          secret: this.configService.get<string>('JWT_SECRET_KEY'),
         }),
         refreshToken: await this.jwtService.signAsync(payload, {
           expiresIn: '7d',
-          secret: process.env.jwtRefreshTokenKey,
+          secret: this.configService.get<string>('JWT_REFRESH_SECRET_KEY'),
         }),
         expiresIn: new Date().setTime(new Date().getTime() + EXPIRE_TIME),
       },
@@ -58,11 +60,11 @@ export class AuthService {
     return {
       accessToken: await this.jwtService.signAsync(payload, {
         expiresIn: '20s',
-        secret: process.env.jwtSecretKey,
+        secret: this.configService.get<string>('JWT_SECRET_KEY'),
       }),
       refreshToken: await this.jwtService.signAsync(payload, {
         expiresIn: '7d',
-        secret: process.env.jwtRefreshTokenKey,
+        secret: this.configService.get<string>('JWT_REFRESH_SECRET_KEY'),
       }),
       expiresIn: new Date().setTime(new Date().getTime() + EXPIRE_TIME),
     };
