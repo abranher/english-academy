@@ -12,7 +12,7 @@ CREATE TYPE "LessonStatus" AS ENUM ('DRAFT', 'PUBLISHED', 'REVIEWED', 'ARCHIVED'
 
 -- CreateTable
 CREATE TABLE "User" (
-    "id" SERIAL NOT NULL,
+    "id" TEXT NOT NULL,
     "role" "Roles" NOT NULL DEFAULT 'STUDENT',
     "name" TEXT NOT NULL,
     "secondName" TEXT,
@@ -28,7 +28,7 @@ CREATE TABLE "User" (
     "lastConnection" TIMESTAMP(3),
     "secretToken" TEXT,
     "profileComplete" BOOLEAN NOT NULL DEFAULT false,
-    "countryId" INTEGER,
+    "countryId" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -37,17 +37,17 @@ CREATE TABLE "User" (
 
 -- CreateTable
 CREATE TABLE "Student" (
-    "id" SERIAL NOT NULL,
-    "userId" INTEGER NOT NULL,
-    "levelId" INTEGER NOT NULL,
+    "id" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "levelId" TEXT NOT NULL,
 
     CONSTRAINT "Student_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "Tutor" (
-    "id" SERIAL NOT NULL,
-    "userId" INTEGER NOT NULL,
+    "id" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
     "biography" TEXT,
     "approvedAt" TIMESTAMP(3),
     "location" TEXT NOT NULL,
@@ -58,8 +58,8 @@ CREATE TABLE "Tutor" (
 
 -- CreateTable
 CREATE TABLE "Certification" (
-    "id" SERIAL NOT NULL,
-    "tutorId" INTEGER NOT NULL,
+    "id" TEXT NOT NULL,
+    "tutorId" TEXT NOT NULL,
     "title" TEXT NOT NULL,
     "certification" TEXT NOT NULL,
     "institution" TEXT NOT NULL,
@@ -73,7 +73,7 @@ CREATE TABLE "Certification" (
 
 -- CreateTable
 CREATE TABLE "Country" (
-    "id" SERIAL NOT NULL,
+    "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "code" TEXT NOT NULL,
 
@@ -82,7 +82,7 @@ CREATE TABLE "Country" (
 
 -- CreateTable
 CREATE TABLE "Level" (
-    "id" SERIAL NOT NULL,
+    "id" TEXT NOT NULL,
     "levelCode" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "description" TEXT NOT NULL,
@@ -94,8 +94,8 @@ CREATE TABLE "Level" (
 
 -- CreateTable
 CREATE TABLE "Course" (
-    "id" SERIAL NOT NULL,
-    "levelId" INTEGER NOT NULL,
+    "id" TEXT NOT NULL,
+    "levelId" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "description" TEXT NOT NULL,
     "price" DOUBLE PRECISION NOT NULL,
@@ -108,8 +108,8 @@ CREATE TABLE "Course" (
 
 -- CreateTable
 CREATE TABLE "Lesson" (
-    "id" SERIAL NOT NULL,
-    "courseId" INTEGER NOT NULL,
+    "id" TEXT NOT NULL,
+    "courseId" TEXT NOT NULL,
     "status" "LessonStatus" NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
