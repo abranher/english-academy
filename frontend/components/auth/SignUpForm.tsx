@@ -18,6 +18,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/shadcn/ui/card";
+import { toast } from "sonner";
 
 export default function SignUpForm() {
   const {
@@ -31,18 +32,27 @@ export default function SignUpForm() {
   const router = useRouter();
 
   async function onSubmit(data: z.infer<typeof firstSignUpSchema>) {
-    const res = await axios.post("/api/auth/signup", {
-      name: data.name,
-      lastName: data.lastName,
-      username: data.username,
-      email: data.email,
-      password: data.password
-    });
+    try {
+      const response = await axios.post("/api/auth/signup", {
+        name: data.name,
+        lastName: data.lastName,
+        username: data.username,
+        email: data.email,
+        password: data.password,
+      });
 
-    console.log(res);
+      console.log(response);
 
-    if (res.status === 201) {
-      router.push("/student/auth/signin");
+      if (response.status === 201) {
+        toast.success(response.data.message, {
+          description: "Sunday, December 03, 2023 at 9:00 AM",
+        });
+        router.push("/student/auth/signin");
+      }
+    } catch (error: any) {
+      if (error.response.status === 409) {
+        toast.error(error.response.data.message);
+      }
     }
   }
 

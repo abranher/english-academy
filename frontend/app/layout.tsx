@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "@/styles/globals.css";
 import { fontInter } from "@/libs/fonts/fonts";
 import { Providers } from "@/components/Providers/Providers";
+import { Toaster } from "@/components/shadcn/ui/sonner";
 
 export const metadata: Metadata = {
   title: "English Academy",
@@ -18,7 +19,10 @@ export default function RootLayout({
       <body
         className={`${fontInter.className} antialiased bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-50`}
       >
-        <Providers>{children}</Providers>
+        <Providers>
+          {children}
+          <Toaster richColors closeButton />
+        </Providers>
       </body>
     </html>
   );
