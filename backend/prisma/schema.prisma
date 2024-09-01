@@ -14,14 +14,48 @@ datasource db {
 }
 
 model User {
-  id             Int      @id @default(autoincrement())
-  name           String
-  secondName     String?
-  lastName       String
-  secondLastName String?
-  email          String   @unique
-  username       String   @unique
-  password       String
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  id                Int       @id @default(autoincrement())
+  role              Roles     @default(STUDENT)
+  name              String
+  secondName        String?
+  lastName          String
+  secondLastName    String?
+  username          String    @unique
+  email             String    @unique
+  email_verified_at DateTime?
+  password          String
+  birthdate         DateTime
+  avatar            String?
+  account_status    String
+  last_connection   DateTime
+  secret_token      String
+  profile_complete  Boolean
+  gender            String?
+  country           Country   @relation(fields: [countryId], references: [id])
+  countryId         Int
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  @@index([username, email])
+}
+
+model Country {
+  id   Int    @id @default(autoincrement())
+  name String
+  code String @unique
+
+  User User[]
+}
+
+enum Roles {
+  ADMIN
+  STUDENT
+  TUTOR
+}
+
+enum AccountStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+  DELETED
 }
