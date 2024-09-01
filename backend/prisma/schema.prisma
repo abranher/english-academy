@@ -16,27 +16,26 @@ datasource db {
 // Users Models
 
 model User {
-  id              Int       @id @default(autoincrement())
-  role            Roles     @default(STUDENT)
+  id              Int           @id @default(autoincrement())
+  role            Roles         @default(STUDENT)
   name            String
   secondName      String?
   lastName        String
   secondLastName  String?
-  username        String    @unique
-  email           String    @unique
+  username        String        @unique
+  email           String        @unique
   emailVerifiedAt DateTime?
   password        String
-  birthdate       DateTime
-  avatar          String?
-  accountStatus   String
-  lastConnection  DateTime
+  birthdate       DateTime?
+  avatarUrl       String?
+  accountStatus   AccountStatus @default(ACTIVE)
+  lastConnection  DateTime?
   secretToken     String?
-  profileComplete Boolean
-  gender          String?
-  country         Country   @relation(fields: [countryId], references: [id])
+  profileComplete Boolean       @default(false)
+  country         Country       @relation(fields: [countryId], references: [id])
   countryId       Int
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
   Student         Student[]
   Tutor           Tutor[]
 
@@ -54,11 +53,11 @@ model Student {
 model Tutor {
   id             Int             @id @default(autoincrement())
   userId         Int
-  biography      String
-  approvedAt     DateTime
+  biography      String?
+  approvedAt     DateTime?
   location       String
   certifications Certification[]
-  curriculum     String
+  curriculumUrl  String
   User           User            @relation(fields: [userId], references: [id])
 }
 
@@ -98,25 +97,26 @@ model Level {
 
 // Modelo de Curso
 model Course {
-  id          Int      @id @default(autoincrement())
+  id          Int          @id @default(autoincrement())
   levelId     Int
   name        String
   description String
-  status      String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  Level       Level    @relation(fields: [levelId], references: [id])
+  price       Float
+  status      CourseStatus
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  Level       Level        @relation(fields: [levelId], references: [id])
   lessons     Lesson[]
 }
 
 // Modelo de Lección
 model Lesson {
-  id        Int      @id @default(autoincrement())
+  id        Int          @id @default(autoincrement())
   courseId  Int
-  status    String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  Course    Course   @relation(fields: [courseId], references: [id])
+  status    LessonStatus
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+  Course    Course       @relation(fields: [courseId], references: [id])
 }
 
 enum Roles {
@@ -129,5 +129,20 @@ enum AccountStatus {
   ACTIVE
   INACTIVE
   SUSPENDED
+  DELETED
+}
+
+enum CourseStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+  DELETED
+}
+
+enum LessonStatus {
+  DRAFT
+  PUBLISHED
+  REVIEWED
+  ARCHIVED
   DELETED
 }
