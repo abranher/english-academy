@@ -32,8 +32,8 @@ model User {
   lastConnection  DateTime?
   secretToken     String?
   profileComplete Boolean       @default(false)
-  country         Country       @relation(fields: [countryId], references: [id])
-  countryId       Int
+  country         Country?      @relation(fields: [countryId], references: [id])
+  countryId       Int?
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
   Student         Student[]

@@ -59,7 +59,7 @@ export default function SignUpForm() {
       lastName: data.lastName,
       username: data.username,
       email: data.email,
-      password: data.password,
+      password: data.password
     });
   }
 
