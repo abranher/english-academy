@@ -1,6 +1,6 @@
 import Image from "next/image";
 import BoxAuth from "@/components/auth/BoxAuth";
-import SignUpForm from "@/components/auth/SignUpForm";
+import SignUpForm from "@/components/auth/student/SignUpForm";
 
 export default function SignupPage() {
   return (

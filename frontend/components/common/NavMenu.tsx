@@ -94,7 +94,7 @@ export default function NavMenu() {
                 key="logout"
                 color="danger"
                 onClick={() => {
-                  signOut({ callbackUrl: "/auth/signin" });
+                  signOut({ callbackUrl: "/student/auth/signin" });
                 }}
               >
                 Cerrar sesión

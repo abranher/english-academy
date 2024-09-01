@@ -36,7 +36,7 @@ const authOptions: NextAuthOptions = {
 
         const response = await axios.post("/api/auth/signin", {
           email,
-          password
+          password,
         });
 
         console.log(response.data);
@@ -48,10 +48,12 @@ const authOptions: NextAuthOptions = {
         }
 
         const user = await response.data;
+
         return user;
       },
     }),
   ],
+
   callbacks: {
     async jwt({ token, user }) {
       if (user) return { ...token, ...user };
@@ -67,6 +69,10 @@ const authOptions: NextAuthOptions = {
 
       return session;
     },
+  },
+
+  pages: {
+    signIn: "/student/auth/signin",
   },
 };
 
