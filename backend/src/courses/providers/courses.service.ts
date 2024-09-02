@@ -11,7 +11,6 @@ export class CoursesService {
     const course = await this.prisma.course.create({
       data: {
         title: createCourseDto.title,
-        levelId: createCourseDto.levelId,
       },
     });
 

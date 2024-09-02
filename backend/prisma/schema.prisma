@@ -132,8 +132,8 @@ model Course {
   imageUrl    String?
   status      CourseStatus @default(DRAFT)
 
-  levelId     String
-  level       Level        @relation(fields: [levelId], references: [id])
+  levelId     String?
+  level       Level?       @relation(fields: [levelId], references: [id])
   lessons     Lesson[]
   skillId     String?
   skill       Skill?       @relation(fields: [skillId], references: [id])

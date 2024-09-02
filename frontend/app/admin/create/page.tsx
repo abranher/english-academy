@@ -17,19 +17,12 @@ import {
 import { Label } from "@/components/shadcn/ui/label";
 import Link from "next/link";
 import { toast } from "sonner";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/shadcn/ui/select";
+import { Skeleton } from "@/components/shadcn/ui/skeleton";
+import { useQuery } from "@tanstack/react-query";
+import messages from "@/libs/validations/schemas/messages";
 
 const formSchema = z.object({
-  title: z.string().min(1, { message: "Title is required" }),
-  levelId: z.string(),
+  title: z.string(messages.requiredError).min(4, messages.min(4)),
 });
 
 export default function CreateCoursePage() {
@@ -39,8 +32,12 @@ export default function CreateCoursePage() {
     formState: { errors },
   } = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      title: "",
+  });
+
+  const { data: levels, isLoading } = useQuery({
+    queryKey: ["levels"],
+    queryFn: () => {
+      return axios.get("/api/levels");
     },
   });
 
@@ -75,24 +72,8 @@ export default function CreateCoursePage() {
             </CardHeader>
             <CardContent>
               <form onSubmit={handleSubmit(onSubmit)} className="grid gap-6">
-                <div className="grid gap-3">
-                  <Label>Nivel</Label>
-                  <Select>
-                    <SelectTrigger className="w-[180px]">
-                      <SelectValue placeholder="Select a fruit" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        <SelectLabel>Fruits</SelectLabel>
-                        <SelectItem value="apple">Apple</SelectItem>
-                        <SelectItem value="banana">Banana</SelectItem>
-                        <SelectItem value="blueberry">Blueberry</SelectItem>
-                        <SelectItem value="grapes">Grapes</SelectItem>
-                        <SelectItem value="pineapple">Pineapple</SelectItem>
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-                </div>
+                {isLoading && <Skeleton className="h-4 w-[250px]" />}
+
                 <div className="grid gap-3">
                   <Label htmlFor="name">Título del curso</Label>
                   <Input

@@ -4,6 +4,4 @@ export class CreateCourseDto {
   @IsNotEmpty()
   @IsString()
   title: string;
-
-  levelId: string;
 }
