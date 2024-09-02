@@ -8,6 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/shadcn/ui/card";
+import { Combobox } from "@/components/shadcn/ui/combobox";
 import {
   Form,
   FormControl,
@@ -27,21 +28,23 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
-interface DescriptionFormProps {
+interface LevelFormProps {
   initialData: {
-    description: string;
+    levelId: string;
   };
   courseId: string;
+  options: { label: string; value: string }[];
 }
 
 const formSchema = z.object({
-  description: z.string(messages.requiredError).min(4, messages.min(4)),
+  levelId: z.string(messages.requiredError).min(1, messages.min(1)),
 });
 
-export default function DescriptionForm({
+export default function LevelForm({
   initialData,
   courseId,
-}: DescriptionFormProps) {
+  options,
+}: LevelFormProps) {
   const [isEditing, setIsEditing] = useState(false);
 
   const toggleEdit = () => setIsEditing((current) => !current);
@@ -51,7 +54,7 @@ export default function DescriptionForm({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      description: initialData?.description || "",
+      levelId: initialData?.levelId || "",
     },
   });
 
@@ -60,7 +63,7 @@ export default function DescriptionForm({
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       await axios.patch(`/api/courses/${courseId}`, values);
-      toast.success("Descripción del curso actualizada!");
+      toast.success("Nivel del curso actualizado!");
       toggleEdit();
       router.refresh();
     } catch (error) {
@@ -68,19 +71,23 @@ export default function DescriptionForm({
     }
   };
 
+  const selectedOption = options.find(
+    (option) => option.value === initialData.levelId
+  );
+
   return (
     <>
       <Card x-chunk="dashboard-07-chunk-0">
         <CardHeader>
           <CardTitle className="flex justify-between gap-3">
-            Descripción del curso
+            Nivel del curso
             <Button onClick={toggleEdit} variant="ghost">
               {isEditing ? (
                 <>Cancelar</>
               ) : (
                 <>
                   <Pencil className="h-4 w-4 mr-2" />
-                  Editar descripción
+                  Editar nivel
                 </>
               )}
             </Button>
@@ -89,10 +96,10 @@ export default function DescriptionForm({
             <CardDescription
               className={cn(
                 "text-sm mt-2",
-                !initialData.description && "text-slate-500 italic"
+                !initialData.levelId && "text-slate-500 italic"
               )}
             >
-              {initialData.description || "Sin descripción"}
+              {selectedOption?.label || "Sin nivel"}
             </CardDescription>
           )}
         </CardHeader>
@@ -105,15 +112,11 @@ export default function DescriptionForm({
               >
                 <FormField
                   control={form.control}
-                  name="description"
+                  name="levelId"
                   render={({ field }) => (
                     <FormItem>
                       <FormControl>
-                        <Textarea
-                          disabled={isSubmitting}
-                          placeholder="e.g. 'Este curso trata sobre...'"
-                          {...field}
-                        />
+                        <Combobox options={...options} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
