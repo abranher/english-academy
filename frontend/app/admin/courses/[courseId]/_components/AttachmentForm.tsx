@@ -10,24 +10,30 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/shadcn/ui/card";
-import { ImageIcon, Pencil, PlusCircle } from "lucide-react";
+import { File, ImageIcon, Loader2, PlusCircle, X } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
 import { toast } from "sonner";
+import { Course } from "@/types/models/Course";
+import { Attachment } from "@/types/models/Attachment";
+import { z } from "zod";
 
 interface AttachmentFormProps {
-  initialData: {
-    imageUrl: string;
-  };
+  initialData: Course & { attachments: Attachment[] };
   courseId: string;
 }
+
+const formSchema = z.object({
+  url: z.string().min(1),
+});
 
 export default function AttachmentForm({
   initialData,
   courseId,
 }: AttachmentFormProps) {
   const [isEditing, setIsEditing] = useState(false);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   const toggleEdit = () => setIsEditing((current) => !current);
 
@@ -48,12 +54,25 @@ export default function AttachmentForm({
     formData.append("imageUrl", acceptedFiles[0]);
 
     try {
-      await axios.post(`/api/courses/${courseId}`, formData);
+      await axios.post(`/api/courses/${courseId}/attachments`, formData);
       toast.success("Descripción del curso actualizada!");
       toggleEdit();
       router.refresh();
     } catch (error) {
       toast.error("Something wrong");
+    }
+  };
+
+  const onDelete = async (id: string) => {
+    try {
+      setDeletingId(id);
+      await axios.delete(`/api/courses/${courseId}/attachments/${id}`);
+      toast.success("Attachment deleted");
+      router.refresh();
+    } catch {
+      toast.error("Something went wrong");
+    } finally {
+      setDeletingId(null);
     }
   };
 
@@ -74,21 +93,41 @@ export default function AttachmentForm({
               )}
             </Button>
           </CardTitle>
-          {!isEditing &&
-            (!initialData.imageUrl ? (
-              <CardDescription className="flex items-center justify-center h-60 bg-slate-200 rounded-md mt-6">
-                <ImageIcon className="h-10 w-10 text-slate-500" />
-              </CardDescription>
-            ) : (
-              <div className="relative aspect-video w-full h-60 mt-2">
-                <Image
-                  alt="Upload"
-                  fill
-                  className="object-cover rounded-md"
-                  src={initialData.imageUrl}
-                />
-              </div>
-            ))}
+          {!isEditing && (
+            <>
+              {initialData.attachments.length === 0 && (
+                <p className="text-sm mt-2 text-slate-500 italic">
+                  No hay archivos adjuntos todavía
+                </p>
+              )}
+            </>
+          )}
+          {initialData.attachments.length > 0 && (
+            <div className="space-y-2">
+              {initialData.attachments.map((attachment) => (
+                <div
+                  key={attachment.id}
+                  className="flex items-center p-3 w-full bg-sky-100 border-sky-200 border text-sky-700 rounded-md"
+                >
+                  <File className="h-4 w-4 mr-2 flex-shrink-0" />
+                  <p className="text-xs line-clamp-1">{attachment.name}</p>
+                  {deletingId === attachment.id && (
+                    <div>
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    </div>
+                  )}
+                  {deletingId !== attachment.id && (
+                    <button
+                      onClick={() => onDelete(attachment.id)}
+                      className="ml-auto hover:opacity-75 transition"
+                    >
+                      <X className="h-4 w-4 animate-spin" />
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
         </CardHeader>
         <CardContent>
           {isEditing && (
@@ -130,6 +169,10 @@ export default function AttachmentForm({
                   className="opacity-0 w-full h-full absolute"
                 />
               </div>
+              <p className="text-xs mt-4">
+                Agregue todo lo que sus estudiantes puedan necesitar para
+                completar el curso.
+              </p>
             </form>
           )}
         </CardContent>

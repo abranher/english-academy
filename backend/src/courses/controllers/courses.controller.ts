@@ -20,6 +20,11 @@ export class CoursesController {
     return this.coursesService.create(createCourseDto);
   }
 
+  @Post(':id/attachments')
+  createAttachment(@Param('id') id: string) {
+    return this.coursesService.createAttachment(id);
+  }
+
   @Get()
   findAll() {
     return this.coursesService.findAll();

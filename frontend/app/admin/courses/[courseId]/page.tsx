@@ -24,19 +24,19 @@ export default async function CourseIdPage({
     courseId: string;
   };
 }) {
-  const courseResponse = await axios.get(`/api/courses/${params.courseId}`);
+  const { data: course } = await axios.get(`/api/courses/${params.courseId}`);
   const { data: levels } = await axios.get(`/api/levels/`);
 
-  if (!courseResponse) {
+  if (!course) {
     return redirect("/admin");
   }
 
   const requieredFields = [
-    courseResponse.data.title,
-    courseResponse.data.description,
-    courseResponse.data.imageUrl,
-    courseResponse.data.price,
-    courseResponse.data.skillId,
+    course.title,
+    course.description,
+    course.imageUrl,
+    course.price,
+    course.skillId,
   ];
 
   const totalFields = requieredFields.length;
@@ -72,22 +72,13 @@ export default async function CourseIdPage({
 
       <div className="grid gap-4 md:grid-cols-[1fr_250px] lg:grid-cols-3 lg:gap-8">
         <div className="grid auto-rows-max items-start gap-4 lg:col-span-2 lg:gap-8">
-          <TitleForm
-            initialData={courseResponse.data}
-            courseId={courseResponse.data.id}
-          />
-          <DescriptionForm
-            initialData={courseResponse.data}
-            courseId={courseResponse.data.id}
-          />
-          <ImageForm
-            initialData={courseResponse.data}
-            courseId={courseResponse.data.id}
-          />
+          <TitleForm initialData={course} courseId={course.id} />
+          <DescriptionForm initialData={course} courseId={course.id} />
+          <ImageForm initialData={course} courseId={course.id} />
 
           <LevelForm
-            initialData={courseResponse.data}
-            courseId={courseResponse.data.id}
+            initialData={course}
+            courseId={course.id}
             options={levels.map((level: any) => ({
               label: `${level.levelCode} - ${level.title}`,
               value: level.id,
@@ -108,20 +99,14 @@ export default async function CourseIdPage({
                 <IconBadge icon={CircleDollarSign} />
                 <h2 className="text-xl">Vende tu curso</h2>
               </div>
-              <PriceForm
-                initialData={courseResponse.data}
-                courseId={courseResponse.data.id}
-              />
+              <PriceForm initialData={course} courseId={course.id} />
             </div>
             <div>
               <div className="flex items-center gap-x-2">
                 <IconBadge icon={File} />
                 <h2 className="text-xl">Recursos y archivos adjuntos</h2>
               </div>
-              <AttachmentForm
-                initialData={courseResponse.data}
-                courseId={courseResponse.data.id}
-              />
+              <AttachmentForm initialData={course} courseId={course.id} />
             </div>
           </div>
         </div>
