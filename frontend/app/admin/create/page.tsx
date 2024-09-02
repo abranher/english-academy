@@ -17,8 +17,6 @@ import {
 import { Label } from "@/components/shadcn/ui/label";
 import Link from "next/link";
 import { toast } from "sonner";
-import { Skeleton } from "@/components/shadcn/ui/skeleton";
-import { useQuery } from "@tanstack/react-query";
 import messages from "@/libs/validations/schemas/messages";
 
 const formSchema = z.object({
@@ -34,21 +32,16 @@ export default function CreateCoursePage() {
     resolver: zodResolver(formSchema),
   });
 
-  const { data: levels, isLoading } = useQuery({
-    queryKey: ["levels"],
-    queryFn: () => {
-      return axios.get("/api/levels");
-    },
-  });
-
   const router = useRouter();
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const response = axios.post("/api/courses", values);
+      const response = await axios.post("/api/courses", values);
+
       router.push(`/admin/courses/${response.data.id}`);
       toast.success("Curso creado!");
     } catch (error) {
+      console.log(error);
       toast.error("something ocurred!");
     }
   };
@@ -72,8 +65,6 @@ export default function CreateCoursePage() {
             </CardHeader>
             <CardContent>
               <form onSubmit={handleSubmit(onSubmit)} className="grid gap-6">
-                {isLoading && <Skeleton className="h-4 w-[250px]" />}
-
                 <div className="grid gap-3">
                   <Label htmlFor="name">Título del curso</Label>
                   <Input

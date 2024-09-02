@@ -1,5 +1,6 @@
 import AsideAdmin from "@/components/admin/AsideAdmin";
 import HeaderAdmin from "@/components/admin/HeaderAdmin";
+import MainBox from "@/components/admin/MainBox";
 import "@/styles/globals.css";
 
 export default function RootLayout({
@@ -14,7 +15,7 @@ export default function RootLayout({
         <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
           <HeaderAdmin />
 
-          {children}
+          <MainBox>{children}</MainBox>
         </div>
       </div>
     </div>

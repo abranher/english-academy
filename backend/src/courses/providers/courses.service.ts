@@ -14,18 +14,19 @@ export class CoursesService {
       },
     });
 
-    return {
-      message: 'Curso creado exitosamente!',
-      data: course,
-    };
+    return course;
   }
 
   findAll() {
     return `This action returns all courses`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} course`;
+  async findOne(id: string) {
+    return await this.prisma.course.findUnique({
+      where: {
+        id,
+      },
+    });
   }
 
   update(id: number, updateCourseDto: UpdateCourseDto) {
