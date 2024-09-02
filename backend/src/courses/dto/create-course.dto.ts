@@ -12,4 +12,7 @@ export class CreateCourseDto {
   @IsString()
   @IsOptional()
   levelId: string;
+
+  @IsOptional()
+  price: number;
 }

@@ -16,14 +16,17 @@ import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
 import { toast } from "sonner";
 
-interface ImageFormProps {
+interface AttachmentFormProps {
   initialData: {
     imageUrl: string;
   };
   courseId: string;
 }
 
-export default function ImageForm({ initialData, courseId }: ImageFormProps) {
+export default function AttachmentForm({
+  initialData,
+  courseId,
+}: AttachmentFormProps) {
   const [isEditing, setIsEditing] = useState(false);
 
   const toggleEdit = () => setIsEditing((current) => !current);
@@ -59,20 +62,14 @@ export default function ImageForm({ initialData, courseId }: ImageFormProps) {
       <Card x-chunk="dashboard-07-chunk-0">
         <CardHeader>
           <CardTitle className="flex justify-between gap-3 text-lg">
-            Imagen del curso
+            Archivos adjuntos del curso
             <Button onClick={toggleEdit} variant="ghost">
               {isEditing && <>Cancelar</>}
 
               {!isEditing && !initialData.imageUrl && (
                 <>
                   <PlusCircle className="h-4 w-4 mr-2" />
-                  Añadir una imagen
-                </>
-              )}
-              {!isEditing && initialData.imageUrl && (
-                <>
-                  <Pencil className="h-4 w-4 mr-2" />
-                  Editar imagen
+                  Añadir una archivo
                 </>
               )}
             </Button>

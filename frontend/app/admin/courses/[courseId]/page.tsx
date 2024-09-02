@@ -2,12 +2,20 @@ import { IconBadge } from "@/components/icons/IconBadge";
 import { Badge } from "@/components/shadcn/ui/badge";
 import { Button } from "@/components/shadcn/ui/button";
 import axios from "@/config/axios";
-import { ChevronLeft, LayoutDashboard } from "lucide-react";
+import {
+  ChevronLeft,
+  CircleDollarSign,
+  File,
+  LayoutDashboard,
+  ListChecks,
+} from "lucide-react";
 import { redirect } from "next/navigation";
 import TitleForm from "./_components/TitleForm";
 import DescriptionForm from "./_components/DescriptionForm";
 import ImageForm from "./_components/ImageForm";
 import LevelForm from "./_components/LevelForm";
+import PriceForm from "./_components/PriceForm";
+import AttachmentForm from "./_components/AttachmentForm";
 
 export default async function CourseIdPage({
   params,
@@ -87,7 +95,35 @@ export default async function CourseIdPage({
           />
         </div>
         <div className="grid auto-rows-max items-start gap-4 lg:gap-8">
-          content
+          <div className="space-y-6">
+            <div>
+              <div className="flex items-center gap-x-2">
+                <IconBadge icon={ListChecks} />
+                <h2 className="text-xl">Capítulos del curso</h2>
+              </div>
+              <div>todo: chatp</div>
+            </div>
+            <div>
+              <div className="flex items-center gap-x-2">
+                <IconBadge icon={CircleDollarSign} />
+                <h2 className="text-xl">Vende tu curso</h2>
+              </div>
+              <PriceForm
+                initialData={courseResponse.data}
+                courseId={courseResponse.data.id}
+              />
+            </div>
+            <div>
+              <div className="flex items-center gap-x-2">
+                <IconBadge icon={File} />
+                <h2 className="text-xl">Recursos y archivos adjuntos</h2>
+              </div>
+              <AttachmentForm
+                initialData={courseResponse.data}
+                courseId={courseResponse.data.id}
+              />
+            </div>
+          </div>
         </div>
       </div>
     </>

@@ -17,7 +17,8 @@ import {
 } from "@/components/shadcn/ui/form";
 import { Input } from "@/components/shadcn/ui/input";
 import axios from "@/config/axios";
-import messages from "@/libs/validations/schemas/messages";
+import { formatPrice } from "@/libs/format";
+import { cn } from "@/libs/shadcn/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Pencil } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -26,18 +27,18 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
-interface TitleFormProps {
+interface PriceFormProps {
   initialData: {
-    title: string;
+    price: number;
   };
   courseId: string;
 }
 
 const formSchema = z.object({
-  title: z.string(messages.requiredError).min(4, messages.min(4)),
+  price: z.coerce.number(),
 });
 
-export default function TitleForm({ initialData, courseId }: TitleFormProps) {
+export default function PriceForm({ initialData, courseId }: PriceFormProps) {
   const [isEditing, setIsEditing] = useState(false);
 
   const toggleEdit = () => setIsEditing((current) => !current);
@@ -46,7 +47,9 @@ export default function TitleForm({ initialData, courseId }: TitleFormProps) {
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: initialData,
+    defaultValues: {
+      price: initialData?.price || undefined,
+    },
   });
 
   const { isSubmitting, isValid } = form.formState;
@@ -54,7 +57,7 @@ export default function TitleForm({ initialData, courseId }: TitleFormProps) {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       await axios.patch(`/api/courses/${courseId}`, values);
-      toast.success("Título del curso actualizado!");
+      toast.success("Precio del curso actualizado!");
       toggleEdit();
       router.refresh();
     } catch (error) {
@@ -66,20 +69,31 @@ export default function TitleForm({ initialData, courseId }: TitleFormProps) {
     <>
       <Card x-chunk="dashboard-07-chunk-0">
         <CardHeader>
-          <CardTitle className="flex justify-between text-lg">
-            Título del curso
+          <CardTitle className="flex justify-between gap-3 text-lg">
+            Precio del curso
             <Button onClick={toggleEdit} variant="ghost">
               {isEditing ? (
                 <>Cancelar</>
               ) : (
                 <>
                   <Pencil className="h-4 w-4 mr-2" />
-                  Editar título
+                  Editar precio
                 </>
               )}
             </Button>
           </CardTitle>
-          <CardDescription>{initialData.title}</CardDescription>
+          {!isEditing && (
+            <CardDescription
+              className={cn(
+                "text-sm mt-2",
+                !initialData.price && "text-slate-500 italic"
+              )}
+            >
+              {initialData.price
+                ? formatPrice(initialData.price)
+                : "Sin precio"}
+            </CardDescription>
+          )}
         </CardHeader>
         <CardContent>
           {isEditing && (
@@ -90,13 +104,15 @@ export default function TitleForm({ initialData, courseId }: TitleFormProps) {
               >
                 <FormField
                   control={form.control}
-                  name="title"
+                  name="price"
                   render={({ field }) => (
                     <FormItem>
                       <FormControl>
                         <Input
+                          type="number"
+                          step="0.01"
                           disabled={isSubmitting}
-                          placeholder="e.g. 'Advanced web development'"
+                          placeholder="Establece un precio para tu curso"
                           {...field}
                         />
                       </FormControl>

@@ -72,7 +72,7 @@ export default function DescriptionForm({
     <>
       <Card x-chunk="dashboard-07-chunk-0">
         <CardHeader>
-          <CardTitle className="flex justify-between gap-3">
+          <CardTitle className="flex justify-between gap-3 text-lg">
             Descripción del curso
             <Button onClick={toggleEdit} variant="ghost">
               {isEditing ? (
