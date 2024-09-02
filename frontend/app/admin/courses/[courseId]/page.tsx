@@ -5,6 +5,7 @@ import axios from "@/config/axios";
 import { ChevronLeft, LayoutDashboard } from "lucide-react";
 import { redirect } from "next/navigation";
 import TitleForm from "./_components/TitleForm";
+import DescriptionForm from "./_components/DescriptionForm";
 
 export default async function CourseIdPage({
   params,
@@ -63,6 +64,10 @@ export default async function CourseIdPage({
       <div className="grid gap-4 md:grid-cols-[1fr_250px] lg:grid-cols-3 lg:gap-8">
         <div className="grid auto-rows-max items-start gap-4 lg:col-span-2 lg:gap-8">
           <TitleForm initialData={response.data} courseId={response.data.id} />
+          <DescriptionForm
+            initialData={response.data}
+            courseId={response.data.id}
+          />
         </div>
         <div className="grid auto-rows-max items-start gap-4 lg:gap-8">
           content
