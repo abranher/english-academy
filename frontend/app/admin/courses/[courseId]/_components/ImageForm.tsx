@@ -1,5 +1,7 @@
 "use client";
 
+import { useDropzone } from "react-dropzone";
+import axios from "@/config/axios";
 import { Button } from "@/components/shadcn/ui/button";
 import {
   Card,
@@ -8,25 +10,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/shadcn/ui/card";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "@/components/shadcn/ui/form";
-import { Textarea } from "@/components/shadcn/ui/textarea";
-import axios from "@/config/axios";
-import { cn } from "@/libs/shadcn/utils";
-import messages from "@/libs/validations/schemas/messages";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { ImageIcon, Pencil, PlusCircle } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useCallback, useState } from "react";
 import { toast } from "sonner";
-import { z } from "zod";
 
 interface ImageFormProps {
   initialData: {
@@ -35,29 +23,29 @@ interface ImageFormProps {
   courseId: string;
 }
 
-const formSchema = z.object({
-  imageUrl: z.string(messages.requiredError).min(1, messages.min(1)),
-});
-
 export default function ImageForm({ initialData, courseId }: ImageFormProps) {
   const [isEditing, setIsEditing] = useState(false);
 
   const toggleEdit = () => setIsEditing((current) => !current);
 
+  // drop zone
+
+  const onDrop = useCallback((acceptedFiles: any) => {
+    console.log(acceptedFiles[0]);
+  }, []);
+  const { getRootProps, getInputProps, isDragActive, acceptedFiles } =
+    useDropzone({ onDrop });
+
   const router = useRouter();
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      imageUrl: initialData?.imageUrl || "",
-    },
-  });
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
-  const { isSubmitting, isValid } = form.formState;
+    const formData = new FormData();
+    formData.append("imageUrl", acceptedFiles[0]);
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await axios.patch(`/api/courses/${courseId}`, values);
+      await axios.post(`/api/courses/${courseId}`, formData);
       toast.success("Descripción del curso actualizada!");
       toggleEdit();
       router.refresh();
@@ -91,11 +79,11 @@ export default function ImageForm({ initialData, courseId }: ImageFormProps) {
           </CardTitle>
           {!isEditing &&
             (!initialData.imageUrl ? (
-              <CardDescription className="flex items-center justify-center h-60 bg-slate-200 rounded-md">
+              <CardDescription className="flex items-center justify-center h-60 bg-slate-200 rounded-md mt-6">
                 <ImageIcon className="h-10 w-10 text-slate-500" />
               </CardDescription>
             ) : (
-              <div className="relative aspect-video mt-2">
+              <div className="relative aspect-video w-full h-60 mt-2">
                 <Image
                   alt="Upload"
                   fill
@@ -107,34 +95,45 @@ export default function ImageForm({ initialData, courseId }: ImageFormProps) {
         </CardHeader>
         <CardContent>
           {isEditing && (
-            <Form {...form}>
-              <form
-                onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-4 mt-4"
+            <form onSubmit={onSubmit}>
+              <div
+                {...getRootProps()}
+                className="flex items-center justify-center w-full h-60 bg-gray-100 rounded-lg border-2 border-dashed border-gray-400 cursor-pointer mt-2"
               >
-                <FormField
-                  control={form.control}
-                  name="imageUrl"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <Textarea
-                          disabled={isSubmitting}
-                          placeholder="e.g. 'Este curso trata sobre...'"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
+                <div className="flex flex-col items-center justify-center">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-12 h-12 text-gray-400"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M7 16a4 4 0 01-4-4h5l5 4zM20 8h-1.5a2.5 2.5 0 00-5 0H6a2.5 2.5 0 00-5 0V6a2.5 2.5 0 005 0h4a2.5 2.5 0 005 0v2m-1.5 6a2.5 2.5 0 00-5 0H6a2.5 2.5 0 00-5 0v2a2.5 2.5 0 005 0h4a2.5 2.5 0 005 0v2"
+                    />
+                  </svg>
+                  {isDragActive ? (
+                    <p className="mt-2 text-sm text-gray-500">
+                      Suelta los archivos aquí ...
+                    </p>
+                  ) : (
+                    <p className="mt-2 text-sm text-gray-500">
+                      Arrastra y suelta tus archivos aquí o{" "}
+                      <span className="font-medium text-blue-600 hover:underline">
+                        explora
+                      </span>
+                    </p>
                   )}
-                />
-                <div className="flex items-center gap-x-2">
-                  <Button disabled={!isValid || isSubmitting} type="submit">
-                    Guardar
-                  </Button>
                 </div>
-              </form>
-            </Form>
+                <input
+                  {...getInputProps()}
+                  className="opacity-0 w-full h-full absolute"
+                />
+              </div>
+            </form>
           )}
         </CardContent>
       </Card>
