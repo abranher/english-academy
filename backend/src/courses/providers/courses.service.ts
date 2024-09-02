@@ -29,7 +29,7 @@ export class CoursesService {
     });
   }
 
-  update(id: number, updateCourseDto: UpdateCourseDto) {
+  update(id: string, updateCourseDto: UpdateCourseDto) {
     return `This action updates a #${id} course`;
   }
 
