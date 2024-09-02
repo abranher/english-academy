@@ -44,4 +44,12 @@ export class CoursesController {
   remove(@Param('id') id: string) {
     return this.coursesService.remove(+id);
   }
+
+  @Delete(':id/attachments/:attachmentId')
+  removeAttachment(
+    @Param('id') id: string,
+    @Param('attachmentId') attachmentId: string,
+  ) {
+    return this.coursesService.removeAttachment(id, attachmentId);
+  }
 }

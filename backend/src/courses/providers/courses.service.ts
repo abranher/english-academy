@@ -70,4 +70,23 @@ export class CoursesService {
   remove(id: number) {
     return `This action removes a #${id} course`;
   }
+
+  async removeAttachment(id: string, attachmentId: string) {
+    const courseOwner = await this.prisma.course.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!courseOwner) throw new NotFoundException('Curso no encontrado.');
+
+    const attachment = await this.prisma.attachment.delete({
+      where: {
+        courseId: id,
+        id: attachmentId,
+      },
+    });
+
+    return attachment;
+  }
 }
