@@ -20,28 +20,26 @@ import axios from "@/config/axios";
 import { cn } from "@/libs/shadcn/utils";
 import messages from "@/libs/validations/schemas/messages";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Pencil } from "lucide-react";
+import { ImageIcon, Pencil, PlusCircle } from "lucide-react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
-interface DescriptionFormProps {
+interface ImageFormProps {
   initialData: {
-    description: string;
+    imageUrl: string;
   };
   courseId: string;
 }
 
 const formSchema = z.object({
-  description: z.string(messages.requiredError).min(4, messages.min(4)),
+  imageUrl: z.string(messages.requiredError).min(1, messages.min(1)),
 });
 
-export default function DescriptionForm({
-  initialData,
-  courseId,
-}: DescriptionFormProps) {
+export default function ImageForm({ initialData, courseId }: ImageFormProps) {
   const [isEditing, setIsEditing] = useState(false);
 
   const toggleEdit = () => setIsEditing((current) => !current);
@@ -50,7 +48,9 @@ export default function DescriptionForm({
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: initialData,
+    defaultValues: {
+      imageUrl: initialData?.imageUrl || "",
+    },
   });
 
   const { isSubmitting, isValid } = form.formState;
@@ -71,28 +71,39 @@ export default function DescriptionForm({
       <Card x-chunk="dashboard-07-chunk-0">
         <CardHeader>
           <CardTitle className="flex justify-between gap-3">
-            Descripción del curso
+            Imagen del curso
             <Button onClick={toggleEdit} variant="ghost">
-              {isEditing ? (
-                <>Cancelar</>
-              ) : (
+              {isEditing && <>Cancelar</>}
+
+              {!isEditing && !initialData.imageUrl && (
+                <>
+                  <PlusCircle className="h-4 w-4 mr-2" />
+                  Añadir una imagen
+                </>
+              )}
+              {!isEditing && initialData.imageUrl && (
                 <>
                   <Pencil className="h-4 w-4 mr-2" />
-                  Editar descripción
+                  Editar imagen
                 </>
               )}
             </Button>
           </CardTitle>
-          {!isEditing && (
-            <CardDescription
-              className={cn(
-                "text-sm mt-2",
-                !initialData.description && "text-slate-500 italic"
-              )}
-            >
-              {initialData.description || "Sin descripción"}
-            </CardDescription>
-          )}
+          {!isEditing &&
+            (!initialData.imageUrl ? (
+              <CardDescription className="flex items-center justify-center h-60 bg-slate-200 rounded-md">
+                <ImageIcon className="h-10 w-10 text-slate-500" />
+              </CardDescription>
+            ) : (
+              <div className="relative aspect-video mt-2">
+                <Image
+                  alt="Upload"
+                  fill
+                  className="object-cover rounded-md"
+                  src={initialData.imageUrl}
+                />
+              </div>
+            ))}
         </CardHeader>
         <CardContent>
           {isEditing && (
@@ -103,7 +114,7 @@ export default function DescriptionForm({
               >
                 <FormField
                   control={form.control}
-                  name="description"
+                  name="imageUrl"
                   render={({ field }) => (
                     <FormItem>
                       <FormControl>

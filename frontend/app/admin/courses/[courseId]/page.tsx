@@ -6,6 +6,7 @@ import { ChevronLeft, LayoutDashboard } from "lucide-react";
 import { redirect } from "next/navigation";
 import TitleForm from "./_components/TitleForm";
 import DescriptionForm from "./_components/DescriptionForm";
+import ImageForm from "./_components/ImageForm";
 
 export default async function CourseIdPage({
   params,
@@ -19,8 +20,6 @@ export default async function CourseIdPage({
   if (!response) {
     return redirect("/admin");
   }
-
-  console.log(response);
 
   const requieredFields = [
     response.data.title,
@@ -68,6 +67,7 @@ export default async function CourseIdPage({
             initialData={response.data}
             courseId={response.data.id}
           />
+          <ImageForm initialData={response.data} courseId={response.data.id} />
         </div>
         <div className="grid auto-rows-max items-start gap-4 lg:gap-8">
           content
