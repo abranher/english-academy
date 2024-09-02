@@ -115,7 +115,7 @@ CREATE TABLE "Course" (
     "description" TEXT,
     "price" DOUBLE PRECISION,
     "imageUrl" TEXT,
-    "status" "CourseStatus" NOT NULL,
+    "status" "CourseStatus" NOT NULL DEFAULT 'DRAFT',
     "levelId" TEXT NOT NULL,
     "skillId" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,

@@ -17,9 +17,19 @@ import {
 import { Label } from "@/components/shadcn/ui/label";
 import Link from "next/link";
 import { toast } from "sonner";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/shadcn/ui/select";
 
 const formSchema = z.object({
   title: z.string().min(1, { message: "Title is required" }),
+  levelId: z.string(),
 });
 
 export default function CreateCoursePage() {
@@ -40,6 +50,7 @@ export default function CreateCoursePage() {
     try {
       const response = axios.post("/api/courses", values);
       router.push(`/admin/courses/${response.data.id}`);
+      toast.success("Curso creado!");
     } catch (error) {
       toast.error("something ocurred!");
     }
@@ -49,15 +60,15 @@ export default function CreateCoursePage() {
     <>
       <div className="max-w-5xl mx-auto flex items-center justify-center h-full p-6">
         <div>
-          <h1 className="text-2xl">Name your course</h1>
+          <h1 className="text-2xl">Ponle nombre a tu curso</h1>
           <p className="text-sm text-slate-600">
-            What would you like to name your course? Don&apos;t worry, you can
-            change this later.
+            ¿Cómo te gustaría llamar a tu curso? No te preocupes, podrás cambiar
+            esto más tarde.
           </p>{" "}
           <br />
           <Card x-chunk="dashboard-07-chunk-0">
             <CardHeader>
-              <CardTitle>Course Title</CardTitle>
+              <CardTitle>Curso</CardTitle>
               <CardDescription>
                 Lipsum dolor sit amet, consectetur adipiscing elit
               </CardDescription>
@@ -65,7 +76,25 @@ export default function CreateCoursePage() {
             <CardContent>
               <form onSubmit={handleSubmit(onSubmit)} className="grid gap-6">
                 <div className="grid gap-3">
-                  <Label htmlFor="name">Course Title</Label>
+                  <Label>Nivel</Label>
+                  <Select>
+                    <SelectTrigger className="w-[180px]">
+                      <SelectValue placeholder="Select a fruit" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectLabel>Fruits</SelectLabel>
+                        <SelectItem value="apple">Apple</SelectItem>
+                        <SelectItem value="banana">Banana</SelectItem>
+                        <SelectItem value="blueberry">Blueberry</SelectItem>
+                        <SelectItem value="grapes">Grapes</SelectItem>
+                        <SelectItem value="pineapple">Pineapple</SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="grid gap-3">
+                  <Label htmlFor="name">Título del curso</Label>
                   <Input
                     id="name"
                     type="text"
@@ -80,10 +109,10 @@ export default function CreateCoursePage() {
                 <div className="flex items-center gap-x-2">
                   <Link href="/admin/dashboard">
                     <Button variant="ghost" type="button">
-                      cancel
+                      Cancelar
                     </Button>
                   </Link>
-                  <Button type="submit">Continue</Button>
+                  <Button type="submit">Continuar</Button>
                 </div>
               </form>
             </CardContent>

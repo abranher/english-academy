@@ -130,7 +130,7 @@ model Course {
   description String?
   price       Float?
   imageUrl    String?
-  status      CourseStatus
+  status      CourseStatus @default(DRAFT)
 
   levelId     String
   level       Level        @relation(fields: [levelId], references: [id])
