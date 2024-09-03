@@ -60,6 +60,11 @@ export class CoursesService {
         id,
       },
       include: {
+        chapters: {
+          orderBy: {
+            position: 'asc',
+          },
+        },
         attachments: {
           orderBy: {
             createdAt: 'desc',

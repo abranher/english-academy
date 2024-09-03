@@ -16,6 +16,7 @@ import ImageForm from "./_components/ImageForm";
 import LevelForm from "./_components/LevelForm";
 import PriceForm from "./_components/PriceForm";
 import AttachmentForm from "./_components/AttachmentForm";
+import ChaptersForm from "./_components/ChaptersForm";
 
 export default async function CourseIdPage({
   params,
@@ -37,6 +38,7 @@ export default async function CourseIdPage({
     course.imageUrl,
     course.price,
     course.skillId,
+    course.chapters.some((chapter) => chapter.isPublished),
   ];
 
   const totalFields = requieredFields.length;
@@ -87,21 +89,21 @@ export default async function CourseIdPage({
         </div>
         <div className="grid auto-rows-max items-start gap-4 lg:gap-8">
           <div className="space-y-6">
-            <div>
+            <div className="flex flex-col gap-3">
               <div className="flex items-center gap-x-2">
                 <IconBadge icon={ListChecks} />
                 <h2 className="text-xl">Capítulos del curso</h2>
               </div>
-              <div>todo: chatp</div>
+              <ChaptersForm initialData={course} courseId={course.id} />
             </div>
-            <div>
+            <div className="flex flex-col gap-3">
               <div className="flex items-center gap-x-2">
                 <IconBadge icon={CircleDollarSign} />
                 <h2 className="text-xl">Vende tu curso</h2>
               </div>
               <PriceForm initialData={course} courseId={course.id} />
             </div>
-            <div>
+            <div className="flex flex-col gap-3">
               <div className="flex items-center gap-x-2">
                 <IconBadge icon={File} />
                 <h2 className="text-xl">Recursos y archivos adjuntos</h2>

@@ -17,19 +17,20 @@ import {
 } from "@/components/shadcn/ui/form";
 import { Input } from "@/components/shadcn/ui/input";
 import axios from "@/config/axios";
+import { cn } from "@/libs/shadcn/utils";
 import messages from "@/libs/validations/schemas/messages";
+import { Chapter } from "@/types/models/Chapter";
+import { Course } from "@/types/models/Course";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Pencil } from "lucide-react";
+import { Pencil, PlusCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
-interface TitleFormProps {
-  initialData: {
-    title: string;
-  };
+interface ChaptersFormProps {
+  initialData: Course & { chapters: Chapter[] };
   courseId: string;
 }
 
@@ -37,25 +38,33 @@ const formSchema = z.object({
   title: z.string(messages.requiredError).min(4, messages.min(4)),
 });
 
-export default function TitleForm({ initialData, courseId }: TitleFormProps) {
-  const [isEditing, setIsEditing] = useState(false);
+export default function ChaptersForm({
+  initialData,
+  courseId,
+}: ChaptersFormProps) {
+  const [isCreating, setIsCreating] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
 
-  const toggleEdit = () => setIsEditing((current) => !current);
+  const toggleCreating = () => {
+    setIsCreating((current) => !current);
+  };
 
   const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: initialData,
+    defaultValues: {
+      title: "",
+    },
   });
 
   const { isSubmitting, isValid } = form.formState;
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await axios.patch(`/api/courses/${courseId}`, values);
-      toast.success("Título del curso actualizado!");
-      toggleEdit();
+      await axios.post(`/api/courses/${courseId}/chapters`, values);
+      toast.success("Capítulo creado!");
+      toggleCreating();
       router.refresh();
     } catch (error) {
       toast.error("Something wrong");
@@ -66,23 +75,22 @@ export default function TitleForm({ initialData, courseId }: TitleFormProps) {
     <>
       <Card x-chunk="dashboard-07-chunk-0">
         <CardHeader>
-          <CardTitle className="flex justify-between text-lg">
-            Título del curso
-            <Button onClick={toggleEdit} variant="ghost">
-              {isEditing ? (
+          <CardTitle className="flex justify-between gap-3 text-lg">
+            Capítulos del curso
+            <Button onClick={toggleCreating} variant="ghost">
+              {isCreating ? (
                 <>Cancelar</>
               ) : (
                 <>
-                  <Pencil className="h-4 w-4 mr-2" />
-                  Editar título
+                  <PlusCircle className="h-4 w-4 mr-2" />
+                  Añadir un capítulo
                 </>
               )}
             </Button>
           </CardTitle>
-          <CardDescription>{initialData.title}</CardDescription>
         </CardHeader>
         <CardContent>
-          {isEditing && (
+          {isCreating && (
             <Form {...form}>
               <form
                 onSubmit={form.handleSubmit(onSubmit)}
@@ -96,7 +104,7 @@ export default function TitleForm({ initialData, courseId }: TitleFormProps) {
                       <FormControl>
                         <Input
                           disabled={isSubmitting}
-                          placeholder="p.ej. 'Conversación en Inglés Fluido'"
+                          placeholder="p.ej. 'Introducción al curso'"
                           {...field}
                         />
                       </FormControl>
@@ -104,13 +112,27 @@ export default function TitleForm({ initialData, courseId }: TitleFormProps) {
                     </FormItem>
                   )}
                 />
-                <div className="flex items-center gap-x-2">
-                  <Button disabled={!isValid || isSubmitting} type="submit">
-                    Guardar
-                  </Button>
-                </div>
+                <Button disabled={!isValid || isSubmitting} type="submit">
+                  Crear
+                </Button>
               </form>
             </Form>
+          )}
+          {!isCreating && (
+            <div
+              className={cn(
+                "text-sm mt-2",
+                !initialData.chapters.length && "text-slate-500 italic"
+              )}
+            >
+              {!initialData.chapters.length && "Sin capítulos"}
+              {/* TODO: Add a list of chapters */}
+            </div>
+          )}
+          {!isCreating && (
+            <p className="text-xs text-muted-foreground mt-4">
+              Arrastre y suelte para reordenar los capítulos
+            </p>
           )}
         </CardContent>
       </Card>

@@ -111,7 +111,7 @@ export default function DescriptionForm({
                       <FormControl>
                         <Textarea
                           disabled={isSubmitting}
-                          placeholder="e.g. 'Este curso trata sobre...'"
+                          placeholder="p.ej. 'Este curso trata sobre...'"
                           {...field}
                         />
                       </FormControl>
