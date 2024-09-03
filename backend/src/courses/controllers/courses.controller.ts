@@ -16,11 +16,15 @@ import { CreateCourseDto } from '../dto/create-course.dto';
 import { UpdateCourseDto } from '../dto/update-course.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
-import { randomUUID } from 'crypto';
+import { createFileName, imageFileFilter } from 'libs/storage';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Controller('courses')
 export class CoursesController {
-  constructor(private readonly coursesService: CoursesService) {}
+  constructor(
+    private readonly coursesService: CoursesService,
+    private prisma: PrismaService,
+  ) {}
 
   /**
    * Create routes
@@ -34,32 +38,34 @@ export class CoursesController {
   @Post(':id/image')
   @UseInterceptors(
     FileInterceptor('imageUrl', {
-      fileFilter: (req, file, callback) => {
-        if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
-          req.fileValidationError = 'Solo se permiten archivos de imagen';
-          return callback(null, false);
-        }
-        callback(null, true);
-      },
+      fileFilter: imageFileFilter,
       storage: diskStorage({
         destination: './storage/images',
-        filename: (req, file, cb) => {
-          const fileName = `${randomUUID()}.${file.originalname.split('.')[1]}`;
-          console.log(fileName);
-          cb(null, fileName);
-        },
+        filename: createFileName,
       }),
     }),
   )
-  uploadImage(@Req() req, @UploadedFile() file: Express.Multer.File) {
+  async uploadImage(
+    @Req() req,
+    @UploadedFile() file: Express.Multer.File,
+    @Param('id') id: string,
+  ) {
     if (!file || req.fileValidationError) {
       throw new BadRequestException(
         'Archivo proporcionado no válido, [archivos de imagen permitidos]',
       );
     }
-    return file.originalname;
-    console.log(file.originalname.split('.')[1]);
-    console.log(!file.originalname.match(/\.(jpg|jpeg|png|gif)$/));
+
+    const course = await this.prisma.course.update({
+      where: {
+        id,
+      },
+      data: {
+        imageUrl: file.filename,
+      },
+    });
+
+    return course;
   }
 
   @Post(':id/attachments')
