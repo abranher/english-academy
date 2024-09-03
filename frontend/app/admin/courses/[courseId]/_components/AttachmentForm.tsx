@@ -1,7 +1,8 @@
 "use client";
 
-import { useDropzone } from "react-dropzone";
+import NextImage from "next/image";
 import axios from "@/config/axios";
+import { useDropzone } from "react-dropzone";
 import { Button } from "@/components/shadcn/ui/button";
 import {
   Card,
@@ -9,13 +10,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/shadcn/ui/card";
-import { File, ImageIcon, Loader2, PlusCircle, X } from "lucide-react";
+import { File, Loader2, PlusCircle, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
 import { toast } from "sonner";
 import { Course } from "@/types/models/Course";
 import { Attachment } from "@/types/models/Attachment";
-import { z } from "zod";
+import { Image } from "@nextui-org/react";
 
 interface AttachmentFormProps {
   initialData: Course & { attachments: Attachment[] };
@@ -52,7 +53,7 @@ export default function AttachmentForm({
 
     try {
       await axios.post(`/api/courses/${courseId}/attachments`, formData);
-      toast.success("Archivo actualizado!");
+      toast.success("Archivo añadido!");
       toggleEdit();
       setSelectedFile(undefined);
       router.refresh();
@@ -65,7 +66,7 @@ export default function AttachmentForm({
     try {
       setDeletingId(id);
       await axios.delete(`/api/courses/${courseId}/attachments/${id}`);
-      toast.success("Attachment deleted");
+      toast.success("Archivo adjunto eliminado");
       router.refresh();
     } catch {
       toast.error("Something went wrong");
@@ -110,7 +111,7 @@ export default function AttachmentForm({
                   <File className="h-4 w-4 mr-2 flex-shrink-0" />
                   <p className="text-xs line-clamp-1">{attachment.name}</p>
                   {deletingId === attachment.id && (
-                    <div>
+                    <div className="ml-auto">
                       <Loader2 className="h-4 w-4 animate-spin" />
                     </div>
                   )}
@@ -119,7 +120,7 @@ export default function AttachmentForm({
                       onClick={() => onDelete(attachment.id)}
                       className="ml-auto hover:opacity-75 transition"
                     >
-                      <X className="h-4 w-4 animate-spin" />
+                      <X className="h-4 w-4" />
                     </button>
                   )}
                 </div>
@@ -171,6 +172,47 @@ export default function AttachmentForm({
                 Agregue todo lo que sus estudiantes puedan necesitar para
                 completar el curso.
               </p>
+
+              {selectedFile && (
+                <>
+                  <article className="flex items-center space-x-6 p-6">
+                    {selectedFile.type.startsWith("image/") && (
+                      <Image
+                        as={NextImage}
+                        src={URL.createObjectURL(selectedFile)}
+                        alt="Preview"
+                        width={60}
+                        height={88}
+                        className="mt-2 rounded-md max-w-full"
+                      />
+                    )}
+                    <div className="min-w-0 relative flex-auto">
+                      <p className="text-sm font-bold">
+                        Nombre del archivo: {selectedFile.name}
+                      </p>
+                      <dl className="mt-2 flex flex-wrap text-sm leading-6 font-medium">
+                        <div>
+                          <dt className="sr-only">Rating</dt>
+                          <dd className="px-1.5 ring-1 ring-slate-200 rounded">
+                            Tamaño del archivo:{" "}
+                            {`${(selectedFile.size / 1024).toFixed(2)} KB o ${(
+                              selectedFile.size /
+                              1024 /
+                              1024
+                            ).toFixed(2)} MB`}
+                          </dd>
+                        </div>
+                      </dl>
+                    </div>
+                  </article>
+
+                  <div className="w-full">
+                    <div className="justify-end flex px-4">
+                      <Button>Subir</Button>
+                    </div>
+                  </div>
+                </>
+              )}
             </form>
           )}
         </CardContent>

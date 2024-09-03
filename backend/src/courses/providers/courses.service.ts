@@ -95,8 +95,8 @@ export class CoursesService {
 
     const attachment = await this.prisma.attachment.delete({
       where: {
-        courseId: id,
         id: attachmentId,
+        courseId: id,
       },
     });
 
