@@ -132,13 +132,14 @@ model Course {
   imageUrl    String?
   status      CourseStatus @default(DRAFT)
 
-  levelId     String?
-  level       Level?       @relation(fields: [levelId], references: [id])
-  lessons     Lesson[]
-  skillId     String?
-  skill       Skill?       @relation(fields: [skillId], references: [id])
+  levelId String?
+  level   Level?  @relation(fields: [levelId], references: [id])
+  skillId String?
+  skill   Skill?  @relation(fields: [skillId], references: [id])
+
   attachments Attachment[]
   chapters    Chapter[]
+  purchases   Purchase[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -175,9 +176,12 @@ model Chapter {
   course   Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
   studentProgress StudentProgress[]
+  lessons         Lesson[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([courseId])
 }
 
 model MuxData {
@@ -187,6 +191,9 @@ model MuxData {
 
   chapterId String  @unique
   chapter   Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model StudentProgress {
@@ -195,6 +202,14 @@ model StudentProgress {
 
   chapterId String
   chapter   Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+
+  isCompleted Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([studentId, chapterId])
+  @@index([chapterId])
 }
 
 // Modelo de Lección
@@ -202,12 +217,27 @@ model Lesson {
   id     String       @id @default(uuid())
   status LessonStatus
 
-  courseId String
-  course   Course @relation(fields: [courseId], references: [id])
+  chapterId String
+  chapter   Chapter @relation(fields: [chapterId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+model Purchase {
+  id        String @id @default(uuid())
+  studentId String
+
+  courseId String
+  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([courseId])
+}
+
+// Enums
 
 enum Roles {
   ADMIN
