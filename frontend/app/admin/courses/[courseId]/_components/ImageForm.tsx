@@ -16,6 +16,7 @@ import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
 import { toast } from "sonner";
 import { Image } from "@nextui-org/react";
+import { generateBackendImageUrl } from "@/libs/utils/http";
 
 interface ImageFormProps {
   initialData: {
@@ -94,7 +95,7 @@ export default function ImageForm({ initialData, courseId }: ImageFormProps) {
                   alt="Upload"
                   fill
                   className="object-cover rounded-md"
-                  src={initialData.imageUrl}
+                  src={generateBackendImageUrl(initialData.imageUrl)}
                 />
               </div>
             ))}
