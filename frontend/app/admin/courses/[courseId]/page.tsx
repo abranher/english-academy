@@ -75,8 +75,8 @@ export default async function CourseIdPage({
       <div className="grid gap-4 md:grid-cols-[1fr_250px] lg:grid-cols-3 lg:gap-8">
         <div className="grid auto-rows-max items-start gap-4 lg:col-span-2 lg:gap-8">
           <TitleForm initialData={course} courseId={course.id} />
+
           <DescriptionForm initialData={course} courseId={course.id} />
-          <ImageForm initialData={course} courseId={course.id} />
 
           <LevelForm
             initialData={course}
@@ -86,6 +86,8 @@ export default async function CourseIdPage({
               value: level.id,
             }))}
           />
+
+          <ImageForm initialData={course} courseId={course.id} />
         </div>
         <div className="grid auto-rows-max items-start gap-4 lg:gap-8">
           <div className="space-y-6">
