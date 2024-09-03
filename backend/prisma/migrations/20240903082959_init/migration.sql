@@ -137,14 +137,76 @@ CREATE TABLE "Attachment" (
 );
 
 -- CreateTable
-CREATE TABLE "Lesson" (
+CREATE TABLE "Chapter" (
     "id" TEXT NOT NULL,
-    "status" "LessonStatus" NOT NULL,
+    "title" TEXT NOT NULL,
+    "description" TEXT,
+    "videoUrl" TEXT,
+    "position" INTEGER NOT NULL,
+    "isPublished" BOOLEAN NOT NULL DEFAULT false,
+    "isFree" BOOLEAN NOT NULL DEFAULT false,
     "courseId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
+    CONSTRAINT "Chapter_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "MuxData" (
+    "id" TEXT NOT NULL,
+    "assetId" TEXT NOT NULL,
+    "playbackId" TEXT,
+    "chapterId" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "MuxData_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "StudentProgress" (
+    "id" TEXT NOT NULL,
+    "studentId" TEXT NOT NULL,
+    "chapterId" TEXT NOT NULL,
+    "isCompleted" BOOLEAN NOT NULL DEFAULT false,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "StudentProgress_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Lesson" (
+    "id" TEXT NOT NULL,
+    "status" "LessonStatus" NOT NULL,
+    "chapterId" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
     CONSTRAINT "Lesson_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Purchase" (
+    "id" TEXT NOT NULL,
+    "studentId" TEXT NOT NULL,
+    "courseId" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Purchase_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "StripeCustomer" (
+    "id" TEXT NOT NULL,
+    "studentId" TEXT NOT NULL,
+    "stripeCustomerId" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "StripeCustomer_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
@@ -171,6 +233,27 @@ CREATE INDEX "Course_skillId_idx" ON "Course"("skillId");
 -- CreateIndex
 CREATE INDEX "Attachment_courseId_idx" ON "Attachment"("courseId");
 
+-- CreateIndex
+CREATE INDEX "Chapter_courseId_idx" ON "Chapter"("courseId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "MuxData_chapterId_key" ON "MuxData"("chapterId");
+
+-- CreateIndex
+CREATE INDEX "StudentProgress_chapterId_idx" ON "StudentProgress"("chapterId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "StudentProgress_studentId_chapterId_key" ON "StudentProgress"("studentId", "chapterId");
+
+-- CreateIndex
+CREATE INDEX "Purchase_courseId_idx" ON "Purchase"("courseId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "StripeCustomer_studentId_key" ON "StripeCustomer"("studentId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "StripeCustomer_stripeCustomerId_key" ON "StripeCustomer"("stripeCustomerId");
+
 -- AddForeignKey
 ALTER TABLE "User" ADD CONSTRAINT "User_countryId_fkey" FOREIGN KEY ("countryId") REFERENCES "Country"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
@@ -196,4 +279,16 @@ ALTER TABLE "Course" ADD CONSTRAINT "Course_skillId_fkey" FOREIGN KEY ("skillId"
 ALTER TABLE "Attachment" ADD CONSTRAINT "Attachment_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "Course"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Lesson" ADD CONSTRAINT "Lesson_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "Course"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Chapter" ADD CONSTRAINT "Chapter_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "Course"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "MuxData" ADD CONSTRAINT "MuxData_chapterId_fkey" FOREIGN KEY ("chapterId") REFERENCES "Chapter"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "StudentProgress" ADD CONSTRAINT "StudentProgress_chapterId_fkey" FOREIGN KEY ("chapterId") REFERENCES "Chapter"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Lesson" ADD CONSTRAINT "Lesson_chapterId_fkey" FOREIGN KEY ("chapterId") REFERENCES "Chapter"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Purchase" ADD CONSTRAINT "Purchase_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "Course"("id") ON DELETE CASCADE ON UPDATE CASCADE;
