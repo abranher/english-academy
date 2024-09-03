@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { ChaptersService } from './chapters.service';
-import { ChaptersController } from './chapters.controller';
+import { ChaptersService } from './providers/chapters.service';
+import { ChaptersController } from './controllers/chapters.controller';
 
 @Module({
   controllers: [ChaptersController],
