@@ -17,7 +17,7 @@ export class CoursesService {
     return course;
   }
 
-  async createAttachment(id: string) {
+  async createAttachment(id: string, url: string) {
     const courseOwner = await this.prisma.course.findUnique({
       where: {
         id,

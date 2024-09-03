@@ -11,10 +11,11 @@ import {
   CardTitle,
 } from "@/components/shadcn/ui/card";
 import { ImageIcon, Pencil, PlusCircle } from "lucide-react";
-import Image from "next/image";
+import NextImage from "next/image";
 import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
 import { toast } from "sonner";
+import { Image } from "@nextui-org/react";
 
 interface ImageFormProps {
   initialData: {
@@ -25,14 +26,16 @@ interface ImageFormProps {
 
 export default function ImageForm({ initialData, courseId }: ImageFormProps) {
   const [isEditing, setIsEditing] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | undefined>(undefined);
 
   const toggleEdit = () => setIsEditing((current) => !current);
 
   // drop zone
 
   const onDrop = useCallback((acceptedFiles: any) => {
-    console.log(acceptedFiles[0]);
+    setSelectedFile(acceptedFiles[0]);
   }, []);
+
   const { getRootProps, getInputProps, isDragActive, acceptedFiles } =
     useDropzone({ onDrop });
 
@@ -42,11 +45,14 @@ export default function ImageForm({ initialData, courseId }: ImageFormProps) {
     e.preventDefault();
 
     const formData = new FormData();
-    formData.append("imageUrl", acceptedFiles[0]);
+
+    if (typeof selectedFile === "undefined") return;
+    formData.set("imageUrl", selectedFile);
 
     try {
-      await axios.post(`/api/courses/${courseId}`, formData);
-      toast.success("Descripción del curso actualizada!");
+      const res = await axios.post(`/api/courses/${courseId}/image`, formData);
+      console.log(res);
+      toast.success("Imagen del curso actualizada!");
       toggleEdit();
       router.refresh();
     } catch (error) {
@@ -84,7 +90,7 @@ export default function ImageForm({ initialData, courseId }: ImageFormProps) {
               </CardDescription>
             ) : (
               <div className="relative aspect-video w-full h-60 mt-2">
-                <Image
+                <NextImage
                   alt="Upload"
                   fill
                   className="object-cover rounded-md"
@@ -133,6 +139,46 @@ export default function ImageForm({ initialData, courseId }: ImageFormProps) {
                   className="opacity-0 w-full h-full absolute"
                 />
               </div>
+              {selectedFile && (
+                <>
+                  <article className="flex items-center space-x-6 p-6">
+                    {selectedFile.type.startsWith("image/") && (
+                      <Image
+                        as={NextImage}
+                        src={URL.createObjectURL(selectedFile)}
+                        alt="Preview"
+                        width={60}
+                        height={88}
+                        className="mt-2 rounded-md max-w-full"
+                      />
+                    )}
+                    <div className="min-w-0 relative flex-auto">
+                      <p className="text-sm font-bold">
+                        Nombre del archivo: {selectedFile.name}
+                      </p>
+                      <dl className="mt-2 flex flex-wrap text-sm leading-6 font-medium">
+                        <div>
+                          <dt className="sr-only">Rating</dt>
+                          <dd className="px-1.5 ring-1 ring-slate-200 rounded">
+                            Tamaño del archivo:{" "}
+                            {`${(selectedFile.size / 1024).toFixed(2)} KB o ${(
+                              selectedFile.size /
+                              1024 /
+                              1024
+                            ).toFixed(2)} MB`}
+                          </dd>
+                        </div>
+                      </dl>
+                    </div>
+                  </article>
+
+                  <div className="w-full">
+                    <div className="justify-end flex px-4">
+                      <Button>Subir</Button>
+                    </div>
+                  </div>
+                </>
+              )}
             </form>
           )}
         </CardContent>

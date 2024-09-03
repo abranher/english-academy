@@ -6,12 +6,10 @@ import { Button } from "@/components/shadcn/ui/button";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/shadcn/ui/card";
 import { File, ImageIcon, Loader2, PlusCircle, X } from "lucide-react";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
 import { toast } from "sonner";
