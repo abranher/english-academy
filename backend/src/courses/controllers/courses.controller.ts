@@ -16,7 +16,11 @@ import { CreateCourseDto } from '../dto/create-course.dto';
 import { UpdateCourseDto } from '../dto/update-course.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
-import { createFileName, imageFileFilter } from 'libs/storage';
+import {
+  attachmentFilter,
+  createFileName,
+  imageFileFilter,
+} from 'libs/storage';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Controller('courses')
@@ -56,21 +60,31 @@ export class CoursesController {
       );
     }
 
-    const course = await this.prisma.course.update({
-      where: {
-        id,
-      },
-      data: {
-        imageUrl: file.filename,
-      },
-    });
-
-    return course;
+    return this.coursesService.uploadImage(id, file.filename);
   }
 
   @Post(':id/attachments')
-  createAttachment(@Param('id') id: string) {
-    return this.coursesService.createAttachment(id, '');
+  @UseInterceptors(
+    FileInterceptor('url', {
+      fileFilter: attachmentFilter,
+      storage: diskStorage({
+        destination: './storage/attachments',
+        filename: createFileName,
+      }),
+    }),
+  )
+  createAttachment(
+    @Req() req,
+    @UploadedFile() file: Express.Multer.File,
+    @Param('id') id: string,
+  ) {
+    if (!file || req.fileValidationError) {
+      throw new BadRequestException(
+        'Archivo proporcionado no válido, [archivos de imagen permitidos]',
+      );
+    }
+
+    return this.coursesService.createAttachment(id, file.filename);
   }
 
   /**

@@ -37,6 +37,19 @@ export class CoursesService {
     return attachment;
   }
 
+  async uploadImage(id: string, imageUrl: string) {
+    const course = await this.prisma.course.update({
+      where: {
+        id,
+      },
+      data: {
+        imageUrl,
+      },
+    });
+
+    return course;
+  }
+
   findAll() {
     return `This action returns all courses`;
   }

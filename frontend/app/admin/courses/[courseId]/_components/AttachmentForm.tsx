@@ -22,39 +22,39 @@ interface AttachmentFormProps {
   courseId: string;
 }
 
-const formSchema = z.object({
-  url: z.string().min(1),
-});
-
 export default function AttachmentForm({
   initialData,
   courseId,
 }: AttachmentFormProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | undefined>(undefined);
 
   const toggleEdit = () => setIsEditing((current) => !current);
 
   // drop zone
 
   const onDrop = useCallback((acceptedFiles: any) => {
-    console.log(acceptedFiles[0]);
+    setSelectedFile(acceptedFiles[0]);
   }, []);
-  const { getRootProps, getInputProps, isDragActive, acceptedFiles } =
-    useDropzone({ onDrop });
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   const router = useRouter();
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    if (typeof selectedFile === "undefined") return;
+
     const formData = new FormData();
-    formData.append("imageUrl", acceptedFiles[0]);
+    formData.set("url", selectedFile);
 
     try {
       await axios.post(`/api/courses/${courseId}/attachments`, formData);
-      toast.success("Descripción del curso actualizada!");
+      toast.success("Archivo actualizado!");
       toggleEdit();
+      setSelectedFile(undefined);
       router.refresh();
     } catch (error) {
       toast.error("Something wrong");
@@ -83,10 +83,10 @@ export default function AttachmentForm({
             <Button onClick={toggleEdit} variant="ghost">
               {isEditing && <>Cancelar</>}
 
-              {!isEditing && !initialData.imageUrl && (
+              {!isEditing && (
                 <>
                   <PlusCircle className="h-4 w-4 mr-2" />
-                  Añadir una archivo
+                  Añadir un archivo
                 </>
               )}
             </Button>
@@ -154,7 +154,7 @@ export default function AttachmentForm({
                       Suelta los archivos aquí ...
                     </p>
                   ) : (
-                    <p className="mt-2 text-sm text-gray-500">
+                    <p className="mt-2 text-sm text-gray-500 px-12">
                       Arrastra y suelta tus archivos aquí o{" "}
                       <span className="font-medium text-blue-600 hover:underline">
                         explora

@@ -37,23 +37,23 @@ export default function ImageForm({ initialData, courseId }: ImageFormProps) {
     setSelectedFile(acceptedFiles[0]);
   }, []);
 
-  const { getRootProps, getInputProps, isDragActive, acceptedFiles } =
-    useDropzone({ onDrop });
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   const router = useRouter();
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const formData = new FormData();
-
     if (typeof selectedFile === "undefined") return;
+
+    const formData = new FormData();
     formData.set("imageUrl", selectedFile);
 
     try {
-      const res = await axios.post(`/api/courses/${courseId}/image`, formData);
-      console.log(res);
-      toast.success("Imagen del curso actualizada!");
+      await axios.post(`/api/courses/${courseId}/image`, formData);
+
+      toast.success("Imagen actualizada!");
+      setSelectedFile(undefined);
       toggleEdit();
       router.refresh();
     } catch (error) {
