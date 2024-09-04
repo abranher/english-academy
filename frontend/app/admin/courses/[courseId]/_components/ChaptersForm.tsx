@@ -27,6 +27,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
+import ChaptersList from "./ChaptersList";
 
 interface ChaptersFormProps {
   initialData: Course & { chapters: Chapter[] };
@@ -61,11 +62,12 @@ export default function ChaptersForm({
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await axios.post(`/api/courses/${courseId}/chapters`, values);
+      await axios.post(`/api/chapters/${courseId}`, values);
       toast.success("Capítulo creado!");
       toggleCreating();
       router.refresh();
     } catch (error) {
+      console.log(error);
       toast.error("Something wrong");
     }
   };
@@ -125,7 +127,11 @@ export default function ChaptersForm({
               )}
             >
               {!initialData.chapters.length && "Sin capítulos"}
-              {/* TODO: Add a list of chapters */}
+              <ChaptersList
+                onEdit={() => {}}
+                onReorder={() => {}}
+                items={initialData.chapters || []}
+              />
             </div>
           )}
           {!isCreating && (

@@ -35,7 +35,7 @@ export class ChaptersService {
       },
     });
 
-    return 'This action adds a new chapter';
+    return chapter;
   }
 
   findAll() {

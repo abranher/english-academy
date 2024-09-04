@@ -13,7 +13,8 @@ export class CreateChapterDto {
   videoUrl?: string;
 
   @IsInt()
-  position: number;
+  @IsOptional()
+  position?: number;
 
   @IsOptional()
   isPublished: boolean;
@@ -22,5 +23,6 @@ export class CreateChapterDto {
   isFree: boolean;
 
   @IsString()
-  courseId: string;
+  @IsOptional()
+  courseId?: string;
 }
