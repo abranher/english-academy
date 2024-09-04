@@ -129,18 +129,21 @@ export class ChaptersService {
       },
     });
 
+    /*
     const muxData = this.prisma.muxData.findUnique({
       where: {
         chapterId: id,
       },
     });
 
+    */
+
     if (
       !chapter ||
-      !muxData ||
+      //!muxData ||
       !chapter.title ||
-      !chapter.description ||
-      !chapter.videoUrl
+      !chapter.description
+      // !chapter.videoUrl
     ) {
       throw new BadRequestException('Faltan campos obligatorios.');
     }
@@ -156,6 +159,46 @@ export class ChaptersService {
     });
 
     return publishedChapter;
+  }
+
+  async unpublishChapter(id: string, courseId: string) {
+    const ownCourse = await this.prisma.course.findUnique({
+      where: {
+        id: courseId,
+      },
+    });
+
+    if (!ownCourse) throw new NotFoundException('Curso no encontrado.');
+
+    const unpublishedChapter = this.prisma.chapter.update({
+      where: {
+        id,
+        courseId,
+      },
+      data: {
+        isPublished: false,
+      },
+    });
+
+    const publishedChaptersInCourse = await this.prisma.chapter.findMany({
+      where: {
+        courseId,
+        isPublished: true,
+      },
+    });
+
+    if (!publishedChaptersInCourse.length) {
+      await this.prisma.course.update({
+        where: {
+          id: courseId,
+        },
+        data: {
+          isPublished: false,
+        },
+      });
+    }
+
+    return unpublishedChapter;
   }
 
   async remove(id: string, courseId: string) {

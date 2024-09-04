@@ -31,17 +31,18 @@ export default function ChapterActions({
 
       if (isPublished) {
         await axios.patch(
-          `/api/courses/${courseId}/chapters/${chapterId}/unpublish`
+          `/api/chapters/${chapterId}/course/${courseId}/unpublish`
         );
 
         toast.success("Capítulo no publicado!");
       } else {
         await axios.patch(
-          `/api/courses/${courseId}/chapters/${chapterId}/publish`
+          `/api/chapters/${chapterId}/course/${courseId}/publish`
         );
 
         toast.success("Capítulo publicado!");
       }
+      router.refresh();
     } catch (error) {
       toast.error("Something went wrong");
     } finally {

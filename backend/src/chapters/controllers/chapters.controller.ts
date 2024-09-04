@@ -51,6 +51,19 @@ export class ChaptersController {
     return this.chaptersService.update(id, courseId, updateChapterDto);
   }
 
+  @Patch(':id/course/:courseId/publish')
+  publishChapter(@Param('id') id: string, @Param('courseId') courseId: string) {
+    return this.chaptersService.publishChapter(id, courseId);
+  }
+
+  @Patch(':id/course/:courseId/unpublish')
+  unpublishChapter(
+    @Param('id') id: string,
+    @Param('courseId') courseId: string,
+  ) {
+    return this.chaptersService.unpublishChapter(id, courseId);
+  }
+
   @Delete(':id/course/:courseId')
   remove(@Param('id') id: string, @Param('courseId') courseId: string) {
     return this.chaptersService.remove(id, courseId);

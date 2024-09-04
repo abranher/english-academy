@@ -31,7 +31,7 @@ export default async function ChapterIdPage({
   const requieredFields = [
     chapter.title,
     chapter.description,
-    chapter.videoUrl,
+    //chapter.videoUrl,
   ];
 
   const totalFields = requieredFields.length;
