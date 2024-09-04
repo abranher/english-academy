@@ -1,10 +1,40 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateChapterDto } from '../dto/create-chapter.dto';
 import { UpdateChapterDto } from '../dto/update-chapter.dto';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class ChaptersService {
-  create(createChapterDto: CreateChapterDto) {
+  constructor(private readonly prisma: PrismaService) {}
+
+  async create(courseId: string, createChapterDto: CreateChapterDto) {
+    const courseOwner = await this.prisma.course.findUnique({
+      where: {
+        id: courseId,
+      },
+    });
+
+    if (!courseOwner) throw new NotFoundException('Curso no encontrado.');
+
+    const lastChapter = await this.prisma.chapter.findFirst({
+      where: {
+        courseId,
+      },
+      orderBy: {
+        position: 'desc',
+      },
+    });
+
+    const newPosition = lastChapter ? lastChapter.position + 1 : 1;
+
+    const chapter = await this.prisma.chapter.create({
+      data: {
+        title: createChapterDto.title,
+        courseId,
+        position: newPosition,
+      },
+    });
+
     return 'This action adds a new chapter';
   }
 

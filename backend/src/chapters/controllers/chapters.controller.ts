@@ -15,9 +15,12 @@ import { UpdateChapterDto } from '../dto/update-chapter.dto';
 export class ChaptersController {
   constructor(private readonly chaptersService: ChaptersService) {}
 
-  @Post()
-  create(@Body() createChapterDto: CreateChapterDto) {
-    return this.chaptersService.create(createChapterDto);
+  @Post('/:courseId')
+  create(
+    @Param('courseId') courseId: string,
+    @Body() createChapterDto: CreateChapterDto,
+  ) {
+    return this.chaptersService.create(courseId, createChapterDto);
   }
 
   @Get()
