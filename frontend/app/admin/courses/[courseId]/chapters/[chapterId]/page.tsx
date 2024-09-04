@@ -9,6 +9,8 @@ import ChapterTitleForm from "./_components/ChapterTitleForm";
 import ChapterDescriptionForm from "./_components/ChapterDescriptionForm";
 import ChapterAccessForm from "./_components/ChapterAccessForm";
 import ChapterVideoForm from "./_components/ChapterVideoForm";
+import { Banner } from "@/components/shadcn/ui/banner";
+import ChapterActions from "./_components/ChapterActions";
 
 export default async function ChapterIdPage({
   params,
@@ -37,8 +39,16 @@ export default async function ChapterIdPage({
 
   const completionText = `(${completedFields} / ${totalFields})`;
 
+  const isComplete = requieredFields.every(Boolean);
+
   return (
     <>
+      {!chapter.isPublished && (
+        <Banner
+          variant="warning"
+          label="Este capítulo no está publicado. No será visible en el curso."
+        />
+      )}
       <div className="flex items-center gap-4">
         <Link href={`/admin/courses/${params.courseId}`}>
           <Button variant="outline" size="icon" className="h-7 w-7">
@@ -56,7 +66,12 @@ export default async function ChapterIdPage({
           In stock
         </Badge>
         <div className="hidden items-center gap-2 md:ml-auto md:flex">
-          <Button size="sm">Save Product</Button>
+          <ChapterActions
+            disabled={!isComplete}
+            courseId={params.courseId}
+            chapterId={params.chapterId}
+            isPublished={chapter.isPublished}
+          />
         </div>
       </div>
 
