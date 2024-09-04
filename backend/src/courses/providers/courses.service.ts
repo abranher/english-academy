@@ -54,8 +54,14 @@ export class CoursesService {
     return course;
   }
 
-  findAll() {
-    return `This action returns all courses`;
+  async findAll() {
+    const courses = await this.prisma.course.findMany({
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+
+    return courses;
   }
 
   async findOne(id: string) {

@@ -21,14 +21,10 @@ import {
   createFileName,
   imageFileFilter,
 } from 'libs/storage';
-import { PrismaService } from 'src/prisma/prisma.service';
 
 @Controller('courses')
 export class CoursesController {
-  constructor(
-    private readonly coursesService: CoursesService,
-    private prisma: PrismaService,
-  ) {}
+  constructor(private readonly coursesService: CoursesService) {}
 
   /**
    * Create routes

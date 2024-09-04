@@ -5,6 +5,7 @@ export interface Course {
   price: number | null;
   imageUrl: string | null;
   status: CourseStatus;
+  isPublished: boolean;
   levelId: string | null;
   skillId: string | null;
   createdAt: Date;
