@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { hash } from 'bcrypt';
 import levels from './data/levels';
+import skills from './data/skills';
 
 const prisma = new PrismaClient();
 
@@ -20,7 +21,11 @@ async function main() {
     data: levels,
   });
 
-  console.log({ abran }, { levels: levelsResult });
+  const skillsResult = await prisma.skill.createMany({
+    data: skills,
+  });
+
+  console.log({ abran }, { levels: levelsResult }, { skills: skillsResult });
 }
 
 main()

@@ -23,6 +23,8 @@ import {
 } from "@/components/shadcn/ui/table";
 import { Button } from "@/components/shadcn/ui/button";
 import { Input } from "@/components/shadcn/ui/input";
+import { PlusCircle } from "lucide-react";
+import Link from "next/link";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -55,7 +57,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <div className="flex items-center py-4">
+      <div className="flex justify-between items-center py-4">
         <Input
           placeholder="Filtrar cursos..."
           value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
@@ -64,6 +66,12 @@ export function DataTable<TData, TValue>({
           }
           className="max-w-sm"
         />
+        <Link href="/admin/create">
+          <Button>
+            <PlusCircle className="h-6 w-6 mr-2" />
+            Nuevo curso
+          </Button>
+        </Link>
       </div>
 
       <div className="rounded-md border">
