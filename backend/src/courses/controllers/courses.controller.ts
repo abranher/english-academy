@@ -101,7 +101,7 @@ export class CoursesController {
     return this.coursesService.findOne(id);
   }
 
-  // Updated title
+  // Updated every fields
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateCourseDto: UpdateCourseDto) {
     return this.coursesService.update(id, updateCourseDto);

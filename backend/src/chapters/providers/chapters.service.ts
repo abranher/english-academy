@@ -97,9 +97,7 @@ export class ChaptersService {
         id,
         courseId,
       },
-      data: {
-        title: updateChapterDto.title,
-      },
+      data: updateChapterDto,
     });
 
     // TODO: handle video upload
