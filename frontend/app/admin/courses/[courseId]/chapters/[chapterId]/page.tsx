@@ -2,11 +2,13 @@ import { IconBadge } from "@/components/icons/IconBadge";
 import { Badge } from "@/components/shadcn/ui/badge";
 import { Button } from "@/components/shadcn/ui/button";
 import axios from "@/config/axios";
-import { ChevronLeft, LayoutDashboard } from "lucide-react";
+import { ChevronLeft, Eye, LayoutDashboard, ListChecks } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import ChapterTitleForm from "./_components/ChapterTitleForm";
 import ChapterDescriptionForm from "./_components/ChapterDescriptionForm";
+import ChapterAccessForm from "./_components/ChapterAccessForm";
+import ChapterVideoForm from "./_components/ChapterVideoForm";
 
 export default async function ChapterIdPage({
   params,
@@ -76,48 +78,37 @@ export default async function ChapterIdPage({
             courseId={params.courseId}
             chapterId={params.chapterId}
           />
-          {/*
-          
-          <LevelForm
-            initialData={course}
-            courseId={course.id}
-            options={levels.map((level: any) => ({
-              label: `${level.levelCode} - ${level.title}`,
-              value: level.id,
-            }))}
-          />
 
-          <ImageForm initialData={course} courseId={course.id} />
-        */}
+          <div className="space-y-6">
+            <div className="flex flex-col gap-3">
+              <div className="flex items-center gap-x-2">
+                <IconBadge icon={Eye} />
+                <h2 className="text-xl">Configuración de acceso</h2>
+              </div>
+
+              <ChapterAccessForm
+                initialData={chapter}
+                courseId={params.courseId}
+                chapterId={params.chapterId}
+              />
+            </div>
+          </div>
         </div>
+
         <div className="grid auto-rows-max items-start gap-4 lg:col-span-1 lg:gap-8">
-          {/*
-        
           <div className="space-y-6">
             <div className="flex flex-col gap-3">
               <div className="flex items-center gap-x-2">
                 <IconBadge icon={ListChecks} />
-                <h2 className="text-xl">Capítulos del curso</h2>
+                <h2 className="text-xl">Añadir un video</h2>
               </div>
-              <ChaptersForm initialData={course} courseId={course.id} />
-            </div>
-            <div className="flex flex-col gap-3">
-              <div className="flex items-center gap-x-2">
-                <IconBadge icon={CircleDollarSign} />
-                <h2 className="text-xl">Vende tu curso</h2>
-              </div>
-              <PriceForm initialData={course} courseId={course.id} />
-            </div>
-            <div className="flex flex-col gap-3">
-              <div className="flex items-center gap-x-2">
-                <IconBadge icon={File} />
-                <h2 className="text-xl">Recursos y archivos adjuntos</h2>
-              </div>
-              <AttachmentForm initialData={course} courseId={course.id} />
+              <ChapterVideoForm
+                initialData={chapter}
+                courseId={params.courseId}
+                chapterId={params.chapterId}
+              />
             </div>
           </div>
-
-        */}
         </div>
       </div>
     </>
