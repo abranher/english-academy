@@ -38,6 +38,10 @@ export class ChaptersService {
     return chapter;
   }
 
+  reorderChapters(courseId: string, updateChapterDto: UpdateChapterDto) {
+    return `This action updates a #${id} chapter`;
+  }
+
   findAll() {
     return `This action returns all chapters`;
   }

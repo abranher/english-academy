@@ -2,9 +2,14 @@
 
 import { Chapter } from "@/types/models/Chapter";
 import { useEffect, useState } from "react";
-import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
+import {
+  DragDropContext,
+  Draggable,
+  Droppable,
+  DropResult,
+} from "@hello-pangea/dnd";
 import { cn } from "@/libs/shadcn/utils";
-import { Grip } from "lucide-react";
+import { Grip, Pencil } from "lucide-react";
 import { Badge } from "@/components/shadcn/ui/badge";
 
 interface ChaptersListProps {
@@ -29,11 +34,33 @@ export default function ChaptersList({
     setChapters(items);
   }, [items]);
 
+  const onDragEnd = (result: DropResult) => {
+    if (!result.destination) return;
+
+    const items = Array.from(chapters);
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
+
+    const startIndex = Math.min(result.source.index, result.destination.index);
+    const endIndex = Math.max(result.source.index, result.destination.index);
+
+    const updatedChapters = items.slice(startIndex, endIndex + 1);
+
+    setChapters(items);
+
+    const bulkUpdateData = updatedChapters.map((chapter) => ({
+      id: chapter.id,
+      position: items.findIndex((item) => item.id === chapter.id),
+    }));
+
+    onReorder(bulkUpdateData);
+  };
+
   if (!isMounted) return null;
 
   return (
     <>
-      <DragDropContext onDragEnd={() => {}}>
+      <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="chapters">
           {(provided) => (
             <div {...provided.droppableProps} ref={provided.innerRef}>
@@ -75,11 +102,16 @@ export default function ChaptersList({
                         >
                           {chapter.isPublished ? "Publicado" : "Borrador"}
                         </Badge>
+                        <Pencil
+                          onClick={() => onEdit(chapter.id)}
+                          className="w-4 h-4 cursor-pointer hover:opacity-75 transition"
+                        />
                       </div>
                     </div>
                   )}
                 </Draggable>
               ))}
+              {provided.placeholder}
             </div>
           )}
         </Droppable>

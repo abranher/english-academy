@@ -72,6 +72,23 @@ export default function ChaptersForm({
     }
   };
 
+  const onReorder = async (updateData: { id: string; position: number }[]) => {
+    try {
+      setIsUpdating(true);
+
+      await axios.put(`/api/courses/${courseId}/chapters/reorder`, {
+        list: updateData,
+      });
+
+      toast.success("Capítulos reordenados");
+      router.refresh();
+    } catch (error) {
+      toast.error("Something went wrong");
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
   return (
     <>
       <Card x-chunk="dashboard-07-chunk-0">
@@ -129,7 +146,7 @@ export default function ChaptersForm({
               {!initialData.chapters.length && "Sin capítulos"}
               <ChaptersList
                 onEdit={() => {}}
-                onReorder={() => {}}
+                onReorder={onReorder}
                 items={initialData.chapters || []}
               />
             </div>
