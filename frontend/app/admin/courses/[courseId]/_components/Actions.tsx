@@ -28,11 +28,12 @@ export default function Actions({
       setIsLoading(true);
 
       if (isPublished) {
-        await axios.patch(`/api/courses/${courseId}/unpublish`);
-
+        const res = await axios.patch(`/api/courses/${courseId}/unpublish`);
+console.log(res)
         toast.success("Curso no publicado!");
       } else {
-        await axios.patch(`/api/courses/${courseId}/publish`);
+        const res=await axios.patch(`/api/courses/${courseId}/publish`);
+        console.log(res)
 
         toast.success("Curso publicado!");
       }

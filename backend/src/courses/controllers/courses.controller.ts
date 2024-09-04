@@ -108,16 +108,13 @@ export class CoursesController {
   }
 
   @Patch(':id/publish')
-  publishCourse(@Param('id') id: string, @Param('courseId') courseId: string) {
-    return this.coursesService.publishChapter(id, courseId);
+  publishCourse(@Param('id') id: string) {
+    return this.coursesService.publishCourse(id);
   }
 
   @Patch(':id/unpublish')
-  unpublishCourse(
-    @Param('id') id: string,
-    @Param('courseId') courseId: string,
-  ) {
-    return this.coursesService.unpublishChapter(id, courseId);
+  unpublishCourse(@Param('id') id: string) {
+    return this.coursesService.unpublishCourse(id);
   }
 
   @Delete(':id')

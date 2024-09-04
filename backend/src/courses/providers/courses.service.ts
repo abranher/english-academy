@@ -89,92 +89,67 @@ export class CoursesService {
     return course;
   }
 
-  async publishChapter(id: string, courseId: string) {
-    const ownCourse = await this.prisma.course.findUnique({
-      where: {
-        id: courseId,
-      },
-    });
-
-    if (!ownCourse) throw new NotFoundException('Curso no encontrado.');
-
-    const chapter = await this.prisma.chapter.findUnique({
+  async publishCourse(id: string) {
+    const course = await this.prisma.course.findUnique({
       where: {
         id,
-        courseId,
+      },
+      include: {
+        chapters: {
+          include: {
+            muxData: true,
+          },
+        },
       },
     });
 
-    /*
-    const muxData = this.prisma.muxData.findUnique({
-      where: {
-        chapterId: id,
-      },
-    });
+    if (!course) throw new NotFoundException('Curso no encontrado.');
 
-    */
+    const hasPublishedChapter = course.chapters.some(
+      (chapter) => chapter.isPublished,
+    );
 
     if (
-      !chapter ||
-      //!muxData ||
-      !chapter.title ||
-      !chapter.description
-      // !chapter.videoUrl
+      !course.title ||
+      !course.description ||
+      !course.imageUrl ||
+      !course.levelId ||
+      !hasPublishedChapter
     ) {
-      throw new BadRequestException('Faltan campos obligatorios.');
+      return new BadRequestException('Faltan campos obligatorios.');
     }
 
-    const publishedChapter = this.prisma.chapter.update({
+    const publishedCourse = this.prisma.course.update({
       where: {
         id,
-        courseId,
       },
       data: {
         isPublished: true,
       },
     });
 
-    return publishedChapter;
+    return publishedCourse;
   }
 
-  async unpublishChapter(id: string, courseId: string) {
-    const ownCourse = await this.prisma.course.findUnique({
+  async unpublishCourse(id: string) {
+    const course = await this.prisma.course.findUnique({
       where: {
-        id: courseId,
+        id,
       },
     });
 
-    if (!ownCourse) throw new NotFoundException('Curso no encontrado.');
+    if (!course) throw new NotFoundException('Curso no encontrado.');
 
-    const unpublishedChapter = this.prisma.chapter.update({
+    const unpublishedCourse = this.prisma.course.update({
       where: {
         id,
-        courseId,
       },
       data: {
         isPublished: false,
       },
     });
 
-    const publishedChaptersInCourse = await this.prisma.chapter.findMany({
-      where: {
-        courseId,
-        isPublished: true,
-      },
-    });
-
-    if (!publishedChaptersInCourse.length) {
-      await this.prisma.course.update({
-        where: {
-          id: courseId,
-        },
-        data: {
-          isPublished: false,
-        },
-      });
-    }
-
-    return unpublishedChapter;
+    return unpublishedCourse;
   }
 
   async remove(id: string) {
