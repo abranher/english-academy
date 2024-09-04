@@ -76,13 +76,16 @@ export default function ChaptersForm({
     try {
       setIsUpdating(true);
 
-      await axios.put(`/api/courses/${courseId}/chapters/reorder`, {
+      const response = await axios.put(`/api/chapters/${courseId}/reorder`, {
         list: updateData,
       });
+
+      console.log(response);
 
       toast.success("Capítulos reordenados");
       router.refresh();
     } catch (error) {
+      console.log(error);
       toast.error("Something went wrong");
     } finally {
       setIsUpdating(false);

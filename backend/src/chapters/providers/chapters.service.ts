@@ -38,8 +38,31 @@ export class ChaptersService {
     return chapter;
   }
 
-  reorderChapters(courseId: string, updateChapterDto: UpdateChapterDto) {
-    return `This action updates a #${id} chapter`;
+  async reorderChapters(courseId: string, updateChapterDto: UpdateChapterDto) {
+    const { list } = updateChapterDto;
+
+    const ownCourse = await this.prisma.course.findUnique({
+      where: {
+        id: courseId,
+      },
+    });
+
+    if (!ownCourse) throw new NotFoundException('Curso no encontrado.');
+
+    for (const { id, position } of list) {
+      await this.prisma.chapter.update({
+        where: {
+          id,
+        },
+        data: {
+          position,
+        },
+      });
+    }
+
+    return {
+      message: 'Actualización exitosa.',
+    };
   }
 
   findAll() {
@@ -56,5 +79,14 @@ export class ChaptersService {
 
   remove(id: number) {
     return `This action removes a #${id} chapter`;
+  }
+
+  // Common service
+  async findById(id: string) {
+    return await this.prisma.chapter.findUnique({
+      where: {
+        id,
+      },
+    });
   }
 }
