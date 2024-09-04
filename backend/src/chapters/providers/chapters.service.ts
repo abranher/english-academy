@@ -83,8 +83,28 @@ export class ChaptersService {
     return chapter;
   }
 
-  update(id: number, updateChapterDto: UpdateChapterDto) {
-    return `This action updates a #${id} chapter`;
+  update(id: string, courseId: string, updateChapterDto: UpdateChapterDto) {
+    const ownCourse = this.prisma.course.findUnique({
+      where: {
+        id: courseId,
+      },
+    });
+
+    if (!ownCourse) throw new NotFoundException('Curso no encontrado.');
+
+    const chapter = this.prisma.chapter.update({
+      where: {
+        id,
+        courseId,
+      },
+      data: {
+        title: updateChapterDto.title,
+      },
+    });
+
+    // TODO: handle video upload
+
+    return chapter;
   }
 
   remove(id: number) {

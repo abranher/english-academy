@@ -42,9 +42,13 @@ export class ChaptersController {
     return this.chaptersService.findOne(id, courseId);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateChapterDto: UpdateChapterDto) {
-    return this.chaptersService.update(+id, updateChapterDto);
+  @Patch(':id/course/:courseId')
+  update(
+    @Param('id') id: string,
+    @Param('courseId') courseId: string,
+    @Body() updateChapterDto: UpdateChapterDto,
+  ) {
+    return this.chaptersService.update(id, courseId, updateChapterDto);
   }
 
   @Delete(':id')

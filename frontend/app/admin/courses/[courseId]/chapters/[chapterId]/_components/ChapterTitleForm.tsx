@@ -58,11 +58,15 @@ export default function ChapterTitleForm({
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await axios.patch(`/api/courses/${courseId}`, values);
-      toast.success("Título del curso actualizado!");
+      await axios.patch(
+        `/api/chapters/${chapterId}/course/${courseId}`,
+        values
+      );
+      toast.success("Título del capítulo actualizado!");
       toggleEdit();
       router.refresh();
     } catch (error) {
+      console.log(error)
       toast.error("Something wrong");
     }
   };
