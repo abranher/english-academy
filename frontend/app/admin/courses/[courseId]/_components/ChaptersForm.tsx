@@ -21,13 +21,14 @@ import messages from "@/libs/validations/schemas/messages";
 import { Chapter } from "@/types/models/Chapter";
 import { Course } from "@/types/models/Course";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Pencil, PlusCircle } from "lucide-react";
+import { PlusCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 import ChaptersList from "./ChaptersList";
+import { Spinner } from "@nextui-org/react";
 
 interface ChaptersFormProps {
   initialData: Course & { chapters: Chapter[] };
@@ -80,8 +81,6 @@ export default function ChaptersForm({
         list: updateData,
       });
 
-      console.log(response);
-
       toast.success("Capítulos reordenados");
       router.refresh();
     } catch (error) {
@@ -94,7 +93,12 @@ export default function ChaptersForm({
 
   return (
     <>
-      <Card x-chunk="dashboard-07-chunk-0">
+      <Card x-chunk="dashboard-07-chunk-0" className="relative">
+        {isUpdating && (
+          <div className="absolute h-full w-full bg-slate-500/20 top-0 right-0 rounded-md flex items-center justify-center">
+            <Spinner size="lg" />
+          </div>
+        )}
         <CardHeader>
           <CardTitle className="flex justify-between gap-3 text-lg">
             Capítulos del curso
