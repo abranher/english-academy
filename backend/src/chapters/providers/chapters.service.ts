@@ -170,7 +170,7 @@ export class ChaptersService {
 
     if (!ownCourse) throw new NotFoundException('Curso no encontrado.');
 
-    const unpublishedChapter = this.prisma.chapter.update({
+    const unpublishedChapter = await this.prisma.chapter.update({
       where: {
         id,
         courseId,
