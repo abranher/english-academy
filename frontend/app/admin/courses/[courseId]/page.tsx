@@ -19,6 +19,7 @@ import AttachmentForm from "./_components/AttachmentForm";
 import ChaptersForm from "./_components/ChaptersForm";
 import { Banner } from "@/components/shadcn/ui/banner";
 import Actions from "./_components/Actions";
+import Link from "next/link";
 
 export default async function CourseIdPage({
   params,
@@ -56,10 +57,12 @@ export default async function CourseIdPage({
         <Banner label="Este curso no está publicado, por lo que no será visible para el estudiante." />
       )}
       <div className="flex items-center gap-4">
-        <Button variant="outline" size="icon" className="h-7 w-7">
-          <ChevronLeft className="h-4 w-4" />
-          <span className="sr-only">atrás</span>
-        </Button>
+        <Link href={"/admin/courses"}>
+          <Button variant="outline" size="icon" className="h-7 w-7">
+            <ChevronLeft className="h-4 w-4" />
+            <span className="sr-only">atrás</span>
+          </Button>
+        </Link>
         <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
           Configuración del curso
         </h1>
