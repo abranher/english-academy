@@ -69,8 +69,18 @@ export class ChaptersService {
     return `This action returns all chapters`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} chapter`;
+  async findOne(id: string, courseId: string) {
+    const chapter = await this.prisma.chapter.findUnique({
+      where: {
+        id,
+        courseId,
+      },
+      include: {
+        muxData: true,
+      },
+    });
+
+    return chapter;
   }
 
   update(id: number, updateChapterDto: UpdateChapterDto) {

@@ -91,6 +91,10 @@ export default function ChaptersForm({
     }
   };
 
+  const onEdit = (id: string) => {
+    router.push(`/admin/courses/${courseId}/chapters/${id}`);
+  };
+
   return (
     <>
       <Card x-chunk="dashboard-07-chunk-0" className="relative">
@@ -152,7 +156,7 @@ export default function ChaptersForm({
             >
               {!initialData.chapters.length && "Sin capítulos"}
               <ChaptersList
-                onEdit={() => {}}
+                onEdit={onEdit}
                 onReorder={onReorder}
                 items={initialData.chapters || []}
               />

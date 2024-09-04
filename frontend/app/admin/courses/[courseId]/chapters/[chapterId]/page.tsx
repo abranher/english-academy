@@ -2,43 +2,31 @@ import { IconBadge } from "@/components/icons/IconBadge";
 import { Badge } from "@/components/shadcn/ui/badge";
 import { Button } from "@/components/shadcn/ui/button";
 import axios from "@/config/axios";
-import {
-  ChevronLeft,
-  CircleDollarSign,
-  File,
-  LayoutDashboard,
-  ListChecks,
-} from "lucide-react";
+import { ChevronLeft, LayoutDashboard } from "lucide-react";
+import Link from "next/link";
 import { redirect } from "next/navigation";
-import TitleForm from "./_components/TitleForm";
-import DescriptionForm from "./_components/DescriptionForm";
-import ImageForm from "./_components/ImageForm";
-import LevelForm from "./_components/LevelForm";
-import PriceForm from "./_components/PriceForm";
-import AttachmentForm from "./_components/AttachmentForm";
-import ChaptersForm from "./_components/ChaptersForm";
+import ChapterTitleForm from "./_components/ChapterTitleForm";
 
-export default async function CourseIdPage({
+export default async function ChapterIdPage({
   params,
 }: {
   params: {
     courseId: string;
+    chapterId: string;
   };
 }) {
-  const { data: course } = await axios.get(`/api/courses/${params.courseId}`);
-  const { data: levels } = await axios.get(`/api/levels/`);
+  const { data: chapter } = await axios.get(
+    `/api/chapters/${params.chapterId}/course/${params.courseId}`
+  );
 
-  if (!course) {
+  if (!chapter) {
     return redirect("/admin");
   }
 
   const requieredFields = [
-    course.title,
-    course.description,
-    course.imageUrl,
-    course.price,
-    course.skillId,
-    course.chapters.some((chapter) => chapter.isPublished),
+    chapter.title,
+    chapter.description,
+    chapter.videoUrl,
   ];
 
   const totalFields = requieredFields.length;
@@ -49,12 +37,14 @@ export default async function CourseIdPage({
   return (
     <>
       <div className="flex items-center gap-4">
-        <Button variant="outline" size="icon" className="h-7 w-7">
-          <ChevronLeft className="h-4 w-4" />
-          <span className="sr-only">atrás</span>
-        </Button>
+        <Link href={`/admin/courses/${params.courseId}`}>
+          <Button variant="outline" size="icon" className="h-7 w-7">
+            <ChevronLeft className="h-4 w-4" />
+            <span className="sr-only">atrás</span>
+          </Button>
+        </Link>
         <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
-          Configuración del curso
+          Configuración del capítulo
         </h1>
         <p className="flex-1 shrink-0 whitespace-nowrap tracking-tight">
           Complete all fields {completionText}
@@ -69,15 +59,20 @@ export default async function CourseIdPage({
 
       <div className="flex items-center gap-2 my-3 whitespace-nowrap text-xl tracking-tight sm:grow-0">
         <IconBadge icon={LayoutDashboard} />
-        Personaliza tu curso
+        Personaliza tu capítulo
       </div>
 
       <div className="grid gap-4 lg:grid-cols-2 lg:gap-8">
         <div className="grid auto-rows-max items-start gap-4 lg:col-span-1 lg:gap-8">
-          <TitleForm initialData={course} courseId={course.id} />
+          <ChapterTitleForm
+            initialData={chapter}
+            courseId={params.courseId}
+            chapterId={params.chapterId}
+          />
 
+          {/*
           <DescriptionForm initialData={course} courseId={course.id} />
-
+          
           <LevelForm
             initialData={course}
             courseId={course.id}
@@ -88,8 +83,11 @@ export default async function CourseIdPage({
           />
 
           <ImageForm initialData={course} courseId={course.id} />
+        */}
         </div>
         <div className="grid auto-rows-max items-start gap-4 lg:col-span-1 lg:gap-8">
+          {/*
+        
           <div className="space-y-6">
             <div className="flex flex-col gap-3">
               <div className="flex items-center gap-x-2">
@@ -113,6 +111,8 @@ export default async function CourseIdPage({
               <AttachmentForm initialData={course} courseId={course.id} />
             </div>
           </div>
+
+        */}
         </div>
       </div>
     </>
