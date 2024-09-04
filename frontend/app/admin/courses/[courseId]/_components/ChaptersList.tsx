@@ -93,7 +93,7 @@ export default function ChaptersList({
                       {chapter.title}
 
                       <div className="ml-auto pr-2 flex items-center gap-x-2">
-                        {chapter.isFree && <Badge>Gratis</Badge>}
+                        {chapter.isFree && <Badge>Vista previa</Badge>}
                         <Badge
                           className={cn(
                             "bg-slate-500",

@@ -17,6 +17,8 @@ import LevelForm from "./_components/LevelForm";
 import PriceForm from "./_components/PriceForm";
 import AttachmentForm from "./_components/AttachmentForm";
 import ChaptersForm from "./_components/ChaptersForm";
+import { Banner } from "@/components/shadcn/ui/banner";
+import Actions from "./_components/Actions";
 
 export default async function CourseIdPage({
   params,
@@ -46,8 +48,13 @@ export default async function CourseIdPage({
 
   const completionText = `(${completedFields} / ${totalFields})`;
 
+  const isComplete = requieredFields.every(Boolean);
+
   return (
     <>
+      {!course.isPublished && (
+        <Banner label="Este curso no está publicado, por lo que no será visible para el estudiante." />
+      )}
       <div className="flex items-center gap-4">
         <Button variant="outline" size="icon" className="h-7 w-7">
           <ChevronLeft className="h-4 w-4" />
@@ -63,7 +70,11 @@ export default async function CourseIdPage({
           In stock
         </Badge>
         <div className="hidden items-center gap-2 md:ml-auto md:flex">
-          <Button size="sm">Save Product</Button>
+          <Actions
+            disabled={!isComplete}
+            courseId={params.courseId}
+            isPublished={course.isPublished}
+          />
         </div>
       </div>
 

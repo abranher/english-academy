@@ -107,9 +107,22 @@ export class CoursesController {
     return this.coursesService.update(id, updateCourseDto);
   }
 
+  @Patch(':id/publish')
+  publishCourse(@Param('id') id: string, @Param('courseId') courseId: string) {
+    return this.coursesService.publishChapter(id, courseId);
+  }
+
+  @Patch(':id/unpublish')
+  unpublishCourse(
+    @Param('id') id: string,
+    @Param('courseId') courseId: string,
+  ) {
+    return this.coursesService.unpublishChapter(id, courseId);
+  }
+
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.coursesService.remove(+id);
+    return this.coursesService.remove(id);
   }
 
   @Delete(':id/attachments/:attachmentId')

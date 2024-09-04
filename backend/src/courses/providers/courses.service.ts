@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateCourseDto } from '../dto/create-course.dto';
 import { UpdateCourseDto } from '../dto/update-course.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -85,8 +89,125 @@ export class CoursesService {
     return course;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} course`;
+  async publishChapter(id: string, courseId: string) {
+    const ownCourse = await this.prisma.course.findUnique({
+      where: {
+        id: courseId,
+      },
+    });
+
+    if (!ownCourse) throw new NotFoundException('Curso no encontrado.');
+
+    const chapter = await this.prisma.chapter.findUnique({
+      where: {
+        id,
+        courseId,
+      },
+    });
+
+    /*
+    const muxData = this.prisma.muxData.findUnique({
+      where: {
+        chapterId: id,
+      },
+    });
+
+    */
+
+    if (
+      !chapter ||
+      //!muxData ||
+      !chapter.title ||
+      !chapter.description
+      // !chapter.videoUrl
+    ) {
+      throw new BadRequestException('Faltan campos obligatorios.');
+    }
+
+    const publishedChapter = this.prisma.chapter.update({
+      where: {
+        id,
+        courseId,
+      },
+      data: {
+        isPublished: true,
+      },
+    });
+
+    return publishedChapter;
+  }
+
+  async unpublishChapter(id: string, courseId: string) {
+    const ownCourse = await this.prisma.course.findUnique({
+      where: {
+        id: courseId,
+      },
+    });
+
+    if (!ownCourse) throw new NotFoundException('Curso no encontrado.');
+
+    const unpublishedChapter = this.prisma.chapter.update({
+      where: {
+        id,
+        courseId,
+      },
+      data: {
+        isPublished: false,
+      },
+    });
+
+    const publishedChaptersInCourse = await this.prisma.chapter.findMany({
+      where: {
+        courseId,
+        isPublished: true,
+      },
+    });
+
+    if (!publishedChaptersInCourse.length) {
+      await this.prisma.course.update({
+        where: {
+          id: courseId,
+        },
+        data: {
+          isPublished: false,
+        },
+      });
+    }
+
+    return unpublishedChapter;
+  }
+
+  async remove(id: string) {
+    const course = await this.prisma.course.findUnique({
+      where: {
+        id,
+      },
+      include: {
+        chapters: {
+          include: {
+            muxData: true,
+          },
+        },
+      },
+    });
+
+    if (!course) throw new NotFoundException('Curso no encontrado.');
+
+    /*
+    for (const chapter of course.chapters) {
+      if (chapter.muxData?.assetId) {
+        await Video.Assets.del(chapter.muxData.assetId);
+      }
+    }
+    */
+
+    const deletedCourse = await this.prisma.course.delete({
+      where: {
+        id,
+      },
+    });
+
+    return deletedCourse;
   }
 
   async removeAttachment(id: string, attachmentId: string) {
