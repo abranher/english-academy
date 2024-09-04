@@ -116,6 +116,7 @@ CREATE TABLE "Course" (
     "price" DOUBLE PRECISION,
     "imageUrl" TEXT,
     "status" "CourseStatus" NOT NULL DEFAULT 'DRAFT',
+    "isPublished" BOOLEAN NOT NULL DEFAULT false,
     "levelId" TEXT,
     "skillId" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,

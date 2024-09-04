@@ -131,6 +131,7 @@ model Course {
   price       Float?
   imageUrl    String?
   status      CourseStatus @default(DRAFT)
+  isPublished Boolean      @default(false)
 
   levelId String?
   level   Level?  @relation(fields: [levelId], references: [id])

@@ -51,8 +51,8 @@ export class ChaptersController {
     return this.chaptersService.update(id, courseId, updateChapterDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.chaptersService.remove(+id);
+  @Delete(':id/course/:courseId')
+  remove(@Param('id') id: string, @Param('courseId') courseId: string) {
+    return this.chaptersService.remove(id, courseId);
   }
 }
