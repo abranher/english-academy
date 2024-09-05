@@ -15,7 +15,7 @@ import { UpdateTutorDto } from '../dto/update-tutor.dto';
 export class TutorsController {
   constructor(private readonly tutorsService: TutorsService) {}
 
-  @Post()
+  @Post('signup')
   create(@Body() createTutorDto: CreateTutorDto) {
     return this.tutorsService.create(createTutorDto);
   }

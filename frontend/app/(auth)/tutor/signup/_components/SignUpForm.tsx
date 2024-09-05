@@ -11,13 +11,6 @@ import { useForm } from "react-hook-form";
 import { Button } from "@/components/shadcn/ui/button";
 import { Input } from "@/components/shadcn/ui/input";
 import { Label } from "@/components/shadcn/ui/label";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/shadcn/ui/card";
 import { toast } from "sonner";
 import { useMutation } from "@tanstack/react-query";
 
@@ -39,11 +32,11 @@ export default function SignUpForm() {
       username: string;
       email: string;
       password: string;
-    }) => axios.post("/api/auth/signup", user),
+    }) => axios.post("/api/tutors/signup", user),
     onSuccess: (response) => {
       if (response.status === 201) {
         toast.success(response.data.message);
-        router.push("/student/auth/signin");
+        router.push("/tutor/signin");
       }
     },
     onError: (error) => {
