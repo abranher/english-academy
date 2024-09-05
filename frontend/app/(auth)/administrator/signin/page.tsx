@@ -1,7 +1,14 @@
 import Image from "next/image";
 import SignInForm from "./_components/SignInForm";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/shadcn/ui/card";
 
-export default function StudentSigninPage() {
+export default function AdministradorSigninPage() {
   return (
     <>
       <div className="container relative h-[800px] flex-col items-center justify-center grid lg:max-w-none lg:grid-cols-2 lg:px-0">
@@ -18,14 +25,15 @@ export default function StudentSigninPage() {
           </div>
         </div>
         <div className="lg:p-8">
-          <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
-            <div className="flex flex-col space-y-2 text-center">
-              <h1 className="text-2xl font-semibold tracking-tight">
-                Iniciar Sesión
-              </h1>
-            </div>
-            <SignInForm />
-          </div>
+          <Card className="mx-auto min-w-96">
+            <CardHeader>
+              <CardTitle className="text-2xl">Bienvenido Admin</CardTitle>
+              <CardDescription>Inicia Sesión en tu cuenta</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <SignInForm />
+            </CardContent>
+          </Card>
         </div>
       </div>
     </>
