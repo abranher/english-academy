@@ -21,7 +21,7 @@ import NextLink from "next/link";
 import { ThemeSwitcher } from "./ThemeSwitcher";
 import { AcmeLogo } from "../icons/AcmeLogo";
 import { MyButton } from "@/components/common/MyButton";
-import web from "@/libs/routes/web";
+import { webStudent } from "@/libs/routes/web";
 import { usePathname } from "next/navigation";
 
 export default function NavMenu() {
@@ -113,7 +113,7 @@ export default function NavMenu() {
         ) : (
           <NavbarContent justify="end">
             <NavbarItem className="hidden lg:flex">
-              <NextLink href={web("signin")}>
+              <NextLink href={webStudent("signin")}>
                 <MyButton color="default" variant="bordered" type="button">
                   Iniciar sesión
                 </MyButton>
@@ -121,7 +121,7 @@ export default function NavMenu() {
             </NavbarItem>
 
             <NavbarItem>
-              <NextLink href={web("signup")}>
+              <NextLink href={webStudent("signup")}>
                 <MyButton color="primary" variant="flat" type="button">
                   Crear cuenta
                 </MyButton>

@@ -2,7 +2,6 @@
 
 import axios from "@/config/axios";
 import Link from "next/link";
-import web from "@/libs/routes/web";
 import { firstSignUpSchema } from "@/libs/validations/schemas/signup/firstSignUp";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -13,6 +12,7 @@ import { Input } from "@/components/shadcn/ui/input";
 import { Label } from "@/components/shadcn/ui/label";
 import { toast } from "sonner";
 import { useMutation } from "@tanstack/react-query";
+import { webStudent } from "@/libs/routes/web";
 
 export default function SignUpForm() {
   const {
@@ -133,7 +133,7 @@ export default function SignUpForm() {
       </form>
       <div className="mt-4 text-center text-sm">
         Ya tienes una cuenta?{" "}
-        <Link href={web("signin")} className="underline">
+        <Link href={webStudent("signin")} className="underline">
           Iniciar sesión
         </Link>
       </div>
