@@ -14,15 +14,9 @@ import {
   AlertTitle,
 } from "@/components/shadcn/ui/alert";
 import { AlertCircle } from "lucide-react";
-import web from "@/libs/routes/web";
 import { z } from "zod";
 import { signInSchema } from "@/libs/validations/schemas/signin/signIn";
 import { zodResolver } from "@hookform/resolvers/zod";
-
-type Inputs = {
-  email: string;
-  password: string;
-};
 
 export default function SignInForm() {
   const {
@@ -91,7 +85,7 @@ export default function SignInForm() {
       </form>
       <div className="mt-4 text-center text-sm">
         No tienes una cuenta?{" "}
-        <Link href={web("signup")} className="underline">
+        <Link href="/tutor/signup" className="underline">
           Crear cuenta
         </Link>
       </div>

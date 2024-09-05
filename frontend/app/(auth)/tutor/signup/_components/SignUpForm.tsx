@@ -2,7 +2,6 @@
 
 import axios from "@/config/axios";
 import Link from "next/link";
-import web from "@/libs/routes/web";
 import { firstSignUpSchema } from "@/libs/validations/schemas/signup/firstSignUp";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -52,7 +51,7 @@ export default function SignUpForm() {
       lastName: data.lastName,
       username: data.username,
       email: data.email,
-      password: data.password
+      password: data.password,
     });
   }
 
@@ -132,7 +131,7 @@ export default function SignUpForm() {
       </form>
       <div className="mt-4 text-center text-sm">
         Ya tienes una cuenta?{" "}
-        <Link href={web("signin")} className="underline">
+        <Link href="/tutor/signin" className="underline">
           Iniciar sesión
         </Link>
       </div>

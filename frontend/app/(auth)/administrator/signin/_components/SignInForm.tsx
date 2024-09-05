@@ -18,11 +18,6 @@ import { z } from "zod";
 import { signInSchema } from "@/libs/validations/schemas/signin/signIn";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-type Inputs = {
-  email: string;
-  password: string;
-};
-
 export default function SignInForm() {
   const {
     register,

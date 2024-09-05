@@ -12,7 +12,6 @@ import { Input } from "@/components/shadcn/ui/input";
 import { Label } from "@/components/shadcn/ui/label";
 import { toast } from "sonner";
 import { useMutation } from "@tanstack/react-query";
-import { webStudent } from "@/libs/routes/web";
 
 export default function SignUpForm() {
   const {
@@ -133,7 +132,7 @@ export default function SignUpForm() {
       </form>
       <div className="mt-4 text-center text-sm">
         Ya tienes una cuenta?{" "}
-        <Link href={webStudent("signin")} className="underline">
+        <Link href="/student/signin" className="underline">
           Iniciar sesión
         </Link>
       </div>
