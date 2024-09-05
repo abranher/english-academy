@@ -72,7 +72,7 @@ const authOptions: NextAuthOptions = {
   },
 
   pages: {
-    signIn: "/student/auth/signin",
+    signIn: "/",
   },
 };
 
