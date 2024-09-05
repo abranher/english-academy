@@ -45,7 +45,7 @@ export default function SignInForm() {
     if (res.error) {
       setError(res.error);
     } else {
-      router.push("/student/home");
+      router.push("/admin/courses");
       router.refresh();
     }
   }

@@ -6,7 +6,7 @@ export default async function CoursesPage() {
   const { data } = await axios.get("/api/courses");
 
   return (
-    <div>
+    <div className="w-full">
       <DataTable columns={columns} data={data} />
     </div>
   );

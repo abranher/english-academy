@@ -12,7 +12,7 @@ export default function RootLayout({
     <div suppressHydrationWarning>
       <div className="flex min-h-screen w-full flex-col bg-muted/40">
         <AsideAdmin />
-        <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
+        <div className="w-full flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
           <HeaderAdmin />
 
           <MainBox>{children}</MainBox>
