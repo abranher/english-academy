@@ -117,7 +117,7 @@ export class CoursesController {
           include: {
             studentProgress: {
               where: {
-                id: '',
+                id: '2b0137e8-80c7-4b99-8bc9-df7d14710468',
               },
             },
           },
