@@ -15,7 +15,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   const { data: levels } = await axios.get(`/api/levels/`);
 
   const courses = await getCourses({
-    studentId: "",
+    studentId: "a4b10c50-5cb5-46da-b20d-340d13523d0b",
     ...searchParams,
   });
 

@@ -22,8 +22,10 @@ export const getCourses = async ({
 }: GetCourses): Promise<CourseWithProgressWithCategory[]> => {
   try {
     const { data: courses } = await axios.get(
-      `/api/courses/a604f6bd-99af-4ad5-9c92-2a8c629e99d3/levels/${levelId}?title=${title}`
+      `/api/courses/a4b10c50-5cb5-46da-b20d-340d13523d0b/levels/${levelId}?title=${title}`
     );
+
+    console.log(courses)
 
     const coursesWithProgress: CourseWithProgressWithCategory[] =
       await Promise.all(

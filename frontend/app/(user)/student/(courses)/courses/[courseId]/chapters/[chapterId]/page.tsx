@@ -2,6 +2,10 @@ import { getChapter } from "@/app/_actions/get-chapter";
 import { Banner } from "@/components/shadcn/ui/banner";
 import { redirect } from "next/navigation";
 import VideoPlayer from "./_components/VideoPlayer";
+import CourseEnrollButton from "./_components/CourseEnrollButton";
+import { Separator } from "@/components/shadcn/ui/separator";
+import Preview from "@/components/shadcn/ui/preview";
+import { File } from "lucide-react";
 
 export default async function ChapterIdPage({
   params,
@@ -52,6 +56,41 @@ export default async function ChapterIdPage({
             isLocked={isLocked}
             completeOnEnd={completeOnEnd}
           />
+        </div>
+        <div>
+          <div className="p-4 flex flex-col md:flex-row items-center justify-between">
+            <h2 className="text-2xl font-semibold mb-2">{chapter.title}</h2>
+            {purchase ? (
+              <div></div>
+            ) : (
+              <CourseEnrollButton
+                courseId={params.courseId}
+                price={course.price}
+              />
+            )}
+          </div>
+          <Separator />
+          <div>
+            <Preview value={chapter.description!} />
+          </div>
+          {!!attachments.length && (
+            <>
+              <Separator />
+              <div className="p-4">
+                {attachments.map((attachment: any) => (
+                  <a
+                    key={attachment.id}
+                    href={attachment.url}
+                    target="_blank"
+                    className="flex items-center p-3 w-full bg-sky-200 border text-sky-700 rounded-md hover:underline"
+                  >
+                    <File />
+                    <p className="line-clamp-1">{attachment.name}</p>
+                  </a>
+                ))}
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>

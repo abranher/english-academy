@@ -261,6 +261,8 @@ export class CoursesController {
         },
       });
 
+      console.log(courses)
+
       return courses;
     } catch (error) {
       console.log(error);
