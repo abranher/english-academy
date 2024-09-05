@@ -126,10 +126,10 @@ model Level {
 // Modelo de Curso
 model Course {
   id          String       @id @default(uuid())
-  title       String
-  description String?
+  title       String       @db.Text
+  description String?      @db.Text
+  imageUrl    String?      @db.Text
   price       Float?
-  imageUrl    String?
   status      CourseStatus @default(DRAFT)
   isPublished Boolean      @default(false)
 
@@ -151,7 +151,7 @@ model Course {
 model Attachment {
   id   String @id @default(uuid())
   name String
-  url  String
+  url  String @db.Text
 
   courseId String
   course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
@@ -166,8 +166,8 @@ model Attachment {
 model Chapter {
   id          String  @id @default(uuid())
   title       String
-  description String?
-  videoUrl    String?
+  description String? @db.Text
+  videoUrl    String? @db.Text
   position    Int
   isPublished Boolean @default(false)
   isFree      Boolean @default(false)

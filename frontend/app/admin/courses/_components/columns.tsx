@@ -74,6 +74,7 @@ export const columns: ColumnDef<Course>[] = [
   },
   {
     id: "actions",
+    header: "Acciones",
     cell: ({ row }) => {
       const { id } = row.original;
       return (

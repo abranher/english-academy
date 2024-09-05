@@ -10,11 +10,13 @@ import {
   UploadedFile,
   Req,
   BadRequestException,
+  Query,
 } from '@nestjs/common';
 import { CoursesService } from '../providers/courses.service';
 import { CreateCourseDto } from '../dto/create-course.dto';
 import { UpdateCourseDto } from '../dto/update-course.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { diskStorage } from 'multer';
 import {
   attachmentFilter,
@@ -24,7 +26,10 @@ import {
 
 @Controller('courses')
 export class CoursesController {
-  constructor(private readonly coursesService: CoursesService) {}
+  constructor(
+    private readonly coursesService: CoursesService,
+    private prisma: PrismaService,
+  ) {}
 
   /**
    * Create routes
@@ -124,5 +129,87 @@ export class CoursesController {
     @Param('attachmentId') attachmentId: string,
   ) {
     return this.coursesService.removeAttachment(id, attachmentId);
+  }
+
+  /** Routes for Student progress */
+  @Get(':studentId/progress/:courseId')
+  async getProgress(
+    @Param('studentId') studentId: string,
+    @Param('courseId') courseId: string,
+  ) {
+    try {
+      const publishedChapters = await this.prisma.chapter.findMany({
+        where: {
+          courseId,
+          isPublished: true,
+        },
+        select: {
+          id: true,
+        },
+      });
+
+      const publishedChaptersIds = publishedChapters.map(
+        (chapter) => chapter.id,
+      );
+
+      const validCompletedChapters = await this.prisma.studentProgress.count({
+        where: {
+          studentId,
+          chapterId: {
+            in: publishedChaptersIds,
+          },
+          isCompleted: true,
+        },
+      });
+
+      const progressPercentage =
+        (validCompletedChapters / publishedChaptersIds.length) * 100;
+
+      return progressPercentage;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  @Get(':studentId/levels/:levelId')
+  async findCoursesByStudentAndLevel(
+    @Param('studentId') studentId: string,
+    @Param('levelId') levelId: string,
+    @Query('title') title?: string,
+  ) {
+    try {
+      const courses = await this.prisma.course.findMany({
+        where: {
+          isPublished: true,
+          title: {
+            contains: title,
+          },
+          levelId,
+        },
+        include: {
+          level: true,
+          chapters: {
+            where: {
+              isPublished: true,
+            },
+            select: {
+              id: true,
+            },
+          },
+          purchases: {
+            where: {
+              studentId,
+            },
+          },
+        },
+        orderBy: {
+          createdAt: 'desc',
+        },
+      });
+
+      return courses;
+    } catch (error) {
+      console.log(error);
+    }
   }
 }

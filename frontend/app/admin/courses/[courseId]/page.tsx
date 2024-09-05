@@ -20,6 +20,12 @@ import ChaptersForm from "./_components/ChaptersForm";
 import { Banner } from "@/components/shadcn/ui/banner";
 import Actions from "./_components/Actions";
 import Link from "next/link";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/shadcn/ui/tooltip";
 
 export default async function CourseIdPage({
   params,
@@ -47,7 +53,7 @@ export default async function CourseIdPage({
   const totalFields = requieredFields.length;
   const completedFields = requieredFields.filter(Boolean).length;
 
-  const completionText = `(${completedFields} / ${totalFields})`;
+  const completionText = `${completedFields} de ${totalFields}`;
 
   const isComplete = requieredFields.every(Boolean);
 
@@ -67,11 +73,24 @@ export default async function CourseIdPage({
           Configuración del curso
         </h1>
         <p className="flex-1 shrink-0 whitespace-nowrap tracking-tight">
-          Complete all fields {completionText}
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger>{completionText}</TooltipTrigger>
+              <TooltipContent>
+                <p>Completa todos los campos.</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </p>
-        <Badge variant="outline" className="ml-auto sm:ml-0">
-          In stock
-        </Badge>
+        {course.isPublished ? (
+          <Badge variant="default" className="ml-auto sm:ml-0">
+            Publicado
+          </Badge>
+        ) : (
+          <Badge variant="outline" className="ml-auto sm:ml-0">
+            Borrador
+          </Badge>
+        )}
         <div className="hidden items-center gap-2 md:ml-auto md:flex">
           <Actions
             disabled={!isComplete}

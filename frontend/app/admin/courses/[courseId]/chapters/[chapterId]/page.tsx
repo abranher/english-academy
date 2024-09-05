@@ -11,6 +11,12 @@ import ChapterAccessForm from "./_components/ChapterAccessForm";
 import ChapterVideoForm from "./_components/ChapterVideoForm";
 import { Banner } from "@/components/shadcn/ui/banner";
 import ChapterActions from "./_components/ChapterActions";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/shadcn/ui/tooltip";
 
 export default async function ChapterIdPage({
   params,
@@ -37,7 +43,7 @@ export default async function ChapterIdPage({
   const totalFields = requieredFields.length;
   const completedFields = requieredFields.filter(Boolean).length;
 
-  const completionText = `(${completedFields} / ${totalFields})`;
+  const completionText = `${completedFields} de ${totalFields}`;
 
   const isComplete = requieredFields.every(Boolean);
 
@@ -60,11 +66,25 @@ export default async function ChapterIdPage({
           Configuración del capítulo
         </h1>
         <p className="flex-1 shrink-0 whitespace-nowrap tracking-tight">
-          Complete all fields {completionText}
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger>{completionText}</TooltipTrigger>
+              <TooltipContent>
+                <p>Completa todos los campos.</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </p>
-        <Badge variant="outline" className="ml-auto sm:ml-0">
-          In stock
-        </Badge>
+        {chapter.isPublished ? (
+          <Badge variant="default" className="ml-auto sm:ml-0">
+            Publicado
+          </Badge>
+        ) : (
+          <Badge variant="outline" className="ml-auto sm:ml-0">
+            Borrador
+          </Badge>
+        )}
+
         <div className="hidden items-center gap-2 md:ml-auto md:flex">
           <ChapterActions
             disabled={!isComplete}
