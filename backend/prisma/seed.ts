@@ -6,6 +6,14 @@ import skills from './data/skills';
 const prisma = new PrismaClient();
 
 async function main() {
+  const levelsResult = await prisma.level.createManyAndReturn({
+    data: levels,
+  });
+
+  const skillsResult = await prisma.skill.createMany({
+    data: skills,
+  });
+
   const abran = await prisma.user.create({
     data: {
       name: 'Abraham',
@@ -17,15 +25,28 @@ async function main() {
     },
   });
 
-  const levelsResult = await prisma.level.createMany({
-    data: levels,
+  const carlos = await prisma.user.create({
+    data: {
+      name: 'Carlos',
+      lastName: 'Bolivar',
+      email: 'carlos@gmail.com',
+      username: 'carlos12',
+      password: await hash('carlos123', 10),
+      role: 'STUDENT',
+      student: {
+        create: {
+          levelId: levelsResult[0].id,
+        },
+      },
+    },
   });
 
-  const skillsResult = await prisma.skill.createMany({
-    data: skills,
-  });
-
-  console.log({ abran }, { levels: levelsResult }, { skills: skillsResult });
+  console.log(
+    { abran },
+    { carlos },
+    { levels: levelsResult },
+    { skills: skillsResult },
+  );
 }
 
 main()

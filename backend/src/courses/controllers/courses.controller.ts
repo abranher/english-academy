@@ -11,6 +11,7 @@ import {
   Req,
   BadRequestException,
   Query,
+  NotFoundException,
 } from '@nestjs/common';
 import { CoursesService } from '../providers/courses.service';
 import { CreateCourseDto } from '../dto/create-course.dto';
@@ -100,6 +101,36 @@ export class CoursesController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.coursesService.findOne(id);
+  }
+
+  @Get(':id/all')
+  async findOneWithAll(@Param('id') id: string) {
+    const course = await this.prisma.course.findUnique({
+      where: {
+        id,
+      },
+      include: {
+        chapters: {
+          where: {
+            isPublished: true,
+          },
+          include: {
+            studentProgress: {
+              where: {
+                id: '',
+              },
+            },
+          },
+          orderBy: {
+            position: 'asc',
+          },
+        },
+      },
+    });
+
+    if (!course) throw new NotFoundException('Curso no encontrado.');
+
+    return course;
   }
 
   // Updated every fields

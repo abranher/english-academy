@@ -23,24 +23,17 @@ import { AcmeLogo } from "../icons/AcmeLogo";
 import { MyButton } from "@/components/common/MyButton";
 import web from "@/libs/routes/web";
 import { usePathname } from "next/navigation";
-import SearchInput from "./SearchInput";
 
 export default function NavMenu() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { data: session, status } = useSession();
 
   const pathname = usePathname();
-  const isSearchPage = pathname === "/student/search";
 
   const menuItems = ["Cursos", "Tutores", "Contacto"];
 
   return (
     <>
-      {isSearchPage && (
-        <div className="hidden md:block">
-          <SearchInput />
-        </div>
-      )}
       <Navbar onMenuOpenChange={setIsMenuOpen} isBordered maxWidth="2xl">
         <NavbarContent justify="start">
           <NavbarMenuToggle
