@@ -79,7 +79,7 @@ export default function CreateCoursePage() {
                 </div>
 
                 <div className="flex items-center gap-x-2">
-                  <Link href="/admin/dashboard">
+                  <Link href="/admin/courses">
                     <Button variant="ghost" type="button">
                       Cancelar
                     </Button>

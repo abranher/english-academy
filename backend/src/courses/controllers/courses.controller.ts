@@ -103,6 +103,29 @@ export class CoursesController {
     return this.coursesService.findOne(id);
   }
 
+  @Get(':id/chapters')
+  async findOneWithChapters(@Param('id') id: string) {
+    const course = await this.prisma.course.findUnique({
+      where: {
+        id,
+      },
+      include: {
+        chapters: {
+          where: {
+            isPublished: true,
+          },
+          orderBy: {
+            position: 'asc',
+          },
+        },
+      },
+    });
+
+    if (!course) throw new NotFoundException('Curso no encontrado.');
+
+    return course;
+  }
+
   @Get(':id/all')
   async findOneWithAll(@Param('id') id: string) {
     const course = await this.prisma.course.findUnique({
@@ -117,7 +140,7 @@ export class CoursesController {
           include: {
             studentProgress: {
               where: {
-                id: '2b0137e8-80c7-4b99-8bc9-df7d14710468',
+                id: '2dd1501a-b4a3-41c1-91da-e7520d792945',
               },
             },
           },

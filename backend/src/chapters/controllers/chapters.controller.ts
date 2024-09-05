@@ -42,6 +42,15 @@ export class ChaptersController {
     return this.chaptersService.findOne(id, courseId);
   }
 
+  @Get(':id/student/:studentId/course/:courseId/')
+  findOneWithAll(
+    @Param('id') id: string,
+    @Param('studentId') studentId: string,
+    @Param('courseId') courseId: string,
+  ) {
+    return this.chaptersService.findOneWithAll(id, studentId, courseId);
+  }
+
   @Patch(':id/course/:courseId')
   update(
     @Param('id') id: string,

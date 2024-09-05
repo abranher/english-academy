@@ -32,7 +32,7 @@ export default function Hero() {
               <Image
                 isBlurred
                 width={240}
-                src="/hero-student.jpg"
+                src="/student.jpg"
                 alt="Estudiante"
                 className="m-5"
               />

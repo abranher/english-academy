@@ -16,7 +16,7 @@ export default async function CoursesLayout({
     );
 
     const progressCount = await getProgress(
-      "2b0137e8-80c7-4b99-8bc9-df7d14710468",
+      "2dd1501a-b4a3-41c1-91da-e7520d792945",
       params.courseId
     );
 

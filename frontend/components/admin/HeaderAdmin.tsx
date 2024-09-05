@@ -8,7 +8,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/shadcn/ui/dropdown-menu";
-
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -17,16 +16,13 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/shadcn/ui/breadcrumb";
-
 import {
   Sheet,
   SheetContent,
   SheetTrigger,
 } from "@/components/shadcn/ui/sheet";
-
 import { Input } from "@/components/shadcn/ui/input";
 import { Button } from "@/components/shadcn/ui/button";
-
 import {
   Home,
   LineChart,
@@ -37,6 +33,7 @@ import {
   Search,
   ShoppingCart,
 } from "lucide-react";
+import { ThemeSwitcher } from "@/components/common/ThemeSwitcher";
 
 export default function HeaderAdmin() {
   return (
@@ -148,6 +145,7 @@ export default function HeaderAdmin() {
             <DropdownMenuItem>Logout</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
+        <ThemeSwitcher />
       </header>
     </>
   );

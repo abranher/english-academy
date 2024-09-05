@@ -18,7 +18,7 @@ export default async function CourseSidebar({
   progressCount,
 }: CourseSidebarProps) {
   const { data: purchase } = await axios.get(
-    `/api/purchases/2b0137e8-80c7-4b99-8bc9-df7d14710468/course/${course.id}`
+    `/api/purchases/2dd1501a-b4a3-41c1-91da-e7520d792945/course/${course.id}`
   );
 
   return (

@@ -6,6 +6,7 @@ import {
 import { CreateChapterDto } from '../dto/create-chapter.dto';
 import { UpdateChapterDto } from '../dto/update-chapter.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { Attachment, Chapter } from '@prisma/client';
 
 @Injectable()
 export class ChaptersService {
@@ -85,6 +86,89 @@ export class ChaptersService {
     });
 
     return chapter;
+  }
+
+  async findOneWithAll(chapterId: string, studentId: string, courseId: string) {
+    const purchase = await this.prisma.purchase.findUnique({
+      where: {
+        studentId_courseId: {
+          studentId,
+          courseId,
+        },
+      },
+    });
+
+    const course = await this.prisma.course.findUnique({
+      where: {
+        isPublished: true,
+        id: courseId,
+      },
+      select: {
+        price: true,
+      },
+    });
+
+    const chapter = await this.prisma.chapter.findUnique({
+      where: {
+        id: chapterId,
+        isPublished: true,
+      },
+    });
+
+    if (!chapter || !course)
+      throw new NotFoundException('Curso o capítulo no encontrado.');
+
+    let muxData = null;
+    let attachments: Attachment[] = [];
+    let nextChapter: Chapter | null = null;
+
+    if (purchase) {
+      attachments = await this.prisma.attachment.findMany({
+        where: {
+          courseId,
+        },
+      });
+    }
+
+    if (chapter.isFree || purchase) {
+      muxData = await this.prisma.muxData.findUnique({
+        where: {
+          chapterId,
+        },
+      });
+
+      nextChapter = await this.prisma.chapter.findFirst({
+        where: {
+          courseId,
+          isPublished: true,
+          position: {
+            gt: chapter?.position,
+          },
+        },
+        orderBy: {
+          position: 'asc',
+        },
+      });
+    }
+
+    const studentProgress = await this.prisma.studentProgress.findUnique({
+      where: {
+        studentId_chapterId: {
+          studentId,
+          chapterId,
+        },
+      },
+    });
+
+    return {
+      chapter,
+      course,
+      muxData,
+      attachments,
+      nextChapter,
+      studentProgress,
+      purchase,
+    };
   }
 
   async update(

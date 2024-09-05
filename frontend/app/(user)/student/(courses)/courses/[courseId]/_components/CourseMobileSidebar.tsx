@@ -1,11 +1,9 @@
 import { Menu } from "lucide-react";
-
 import {
   Sheet,
   SheetContent,
   SheetTrigger,
 } from "@/components/shadcn/ui/sheet";
-
 import CourseSidebar from "./CourseSidebar";
 import { Course } from "@/types/models/Course";
 import { Chapter } from "@/types/models/Chapter";
