@@ -1,9 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { CreatePurchaseDto } from './dto/create-purchase.dto';
-import { UpdatePurchaseDto } from './dto/update-purchase.dto';
+import { CreatePurchaseDto } from '../dto/create-purchase.dto';
+import { UpdatePurchaseDto } from '../dto/update-purchase.dto';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class PurchasesService {
+  constructor(private readonly prisma: PrismaService) {}
+
   create(createPurchaseDto: CreatePurchaseDto) {
     return 'This action adds a new purchase';
   }
@@ -14,6 +17,19 @@ export class PurchasesService {
 
   findOne(id: number) {
     return `This action returns a #${id} purchase`;
+  }
+
+  async findOneWithCourse(studentId: string, courseId: string) {
+    const purchase = await this.prisma.purchase.findUnique({
+      where: {
+        studentId_courseId: {
+          studentId,
+          courseId,
+        },
+      },
+    });
+
+    return purchase;
   }
 
   update(id: number, updatePurchaseDto: UpdatePurchaseDto) {

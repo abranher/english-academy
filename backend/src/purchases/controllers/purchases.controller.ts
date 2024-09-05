@@ -1,7 +1,15 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { PurchasesService } from './purchases.service';
-import { CreatePurchaseDto } from './dto/create-purchase.dto';
-import { UpdatePurchaseDto } from './dto/update-purchase.dto';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
+import { PurchasesService } from '../providers/purchases.service';
+import { CreatePurchaseDto } from '../dto/create-purchase.dto';
+import { UpdatePurchaseDto } from '../dto/update-purchase.dto';
 
 @Controller('purchases')
 export class PurchasesController {
@@ -22,8 +30,19 @@ export class PurchasesController {
     return this.purchasesService.findOne(+id);
   }
 
+  @Get(':studentId/course/:courseId')
+  findOneWithCourses(
+    @Param('studentId') studentId: string,
+    @Param('courseId') courseId: string,
+  ) {
+    return this.purchasesService.findOneWithCourse(studentId, courseId);
+  }
+
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePurchaseDto: UpdatePurchaseDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updatePurchaseDto: UpdatePurchaseDto,
+  ) {
     return this.purchasesService.update(+id, updatePurchaseDto);
   }
 
