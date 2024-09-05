@@ -39,8 +39,6 @@ const authOptions: NextAuthOptions = {
           password,
         });
 
-        console.log(response.data);
-
         if (response.status == 401) {
           console.log(response.statusText);
 

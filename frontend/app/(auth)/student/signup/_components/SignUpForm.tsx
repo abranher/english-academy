@@ -130,7 +130,7 @@ export default function SignUpForm() {
           Crear cuenta
         </Button>
       </form>
-      <div className="mt-4 text-center text-sm">
+      <div className="mt-4 text-center text-md">
         Ya tienes una cuenta?{" "}
         <Link href="/student/signin" className="underline">
           Iniciar sesión

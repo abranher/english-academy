@@ -45,7 +45,7 @@ export default function DropdownAuth() {
                 key="logout"
                 color="danger"
                 onClick={() => {
-                  signOut({ callbackUrl: "/student/auth/signin" });
+                  signOut({ callbackUrl: "/" });
                 }}
               >
                 Cerrar sesión
