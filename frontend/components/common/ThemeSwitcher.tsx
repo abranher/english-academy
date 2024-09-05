@@ -29,7 +29,7 @@ export function ThemeSwitcher() {
               setTheme("dark");
             }}
           >
-            <SunIcon />
+            <MoonIcon className="w-5 h-5" />
           </Button>
         </>
       ) : (
@@ -43,7 +43,7 @@ export function ThemeSwitcher() {
               setTheme("light");
             }}
           >
-            <MoonIcon />
+            <SunIcon className="w-5 h-5" />
           </Button>
         </>
       )}
