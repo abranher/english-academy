@@ -39,7 +39,7 @@ CREATE TABLE "User" (
 CREATE TABLE "Student" (
     "id" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
-    "levelId" TEXT NOT NULL,
+    "levelId" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -51,8 +51,8 @@ CREATE TABLE "Tutor" (
     "id" TEXT NOT NULL,
     "biography" TEXT,
     "approvedAt" TIMESTAMP(3),
-    "location" TEXT NOT NULL,
-    "curriculumUrl" TEXT NOT NULL,
+    "location" TEXT,
+    "curriculumUrl" TEXT,
     "userId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -220,6 +220,12 @@ CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 CREATE INDEX "User_username_email_idx" ON "User"("username", "email");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Student_userId_key" ON "Student"("userId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Tutor_userId_key" ON "Tutor"("userId");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Country_code_key" ON "Country"("code");
 
 -- CreateIndex
@@ -250,6 +256,9 @@ CREATE UNIQUE INDEX "StudentProgress_studentId_chapterId_key" ON "StudentProgres
 CREATE INDEX "Purchase_courseId_idx" ON "Purchase"("courseId");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Purchase_studentId_courseId_key" ON "Purchase"("studentId", "courseId");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "StripeCustomer_studentId_key" ON "StripeCustomer"("studentId");
 
 -- CreateIndex
@@ -262,7 +271,7 @@ ALTER TABLE "User" ADD CONSTRAINT "User_countryId_fkey" FOREIGN KEY ("countryId"
 ALTER TABLE "Student" ADD CONSTRAINT "Student_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Student" ADD CONSTRAINT "Student_levelId_fkey" FOREIGN KEY ("levelId") REFERENCES "Level"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Student" ADD CONSTRAINT "Student_levelId_fkey" FOREIGN KEY ("levelId") REFERENCES "Level"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Tutor" ADD CONSTRAINT "Tutor_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
