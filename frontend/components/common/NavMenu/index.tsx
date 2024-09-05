@@ -3,7 +3,6 @@
 import { useState } from "react";
 import {
   Navbar,
-  NavbarBrand,
   NavbarContent,
   NavbarItem,
   NavbarMenuToggle,
@@ -18,10 +17,11 @@ import {
 } from "@nextui-org/react";
 import { signOut, useSession } from "next-auth/react";
 import NextLink from "next/link";
-import { ThemeSwitcher } from "./ThemeSwitcher";
-import { AcmeLogo } from "../icons/AcmeLogo";
-import { MyButton } from "@/components/common/MyButton";
+import { ThemeSwitcher } from "../ThemeSwitcher";
 import { usePathname } from "next/navigation";
+import { Button } from "../../shadcn/ui/button";
+import Logo from "./Logo";
+import MainLinks from "./MainLinks";
 
 export default function NavMenu() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -36,38 +36,13 @@ export default function NavMenu() {
       <Navbar onMenuOpenChange={setIsMenuOpen} isBordered maxWidth="2xl">
         <NavbarContent justify="start">
           <NavbarMenuToggle
-            aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+            aria-label={isMenuOpen ? "Cerrar menu" : "Abrir menu"}
             className="sm:hidden"
           />
-          <NavbarBrand>
-            <AcmeLogo />
-            <NextLink href="/" className="font-bold text-inherit">
-              ACADEMY
-            </NextLink>
-          </NavbarBrand>
 
-          <NavbarContent className="hidden sm:flex gap-3">
-            <NavbarItem>
-              <Link color="foreground" href="/">
-                Inicio
-              </Link>
-            </NavbarItem>
-            <NavbarItem>
-              <Link color="foreground" href="/home/courses">
-                Cursos
-              </Link>
-            </NavbarItem>
-            <NavbarItem isActive>
-              <Link href="#" aria-current="page" color="secondary">
-                Tutores
-              </Link>
-            </NavbarItem>
-            <NavbarItem>
-              <Link color="foreground" href="#">
-                Contacto
-              </Link>
-            </NavbarItem>
-          </NavbarContent>
+          <Logo />
+
+          <MainLinks />
         </NavbarContent>
 
         {status === "authenticated" ? (
@@ -111,19 +86,19 @@ export default function NavMenu() {
           </NavbarContent>
         ) : (
           <NavbarContent justify="end">
-            <NavbarItem className="hidden lg:flex">
+            <NavbarItem className="hidden md:flex">
               <NextLink href="/student/signin">
-                <MyButton color="default" variant="bordered" type="button">
+                <Button color="default" type="button" variant="ghost">
                   Iniciar sesión
-                </MyButton>
+                </Button>
               </NextLink>
             </NavbarItem>
 
-            <NavbarItem>
+            <NavbarItem className="hidden sm:flex">
               <NextLink href="/student/signup">
-                <MyButton color="primary" variant="flat" type="button">
+                <Button color="primary" type="button">
                   Crear cuenta
-                </MyButton>
+                </Button>
               </NextLink>
             </NavbarItem>
 

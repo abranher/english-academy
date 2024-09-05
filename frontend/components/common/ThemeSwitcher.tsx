@@ -1,8 +1,8 @@
 "use client";
 
-import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
-import { Switch } from "@nextui-org/react";
+import { useTheme } from "next-themes";
+import { Button } from "@/components/shadcn/ui/button";
 import { SunIcon } from "../icons/SunIcon";
 import { MoonIcon } from "../icons/MoonIcon";
 
@@ -14,22 +14,39 @@ export function ThemeSwitcher() {
     setMounted(true);
   }, []);
 
-  const handleThemeChange = (e: any) => {
-    const newTheme = e.target.checked ? "light" : "dark";
-    setTheme(newTheme);
-  };
-
   if (!mounted) return null;
 
   return (
     <>
-      <Switch
-        size="lg"
-        color="success"
-        startContent={<SunIcon />}
-        endContent={<MoonIcon />}
-        onChange={handleThemeChange}
-      />
+      {theme === "light" ? (
+        <>
+          <Button
+            variant="outline"
+            size="icon"
+            className="rounded-full"
+            type="button"
+            onClick={() => {
+              setTheme("dark");
+            }}
+          >
+            <SunIcon />
+          </Button>
+        </>
+      ) : (
+        <>
+          <Button
+            variant="outline"
+            size="icon"
+            className="rounded-full"
+            type="button"
+            onClick={() => {
+              setTheme("light");
+            }}
+          >
+            <MoonIcon />
+          </Button>
+        </>
+      )}
     </>
   );
 }
