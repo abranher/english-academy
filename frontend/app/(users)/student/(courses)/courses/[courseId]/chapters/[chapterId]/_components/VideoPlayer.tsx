@@ -27,6 +27,33 @@ export default function VideoPlayer({
   completeOnEnd,
 }: VideoPlayerProps) {
   const [isReady, setIsReady] = useState(false);
+  const router = useRouter();
+  //const confetti = confetti()
+
+  const onEnd = async () => {
+    try {
+      if (completeOnEnd) {
+        await axios.put(
+          `/api/courses/${courseId}/chapters/${chapterId}/progress`,
+          {
+            isCompleted: true,
+          }
+        );
+        if (!nextChapterId) {
+          //confetti();
+        }
+
+        toast.success("Progreso actualizado!");
+        router.refresh();
+
+        if (nextChapterId) {
+          router.push(`/student/courses/${courseId}/chapters/${nextChapterId}`);
+        }
+      }
+    } catch (error) {
+      toast.error("something wrong!");
+    }
+  };
 
   return (
     <div className="relative aspect-video">
@@ -51,7 +78,7 @@ export default function VideoPlayer({
           title={title}
           className={cn(!isReady && "hidden")}
           onCanPlay={() => setIsReady(true)}
-          onEnded={() => {}}
+          onEnded={onEnd}
           autoPlay
           playbackId={playbackId}
         />*/}

@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreatePurchaseDto } from '../dto/create-purchase.dto';
 import { UpdatePurchaseDto } from '../dto/update-purchase.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { Chapter, Course, Level } from '@prisma/client';
 
 @Injectable()
 export class PurchasesService {
@@ -30,6 +31,55 @@ export class PurchasesService {
     });
 
     return purchase;
+  }
+
+  async purchasedCourses(studentId: string) {
+    type CourseWithProgressWithLevel = Course & {
+      level: Level;
+      chapters: Chapter[];
+      progress: number | null;
+    };
+
+    const purchasedCourses = await this.prisma.purchase.findMany({
+      where: {
+        studentId,
+      },
+      select: {
+        course: {
+          include: {
+            level: true,
+            chapters: {
+              where: {
+                isPublished: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    const courses = purchasedCourses.map(
+      (purchase) => purchase.course,
+    ) as CourseWithProgressWithLevel[];
+
+    /*
+    for (const course of courses) {
+      const progress = await getProgress(studentId, course.id);
+      course['progress'] = progress;
+    }
+    */
+
+    const completedCourses = courses.filter(
+      (course) => course.progress === 100,
+    );
+    const coursesInProgress = courses.filter(
+      (course) => (course.progress ?? 0) < 100,
+    );
+
+    return {
+      completedCourses,
+      coursesInProgress,
+    };
   }
 
   update(id: number, updatePurchaseDto: UpdatePurchaseDto) {

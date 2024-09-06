@@ -12,6 +12,7 @@ import {
   BadRequestException,
   Query,
   NotFoundException,
+  Put,
 } from '@nestjs/common';
 import { CoursesService } from '../providers/courses.service';
 import { CreateCourseDto } from '../dto/create-course.dto';
@@ -172,6 +173,15 @@ export class CoursesController {
     return this.coursesService.unpublishCourse(id);
   }
 
+  @Put()
+  updateProgress(
+    @Param('id') id: string,
+    @Param('chapterId') chapterId: string,
+    @Body() data: any,
+  ) {
+    return this.coursesService.updateProgress(id, chapterId, data);
+  }
+
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.coursesService.remove(id);
@@ -261,7 +271,7 @@ export class CoursesController {
         },
       });
 
-      console.log(courses)
+      console.log(courses);
 
       return courses;
     } catch (error) {

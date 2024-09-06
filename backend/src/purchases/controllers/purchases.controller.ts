@@ -38,6 +38,11 @@ export class PurchasesController {
     return this.purchasesService.findOneWithCourse(studentId, courseId);
   }
 
+  @Get(':studentId/courses')
+  purchasedCourses(@Param('studentId') studentId: string) {
+    return this.purchasesService.purchasedCourses(studentId);
+  }
+
   @Patch(':id')
   update(
     @Param('id') id: string,

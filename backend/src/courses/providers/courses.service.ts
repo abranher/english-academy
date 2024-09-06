@@ -158,6 +158,27 @@ export class CoursesService {
     return unpublishedCourse;
   }
 
+  async updateProgress(id: string, chapterId: string, data: any) {
+    const studentProgress = await this.prisma.studentProgress.upsert({
+      where: {
+        studentId_chapterId: {
+          studentId: '',
+          chapterId,
+        },
+      },
+      update: {
+        isCompleted: data.isCompleted,
+      },
+      create: {
+        studentId: '',
+        chapterId,
+        isCompleted: data.isCompleted,
+      },
+    });
+
+    return studentProgress;
+  }
+
   async remove(id: string) {
     const course = await this.prisma.course.findUnique({
       where: {
