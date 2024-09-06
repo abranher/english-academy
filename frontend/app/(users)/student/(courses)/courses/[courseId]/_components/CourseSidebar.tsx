@@ -3,6 +3,7 @@ import { Chapter } from "@/types/models/Chapter";
 import { Course } from "@/types/models/Course";
 import { StudentProgress } from "@/types/models/StudentProgress";
 import CourseSidebarItem from "./CourseSidebarItem";
+import CourseProgress from "@/components/courses/CourseProgress";
 
 interface CourseSidebarProps {
   course: Course & {
@@ -25,7 +26,11 @@ export default async function CourseSidebar({
     <div className="h-full border-r flex flex-col overflow-y-auto shadow-sm">
       <div className="p-8 flex flex-col border-b">
         <h1 className="font-semibold">{course.title}</h1>
-        {/* Check purchase and add progress */}
+        {purchase && <div>aqui deberia ir el CourseProgress</div>}
+
+        <div className="mt-10">
+          <CourseProgress variant="success" value={progressCount} />
+        </div>
       </div>
       <div className="flex flex-col w-full">
         {course.chapters.map((chapter) => (
