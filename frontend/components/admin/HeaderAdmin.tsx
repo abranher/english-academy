@@ -40,7 +40,6 @@ import {
   User,
   CreditCard,
   Settings,
-  Keyboard,
   Users,
   UserPlus,
   Mail,
@@ -212,7 +211,7 @@ export default function HeaderAdmin() {
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 onClick={() => {
-                  signOut({ callbackUrl: "/" });
+                  signOut({ callbackUrl: "/administrator/signin" });
                 }}
               >
                 <LogOut className="mr-2 h-4 w-4" />
