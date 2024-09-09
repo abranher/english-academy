@@ -59,6 +59,13 @@ export class CoursesService {
       orderBy: {
         createdAt: 'desc',
       },
+      include: {
+        chapters: {
+          where: {
+            isPublished: true,
+          },
+        },
+      },
     });
 
     return courses;

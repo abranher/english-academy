@@ -7,6 +7,10 @@ import BoxBase from "@/components/common/BoxBase";
 import { Avatar } from "@/components/shadcn/ui/avatar";
 import Avvvatars from "avvvatars-react";
 import { useSession } from "next-auth/react";
+import { Tabs, TabsContent } from "@/components/shadcn/ui/tabs";
+import { Sidebar } from "./_components/Sidebar";
+import { playlists } from "./data/playlists";
+import CoursesList from "./_components/CoursesList";
 
 export default function StudentDashboardPage() {
   //const { completedCourses, coursesInProgress } = getDashboardCourses("");
@@ -22,6 +26,21 @@ export default function StudentDashboardPage() {
               <h2 className="font-bold text-2xl">
                 Welcome back, {session?.user.name}
               </h2>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="w-full flex items-center justify-center">
+        <div className="max-w-[1200px]">
+          <div>
+            <div className="bg-background">
+              <div className="grid lg:grid-cols-5">
+                <Sidebar playlists={playlists} className="hidden lg:block" />
+                <div className="col-span-3 lg:col-span-4 p-6">
+                  <CoursesList />
+                </div>
+              </div>
             </div>
           </div>
         </div>
