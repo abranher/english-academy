@@ -28,10 +28,9 @@ type GetCourses = {
 
 export default async function SearchPage({ searchParams }: SearchPageProps) {
   const session = await getServerSession(authOptions);
-  console.log(session?.user.student);
-  return;
-  const levels = await axios.get(`/api/levels/`);
-  const courses = await axios.get(
+  const studentId = session?.user.student.id;
+  const { data: levels } = await axios.get(`/api/levels/`);
+  const { data: courses } = await axios.get(
     `/api/courses/${studentId}/levels/${searchParams.levelId}?title=${searchParams.title}`
   );
 
@@ -40,6 +39,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
     courses,
   });
 
+  return;
   return (
     <>
       <div className="px-6 pt-6">

@@ -227,6 +227,43 @@ model Lesson {
   updatedAt DateTime @updatedAt
 }
 
+// *
+// *
+// * Exercise type
+// *
+// *
+
+model MultipleChoiceExercise {
+  id                    String                  @id @default(uuid())
+  question              String
+  text                  String
+  multipleChoiceOptions MultipleChoiceOptions[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model MultipleChoiceOptions {
+  id                       String                 @id @default(uuid())
+  text                     String
+  isCorrect                Boolean
+  multipleChoiceExerciseId String
+  multipleChoiceExercise   MultipleChoiceExercise @relation(fields: [multipleChoiceExerciseId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model TranslationExercise {
+  id          String   @id @default(uuid())
+  phrase      String
+  translation String
+  language    Language
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 model Purchase {
   id        String @id @default(uuid())
   studentId String
@@ -278,4 +315,9 @@ enum LessonStatus {
   REVIEWED
   ARCHIVED
   DELETED
+}
+
+enum Language {
+  ES
+  EN
 }

@@ -18,7 +18,7 @@ export interface User {
   secretToken: string | null;
   profileComplete: boolean;
   countryId: string | null;
-  student: any;
+  student: Student;
   createdAt: Date;
   updatedAt: Date;
 }
