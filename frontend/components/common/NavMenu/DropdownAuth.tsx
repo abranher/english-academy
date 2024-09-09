@@ -123,7 +123,7 @@ export default function DropdownAuth() {
       ) : (
         <NavbarContent justify="end">
           <NavbarItem className="hidden md:flex">
-            <Link href="/student/signin">
+            <Link href="/students/signin">
               <Button color="default" type="button" variant="ghost">
                 Iniciar sesión
               </Button>
@@ -131,7 +131,7 @@ export default function DropdownAuth() {
           </NavbarItem>
 
           <NavbarItem className="hidden sm:flex">
-            <Link href="/student/signup">
+            <Link href="/students/signup">
               <Button color="primary" type="button">
                 Crear cuenta
               </Button>

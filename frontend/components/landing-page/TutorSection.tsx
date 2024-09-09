@@ -30,7 +30,7 @@ export default function TutorSection() {
                 Registrate y empieza hoy mismo.
               </p>
               <div className="flex items-center justify-center flex-col space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0">
-                <Link href="/tutor/signup">
+                <Link href="/tutors/signup">
                   <Button color="primary" size="lg" className="flex gap-3">
                     Solicitar
                     <ArrowRight className="w-5" />

@@ -131,7 +131,7 @@ export default function SignUpForm() {
       </form>
       <div className="mt-4 text-center text-sm">
         Ya tienes una cuenta?{" "}
-        <Link href="/tutor/signin" className="underline">
+        <Link href="/tutors/signin" className="underline">
           Iniciar sesión
         </Link>
       </div>

@@ -40,7 +40,7 @@ export default function SignInForm() {
     if (res.error) {
       setError(res.error);
     } else {
-      router.push("/student/home");
+      router.push("/student/dashboard");
       router.refresh();
     }
   }
@@ -83,9 +83,9 @@ export default function SignInForm() {
           Iniciar sesión
         </Button>
       </form>
-      <div className="mt-4 text-center text-sm">
+      <div className="mt-4 text-center text-md">
         No tienes una cuenta?{" "}
-        <Link href="/tutor/signup" className="underline">
+        <Link href="/students/signup" className="underline">
           Crear cuenta
         </Link>
       </div>

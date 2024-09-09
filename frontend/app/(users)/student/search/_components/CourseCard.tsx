@@ -1,12 +1,14 @@
 import CourseProgress from "@/components/courses/CourseProgress";
 import { IconBadge } from "@/components/icons/IconBadge";
 import { formatPrice } from "@/libs/format";
+import { Course } from "@/types/models/Course";
 import { BookOpen } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
 interface CourseCardProps {
+  course: Course;
   id: string;
   title: string;
   imageUrl: string;
@@ -16,7 +18,8 @@ interface CourseCardProps {
   level: string;
 }
 
-export default function CourseCard({
+export default async function CourseCard({
+  course,
   id,
   title,
   imageUrl,
@@ -25,6 +28,21 @@ export default function CourseCard({
   progress,
   level,
 }: CourseCardProps) {
+  if (course.purchases.length === 0) {
+    return {
+      ...course,
+      progress: null,
+    };
+  }
+
+  const progressPercentage = await axios.get(
+    `/api/courses/${studentId}/progress/${courseId}`
+  );
+  return {
+    ...course,
+    progress: progressPercentage,
+  };
+
   return (
     <>
       <Link href={`/courses/${id}`}>

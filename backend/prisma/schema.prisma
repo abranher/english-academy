@@ -34,9 +34,10 @@ model User {
   profileComplete Boolean       @default(false)
 
   countryId String?
-  country   Country?  @relation(fields: [countryId], references: [id])
-  student   Student[]
-  tutor     Tutor[]
+  country   Country? @relation(fields: [countryId], references: [id])
+
+  student Student?
+  tutor   Tutor?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

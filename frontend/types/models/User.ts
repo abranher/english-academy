@@ -1,3 +1,5 @@
+import { Student } from "./Student";
+
 export interface User {
   id: string;
   role: Roles;
@@ -16,6 +18,7 @@ export interface User {
   secretToken: string | null;
   profileComplete: boolean;
   countryId: string | null;
+  student: any;
   createdAt: Date;
   updatedAt: Date;
 }

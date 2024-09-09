@@ -37,6 +37,9 @@ export class UsersService {
       where: {
         email,
       },
+      include: {
+        student: true,
+      },
     });
   }
 

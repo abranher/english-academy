@@ -1,8 +1,11 @@
 import axios from "@/config/axios";
 import Levels from "./_components/Levels";
 import SearchInput from "@/components/common/SearchInput";
-import { getCourses } from "@/app/_actions/get-courses";
 import CoursesList from "./_components/CoursesList";
+import { Level } from "@/types/models/Level";
+import { Course } from "@/types/models/Course";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/config/next-auth";
 
 interface SearchPageProps {
   searchParams: {
@@ -11,12 +14,30 @@ interface SearchPageProps {
   };
 }
 
-export default async function SearchPage({ searchParams }: SearchPageProps) {
-  const { data: levels } = await axios.get(`/api/levels/`);
+type CourseWithProgressWithCategory = Course & {
+  level: Level | null;
+  chapters: { id: string }[];
+  progress: number | null;
+};
 
-  const courses = await getCourses({
-    studentId: "a4b10c50-5cb5-46da-b20d-340d13523d0b",
-    ...searchParams,
+type GetCourses = {
+  studentId: string;
+  title?: string;
+  levelId?: string;
+};
+
+export default async function SearchPage({ searchParams }: SearchPageProps) {
+  const session = await getServerSession(authOptions);
+  console.log(session?.user.student);
+  return;
+  const levels = await axios.get(`/api/levels/`);
+  const courses = await axios.get(
+    `/api/courses/${studentId}/levels/${searchParams.levelId}?title=${searchParams.title}`
+  );
+
+  console.log({
+    levels,
+    courses,
   });
 
   return (
