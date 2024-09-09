@@ -1,7 +1,7 @@
-import CredentialsProvider from "next-auth/providers/credentials";
 import { NextAuthOptions } from "next-auth";
-import { JWT } from "next-auth/jwt";
+import Credentials from "next-auth/providers/credentials";
 import axios from "./axios";
+import { JWT } from "next-auth/jwt";
 import { NEXT_PUBLIC_BACKEND_URL } from "./app";
 
 async function refreshToken(token: JWT): Promise<JWT> {
@@ -22,10 +22,9 @@ async function refreshToken(token: JWT): Promise<JWT> {
 
 export const authOptions: NextAuthOptions = {
   providers: [
-    CredentialsProvider({
-      name: "Credentials",
+    Credentials({
       credentials: { email: {}, password: {} },
-      async authorize(credentials, req) {
+      authorize: async (credentials) => {
         if (!credentials?.email || !credentials?.password) return null;
         const { email, password } = credentials;
         const response = await axios.post("/api/auth/signin", {
@@ -40,7 +39,6 @@ export const authOptions: NextAuthOptions = {
       },
     }),
   ],
-
   callbacks: {
     async jwt({ token, user }) {
       if (user) return { ...token, ...user };
@@ -54,7 +52,6 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
   },
-
   pages: {
     signIn: "/",
     signOut: "/",

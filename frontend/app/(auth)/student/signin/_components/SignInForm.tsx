@@ -40,7 +40,7 @@ export default function SignInForm() {
     if (res.error) {
       setError(res.error);
     } else {
-      router.push("/student/home");
+      router.push("/student/dashboard");
       router.refresh();
     }
   }
