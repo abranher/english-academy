@@ -1,4 +1,4 @@
-import { Button, buttonVariants } from "@/components/shadcn/ui/button";
+import { buttonVariants } from "@/components/shadcn/ui/button";
 import { cn } from "@/libs/shadcn/utils";
 import Link from "next/link";
 
