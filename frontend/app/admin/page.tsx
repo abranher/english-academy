@@ -32,8 +32,14 @@ import {
   ToggleGroup,
   ToggleGroupItem,
 } from "@/components/shadcn/ui/toggle-group";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/config/next-auth";
 
-export default function Dashboard() {
+export default async function Dashboard() {
+  const session = await getServerSession(authOptions);
+
+  console.log(session);
+
   return (
     <>
       <div className="flex items-center gap-4">

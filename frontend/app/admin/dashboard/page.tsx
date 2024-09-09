@@ -19,6 +19,8 @@ import { redirect } from "next/navigation";
 export default async function DashboardAdminPage() {
   const session = await getServerSession(authOptions);
 
+  console.log(session)
+
   if (session!.user.role !== Roles.ADMIN) {
     redirect("/");
   }

@@ -41,11 +41,36 @@ async function main() {
     },
   });
 
+  const multipleChoiceExercise = await prisma.multipleChoiceExercise.create({
+    data: {
+      question: 'Que significa esta palabra en español:',
+      text: 'Dog',
+    },
+  });
+
+  const multipleChoiceOption1 = await prisma.multipleChoiceOptions.create({
+    data: {
+      text: 'Perro',
+      isCorrect: true,
+      multipleChoiceExerciseId: multipleChoiceExercise.id,
+    },
+  });
+
+  const multipleChoiceOption2 = await prisma.multipleChoiceOptions.create({
+    data: {
+      text: 'Gato',
+      multipleChoiceExerciseId: multipleChoiceExercise.id,
+    },
+  });
+
   console.log(
     { abran },
     { carlos },
     { levels: levelsResult },
     { skills: skillsResult },
+    { multipleChoiceExercise },
+    { multipleChoiceOption1 },
+    { multipleChoiceOption2 },
   );
 }
 
