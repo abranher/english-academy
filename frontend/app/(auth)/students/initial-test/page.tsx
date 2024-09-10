@@ -7,17 +7,28 @@ export default function InitialTestPage() {
     <>
       <div className="container relative h-[600px] flex flex-col items-center justify-center">
         <div className="lg:p-8">
-          <div className="mx-auto min-w-80">
-            <div className="text-4xl">Bienvenido </div>
-            <div>
-              Antes de comenzar, quisieramos conocer tu dominio en el idioma.
+          <div className="mx-auto max-w-lg flex flex-col gap-4">
+            <div className="text-5xl">
+              <h2>¡Bienvenido a Academy!</h2>
             </div>
-            <Link
-              className={cn(buttonVariants({ variant: "default" }))}
-              href="/students/initial-test/considerations"
-            >
-              Empezar
-            </Link>
+            <div className="flex flex-col gap-3">
+              <p>
+                ¡Hola! Antes de que comencemos con tu experiencia en nuestra
+                aplicación, nos gustaría conocerte un poco mejor.
+              </p>
+              <p>
+                Para ello, queremos hacerte un pequeño test que nos ayudará a
+                entender tu nivel de dominio en el idioma.
+              </p>
+            </div>
+            <div className="flex justify-end">
+              <Link
+                className={cn(buttonVariants({ variant: "default" }))}
+                href="/students/initial-test/start"
+              >
+                Siguiente
+              </Link>
+            </div>
           </div>
         </div>
       </div>

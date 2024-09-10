@@ -3,71 +3,71 @@ import { persist } from "zustand/middleware";
 import { Question } from "@/types/Question";
 
 interface State {
-  questions: Question[];
-  currentQuestion: number;
-  fetchQuestions: (limit: number) => Promise<void>;
-  selectAnswer: (questionId: number, answerIndex: number) => void;
+  exercises: Question[];
+  currentExercise: number;
+  fetchExercises: (limit: number) => Promise<void>;
+  selectAnswer: (exerciseId: number, answerIndex: number) => void;
   goNextQuestion: () => void;
   goPreviusQuestion: () => void;
   reset: () => void;
 }
 
-export const useQuestionsStore = create<State>()(
+export const useInitialTestStore = create<State>()(
   persist(
     (set, get) => ({
-      questions: [],
-      currentQuestion: 0,
+      exercises: [],
+      currentExercise: 0,
 
-      fetchQuestions: async (limit: number) => {
+      fetchExercises: async (limit: number) => {
         const res = await fetch("http://localhost:3000/data.json");
         const json = await res.json();
 
-        const questions = json.sort(() => Math.random() - 0.5).slice(0, limit);
+        const exercises = json.sort(() => Math.random() - 0.5).slice(0, limit);
 
-        set({ questions });
+        set({ exercises });
       },
 
-      selectAnswer: (questionId: number, answerIndex: number) => {
-        const { questions } = get();
+      selectAnswer: (exerciseId: number, answerIndex: number) => {
+        const { exercises } = get();
         // usar el structuredClone para clonar el objeto
-        const newQuestions = structuredClone(questions);
+        const newExercises = structuredClone(exercises);
         // encontramos el indice de la pregunta
-        const questionIndex = newQuestions.findIndex(
-          (q) => q.id === questionId
+        const questionIndex = newExercises.findIndex(
+          (q) => q.id === exerciseId
         );
         // obtener la info de la pregunta
-        const questionInfo = newQuestions[questionIndex];
+        const questionInfo = newExercises[questionIndex];
         // averiguamos si el usuario a puesto la respuesta correcta
         const isCorrectUserAnswer = questionInfo.correctAnswer === answerIndex;
         // si la respuesta es correcta lanzamos confetti
         //if (isCorrectUserAnswer) confetti();
         // cambiar esta info en la copia de la pregunta
-        newQuestions[questionIndex] = {
+        newExercises[questionIndex] = {
           ...questionInfo,
           isCorrectUserAnswer,
           userSelectedAnswer: answerIndex,
         };
 
         // actualizamo el estado
-        set({ questions: newQuestions });
+        set({ exercises: newExercises });
       },
       goNextQuestion: () => {
-        const { currentQuestion, questions } = get();
+        const { currentExercise, exercises } = get();
 
-        const nextQuestion = currentQuestion + 1;
+        const nextQuestion = currentExercise + 1;
 
-        if (nextQuestion < questions.length)
-          set({ currentQuestion: nextQuestion });
+        if (nextQuestion < exercises.length)
+          set({ currentExercise: nextQuestion });
       },
       goPreviusQuestion: () => {
-        const { currentQuestion } = get();
+        const { currentExercise } = get();
 
-        const previusQuestion = currentQuestion - 1;
+        const previusQuestion = currentExercise - 1;
 
-        if (previusQuestion >= 0) set({ currentQuestion: previusQuestion });
+        if (previusQuestion >= 0) set({ currentExercise: previusQuestion });
       },
       reset: () => {
-        set({ currentQuestion: 0, questions: [] });
+        set({ currentExercise: 0, exercises: [] });
       },
     }),
     {
