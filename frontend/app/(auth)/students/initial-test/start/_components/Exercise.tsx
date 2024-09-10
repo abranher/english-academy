@@ -63,6 +63,7 @@ export default function Exercise({ info }: { info: Question }) {
               ))}
             </RadioGroup>
           </CardContent>
+
           <TestFooter />
 
           <CardFooter>

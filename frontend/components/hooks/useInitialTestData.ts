@@ -1,5 +1,14 @@
 import { useInitialTestStore } from "@/store/initial-test";
 
+const calculateProgress = (
+  correctAnswer: number,
+  totalAnswer: number
+): number => {
+  if (totalAnswer === 0) return 0;
+  const percentage = (correctAnswer / totalAnswer) * 100;
+  return Math.round(percentage);
+};
+
 export const useInitialTestData = () => {
   const exercises = useInitialTestStore((state) => state.exercises);
 
@@ -14,5 +23,7 @@ export const useInitialTestData = () => {
     else incorrect++;
   });
 
-  return { exercises, correct, incorrect, unanswered };
+  const progress = calculateProgress(correct, exercises.length);
+
+  return { exercises, correct, incorrect, unanswered, progress };
 };
