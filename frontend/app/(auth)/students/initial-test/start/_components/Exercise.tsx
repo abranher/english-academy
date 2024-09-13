@@ -8,22 +8,23 @@ import { RadioGroup } from "@/components/shadcn/ui/radio-group";
 import { useInitialTestStore } from "@/store/initial-test";
 import { Question } from "@/types/Question";
 import TestFooter from "./TestFooter";
+import { cn } from "@/libs/shadcn/utils";
 
 const getBackgroundColor = (info: Question, index: number) => {
   const { userSelectedAnswer, correctAnswer } = info;
+
   // usuario no ha seleccionado nada todavia
-  if (userSelectedAnswer == null) return "transparent";
+  if (userSelectedAnswer == null) return "bg-transparent";
   // si ya selecciono pero la solucion es incorrecta
   if (index !== correctAnswer && index !== userSelectedAnswer)
-    return "transparent";
+    return "bg-transparent";
   // si esta es la solucion correcta
-  if (index === correctAnswer) return "emerald";
+  if (index === correctAnswer) return "border-emerald-400 bg-emerald-100";
   // si esta es la seleccion del usuario pero no es la correcta
-  if (index === userSelectedAnswer) return "red";
+  if (index === userSelectedAnswer) return "border-red-400 bg-red-100";
 
   // si no es ninguna de las anteriores
-
-  return "transparent";
+  return "bg-transparent";
 };
 
 export default function Exercise({ info }: { info: Question }) {
@@ -39,7 +40,7 @@ export default function Exercise({ info }: { info: Question }) {
       <div>
         <div className="p-6 flex flex-col gap-6">
           <CardTitle>{info.question}</CardTitle>
-          <div className="text-lg">{info.text}</div>
+          <div className="text-xl font-semibold">{info.text}</div>
         </div>
         <div className="w-full">
           <CardContent className="flex flex-col justify-center items-center gap-6 py-4">
@@ -52,10 +53,10 @@ export default function Exercise({ info }: { info: Question }) {
                   <button
                     disabled={info.userSelectedAnswer != null}
                     onClick={createHandleCLick(index)}
-                    className={`w-full md:w-64 flex flex-col items-center justify-between rounded-md border-4 p-4 border-${getBackgroundColor(
+                    className={`w-full md:w-64 flex flex-col items-center text-large font-semibold justify-between rounded-md border-4 p-4 ${getBackgroundColor(
                       info,
                       index
-                    )}-400`}
+                    )}`}
                   >
                     {answer}
                   </button>

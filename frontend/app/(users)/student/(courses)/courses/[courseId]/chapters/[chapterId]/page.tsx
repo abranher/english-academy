@@ -9,6 +9,8 @@ import { File } from "lucide-react";
 import CourseProgressButton from "./_components/CourseProgressButton";
 import axios from "@/config/axios";
 import CourseSidebar from "../../_components/CourseSidebar";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/config/next-auth";
 
 export default async function ChapterIdPage({
   params,
@@ -18,9 +20,13 @@ export default async function ChapterIdPage({
     chapterId: string;
   };
 }) {
+  const session = await getServerSession(authOptions);
+
   const { data } = await axios.get(
-    `/api/chapters/${params.chapterId}/student/${studentId}/course/${params.courseId}/`
+    `/api/chapters/${params.chapterId}/student/${session?.user.student.id}/course/${params.courseId}/`
   );
+
+  console.log(data)
 
   if (!data.chapter || !data.course) return redirect("/");
 
@@ -46,7 +52,7 @@ export default async function ChapterIdPage({
           <div>
             <div className="bg-background">
               <div className="grid lg:grid-cols-5">
-                <CourseSidebar className="hidden lg:block" />
+                <CourseSidebar course={data.course} />
                 <div className="col-span-3 lg:col-span-4 p-6">
                   <div>
                     {data.studentProgress?.isCompleted && (

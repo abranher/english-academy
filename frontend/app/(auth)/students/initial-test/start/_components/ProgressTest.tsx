@@ -2,8 +2,7 @@ import { useInitialTestData } from "@/components/hooks/useInitialTestData";
 import { Progress } from "@/components/shadcn/ui/progress";
 
 export default function ProgressTest() {
-  const { exercises, correct, incorrect, unanswered, progress } =
-    useInitialTestData();
+  const { progress } = useInitialTestData();
 
   return (
     <>
