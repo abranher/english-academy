@@ -1,5 +1,7 @@
 ## Se tiene que desarrollar:
 
+- trabajar en la autenticacion
+
 - modulo de evaluacion de conocimiento inicial
 - Registro de tutores
 - Cursos
