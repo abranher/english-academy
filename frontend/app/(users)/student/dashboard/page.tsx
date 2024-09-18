@@ -11,26 +11,24 @@ import { Tabs, TabsContent } from "@/components/shadcn/ui/tabs";
 import { Sidebar } from "./_components/Sidebar";
 import { playlists } from "./data/playlists";
 import CoursesList from "./_components/CoursesList";
+import { useState } from "react";
+import { motion } from "framer-motion";
 
 export default function StudentDashboardPage() {
   //const { completedCourses, coursesInProgress } = getDashboardCourses("");
 
   const { data: session } = useSession();
+  const [selectedId, setSelectedId] = useState(null);
+  const items = [
+    {
+      id: "askjr23",
+      title: "titulo",
+      subtitle: "sun titulo",
+    },
+  ];
 
   return (
     <>
-      <div className="bg-yellow-400 w-full flex items-center justify-center">
-        <div className="max-w-[1536px] md:px-24 lg:px-32">
-          <div className="py-12 w-full">
-            <div className="w-full">
-              <h2 className="font-bold text-2xl">
-                Welcome back, {session?.user.name}
-              </h2>
-            </div>
-          </div>
-        </div>
-      </div>
-
       <div className="w-full flex items-center justify-center">
         <div className="max-w-[1200px]">
           <div>
@@ -39,6 +37,26 @@ export default function StudentDashboardPage() {
                 <Sidebar playlists={playlists} className="hidden lg:block" />
                 <div className="col-span-3 lg:col-span-4 p-6">
                   <CoursesList />
+
+                  {items.map((item) => (
+                    <motion.div
+                      layoutId={item.id}
+                      onClick={() => setSelectedId(item.id)}
+                    >
+                      <motion.h5>{item.subtitle}</motion.h5>
+                      <motion.h2>{item.title}</motion.h2>
+                    </motion.div>
+                  ))}
+
+                  <AnimatePresence>
+                    {selectedId && (
+                      <motion.div layoutId={selectedId}>
+                        <motion.h5>{item.subtitle}</motion.h5>
+                        <motion.h2>{item.title}</motion.h2>
+                        <motion.button onClick={() => setSelectedId(null)} />
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
               </div>
             </div>
