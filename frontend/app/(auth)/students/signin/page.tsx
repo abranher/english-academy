@@ -1,22 +1,15 @@
+import Link from "next/link";
 import Image from "next/image";
 import SignInForm from "./_components/SignInForm";
-import Link from "next/link";
-import { buttonVariants } from "@/components/shadcn/ui/button";
-import { cn } from "@/libs/shadcn/utils";
+import HomeLink from "../../_components/HomeLink";
+import { Roles } from "@/types/enums/Roles";
 
 export default function StudentSigninPage() {
   return (
     <>
       <div className="container relative h-[800px] flex-col items-center justify-center grid lg:max-w-none lg:grid-cols-2 lg:px-0">
-        <Link
-          href="/"
-          className={cn(
-            buttonVariants({ variant: "secondary" }),
-            "absolute right-4 top-4 md:right-8 md:top-8 flex justify-center items-center gap-2"
-          )}
-        >
-          Inicio
-        </Link>
+        <HomeLink role={Roles.STUDENT} />
+
         <div className="relative hidden h-full flex-col bg-muted text-white dark:border-r lg:flex">
           <div className="absolute inset-0 bg-zinc-900" />
           <div className="hidden bg-muted lg:block">

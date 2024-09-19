@@ -1,29 +1,25 @@
 import Image from "next/image";
 import Link from "next/link";
 import SignInForm from "./_components/SignInForm";
-import { ArrowLeftCircle } from "lucide-react";
-import { buttonVariants } from "@/components/shadcn/ui/button";
-import { cn } from "@/libs/shadcn/utils";
+import HomeLink from "../../_components/HomeLink";
+import { Roles } from "@/types/enums/Roles";
 
 export default function TutorSigninPage() {
   return (
     <>
       <div className="container relative h-[800px] flex-col items-center justify-center grid lg:max-w-none lg:grid-cols-2 lg:px-0">
-        <Link
-          href="/"
-          className={cn(
-            buttonVariants({ variant: "secondary" }),
-            "absolute left-4 top-4 md:left-8 md:top-8 flex justify-center items-center gap-2"
-          )}
-        >
-          Inicio
-        </Link>
+        <HomeLink role={Roles.TUTOR} />
+
         <div className="lg:p-8">
           <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
             <div className="flex flex-col space-y-2 text-center">
-              <h1 className="text-2xl font-semibold tracking-tight">
-                Iniciar Sesión
+              <h1 className="text-4xl font-semibold tracking-tight">
+                ¡Bienvenido de nuevo!
               </h1>
+
+              <p className="text-xl text-muted-foreground">
+                Inicia sesión en tu cuenta
+              </p>
             </div>
             <SignInForm />
 

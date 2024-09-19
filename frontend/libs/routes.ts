@@ -6,6 +6,7 @@ export const PUBLIC_ROUTES = [
   "/students/signup",
   "/tutors/signup",
   "/tutors/signin",
+  "/administrator/signin",
 ];
 
 export const ADMIN = {
@@ -15,10 +16,10 @@ export const ADMIN = {
 
 export const STUDENT = {
   DEFAULT_REDIRECT: "/student",
-  ROUTES: ["/"],
+  ROUTES: ["/student"],
 };
 
 export const TUTOR = {
-  DEFAULT_REDIRECT: "",
-  ROUTES: ["/"],
+  DEFAULT_REDIRECT: "/tutor",
+  ROUTES: ["/tutor"],
 };

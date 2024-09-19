@@ -1,6 +1,14 @@
 ## Se tiene que desarrollar:
 
 - trabajar en la autenticacion
+- Registrar a los estudiantes
+- datos por separado e imagen
+
+Registrar tutores
+- Datos por separado
+- Subir sus archivos
+
+
 
 - modulo de evaluacion de conocimiento inicial
 - Registro de tutores

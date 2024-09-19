@@ -1,8 +1,7 @@
-import { auth } from "@/config/auth";
-import { ADMIN, PUBLIC_ROUTES, STUDENT } from "@/libs/routes";
-import { Roles } from "@/types/enums/Roles";
 import { NextResponse } from "next/server";
-import { AuthMiddleware } from "@/libs/Middlewares";
+import { auth } from "@/config/auth";
+import { ADMIN, PUBLIC_ROUTES, ROOT, STUDENT } from "@/libs/routes";
+import { Roles } from "@/types/enums/Roles";
 
 export default auth((req) => {
   const { nextUrl } = req;
@@ -10,7 +9,8 @@ export default auth((req) => {
   const isPublicRoute = PUBLIC_ROUTES.includes(nextUrl.pathname);
   const role = req.auth?.user.role;
 
-  AuthMiddleware(req, isAuthenticated, isPublicRoute);
+  if (!isAuthenticated && !isPublicRoute)
+    return NextResponse.redirect(new URL(ROOT, req.nextUrl));
 
   // guest for admin
   if (isAuthenticated && isPublicRoute && role === Roles.ADMIN) {
@@ -32,5 +32,14 @@ export default auth((req) => {
 });
 
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
+  matcher: [
+    /*
+     * Match all request paths except for the ones starting with:
+     * - api (API routes)
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico, sitemap.xml, robots.txt (metadata files)
+     */
+    "/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)",
+  ],
 };
