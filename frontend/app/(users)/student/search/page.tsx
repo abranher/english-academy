@@ -4,7 +4,7 @@ import SearchInput from "@/components/common/SearchInput";
 import CoursesList from "./_components/CoursesList";
 import { Level } from "@/types/models/Level";
 import { Course } from "@/types/models/Course";
-import { auth } from "@/auth";
+import { auth } from "@/config/auth";
 
 interface SearchPageProps {
   searchParams: {
