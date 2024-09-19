@@ -27,7 +27,6 @@ type GetCourses = {
 
 export default async function SearchPage({ searchParams }: SearchPageProps) {
   const session = await auth();
-  console.log(session);
   const studentId = crypto.randomUUID();
   const { data: levels } = await axios.get(`/api/levels/`);
   const { data: courses } = await axios.get(
