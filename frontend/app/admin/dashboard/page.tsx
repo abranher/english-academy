@@ -12,14 +12,12 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/shadcn/ui/tabs";
-import { authOptions } from "@/config/next-auth";
-import { getServerSession } from "next-auth";
+import { auth } from "@/config/auth";
+import { Roles } from "@/types/enums/Roles";
 import { redirect } from "next/navigation";
 
 export default async function DashboardAdminPage() {
-  const session = await getServerSession(authOptions);
-
-  console.log(session)
+  const session = await auth();
 
   if (session!.user.role !== Roles.ADMIN) {
     redirect("/");

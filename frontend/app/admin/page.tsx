@@ -32,11 +32,10 @@ import {
   ToggleGroup,
   ToggleGroupItem,
 } from "@/components/shadcn/ui/toggle-group";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/config/next-auth";
+import { auth } from "@/config/auth";
 
 export default async function Dashboard() {
-  const session = await getServerSession(authOptions);
+  const session = await auth();
 
   console.log(session);
 
