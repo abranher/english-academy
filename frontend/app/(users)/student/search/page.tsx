@@ -4,8 +4,7 @@ import SearchInput from "@/components/common/SearchInput";
 import CoursesList from "./_components/CoursesList";
 import { Level } from "@/types/models/Level";
 import { Course } from "@/types/models/Course";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/config/next-auth";
+import { auth } from "@/auth";
 
 interface SearchPageProps {
   searchParams: {
@@ -27,17 +26,13 @@ type GetCourses = {
 };
 
 export default async function SearchPage({ searchParams }: SearchPageProps) {
-  const session = await getServerSession(authOptions);
-  const studentId = session?.user.student.id;
+  const session = await auth();
+  console.log(session);
+  const studentId = crypto.randomUUID();
   const { data: levels } = await axios.get(`/api/levels/`);
   const { data: courses } = await axios.get(
     `/api/courses/${studentId}/levels/${searchParams.levelId}?title=${searchParams.title}`
   );
-
-  console.log({
-    levels,
-    courses,
-  });
 
   return;
   return (
