@@ -15,7 +15,7 @@ export default function AdministradorSigninPage() {
         <HomeLink />
 
         <div className="lg:p-8">
-          <Card className="mx-auto min-w-80">
+          <Card className="mx-auto min-w-96">
             <CardHeader>
               <CardTitle className="text-2xl">Bienvenido Admin</CardTitle>
               <CardDescription>Inicia Sesión en tu cuenta</CardDescription>

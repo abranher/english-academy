@@ -1,10 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { useForm } from "react-hook-form";
-import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { signIn } from "next-auth/react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+
 import { Button } from "@/components/shadcn/ui/button";
 import { Input } from "@/components/shadcn/ui/input";
 import { Label } from "@/components/shadcn/ui/label";
@@ -14,9 +17,8 @@ import {
   AlertTitle,
 } from "@/components/shadcn/ui/alert";
 import { AlertCircle, Loader2 } from "lucide-react";
-import { z } from "zod";
 import { signInSchema } from "@/libs/validations/schemas/signin/signIn";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { Roles } from "@/types/enums/Roles";
 
 export default function SignInForm() {
   const {
@@ -37,11 +39,14 @@ export default function SignInForm() {
       const response = await signIn("credentials", {
         email: data.email,
         password: data.password,
+        type: Roles.STUDENT,
         redirect: false,
       });
 
+      console.log(response);
+
       if (response === undefined || response.error) {
-        setError("Usuario no encontrado.");
+        setError(response?.code);
       } else {
         router.push("/student");
         router.refresh();

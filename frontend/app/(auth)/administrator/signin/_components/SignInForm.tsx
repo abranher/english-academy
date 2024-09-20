@@ -17,6 +17,7 @@ import { AlertCircle } from "lucide-react";
 import { z } from "zod";
 import { signInSchema } from "@/libs/validations/schemas/signin/signIn";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Roles } from "@/types/enums/Roles";
 
 export default function SignInForm() {
   const {
@@ -28,20 +29,31 @@ export default function SignInForm() {
   });
 
   const router = useRouter();
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<null | undefined | string>();
+  const [isLoading, setIsLoading] = useState(false);
 
   async function onSubmit(data: z.infer<typeof signInSchema>) {
-    const res = await signIn("credentials", {
-      email: data.email,
-      password: data.password,
-      redirect: false,
-    });
+    setIsLoading(true);
+    try {
+      const response = await signIn("credentials", {
+        email: data.email,
+        password: data.password,
+        type: Roles.ADMIN,
+        redirect: false,
+      });
 
-    if (res.error) {
-      setError(res.error);
-    } else {
-      router.push("/admin/dashboard");
-      router.refresh();
+      console.log(response);
+
+      if (response === undefined || response.error) {
+        setError("Usuario no encontrado.");
+      } else {
+        // router.push("/student");
+        //router.refresh();
+      }
+    } catch (error) {
+      console.error("Error during login:", error);
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -54,7 +66,7 @@ export default function SignInForm() {
           <AlertDescription>{error}</AlertDescription>
         </Alert>
       )}
-      <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4">
+      <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4 mt-3">
         <div className="grid gap-2">
           <Label htmlFor="email">Correo Electrónico</Label>
           <Input

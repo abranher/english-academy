@@ -1,8 +1,29 @@
-import NextAuth from "next-auth";
+import NextAuth, { CredentialsSignin } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import axios from "@/config/axios";
 import SessionService from "@/libs/auth/Session";
 import { object, string, ZodError } from "zod";
+import { Roles } from "@/types/enums/Roles";
+
+class NotStudentError extends CredentialsSignin {
+  code = "No eres estudiante.";
+}
+
+class NotTutorError extends CredentialsSignin {
+  code = "No eres tutor.";
+}
+
+class NotAdminError extends CredentialsSignin {
+  code = "No eres administrador.";
+}
+
+class InvalidCredentialsError extends CredentialsSignin {
+  code = "Credenciales no validas";
+}
+
+class UserNotFound extends CredentialsSignin {
+  code = "Usuario no encontrado";
+}
 
 export const signInSchema = object({
   email: string({ required_error: "Correo electrónico es requerido" })
@@ -17,7 +38,7 @@ export const signInSchema = object({
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
     Credentials({
-      credentials: { email: {}, password: {} },
+      credentials: { email: {}, password: {}, type: {} },
       authorize: async (credentials) => {
         try {
           const { email, password } = await signInSchema.parseAsync(
@@ -31,10 +52,26 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
           const user = await response.data;
 
+          if (credentials.type !== user.user.role) {
+            if (credentials.type === Roles.STUDENT) throw new NotStudentError();
+            if (credentials.type === Roles.TUTOR) throw new NotTutorError();
+            if (credentials.type === Roles.ADMIN) throw new NotAdminError();
+          }
+
           return user;
         } catch (error) {
-          if (error?.response?.status === 401 || error instanceof ZodError) {
-            return null;
+          if (error instanceof NotStudentError) throw new NotStudentError();
+
+          if (error instanceof NotTutorError) throw new NotTutorError();
+
+          if (error instanceof NotAdminError) throw new NotAdminError();
+
+          if (error instanceof ZodError) {
+            throw new InvalidCredentialsError();
+          }
+
+          if (error?.response?.status === 401) {
+            throw new UserNotFound();
           }
         }
       },
