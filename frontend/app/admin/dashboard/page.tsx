@@ -25,6 +25,10 @@ export default async function DashboardAdminPage() {
 
   return (
     <>
+      <div className="flex items-center">
+        <h1 className="text-lg font-semibold md:text-2xl">Panel</h1>
+      </div>
+
       <div className="w-full">
         <Tabs defaultValue="overview" className="space-y-4">
           <TabsList>

@@ -154,8 +154,6 @@ export function AppearanceForm() {
             </FormItem>
           )}
         />
-
-        <Button type="submit">Actualizar preferencias</Button>
       </form>
     </Form>
   );

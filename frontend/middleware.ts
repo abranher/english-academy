@@ -23,11 +23,11 @@ export default auth((req) => {
   }
 
   if (!(role === Roles.ADMIN) && ADMIN.ROUTES.includes(nextUrl.pathname)) {
-    return NextResponse.json({ message: "Acceso denegado" }, { status: 403 });
+    return NextResponse.json({ message: "Not Found" }, { status: 404 });
   }
 
   if (!(role === Roles.STUDENT) && STUDENT.ROUTES.includes(nextUrl.pathname)) {
-    return NextResponse.json({ message: "Acceso denegado" }, { status: 403 });
+    return NextResponse.json({ message: "Not Found" }, { status: 404 });
   }
 });
 

@@ -11,7 +11,7 @@ export const PUBLIC_ROUTES = [
 
 export const ADMIN = {
   DEFAULT_REDIRECT: "/admin",
-  ROUTES: ["/admin/dashboard", "/admin/courses"],
+  ROUTES: ["/admin", "/admin/dashboard", "/admin/courses"],
 };
 
 export const STUDENT = {
