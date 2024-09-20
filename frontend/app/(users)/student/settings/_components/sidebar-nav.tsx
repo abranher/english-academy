@@ -1,12 +1,12 @@
 "use client";
 
-import { Nav } from "@/components/settings/nav";
+import SideNav from "@/components/common/SideNav";
 import { MessageCircle, Pencil, User, UserPenIcon } from "lucide-react";
 
 export function SidebarNav() {
   return (
     <>
-      <Nav
+      <SideNav
         links={[
           {
             title: "Perfil",

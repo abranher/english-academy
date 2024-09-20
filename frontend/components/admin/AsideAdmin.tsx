@@ -1,16 +1,10 @@
+"use client";
+
 import Link from "next/link";
 
-import {
-  Bell,
-  GraduationCap,
-  Home,
-  LineChart,
-  Package,
-  Package2,
-  Users,
-} from "lucide-react";
-import { Badge } from "../shadcn/ui/badge";
-import { Button } from "../shadcn/ui/button";
+import { Bell, GraduationCap, Home, Package2 } from "lucide-react";
+import { Button } from "@/components/shadcn/ui/button";
+import SideNav from "@/components/common/SideNav";
 
 export default function AsideAdmin() {
   return (
@@ -28,46 +22,22 @@ export default function AsideAdmin() {
             </Button>
           </div>
           <div className="flex-1">
-            <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
-              <Link
-                href="/admin/dashboard"
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-              >
-                <Home className="h-4 w-4" />
-                Dashboard
-              </Link>
-              <Link
-                href="/admin/courses"
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-              >
-                <GraduationCap className="h-4 w-4" />
-                Cursos
-                <Badge className="ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full">
-                  6
-                </Badge>
-              </Link>
-              <Link
-                href="#"
-                className="flex items-center gap-3 rounded-lg bg-muted px-3 py-2 text-primary transition-all hover:text-primary"
-              >
-                <Package className="h-4 w-4" />
-                Products{" "}
-              </Link>
-              <Link
-                href="#"
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-              >
-                <Users className="h-4 w-4" />
-                Customers
-              </Link>
-              <Link
-                href="#"
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-              >
-                <LineChart className="h-4 w-4" />
-                Analytics
-              </Link>
-            </nav>
+            <SideNav
+              links={[
+                {
+                  title: "Dashboard",
+                  href: "/admin",
+                  icon: Home,
+                  variant: "default",
+                },
+                {
+                  title: "Cursos",
+                  href: "/admin/courses",
+                  icon: GraduationCap,
+                  variant: "default",
+                },
+              ]}
+            />
           </div>
         </div>
       </div>
