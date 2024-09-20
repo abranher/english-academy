@@ -13,7 +13,7 @@ import {
   AlertDescription,
   AlertTitle,
 } from "@/components/shadcn/ui/alert";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, Loader2 } from "lucide-react";
 import { z } from "zod";
 import { signInSchema } from "@/libs/validations/schemas/signin/signIn";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -28,20 +28,28 @@ export default function SignInForm() {
   });
 
   const router = useRouter();
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<null | undefined | string>();
+  const [isLoading, setIsLoading] = useState(false);
 
   async function onSubmit(data: z.infer<typeof signInSchema>) {
-    const res = await signIn("credentials", {
-      email: data.email,
-      password: data.password,
-      redirect: false,
-    });
+    setIsLoading(true);
+    try {
+      const response = await signIn("credentials", {
+        email: data.email,
+        password: data.password,
+        redirect: false,
+      });
 
-    if (res.error) {
-      setError(res.error);
-    } else {
-      router.push("/student/dashboard");
-      router.refresh();
+      if (response === undefined || response.error) {
+        setError("Usuario no encontrado.");
+      } else {
+        router.push("/student");
+        router.refresh();
+      }
+    } catch (error) {
+      console.error("Error during login:", error);
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -79,9 +87,16 @@ export default function SignInForm() {
             <span className="text-red-500">{errors.password.message}</span>
           )}
         </div>
-        <Button type="submit" className="w-full">
-          Iniciar sesión
-        </Button>
+        {!isLoading ? (
+          <Button type="submit" className="w-full">
+            Iniciar sesión
+          </Button>
+        ) : (
+          <Button disabled>
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            Espere por favor...
+          </Button>
+        )}
       </form>
       <div className="mt-4 text-center text-md">
         No tienes una cuenta?{" "}

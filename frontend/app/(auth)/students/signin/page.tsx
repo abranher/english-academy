@@ -10,7 +10,7 @@ export default function StudentSigninPage() {
       <div className="container relative h-[800px] flex-col items-center justify-center grid lg:max-w-none lg:grid-cols-2 lg:px-0">
         <HomeLink role={Roles.STUDENT} />
 
-        <div className="relative hidden h-full flex-col bg-muted text-white dark:border-r lg:flex">
+        <div className="relative hidden h-full flex-col bg-muted text-white dark:border-r dark:border-zinc-800 lg:flex">
           <div className="absolute inset-0 bg-zinc-900" />
           <div className="hidden bg-muted lg:block">
             <Image
