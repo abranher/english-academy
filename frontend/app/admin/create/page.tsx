@@ -56,12 +56,10 @@ export default function CreateCoursePage() {
             esto más tarde.
           </p>{" "}
           <br />
-          <Card x-chunk="dashboard-07-chunk-0">
+          <Card>
             <CardHeader>
               <CardTitle>Curso</CardTitle>
-              <CardDescription>
-                Lipsum dolor sit amet, consectetur adipiscing elit
-              </CardDescription>
+              <CardDescription>Nombre del curso.</CardDescription>
             </CardHeader>
             <CardContent>
               <form onSubmit={handleSubmit(onSubmit)} className="grid gap-6">

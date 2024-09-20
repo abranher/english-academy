@@ -1,8 +1,7 @@
 "use client";
 
-import { useSession } from "next-auth/react";
-import { usePathname } from "next/navigation";
 import { useState } from "react";
+
 import {
   Navbar,
   NavbarContent,
@@ -19,9 +18,6 @@ import DropdownAuth from "./DropdownAuth";
 
 export default function NavMenu() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { data: session, status } = useSession();
-
-  const pathname = usePathname();
 
   const menuItems = ["Cursos", "Tutores", "Contacto"];
 

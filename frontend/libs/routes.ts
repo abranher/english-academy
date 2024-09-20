@@ -1,3 +1,7 @@
+export { ADMIN } from "./routes/ADMIN";
+export { STUDENT } from "./routes/STUDENT";
+export { TUTOR } from "./routes/TUTOR";
+
 export const ROOT = "/";
 
 export const PUBLIC_ROUTES = [
@@ -8,18 +12,3 @@ export const PUBLIC_ROUTES = [
   "/tutors/signin",
   "/administrator/signin",
 ];
-
-export const ADMIN = {
-  DEFAULT_REDIRECT: "/admin",
-  ROUTES: ["/admin", "/admin/dashboard", "/admin/courses"],
-};
-
-export const STUDENT = {
-  DEFAULT_REDIRECT: "/student",
-  ROUTES: ["/student"],
-};
-
-export const TUTOR = {
-  DEFAULT_REDIRECT: "/tutor",
-  ROUTES: ["/tutor"],
-};
