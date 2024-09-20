@@ -3,7 +3,6 @@
 import { Level } from "@/types/models/Level";
 import React from "react";
 import {
-  FcEngineering,
   FcFilmReel,
   FcMultipleDevices,
   FcMusic,
