@@ -5,30 +5,27 @@ import { Separator } from "@/components/shadcn/ui/separator";
 import { SidebarNav } from "./_components/sidebar-nav";
 
 export const metadata: Metadata = {
-  title: "Forms",
-  description: "Advanced form example using react-hook-form and Zod.",
+  title: "Configuración",
+  description:
+    "Personaliza tu experiencia. Administra tu perfil, preferencias de notificación y más. ¡Configura tu cuenta a tu gusto y disfruta de una experiencia más personalizada!",
 };
 
 const sidebarNavItems = [
   {
-    title: "Profile",
+    title: "Perfil",
     href: "/student/settings",
   },
   {
-    title: "Account",
+    title: "Cuenta",
     href: "/student/settings/account",
   },
   {
-    title: "Appearance",
+    title: "Apariencia",
     href: "/student/settings/appearance",
   },
   {
-    title: "Notifications",
+    title: "Notificaciones",
     href: "/student/settings/notifications",
-  },
-  {
-    title: "Display",
-    href: "/student/settings/display",
   },
 ];
 

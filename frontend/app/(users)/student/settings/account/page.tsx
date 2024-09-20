@@ -5,10 +5,10 @@ export default function SettingsAccountPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-lg font-medium">Account</h3>
+        <h3 className="text-lg font-medium">Cuenta</h3>
         <p className="text-sm text-muted-foreground">
-          Update your account settings. Set your preferred language and
-          timezone.
+          Actualice la configuración de su cuenta. Establezca su idioma
+          preferido y su zona horaria.
         </p>
       </div>
       <Separator />

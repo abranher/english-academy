@@ -61,7 +61,7 @@ export function AppearanceForm() {
           name="font"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Font</FormLabel>
+              <FormLabel>Fuente</FormLabel>
               <div className="relative w-max">
                 <FormControl>
                   <select
@@ -79,7 +79,7 @@ export function AppearanceForm() {
                 <ChevronDownIcon className="absolute right-3 top-2.5 h-4 w-4 opacity-50" />
               </div>
               <FormDescription>
-                Set the font you want to use in the dashboard.
+                Establezca la fuente que desea utilizar.
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -90,10 +90,8 @@ export function AppearanceForm() {
           name="theme"
           render={({ field }) => (
             <FormItem className="space-y-1">
-              <FormLabel>Theme</FormLabel>
-              <FormDescription>
-                Select the theme for the dashboard.
-              </FormDescription>
+              <FormLabel>Tema</FormLabel>
+              <FormDescription>Selecciona el tema.</FormDescription>
               <FormMessage />
               <RadioGroup
                 onValueChange={field.onChange}
@@ -122,7 +120,7 @@ export function AppearanceForm() {
                       </div>
                     </div>
                     <span className="block w-full p-2 text-center font-normal">
-                      Light
+                      Claro
                     </span>
                   </FormLabel>
                 </FormItem>
@@ -148,7 +146,7 @@ export function AppearanceForm() {
                       </div>
                     </div>
                     <span className="block w-full p-2 text-center font-normal">
-                      Dark
+                      Oscuro
                     </span>
                   </FormLabel>
                 </FormItem>
@@ -157,7 +155,7 @@ export function AppearanceForm() {
           )}
         />
 
-        <Button type="submit">Update preferences</Button>
+        <Button type="submit">Actualizar preferencias</Button>
       </form>
     </Form>
   );

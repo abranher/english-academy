@@ -93,13 +93,13 @@ export function ProfileForm() {
           name="username"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Username</FormLabel>
+              <FormLabel>Nombre de usuario</FormLabel>
               <FormControl>
                 <Input placeholder="shadcn" {...field} />
               </FormControl>
               <FormDescription>
-                This is your public display name. It can be your real name or a
-                pseudonym. You can only change this once every 30 days.
+                Este es tu nombre público. Puede ser tu nombre real o un
+                seudónimo. Solo puedes cambiarlo una vez cada 30 días.
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -110,11 +110,11 @@ export function ProfileForm() {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel>Correo electrónico</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select a verified email to display" />
+                    <SelectValue placeholder="Seleccione un correo electrónico verificado para mostrar" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
@@ -124,8 +124,12 @@ export function ProfileForm() {
                 </SelectContent>
               </Select>
               <FormDescription>
-                You can manage verified email addresses in your{" "}
-                <Link href="/examples/forms">email settings</Link>.
+                Puede administrar direcciones de correo electrónico verificadas
+                en su{" "}
+                <Link href="/examples/forms">
+                  configuración de correo electrónico
+                </Link>
+                .
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -145,46 +149,14 @@ export function ProfileForm() {
                 />
               </FormControl>
               <FormDescription>
-                You can <span>@mention</span> other users and organizations to
-                link to them.
+                Puedes <span>@mencionar</span> a otros usuarios y organizaciones
+                para vincularlos.
               </FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
-        <div>
-          {fields.map((field, index) => (
-            <FormField
-              control={form.control}
-              key={field.id}
-              name={`urls.${index}.value`}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className={cn(index !== 0 && "sr-only")}>
-                    URLs
-                  </FormLabel>
-                  <FormDescription className={cn(index !== 0 && "sr-only")}>
-                    Add links to your website, blog, or social media profiles.
-                  </FormDescription>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          ))}
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            className="mt-2"
-            onClick={() => append({ value: "" })}
-          >
-            Add URL
-          </Button>
-        </div>
-        <Button type="submit">Update profile</Button>
+        <Button type="submit">Actualizar perfil</Button>
       </form>
     </Form>
   );
