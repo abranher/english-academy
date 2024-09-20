@@ -52,13 +52,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
           const user = await response.data;
 
-          if (credentials.type !== user.user.role) {
-            if (credentials.type === Roles.STUDENT) throw new NotStudentError();
-            if (credentials.type === Roles.TUTOR) throw new NotTutorError();
-            if (credentials.type === Roles.ADMIN) throw new NotAdminError();
+          if (credentials.type === user.user.role) {
+            return user;
           }
 
-          return user;
+          if (credentials.type === Roles.STUDENT) throw new NotStudentError();
+          if (credentials.type === Roles.TUTOR) throw new NotTutorError();
+          if (credentials.type === Roles.ADMIN) throw new NotAdminError();
         } catch (error) {
           if (error instanceof NotStudentError) throw new NotStudentError();
 

@@ -45,10 +45,10 @@ export default function SignInForm() {
       console.log(response);
 
       if (response === undefined || response.error) {
-        setError("Usuario no encontrado.");
+        setError(response?.code);
       } else {
-        // router.push("/student");
-        //router.refresh();
+        router.push("/student");
+        router.refresh();
       }
     } catch (error) {
       console.error("Error during login:", error);
