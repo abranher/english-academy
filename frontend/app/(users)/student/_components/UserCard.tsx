@@ -1,8 +1,15 @@
 import React from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
-import Image from "next/image";
 import { Progress } from "@/components/shadcn/ui/progress";
 import FlagIcon from "@/components/common/FlagIcon";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@/components/shadcn/ui/avatar";
+import { Card, CardContent, CardHeader } from "@/components/shadcn/ui/card";
+import { Badge } from "@/components/shadcn/ui/badge";
+import BadgeLevel from "./BadgeLevel";
+import { Button } from "@/components/shadcn/ui/button";
 
 // Tipo para las propiedades del usuario
 interface User {
@@ -23,104 +30,102 @@ interface UserCardProps {
 }
 
 export default function UserCard({ user }: UserCardProps) {
-  const {
-    name,
-    email,
-    avatarUrl,
-    progress,
-    level,
-    hoursStudied,
-    isOnline,
-    country,
-    countryFlag,
-  } = user;
+  const { name, email, progress, level, hoursStudied, isOnline, country } =
+    user;
 
   return (
-    <div className="max-w-sm mx-auto bg-white shadow-lg rounded-lg p-6 border border-gray-200">
-      <div className="flex items-center space-x-4 mb-4">
-        {/* Avatar con estado en línea */}
-        <div className="relative">
-          <Avatar className="w-16 h-16">
-            <AvatarImage src={avatarUrl} alt={name} />
+    <Card className="bg-white text-gray-900 dark:text-gray-100 dark:bg-transparent w-full rounded-lg">
+      <CardHeader>
+        {/* Avatar con estado en línea y badge */}
+        <div className="relative flex items-center space-x-4">
+          <Avatar className="w-24 h-24">
+            <AvatarImage src="/user.jpg" className="object-cover" alt={name} />
             <AvatarFallback>{name.charAt(0)}</AvatarFallback>
           </Avatar>
           {isOnline && (
-            <span className="absolute bottom-0 right-0 block h-3 w-3 rounded-full bg-green-500 ring-2 ring-white" />
+            <Badge className="absolute top-0 left-0 px-2 py-1 text-xs bg-green-100 text-green-800 rounded-md" />
           )}
         </div>
 
         {/* Datos principales del usuario */}
-        <div>
-          <h3 className="text-lg font-semibold text-gray-900">{name}</h3>
-          <p className="text-sm text-gray-500">{email}</p>
+        <div className="mt-4">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+            {name}
+          </h3>
+          <p className="text-sm text-gray-500 dark:text-gray-400">{email}</p>
 
           {/* País y bandera */}
           <div className="flex items-center mt-2 space-x-2">
-            <Image
-              src={countryFlag}
-              alt={country}
-              width={24}
-              height={16}
-              className="w-6 h-4 rounded-md"
-            />
-            <p className="text-sm text-gray-600">{country}</p>
+            <FlagIcon />
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              {country}
+            </p>
           </div>
         </div>
-      </div>
+      </CardHeader>
 
-      <FlagIcon />
-
-      {/* Progreso en el curso */}
-      <div className="mt-4">
-        <h4 className="text-md font-semibold text-gray-800 mb-2">
-          Progreso en el Curso
-        </h4>
-        <div className="flex justify-between items-center mb-3">
+      {/* Contenido de la tarjeta */}
+      <CardContent className="space-y-4">
+        <div className="flex justify-between items-center">
           <div>
-            <p className="text-sm text-gray-600 mb-1">Nivel:</p>
-            <Badge level={level} />
+            <h4 className="text-md font-semibold text-gray-800 dark:text-gray-200">
+              Nivel actual:
+            </h4>
+            <BadgeLevel level={level} />
           </div>
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-gray-600 dark:text-gray-400">
             Horas Estudiadas: {hoursStudied}
           </p>
         </div>
 
-        <Progress
-          value={progress}
-          className="w-full h-2 bg-gray-200 rounded-full"
-        >
-          <div
-            className="h-2 bg-green-500 rounded-full"
-            style={{ width: `${progress}%` }}
-          />
-        </Progress>
-        <p className="text-xs text-gray-500 mt-2">{progress}% completado</p>
-      </div>
-    </div>
+        {/* Barra de progreso */}
+        <div>
+          <h4 className="text-md font-semibold text-gray-800 dark:text-gray-200 mb-2">
+            Progreso en el Curso
+          </h4>
+          <Progress
+            value={progress}
+            className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-full"
+          >
+            <div
+              className="h-2 bg-green-500 rounded-full"
+              style={{ width: `${progress}%` }}
+            />
+          </Progress>
+          <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+            {progress}% completado
+          </p>
+        </div>
+
+        {/* Rango de nivel CEFR y última actividad */}
+        <div className="flex justify-between items-center">
+          <div>
+            <h4 className="text-md font-semibold text-gray-800 dark:text-gray-200">
+              Rango de Nivel CEFR:
+            </h4>
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              {level === "A1" || level === "A2"
+                ? "Básico"
+                : level === "B1" || level === "B2"
+                ? "Intermedio"
+                : "Avanzado"}
+            </p>
+          </div>
+          <div>
+            <h4 className="text-md font-semibold text-gray-800 dark:text-gray-200">
+              Última Actividad:
+            </h4>
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              Hace 2 días
+            </p>
+          </div>
+        </div>
+
+        {/* Botón de acción */}
+        <div className="flex justify-end">
+          <Button>Ver Más Detalles</Button>
+        </div>
+      </CardContent>
+    </Card>
   );
 }
-
-// Tipo para las propiedades del componente Badge
-interface BadgeProps {
-  level: "A1" | "A2" | "B1" | "B2" | "C1" | "C2";
-}
-
-// Componente Badge para el nivel CEFR
-const Badge: React.FC<BadgeProps> = ({ level }) => {
-  const levelColors: Record<string, string> = {
-    A1: "bg-blue-100 text-blue-800",
-    A2: "bg-green-100 text-green-800",
-    B1: "bg-yellow-100 text-yellow-800",
-    B2: "bg-purple-100 text-purple-800",
-    C1: "bg-red-100 text-red-800",
-    C2: "bg-teal-100 text-teal-800",
-  };
-
-  return (
-    <span
-      className={`px-2 py-1 text-sm font-semibold rounded-full ${levelColors[level]}`}
-    >
-      {level}
-    </span>
-  );
-};

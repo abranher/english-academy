@@ -1,3 +1,4 @@
+import { cn } from "@/libs/shadcn/utils";
 import "@/node_modules/flag-icons/css/flag-icons.min.css";
 
 interface Size {
@@ -42,10 +43,22 @@ const sizes: {
   },
 };
 
-interface FlagIconProps {
+interface FlagIconProps extends React.HTMLAttributes<HTMLSpanElement> {
   size?: "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl";
+  rounded?: boolean;
 }
 
-export default function FlagIcon({ size = "4xl" }: FlagIconProps) {
-  return <span className="fi fi-ve" style={sizes[size]}></span>;
+export default function FlagIcon(props: FlagIconProps) {
+  const { size = "md", rounded = false, ...otherProps } = props;
+
+  return (
+    <span
+      className={cn(
+        `fi fi-ve ${otherProps.className || ""}`,
+        rounded && "rounded-full"
+      )}
+      style={sizes[size]}
+      {...otherProps}
+    ></span>
+  );
 }
