@@ -1,10 +1,13 @@
 "use client";
 
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import axios from "@/config/axios";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
+
 import { Input } from "@/components/shadcn/ui/input";
 import { Button } from "@/components/shadcn/ui/button";
 import {
@@ -15,8 +18,6 @@ import {
   CardTitle,
 } from "@/components/shadcn/ui/card";
 import { Label } from "@/components/shadcn/ui/label";
-import Link from "next/link";
-import { toast } from "sonner";
 import messages from "@/libs/validations/schemas/messages";
 
 const formSchema = z.object({
@@ -59,7 +60,7 @@ export default function CreateCoursePage() {
           <Card>
             <CardHeader>
               <CardTitle>Curso</CardTitle>
-              <CardDescription>Nombre del curso.</CardDescription>
+              <CardDescription>Crea un nuevo curso.</CardDescription>
             </CardHeader>
             <CardContent>
               <form onSubmit={handleSubmit(onSubmit)} className="grid gap-6">

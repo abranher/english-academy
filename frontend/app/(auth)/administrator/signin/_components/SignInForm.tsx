@@ -1,11 +1,13 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { Button } from "@/components/shadcn/ui/button";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+
 import { Input } from "@/components/shadcn/ui/input";
 import { Label } from "@/components/shadcn/ui/label";
 import {
@@ -13,10 +15,9 @@ import {
   AlertDescription,
   AlertTitle,
 } from "@/components/shadcn/ui/alert";
+import SignInButton from "@/components/auth/SignInButton";
 import { AlertCircle } from "lucide-react";
-import { z } from "zod";
 import { signInSchema } from "@/libs/validations/schemas/signin/signIn";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Roles } from "@/types/enums/Roles";
 
 export default function SignInForm() {
@@ -42,12 +43,10 @@ export default function SignInForm() {
         redirect: false,
       });
 
-      console.log(response);
-
       if (response === undefined || response.error) {
         setError(response?.code);
       } else {
-        router.push("/student");
+        router.push("/admin");
         router.refresh();
       }
     } catch (error) {
@@ -91,9 +90,7 @@ export default function SignInForm() {
             <span className="text-red-500">{errors.password.message}</span>
           )}
         </div>
-        <Button type="submit" className="w-full">
-          Iniciar sesión
-        </Button>
+        <SignInButton isLoading={isLoading} />
       </form>
     </>
   );

@@ -5,11 +5,9 @@ import { signOut, useSession } from "next-auth/react";
 import { Button } from "@/components/shadcn/ui/button";
 import {
   CreditCard,
-  Keyboard,
   LogOut,
   Mail,
   MessageSquare,
-  Plus,
   PlusCircle,
   Settings,
   User,
@@ -60,16 +58,16 @@ export default function DropdownAuth() {
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuGroup>
-                <DropdownMenuItem className="cursor-pointer">
+                <DropdownMenuItem>
                   <User className="mr-2 h-4 w-4" />
                   Perfil
                 </DropdownMenuItem>
-                <DropdownMenuItem className="cursor-pointer">
+                <DropdownMenuItem>
                   <CreditCard className="mr-2 h-4 w-4" />
                   Facturación
                 </DropdownMenuItem>
                 <Link href="/student/settings">
-                  <DropdownMenuItem className="cursor-pointer">
+                  <DropdownMenuItem>
                     <Settings className="mr-2 h-4 w-4" />
                     Configuración
                   </DropdownMenuItem>

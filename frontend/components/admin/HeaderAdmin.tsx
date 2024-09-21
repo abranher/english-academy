@@ -34,9 +34,12 @@ import Avvvatars from "avvvatars-react";
 import { signOut, useSession } from "next-auth/react";
 import { Avatar } from "@/components/shadcn/ui/avatar";
 import { Badge } from "@/components/shadcn/ui/badge";
+import DropdownItemLink from "@/components/common/DropdownItemLink";
 
 export default function HeaderAdmin() {
   const { data: session, status } = useSession();
+
+  console.log(session?.user);
 
   return (
     <>
@@ -134,14 +137,13 @@ export default function HeaderAdmin() {
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuGroup>
-                <DropdownMenuItem>
-                  <User className="mr-2 h-4 w-4" />
-                  Perfil
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Settings className="mr-2 h-4 w-4" />
-                  Configuración
-                </DropdownMenuItem>
+                <DropdownItemLink Icon={User} href="#" title="Perfil" />
+
+                <DropdownItemLink
+                  Icon={Settings}
+                  href="#"
+                  title="Configuración"
+                />
               </DropdownMenuGroup>
 
               <DropdownMenuSeparator />

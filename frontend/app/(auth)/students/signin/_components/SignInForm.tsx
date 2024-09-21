@@ -8,7 +8,6 @@ import { signIn } from "next-auth/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
-import { Button } from "@/components/shadcn/ui/button";
 import { Input } from "@/components/shadcn/ui/input";
 import { Label } from "@/components/shadcn/ui/label";
 import {
@@ -16,9 +15,10 @@ import {
   AlertDescription,
   AlertTitle,
 } from "@/components/shadcn/ui/alert";
-import { AlertCircle, Loader2 } from "lucide-react";
+import { AlertCircle } from "lucide-react";
 import { signInSchema } from "@/libs/validations/schemas/signin/signIn";
 import { Roles } from "@/types/enums/Roles";
+import SignInButton from "@/components/auth/SignInButton";
 
 export default function SignInForm() {
   const {
@@ -42,8 +42,6 @@ export default function SignInForm() {
         type: Roles.STUDENT,
         redirect: false,
       });
-
-      console.log(response);
 
       if (response === undefined || response.error) {
         setError(response?.code);
@@ -92,16 +90,7 @@ export default function SignInForm() {
             <span className="text-red-500">{errors.password.message}</span>
           )}
         </div>
-        {!isLoading ? (
-          <Button type="submit" className="w-full">
-            Iniciar sesión
-          </Button>
-        ) : (
-          <Button disabled>
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            Espere por favor...
-          </Button>
-        )}
+        <SignInButton isLoading={isLoading} />
       </form>
       <div className="mt-4 text-center text-md">
         No tienes una cuenta?{" "}

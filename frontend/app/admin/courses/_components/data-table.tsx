@@ -23,7 +23,7 @@ import {
 } from "@/components/shadcn/ui/table";
 import { Button } from "@/components/shadcn/ui/button";
 import { Input } from "@/components/shadcn/ui/input";
-import { PlusCircle } from "lucide-react";
+import { ArrowBigLeft, ArrowBigRight, PlusCircle } from "lucide-react";
 import Link from "next/link";
 
 interface DataTableProps<TData, TValue> {
@@ -66,7 +66,7 @@ export function DataTable<TData, TValue>({
           }
           className="max-w-sm"
         />
-        <Link href="/admin/create">
+        <Link href="/admin/courses/create">
           <Button>
             <PlusCircle className="h-6 w-6 mr-2" />
             Nuevo curso
@@ -132,7 +132,8 @@ export function DataTable<TData, TValue>({
           onClick={() => table.previousPage()}
           disabled={!table.getCanPreviousPage()}
         >
-          Previous
+          <ArrowBigLeft />
+          Previo
         </Button>
         <Button
           variant="outline"
@@ -140,7 +141,8 @@ export function DataTable<TData, TValue>({
           onClick={() => table.nextPage()}
           disabled={!table.getCanNextPage()}
         >
-          Next
+          Siguiente
+          <ArrowBigRight />
         </Button>
       </div>
     </div>
