@@ -9,7 +9,7 @@ export const metadata: Metadata = {
     "Personaliza tu experiencia. Administra tu perfil, preferencias de notificación y más. ¡Configura tu cuenta a tu gusto y disfruta de una experiencia más personalizada!",
 };
 
-export default function SettingsLayout({
+export default function SettingsStudentLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;

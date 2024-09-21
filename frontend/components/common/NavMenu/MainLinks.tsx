@@ -1,4 +1,5 @@
 import NextLink from "next/link";
+
 import { NavbarContent, Link, NavbarItem } from "@nextui-org/react";
 
 export default function MainLinks() {
@@ -16,7 +17,7 @@ export default function MainLinks() {
           </Link>
         </NavbarItem>
         <NavbarItem isActive>
-          <Link href="#" aria-current="page" color="secondary">
+          <Link href="#" aria-current="page" color="foreground">
             Tutores
           </Link>
         </NavbarItem>

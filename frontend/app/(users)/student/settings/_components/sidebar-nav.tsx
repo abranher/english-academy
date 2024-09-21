@@ -1,7 +1,7 @@
 "use client";
 
 import SideNav from "@/components/common/SideNav";
-import { MessageCircle, Pencil, User, UserPenIcon } from "lucide-react";
+import { AtSign, MessageCircle, Pencil, User, UserPenIcon } from "lucide-react";
 
 export function SidebarNav() {
   return (
@@ -11,7 +11,7 @@ export function SidebarNav() {
           {
             title: "Perfil",
             href: "/student/settings",
-            icon: User,
+            icon: AtSign,
             variant: "default",
           },
           {
