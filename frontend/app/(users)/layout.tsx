@@ -1,7 +1,7 @@
 import Footer from "@/components/common/Footer";
 import NavMenu from "@/components/common/NavMenu";
 
-export default function RootLayout({
+export default function UsersLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;

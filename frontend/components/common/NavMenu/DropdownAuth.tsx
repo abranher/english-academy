@@ -46,29 +46,25 @@ export default function DropdownAuth() {
               </Avatar>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56" align="end" forceMount>
-              <DropdownMenuLabel className="font-normal">
-                <div className="flex gap-4 items-center">
-                  <div>
-                    <Avatar className="flex items-center justify-center h-16 w-16 cursor-pointer">
-                      <Avvvatars size={50} value={session.user.email} />
-                    </Avatar>
-                  </div>
-                  <div className="flex flex-col space-y-1">
-                    <p className="text-sm font-medium leading-none">
-                      {session.user.name}
-                    </p>
-                    <p className="text-xs leading-none text-muted-foreground">
-                      {session.user.email}
-                    </p>
-                  </div>
+              <div className="flex flex-col items-center p-6">
+                <Avatar className="flex items-center justify-center h-24 w-24">
+                  <Avvvatars size={80} value={session.user.email} />
+                </Avatar>
+                <p className="pt-2 text-lg font-semibold">
+                  {session.user.name}
+                </p>
+                <p className="text-sm text-gray-600">{session.user.email}</p>
+                <div className="mt-5">
+                  <Link
+                    href="#"
+                    className="border border-zinc-400 dark:border-zinc-800 rounded-full py-2 px-4 text-xs font-semibold text-gray-700 dark:text-zinc-50"
+                  >
+                    Administra tu cuenta
+                  </Link>
                 </div>
-              </DropdownMenuLabel>
+              </div>
               <DropdownMenuSeparator />
               <DropdownMenuGroup>
-                <DropdownMenuItem>
-                  <User className="mr-2 h-4 w-4" />
-                  Perfil
-                </DropdownMenuItem>
                 <DropdownMenuItem>
                   <CreditCard className="mr-2 h-4 w-4" />
                   Facturación
