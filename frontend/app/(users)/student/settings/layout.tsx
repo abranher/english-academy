@@ -17,8 +17,8 @@ export default function SettingsStudentLayout({
   return (
     <>
       <div className="w-full flex justify-center">
-        <section className="w-full max-w-[1350px]">
-          <div className="space-y-6 p-10 pb-16 block">
+        <section className="w-full max-w-[1536px]">
+          <div className="space-y-6 p-8 pb-16 block">
             <div className="space-y-0.5">
               <h2 className="text-2xl font-bold tracking-tight">
                 Configuración
