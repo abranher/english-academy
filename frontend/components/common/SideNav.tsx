@@ -22,15 +22,15 @@ export default function SideNav({
 
   return (
     <div className="group flex flex-col gap-4 py-2">
-      <nav className="grid gap-1 px-2">
+      <nav className="grid gap-3 px-2">
         {links.map((link, index) => (
           <Link
             key={index}
             href={link.href}
             className={cn(
-              buttonVariants({ variant: "ghost", size: "sm" }),
+              "flex px-3 py-2 items-center justify-center whitespace-nowrap text-md font-medium transition-colors",
               pathname === link.href &&
-                "bg-zinc-100 text-zinc-900 dark:bg-zinc-800 dark:text-zinc-50",
+                "bg-zinc-100 text-zinc-900 border-l-3 border-zinc-400 dark:bg-zinc-800/50 dark:text-zinc-50",
               "justify-start"
             )}
           >
