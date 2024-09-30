@@ -31,7 +31,6 @@ export default function NavMenu() {
           />
 
           <Logo />
-
           <MainLinks />
         </NavbarContent>
 
