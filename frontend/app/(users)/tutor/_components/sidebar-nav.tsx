@@ -15,27 +15,23 @@ export function SidebarNav() {
         links={[
           {
             title: "Cursos",
-            href: "/tutor",
+            href: "/tutor/courses",
             icon: GraduationCap,
-            variant: "default",
           },
           {
             title: "Preguntas y respuestas",
             href: "/student/settings/account",
             icon: UserPenIcon,
-            variant: "ghost",
           },
           {
             title: "Reseñas",
             href: "/student/settings/appearance",
             icon: Pencil,
-            variant: "ghost",
           },
           {
             title: "Notificaciones",
             href: "/student/settings/notifications",
             icon: MessageCircle,
-            variant: "ghost",
           },
         ]}
       />

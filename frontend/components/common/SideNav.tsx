@@ -4,7 +4,6 @@ import Link from "next/link";
 import { LucideIcon } from "lucide-react";
 
 import { cn } from "@/libs/shadcn/utils";
-import { buttonVariants } from "@/components/shadcn/ui/button";
 import { usePathname } from "next/navigation";
 
 export default function SideNav({
@@ -14,7 +13,6 @@ export default function SideNav({
     title: string;
     label?: string;
     icon: LucideIcon;
-    variant: "default" | "ghost";
     href: string;
   }[];
 }) {
@@ -37,13 +35,7 @@ export default function SideNav({
             <link.icon className="mr-2 h-4 w-4" />
             {link.title}
             {link.label && (
-              <span
-                className={cn(
-                  "ml-auto",
-                  link.variant === "default" &&
-                    "text-background dark:text-white"
-                )}
-              >
+              <span className={cn("ml-auto text-background dark:text-white")}>
                 {link.label}
               </span>
             )}

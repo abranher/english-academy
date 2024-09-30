@@ -1,3 +1,4 @@
+import Link from "next/link";
 import {
   Card,
   CardContent,
@@ -10,11 +11,12 @@ import {
   Activity,
   CreditCard,
   DollarSign,
+  PlusCircle,
   Search,
-  Star,
   Users,
 } from "lucide-react";
-import Image from "next/image";
+import CoursesList from "./_components/CoursesList";
+import { Button } from "@/components/shadcn/ui/button";
 
 export default function TutorHomePage() {
   return (
@@ -29,7 +31,7 @@ export default function TutorHomePage() {
 
         <Separator />
 
-        <div className="grid gap-4 md:grid-cols-2 md:gap-8 xl:grid-cols-3">
+        <div className="grid gap-4 md:grid-cols-2 md:gap-8 xl:grid-cols-4">
           <Card x-chunk="dashboard-01-chunk-0">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">
@@ -86,14 +88,31 @@ export default function TutorHomePage() {
           </Card>
         </div>
 
-        <div className="bg-background/95 py-8 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-          <form>
-            <div className="relative">
-              <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-              <Input placeholder="Busca entre tus cursos..." className="pl-8" />
+        <div>
+          <h2 className="text-2xl font-bold">Cursos</h2>
+          <div className="flex items-center justify-between">
+            <div className="bg-background/95 py-8 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+              <form>
+                <div className="relative">
+                  <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    placeholder="Busca entre tus cursos..."
+                    className="pl-8"
+                  />
+                </div>
+              </form>
             </div>
-          </form>
+
+            <Link href="/tutor/courses/create">
+              <Button>
+                <PlusCircle className="h-6 w-6 mr-2" />
+                Nuevo curso
+              </Button>
+            </Link>
+          </div>
         </div>
+
+        <CoursesList />
       </div>
     </>
   );
