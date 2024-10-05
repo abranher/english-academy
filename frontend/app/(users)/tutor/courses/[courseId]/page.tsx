@@ -2,13 +2,7 @@ import { IconBadge } from "@/components/icons/IconBadge";
 import { Badge } from "@/components/shadcn/ui/badge";
 import { Button } from "@/components/shadcn/ui/button";
 import axios from "@/config/axios";
-import {
-  ChevronLeft,
-  CircleDollarSign,
-  File,
-  LayoutDashboard,
-  ListChecks,
-} from "lucide-react";
+import { ChevronLeft, LayoutDashboard } from "lucide-react";
 import { redirect } from "next/navigation";
 import TitleForm from "./_components/TitleForm";
 import DescriptionForm from "./_components/DescriptionForm";
@@ -27,6 +21,12 @@ import {
   TooltipTrigger,
 } from "@/components/shadcn/ui/tooltip";
 import { Separator } from "@/components/shadcn/ui/separator";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/shadcn/ui/tabs";
 
 export default async function CourseIdPage({
   params,
@@ -111,54 +111,77 @@ export default async function CourseIdPage({
           </div>
         </div>
 
-        <div className="flex items-center gap-2 my-3 whitespace-nowrap text-xl tracking-tight sm:grow-0">
-          <IconBadge icon={LayoutDashboard} />
-          Personaliza tu curso
-        </div>
-
-        <div className="grid gap-4 xl:grid-cols-2 lg:gap-8">
-          <div className="grid auto-rows-max items-start gap-4 lg:col-span-1 lg:gap-8">
-            <TitleForm initialData={course} courseId={course.id} />
-
-            <DescriptionForm initialData={course} courseId={course.id} />
-
-            <LevelForm
-              initialData={course}
-              courseId={course.id}
-              options={levels.map((level: any) => ({
-                label: `${level.levelCode} - ${level.title}`,
-                value: level.id,
-              }))}
-            />
-
-            <ImageForm initialData={course} courseId={course.id} />
-          </div>
-          <div className="grid auto-rows-max items-start gap-4 lg:col-span-1 lg:gap-8">
-            <div className="space-y-6">
-              <div className="flex flex-col gap-3">
-                <div className="flex items-center gap-x-2">
-                  <IconBadge icon={ListChecks} />
-                  <h2 className="text-xl">Capítulos del curso</h2>
-                </div>
+        <Tabs defaultValue="general">
+          <section className="flex justify-start gap-3 overflow-x-auto w-full">
+            <TabsList className="my-6">
+              <TabsTrigger value="general">Información General</TabsTrigger>
+              <TabsTrigger value="courseContent">
+                Contenido del Curso
+              </TabsTrigger>
+              <TabsTrigger value="courseImage">Imagen del Curso</TabsTrigger>
+              <TabsTrigger value="price">Configuración del Precio</TabsTrigger>
+              <TabsTrigger value="level">Nivel del Curso</TabsTrigger>
+              <TabsTrigger value="attachment">
+                Recursos y archivos adjuntos
+              </TabsTrigger>
+            </TabsList>
+          </section>
+          <TabsContent value="general">
+            <div className="grid gap-4 xl:grid-cols-2 lg:gap-8">
+              <div className="grid auto-rows-max items-start gap-4 lg:col-span-1 lg:gap-8">
+                <TitleForm initialData={course} courseId={course.id} />
+              </div>
+              <div className="grid auto-rows-max items-start gap-4 lg:col-span-1 lg:gap-8">
+                <DescriptionForm initialData={course} courseId={course.id} />
+              </div>
+            </div>
+          </TabsContent>
+          <TabsContent value="courseContent">
+            <div className="grid gap-4 xl:grid-cols-2 lg:gap-8">
+              <div className="grid auto-rows-max items-start gap-4 lg:col-span-1 lg:gap-8">
                 <ChaptersForm initialData={course} courseId={course.id} />
               </div>
-              <div className="flex flex-col gap-3">
-                <div className="flex items-center gap-x-2">
-                  <IconBadge icon={CircleDollarSign} />
-                  <h2 className="text-xl">Vende tu curso</h2>
-                </div>
+            </div>
+          </TabsContent>
+          <TabsContent value="courseImage">
+            <div className="grid gap-4 xl:grid-cols-2 lg:gap-8">
+              <div className="grid auto-rows-max items-start gap-4 lg:col-span-1 lg:gap-8">
+                <ImageForm initialData={course} courseId={course.id} />
+              </div>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="price">
+            <div className="grid gap-4 xl:grid-cols-2 lg:gap-8">
+              <div className="grid auto-rows-max items-start gap-4 lg:col-span-1 lg:gap-8">
                 <PriceForm initialData={course} courseId={course.id} />
               </div>
-              <div className="flex flex-col gap-3">
-                <div className="flex items-center gap-x-2">
-                  <IconBadge icon={File} />
-                  <h2 className="text-xl">Recursos y archivos adjuntos</h2>
-                </div>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="level">
+            <div className="grid gap-4 xl:grid-cols-2 lg:gap-8">
+              <div className="grid auto-rows-max items-start gap-4 lg:col-span-1 lg:gap-8">
+                <LevelForm
+                  initialData={course}
+                  courseId={course.id}
+                  options={levels.map((level: any) => ({
+                    label: `${level.levelCode} - ${level.title}`,
+                    value: level.id,
+                  }))}
+                />
+              </div>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="attachment">
+            <div className="grid gap-4 xl:grid-cols-2 lg:gap-8">
+              <div className="grid auto-rows-max items-start gap-4 lg:col-span-1 lg:gap-8">
                 <AttachmentForm initialData={course} courseId={course.id} />
               </div>
             </div>
-          </div>
-        </div>
+          </TabsContent>
+        </Tabs>
       </div>
     </>
   );

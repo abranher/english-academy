@@ -3,15 +3,15 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/libs/shadcn/utils";
 
 const backgroundVariants = cva(
-  "rounded-full flex items-center justify-center",
+  "rounded-md flex items-center justify-center",
   {
     variants: {
       variant: {
-        default: "bg-sky-100",
+        default: "bg-zinc-100",
         success: "bg-esmerald-100",
       },
       iconVariant: {
-        default: "text-sky-700",
+        default: "text-zinc-700",
         success: "text-esmerald-700",
       },
       size: {

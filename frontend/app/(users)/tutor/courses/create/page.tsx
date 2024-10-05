@@ -40,7 +40,7 @@ export default function CreateCoursePage() {
     try {
       const response = await axios.post("/api/courses", values);
 
-      router.push(`/admin/courses/${response.data.id}`);
+      router.push(`/tutor/courses/${response.data.id}`);
       toast.success("Curso creado!");
     } catch (error) {
       console.log(error);
