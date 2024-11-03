@@ -1,9 +1,11 @@
-import { IconBadge } from "@/components/icons/IconBadge";
+import Link from "next/link";
+import { redirect } from "next/navigation";
+
+import axios from "@/config/axios";
+
 import { Badge } from "@/components/shadcn/ui/badge";
 import { Button } from "@/components/shadcn/ui/button";
-import axios from "@/config/axios";
-import { ChevronLeft, LayoutDashboard } from "lucide-react";
-import { redirect } from "next/navigation";
+import { ChevronLeft } from "lucide-react";
 import TitleForm from "./_components/TitleForm";
 import DescriptionForm from "./_components/DescriptionForm";
 import ImageForm from "./_components/ImageForm";
@@ -13,7 +15,6 @@ import AttachmentForm from "./_components/AttachmentForm";
 import ChaptersForm from "./_components/ChaptersForm";
 import { Banner } from "@/components/shadcn/ui/banner";
 import Actions from "./_components/Actions";
-import Link from "next/link";
 import {
   Tooltip,
   TooltipContent,
