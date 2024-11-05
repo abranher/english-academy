@@ -11,7 +11,6 @@ import { ChaptersModule } from './chapters/chapters.module';
 import { PurchasesModule } from './purchases/purchases.module';
 import { StudentsModule } from './students/students.module';
 import { TutorsModule } from './tutors/tutors.module';
-import { MultipleChoiceExercisesModule } from './multiple-choice-exercises/multiple-choice-exercises.module';
 
 @Module({
   imports: [
@@ -30,7 +29,6 @@ import { MultipleChoiceExercisesModule } from './multiple-choice-exercises/multi
     PurchasesModule,
     StudentsModule,
     TutorsModule,
-    MultipleChoiceExercisesModule,
   ],
 })
 export class AppModule {}
