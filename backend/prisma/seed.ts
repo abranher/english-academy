@@ -1,7 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import { hash } from 'bcrypt';
 import levels from './data/levels';
-import skills from './data/skills';
 
 const prisma = new PrismaClient();
 
@@ -10,8 +9,19 @@ async function main() {
     data: levels,
   });
 
-  const skillsResult = await prisma.skill.createMany({
-    data: skills,
+  // seed categories and subcategories
+
+  await prisma.category.create({
+    data: {
+      title: 'Reading',
+      description:
+        'Develop your ability to understand texts written in English, from simple articles to complex academic texts.',
+      subCategories: {
+        createMany: {
+          data: [],
+        },
+      },
+    },
   });
 
   const abran = await prisma.user.create({
@@ -67,7 +77,6 @@ async function main() {
     { abran },
     { carlos },
     { levels: levelsResult },
-    { skills: skillsResult },
     { multipleChoiceExercise },
     { multipleChoiceOption1 },
     { multipleChoiceOption2 },
