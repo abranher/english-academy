@@ -67,69 +67,65 @@ export default function PriceForm({ initialData, courseId }: PriceFormProps) {
 
   return (
     <>
-      <Card x-chunk="dashboard-07-chunk-0">
-        <CardHeader>
-          <CardTitle className="flex justify-between gap-3 text-lg">
-            Precio del curso
-            <Button onClick={toggleEdit} variant="ghost">
-              {isEditing ? (
-                <>Cancelar</>
-              ) : (
-                <>
-                  <Pencil className="h-4 w-4 mr-2" />
-                  Editar precio
-                </>
-              )}
-            </Button>
-          </CardTitle>
-          {!isEditing && (
-            <CardDescription
-              className={cn(
-                "text-sm mt-2",
-                !initialData.price && "text-slate-500 italic"
-              )}
+      <CardHeader>
+        <CardTitle className="flex justify-between gap-3 text-lg">
+          Precio del curso
+          <Button onClick={toggleEdit} variant="ghost">
+            {isEditing ? (
+              <>Cancelar</>
+            ) : (
+              <>
+                <Pencil className="h-4 w-4 mr-2" />
+                Editar precio
+              </>
+            )}
+          </Button>
+        </CardTitle>
+        {!isEditing && (
+          <CardDescription
+            className={cn(
+              "text-sm mt-2",
+              !initialData.price && "text-slate-500 italic"
+            )}
+          >
+            {initialData.price ? formatPrice(initialData.price) : "Sin precio"}
+          </CardDescription>
+        )}
+      </CardHeader>
+      <CardContent>
+        {isEditing && (
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="space-y-4 mt-4"
             >
-              {initialData.price
-                ? formatPrice(initialData.price)
-                : "Sin precio"}
-            </CardDescription>
-          )}
-        </CardHeader>
-        <CardContent>
-          {isEditing && (
-            <Form {...form}>
-              <form
-                onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-4 mt-4"
-              >
-                <FormField
-                  control={form.control}
-                  name="price"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <Input
-                          type="number"
-                          step="0.01"
-                          disabled={isSubmitting}
-                          placeholder="Establece un precio para tu curso"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <div className="flex items-center gap-x-2">
-                  <Button disabled={!isValid || isSubmitting} type="submit">
-                    Guardar
-                  </Button>
-                </div>
-              </form>
-            </Form>
-          )}
-        </CardContent>
-      </Card>
+              <FormField
+                control={form.control}
+                name="price"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        step="0.01"
+                        disabled={isSubmitting}
+                        placeholder="Establece un precio para tu curso"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <div className="flex items-center gap-x-2">
+                <Button disabled={!isValid || isSubmitting} type="submit">
+                  Guardar
+                </Button>
+              </div>
+            </form>
+          </Form>
+        )}
+      </CardContent>
     </>
   );
 }

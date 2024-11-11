@@ -1,4 +1,10 @@
-export default function AlertBanner({ label }: { label: string }) {
+export default function AlertBanner({
+  label,
+  description = "",
+}: {
+  label: string;
+  description?: string;
+}) {
   return (
     <>
       <div
@@ -33,9 +39,7 @@ export default function AlertBanner({ label }: { label: string }) {
             >
               {label}
             </h3>
-            <div className="mt-1 text-sm text-yellow-700">
-              We are unable to save any progress at this time.
-            </div>
+            <div className="mt-1 text-sm text-yellow-700">{description}</div>
           </div>
         </div>
       </div>
