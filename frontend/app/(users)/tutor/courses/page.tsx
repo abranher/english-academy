@@ -1,24 +1,19 @@
-import Link from "next/link";
+import axios from "@/config/axios";
+
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@/components/shadcn/ui/card";
-import { Input } from "@/components/shadcn/ui/input";
 import { Separator } from "@/components/shadcn/ui/separator";
-import {
-  Activity,
-  CreditCard,
-  DollarSign,
-  PlusCircle,
-  Search,
-  Users,
-} from "lucide-react";
-import CoursesList from "./_components/CoursesList";
-import { Button } from "@/components/shadcn/ui/button";
+import { Activity, CreditCard, DollarSign, Users } from "lucide-react";
+import { DataTable } from "./_components/data-table";
+import { columns } from "./_components/columns";
 
-export default function TutorHomePage() {
+export default async function TutorHomePage() {
+  const { data } = await axios.get("/api/courses");
+
   return (
     <>
       <div className="space-y-6">
@@ -88,31 +83,7 @@ export default function TutorHomePage() {
           </Card>
         </div>
 
-        <div>
-          <h2 className="text-2xl font-bold">Cursos</h2>
-          <div className="flex items-center gap-5">
-            <div className="bg-background/95 py-8 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-              <form>
-                <div className="relative">
-                  <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    placeholder="Busca entre tus cursos..."
-                    className="pl-8"
-                  />
-                </div>
-              </form>
-            </div>
-
-            <Link href="/tutor/courses/create">
-              <Button>
-                <PlusCircle className="h-6 w-6 mr-2" />
-                Nuevo curso
-              </Button>
-            </Link>
-          </div>
-        </div>
-
-        <CoursesList />
+        <DataTable columns={columns} data={data} />
       </div>
     </>
   );

@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 import * as React from "react";
 import {
   ColumnDef,
@@ -24,7 +26,6 @@ import {
 import { Button } from "@/components/shadcn/ui/button";
 import { Input } from "@/components/shadcn/ui/input";
 import { ArrowBigLeft, ArrowBigRight, PlusCircle } from "lucide-react";
-import Link from "next/link";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
