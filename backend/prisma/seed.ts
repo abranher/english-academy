@@ -1,12 +1,15 @@
 import { PrismaClient } from '@prisma/client';
 import { hash } from 'bcrypt';
 import levels from './data/levels';
-import { readingCategories } from './data/subcategories/readingCategories';
-import { writingCategories } from './data/subcategories/writingCategories';
-import { listeningCategories } from './data/subcategories/listeningCategories';
-import { speakingCategories } from './data/subcategories/speakingCategories';
-import { grammarCategories } from './data/subcategories/grammarCategories';
-import { vocabularyCategories } from './data/subcategories/vocabularyCategories';
+import {
+  cultureCategories,
+  grammarCategories,
+  listeningCategories,
+  readingCategories,
+  speakingCategories,
+  vocabularyCategories,
+  writingCategories,
+} from './data/subcategories';
 
 const prisma = new PrismaClient();
 
@@ -90,6 +93,19 @@ async function main() {
       subCategories: {
         createMany: {
           data: vocabularyCategories,
+        },
+      },
+    },
+  });
+
+  await prisma.category.create({
+    data: {
+      title: 'Culture',
+      description:
+        'Immerse yourself in the culture of English-speaking countries and learn about their customs, traditions, and values.',
+      subCategories: {
+        createMany: {
+          data: cultureCategories,
         },
       },
     },
