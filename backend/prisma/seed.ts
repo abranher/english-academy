@@ -2,6 +2,11 @@ import { PrismaClient } from '@prisma/client';
 import { hash } from 'bcrypt';
 import levels from './data/levels';
 import { readingCategories } from './data/subcategories/readingCategories';
+import { writingCategories } from './data/subcategories/writingCategories';
+import { listeningCategories } from './data/subcategories/listeningCategories';
+import { speakingCategories } from './data/subcategories/speakingCategories';
+import { grammarCategories } from './data/subcategories/grammarCategories';
+import { vocabularyCategories } from './data/subcategories/vocabularyCategories';
 
 const prisma = new PrismaClient();
 
@@ -20,6 +25,71 @@ async function main() {
       subCategories: {
         createMany: {
           data: readingCategories,
+        },
+      },
+    },
+  });
+
+  await prisma.category.create({
+    data: {
+      title: 'Writing',
+      description:
+        'Improve your ability to express yourself clearly and effectively in English, both in formal and informal situations.',
+      subCategories: {
+        createMany: {
+          data: writingCategories,
+        },
+      },
+    },
+  });
+
+  await prisma.category.create({
+    data: {
+      title: 'Listening',
+      description:
+        'Improve your English listening comprehension, from everyday conversations to formal speeches.',
+      subCategories: {
+        createMany: {
+          data: listeningCategories,
+        },
+      },
+    },
+  });
+
+  await prisma.category.create({
+    data: {
+      title: 'Speaking',
+      description:
+        'Practice your fluency and accuracy in speaking English, gaining confidence to communicate in different situations.',
+      subCategories: {
+        createMany: {
+          data: speakingCategories,
+        },
+      },
+    },
+  });
+
+  await prisma.category.create({
+    data: {
+      title: 'Grammar',
+      description:
+        'Learn and master English grammar rules to construct correct and precise sentences.',
+      subCategories: {
+        createMany: {
+          data: grammarCategories,
+        },
+      },
+    },
+  });
+
+  await prisma.category.create({
+    data: {
+      title: 'Vocabulary',
+      description:
+        'Expand your English vocabulary and learn to use new words in different contexts.',
+      subCategories: {
+        createMany: {
+          data: vocabularyCategories,
         },
       },
     },
