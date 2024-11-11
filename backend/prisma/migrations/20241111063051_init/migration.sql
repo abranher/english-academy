@@ -90,16 +90,6 @@ CREATE TABLE "Country" (
 );
 
 -- CreateTable
-CREATE TABLE "Skill" (
-    "id" TEXT NOT NULL,
-    "name" TEXT NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
-
-    CONSTRAINT "Skill_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
 CREATE TABLE "Level" (
     "id" TEXT NOT NULL,
     "levelCode" TEXT NOT NULL,
@@ -112,6 +102,29 @@ CREATE TABLE "Level" (
 );
 
 -- CreateTable
+CREATE TABLE "Category" (
+    "id" TEXT NOT NULL,
+    "title" TEXT NOT NULL,
+    "description" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Category_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "SubCategory" (
+    "id" TEXT NOT NULL,
+    "title" TEXT NOT NULL,
+    "description" TEXT NOT NULL,
+    "categoryId" TEXT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "SubCategory_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "Course" (
     "id" TEXT NOT NULL,
     "title" TEXT NOT NULL,
@@ -121,7 +134,6 @@ CREATE TABLE "Course" (
     "status" "CourseStatus" NOT NULL DEFAULT 'DRAFT',
     "isPublished" BOOLEAN NOT NULL DEFAULT false,
     "levelId" TEXT,
-    "skillId" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -269,13 +281,7 @@ CREATE UNIQUE INDEX "Tutor_userId_key" ON "Tutor"("userId");
 CREATE UNIQUE INDEX "Country_code_key" ON "Country"("code");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Skill_name_key" ON "Skill"("name");
-
--- CreateIndex
 CREATE UNIQUE INDEX "Level_levelCode_key" ON "Level"("levelCode");
-
--- CreateIndex
-CREATE INDEX "Course_skillId_idx" ON "Course"("skillId");
 
 -- CreateIndex
 CREATE INDEX "Attachment_courseId_idx" ON "Attachment"("courseId");
@@ -320,10 +326,10 @@ ALTER TABLE "Tutor" ADD CONSTRAINT "Tutor_userId_fkey" FOREIGN KEY ("userId") RE
 ALTER TABLE "Certification" ADD CONSTRAINT "Certification_tutorId_fkey" FOREIGN KEY ("tutorId") REFERENCES "Tutor"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Course" ADD CONSTRAINT "Course_levelId_fkey" FOREIGN KEY ("levelId") REFERENCES "Level"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "SubCategory" ADD CONSTRAINT "SubCategory_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "Category"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Course" ADD CONSTRAINT "Course_skillId_fkey" FOREIGN KEY ("skillId") REFERENCES "Skill"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Course" ADD CONSTRAINT "Course_levelId_fkey" FOREIGN KEY ("levelId") REFERENCES "Level"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Attachment" ADD CONSTRAINT "Attachment_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "Course"("id") ON DELETE CASCADE ON UPDATE CASCADE;

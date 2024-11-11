@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { hash } from 'bcrypt';
 import levels from './data/levels';
+import { readingCategories } from './data/subcategories/readingCategories';
 
 const prisma = new PrismaClient();
 
@@ -18,7 +19,7 @@ async function main() {
         'Develop your ability to understand texts written in English, from simple articles to complex academic texts.',
       subCategories: {
         createMany: {
-          data: [],
+          data: readingCategories,
         },
       },
     },
