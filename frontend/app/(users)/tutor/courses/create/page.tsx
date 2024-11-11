@@ -52,7 +52,7 @@ export default function CreateCoursePage() {
     <>
       <div className="space-y-6">
         <div>
-          <h3 className="text-lg font-medium">Ponle nombre a tu curso</h3>
+          <h3 className="text-2xl font-medium">Ponle nombre a tu curso</h3>
           <p className="text-sm text-muted-foreground">
             ¿Cómo te gustaría llamar a tu curso? No te preocupes, podrás cambiar
             esto más tarde.
@@ -61,8 +61,8 @@ export default function CreateCoursePage() {
 
         <Separator />
 
-        <div className="w-full max-w-5xl flex items-center justify-center h-full p-6">
-          <Card className="w-full">
+        <div className="w-full flex items-center justify-center h-full p-6">
+          <Card className="w-full max-w-5xl">
             <CardHeader>
               <CardTitle>Nuevo Curso</CardTitle>
               <CardDescription>Crea un nuevo curso.</CardDescription>

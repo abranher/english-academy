@@ -13,7 +13,6 @@ import LevelForm from "./_components/LevelForm";
 import PriceForm from "./_components/PriceForm";
 import AttachmentForm from "./_components/AttachmentForm";
 import ChaptersForm from "./_components/ChaptersForm";
-import { Banner } from "@/components/shadcn/ui/banner";
 import Actions from "./_components/Actions";
 import {
   Tooltip,
@@ -22,13 +21,8 @@ import {
   TooltipTrigger,
 } from "@/components/shadcn/ui/tooltip";
 import { Separator } from "@/components/shadcn/ui/separator";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/shadcn/ui/tabs";
 import { SidebarNav } from "../../_components/sidebar-nav";
+import AlertBanner from "@/components/courses/tutor/AlertBanner";
 
 export default async function CourseIdPage({
   params,
@@ -73,7 +67,7 @@ export default async function CourseIdPage({
         <Separator />
 
         {!course.isPublished && (
-          <Banner label="Este curso no está publicado, por lo que no será visible para el estudiante." />
+          <AlertBanner label="Este curso no está publicado, por lo que no será visible para el estudiante." />
         )}
         <div className="flex items-center gap-4">
           <Link href={"/tutor/courses"}>
