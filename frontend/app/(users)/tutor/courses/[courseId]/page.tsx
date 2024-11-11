@@ -28,6 +28,7 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/shadcn/ui/tabs";
+import { SidebarNav } from "../../_components/sidebar-nav";
 
 export default async function CourseIdPage({
   params,
@@ -112,77 +113,29 @@ export default async function CourseIdPage({
           </div>
         </div>
 
-        <Tabs defaultValue="general">
-          <section className="flex justify-start gap-3 overflow-x-auto w-full">
-            <TabsList className="my-6">
-              <TabsTrigger value="general">Información General</TabsTrigger>
-              <TabsTrigger value="courseContent">
-                Contenido del Curso
-              </TabsTrigger>
-              <TabsTrigger value="courseImage">Imagen del Curso</TabsTrigger>
-              <TabsTrigger value="price">Configuración del Precio</TabsTrigger>
-              <TabsTrigger value="level">Nivel del Curso</TabsTrigger>
-              <TabsTrigger value="attachment">
-                Recursos y archivos adjuntos
-              </TabsTrigger>
-            </TabsList>
-          </section>
-          <TabsContent value="general">
-            <div className="grid gap-4 xl:grid-cols-2 lg:gap-8">
-              <div className="grid auto-rows-max items-start gap-4 lg:col-span-1 lg:gap-8">
-                <TitleForm initialData={course} courseId={course.id} />
-              </div>
-              <div className="grid auto-rows-max items-start gap-4 lg:col-span-1 lg:gap-8">
-                <DescriptionForm initialData={course} courseId={course.id} />
-              </div>
-            </div>
-          </TabsContent>
-          <TabsContent value="courseContent">
-            <div className="grid gap-4 xl:grid-cols-2 lg:gap-8">
-              <div className="grid auto-rows-max items-start gap-4 lg:col-span-1 lg:gap-8">
-                <ChaptersForm initialData={course} courseId={course.id} />
-              </div>
-            </div>
-          </TabsContent>
-          <TabsContent value="courseImage">
-            <div className="grid gap-4 xl:grid-cols-2 lg:gap-8">
-              <div className="grid auto-rows-max items-start gap-4 lg:col-span-1 lg:gap-8">
-                <ImageForm initialData={course} courseId={course.id} />
-              </div>
-            </div>
-          </TabsContent>
+        <Separator className="my-6" />
+        <div className="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
+          <aside className="-mx-4 lg:w-1/5">
+            <SidebarNav />
+          </aside>
+          <div className="flex w-full flex-col lg:max-w-2xl gap-4">
+            <TitleForm initialData={course} courseId={course.id} />
+            <DescriptionForm initialData={course} courseId={course.id} />
+            <ImageForm initialData={course} courseId={course.id} />
+            <LevelForm
+              initialData={course}
+              courseId={course.id}
+              options={levels.map((level: any) => ({
+                label: `${level.levelCode} - ${level.title}`,
+                value: level.id,
+              }))}
+            />
+            <ChaptersForm initialData={course} courseId={course.id} />
 
-          <TabsContent value="price">
-            <div className="grid gap-4 xl:grid-cols-2 lg:gap-8">
-              <div className="grid auto-rows-max items-start gap-4 lg:col-span-1 lg:gap-8">
-                <PriceForm initialData={course} courseId={course.id} />
-              </div>
-            </div>
-          </TabsContent>
-
-          <TabsContent value="level">
-            <div className="grid gap-4 xl:grid-cols-2 lg:gap-8">
-              <div className="grid auto-rows-max items-start gap-4 lg:col-span-1 lg:gap-8">
-                <LevelForm
-                  initialData={course}
-                  courseId={course.id}
-                  options={levels.map((level: any) => ({
-                    label: `${level.levelCode} - ${level.title}`,
-                    value: level.id,
-                  }))}
-                />
-              </div>
-            </div>
-          </TabsContent>
-
-          <TabsContent value="attachment">
-            <div className="grid gap-4 xl:grid-cols-2 lg:gap-8">
-              <div className="grid auto-rows-max items-start gap-4 lg:col-span-1 lg:gap-8">
-                <AttachmentForm initialData={course} courseId={course.id} />
-              </div>
-            </div>
-          </TabsContent>
-        </Tabs>
+            <PriceForm initialData={course} courseId={course.id} />
+            <AttachmentForm initialData={course} courseId={course.id} />
+          </div>
+        </div>
       </div>
     </>
   );

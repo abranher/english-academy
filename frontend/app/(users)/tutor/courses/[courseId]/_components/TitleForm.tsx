@@ -11,6 +11,7 @@ import {
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormMessage,
@@ -64,56 +65,62 @@ export default function TitleForm({ initialData, courseId }: TitleFormProps) {
 
   return (
     <>
-      <Card x-chunk="dashboard-07-chunk-0">
-        <CardHeader>
-          <CardTitle className="flex justify-between text-lg">
+      <CardHeader>
+        <CardTitle className="flex justify-between text-lg">
+          <span className="text-zinc-700 dark:text-zinc-200">
             Título del curso
-            <Button onClick={toggleEdit} variant="ghost">
-              {isEditing ? (
-                <>Cancelar</>
-              ) : (
-                <>
-                  <Pencil className="h-4 w-4 mr-2" />
-                  Editar título
-                </>
-              )}
-            </Button>
-          </CardTitle>
-          <CardDescription>{initialData.title}</CardDescription>
-        </CardHeader>
-        <CardContent>
-          {isEditing && (
-            <Form {...form}>
-              <form
-                onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-4 mt-4"
-              >
-                <FormField
-                  control={form.control}
-                  name="title"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <Input
-                          disabled={isSubmitting}
-                          placeholder="p.ej. 'Conversación en Inglés Fluido'"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <div className="flex items-center gap-x-2">
-                  <Button disabled={!isValid || isSubmitting} type="submit">
-                    Guardar
-                  </Button>
-                </div>
-              </form>
-            </Form>
-          )}
-        </CardContent>
-      </Card>
+          </span>
+          <Button onClick={toggleEdit} variant="ghost">
+            {isEditing ? (
+              <>Cancelar</>
+            ) : (
+              <>
+                <Pencil className="h-4 w-4 mr-2" />
+                Editar título
+              </>
+            )}
+          </Button>
+        </CardTitle>
+        <p className="dark:text-gray-200 font-bold text-xl pt-5">
+          {initialData.title}
+        </p>
+      </CardHeader>
+      <CardContent>
+        {isEditing && (
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="space-y-4 mt-4"
+            >
+              <FormField
+                control={form.control}
+                name="title"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input
+                        disabled={isSubmitting}
+                        placeholder="p.ej. 'Conversación en Inglés Fluido'"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormDescription>
+                      Este es tu nombre público. Puede ser tu nombre real o un
+                      seudónimo. Solo puedes cambiarlo una vez cada 30 días.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <div className="flex items-center gap-x-2">
+                <Button disabled={!isValid || isSubmitting} type="submit">
+                  Guardar
+                </Button>
+              </div>
+            </form>
+          </Form>
+        )}
+      </CardContent>
     </>
   );
 }

@@ -90,7 +90,7 @@ export default function TutorHomePage() {
 
         <div>
           <h2 className="text-2xl font-bold">Cursos</h2>
-          <div className="flex items-center justify-between">
+          <div className="flex items-center gap-5">
             <div className="bg-background/95 py-8 backdrop-blur supports-[backdrop-filter]:bg-background/60">
               <form>
                 <div className="relative">

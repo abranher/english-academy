@@ -15,7 +15,7 @@ import {
   AlertDescription,
   AlertTitle,
 } from "@/components/shadcn/ui/alert";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, EyeIcon, EyeOff } from "lucide-react";
 import { signInSchema } from "@/libs/validations/schemas/signin/signIn";
 import { Roles } from "@/types/enums/Roles";
 import SignInButton from "@/components/auth/SignInButton";
@@ -32,6 +32,7 @@ export default function SignInForm() {
   const router = useRouter();
   const [error, setError] = useState<null | undefined | string>();
   const [isLoading, setIsLoading] = useState(false);
+  const [visiblePassword, setVisiblePassword] = useState(false);
 
   async function onSubmit(data: z.infer<typeof signInSchema>) {
     setIsLoading(true);
@@ -78,6 +79,7 @@ export default function SignInForm() {
             <span className="text-red-500">{errors.email.message}</span>
           )}
         </div>
+
         <div className="grid gap-2">
           <div className="flex items-center">
             <Label htmlFor="password">Contraseña</Label>
@@ -85,7 +87,20 @@ export default function SignInForm() {
               Olvidaste tu contraseña?
             </Link>
           </div>
-          <Input id="password" type="password" {...register("password")} />
+          <div className="relative">
+            <span
+              className="absolute right-4 top-2 cursor-pointer"
+              onClick={() => setVisiblePassword(!visiblePassword)}
+            >
+              {visiblePassword ? <EyeIcon /> : <EyeOff />}
+            </span>
+
+            <Input
+              id="password"
+              type={visiblePassword ? "text" : "password"}
+              {...register("password")}
+            />
+          </div>
           {errors.password && (
             <span className="text-red-500">{errors.password.message}</span>
           )}
