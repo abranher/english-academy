@@ -1,68 +1,61 @@
-# Categories
+# Categories and subcategories
 
-- Reading
+### 1. Reading
 
-Reading comprehension
-Reading for pleasure
-Academic reading
-Business reading
-News articles
-Literature
+- **Reading comprehension:** Exercises and texts to improve your reading comprehension at different levels.
+- **Reading for pleasure:** Books, articles, and short stories to enjoy reading in English.
+- **Academic reading:** Academic texts, research articles, and preparation for exams like IELTS and TOEFL.
+- **Business reading:** Business documents, reports, emails, and articles related to the business world.
+- **News articles:** Current news on various topics to practice reading informative texts.
+- **Literature:** Classic and contemporary works of literature in English.
 
+### 2. Writing
 
-- Writing
+- **Essay writing:** Guidance and exercises for writing essays of different types and formats.
+- **Report writing:** How to structure and write clear and concise reports.
+- **Email writing:** Templates and tips for writing formal and informal emails.
+- **Creative writing:** Develop your creativity by writing stories, poems, and other creative texts.
+- **Business writing:** Master professional writing for emails, proposals, and presentations.
+- **Academic writing:** Learn to write academic essays, research papers, and theses.
 
-Essay writing
-Report writing
-Email writing
-Creative writing
-Business writing
-Academic writing
+### 3. Listening
 
+- **Listening comprehension:** Exercises to improve your listening comprehension of different accents and speeds.
+- **Podcasts:** A wide selection of English podcasts on various topics.
+- **Lectures:** Extracts from lectures and talks to practice understanding formal speeches.
+- **Conversations:** Everyday dialogues and conversations in different contexts.
+- **Movies and TV shows:** Scenes from movies and TV series with comprehension exercises.
+- **Music:** English songs with lyrics and activities to improve pronunciation and vocabulary.
 
-- Listening
+### 4. Speaking
 
-Listening comprehension
-Podcasts
-Lectures
-Conversations
-Movies and TV shows
-Music
+- **Fluency practice:** Conversations with native teachers to improve fluency.
+- **Pronunciation:** Exercises and activities to improve pronunciation of sounds and intonation.
+- **Conversation skills:** Learn how to hold conversations in different situations.
+- **Public speaking:** Preparation for presentations and public speeches.
+- **Business presentations:** How to give effective presentations in a business setting.
+- **Role-playing:** Simulations of real-life situations to practice spoken English.
 
+### 5. Grammar
 
-- Speaking
+- **Verb tenses:** Detailed explanation of English verb tenses and practical exercises.
+- **Sentence structure:** How to construct correct and varied sentences.
+- **Parts of speech:** Nouns, adjectives, verbs, adverbs, and other parts of speech.
+- **Punctuation:** Punctuation rules for correct writing.
+- **Vocabulary building:** Strategies for expanding your vocabulary and learning new words.
 
-Fluency practice
-Pronunciation
-Conversation skills
-Public speaking
-Business presentations
-Role-playing
+### 6. Vocabulary
 
+- **General vocabulary:** Common words and expressions used in everyday English.
+- **Academic vocabulary:** Vocabulary specific to academic settings.
+- **Business vocabulary:** Terms and expressions used in the business world.
+- **Idioms and phrasal verbs:** English idioms and phrasal verbs.
+- **Word formation:** How to form new words from roots and prefixes.
 
-- Grammar
+### 7. Culture
 
-Verb tenses
-Sentence structure
-Parts of speech
-Punctuation
-Vocabulary building
-
-
-- Vocabulary
-
-General vocabulary
-Academic vocabulary
-Business vocabulary
-Idioms and phrasal verbs
-Word formation
-
-
-- Culture
-
-American culture
-British culture
-Australian culture
-Canadian culture
-Other cultures
-
+- **American culture:** Cultural aspects of the United States.
+- **British culture:** Cultural aspects of the United Kingdom.
+- **Australian culture:** Cultural aspects of Australia.
+- **Canadian culture:** Cultural aspects of Canada.
+- **Other cultures:** Cultural aspects of other English-speaking countries.

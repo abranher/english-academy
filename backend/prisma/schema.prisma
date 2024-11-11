@@ -136,6 +136,23 @@ model Level {
   updatedAt DateTime @updatedAt
 }
 
+model Category {
+  id          String @id @default(uuid())
+  title       String
+  description String
+
+  subCategories SubCategory[]
+}
+
+model SubCategory {
+  id          String @id @default(uuid())
+  title       String
+  description String
+
+  category   Category? @relation(fields: [categoryId], references: [id])
+  categoryId String?
+}
+
 // *
 // *
 // * Courses
