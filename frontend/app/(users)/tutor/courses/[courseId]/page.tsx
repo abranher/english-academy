@@ -7,13 +7,6 @@ import { Badge } from "@/components/shadcn/ui/badge";
 import { Button } from "@/components/shadcn/ui/button";
 import { ChevronLeft, Image as ImageIcon } from "lucide-react";
 import Actions from "./_components/Actions";
-import AttachmentForm from "./_components/AttachmentForm";
-import ChaptersForm from "./_components/ChaptersForm";
-import DescriptionForm from "./_components/DescriptionForm";
-import ImageForm from "./_components/ImageForm";
-import LevelForm from "./_components/LevelForm";
-import PriceForm from "./_components/PriceForm";
-import TitleForm from "./_components/TitleForm";
 import {
   Tooltip,
   TooltipContent,
@@ -22,8 +15,7 @@ import {
 } from "@/components/shadcn/ui/tooltip";
 import { Separator } from "@/components/shadcn/ui/separator";
 import AlertBanner from "@/components/courses/tutor/AlertBanner";
-import { Card } from "@/components/shadcn/ui/card";
-import SideNav from "./_components/SideNav";
+import Content from "./_components/Content";
 
 export default async function CourseIdPage({
   params,
@@ -33,7 +25,6 @@ export default async function CourseIdPage({
   };
 }) {
   const { data: course } = await axios.get(`/api/courses/${params.courseId}`);
-  const { data: levels } = await axios.get(`/api/levels/`);
 
   if (!course) {
     return redirect("/tutor");
@@ -59,17 +50,20 @@ export default async function CourseIdPage({
     <>
       <div className="space-y-6">
         <div className="flex flex-wrap items-center gap-8">
-          <div className="grid h-32 w-32 place-items-center rounded-lg bg-zinc-100 dark:bg-zinc-800">
+          <div className="grid h-24 w-24 place-items-center rounded-lg bg-zinc-100 dark:bg-zinc-800">
             <ImageIcon className="h-12 w-12 text-gray-500" />
           </div>
-          <div className="w-max flex flex-col gap-2">
-            <h3 className="text-2xl font-bold"> {course.title}</h3>
-
-            <p className="text-md text-muted-foreground">
-              {course.description
-                ? course.description
-                : "Aun no has agregado una descripción"}
-            </p>
+          <div className="w-max flex gap-2">
+            <h3 className="text-2xl font-bold"> {course.title}</h3>{" "}
+            {course.isPublished ? (
+              <Badge variant="default" className="ml-auto sm:ml-0">
+                Publicado
+              </Badge>
+            ) : (
+              <Badge variant="outline" className="ml-auto sm:ml-0">
+                Borrador
+              </Badge>
+            )}
           </div>
         </div>
 
@@ -98,15 +92,7 @@ export default async function CourseIdPage({
               </Tooltip>
             </TooltipProvider>
           </p>
-          {course.isPublished ? (
-            <Badge variant="default" className="ml-auto sm:ml-0">
-              Publicado
-            </Badge>
-          ) : (
-            <Badge variant="outline" className="ml-auto sm:ml-0">
-              Borrador
-            </Badge>
-          )}
+
           <div className="hidden items-center gap-2 md:ml-auto md:flex">
             <Actions
               disabled={!isComplete}
@@ -118,31 +104,7 @@ export default async function CourseIdPage({
 
         <Separator className="my-6" />
 
-        <section className="w-full flex justify-center">
-          <div className="grid grid-cols-4 max-w-[1100px] space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
-            <Card className="col-span-3 flex w-full flex-col gap-4">
-              <TitleForm initialData={course} courseId={course.id} />
-              <DescriptionForm initialData={course} courseId={course.id} />
-              <ImageForm initialData={course} courseId={course.id} />
-              <LevelForm
-                initialData={course}
-                courseId={course.id}
-                options={levels.map((level: any) => ({
-                  label: `${level.levelCode} - ${level.title}`,
-                  value: level.id,
-                }))}
-              />
-              <ChaptersForm initialData={course} courseId={course.id} />
-
-              <PriceForm initialData={course} courseId={course.id} />
-              <AttachmentForm initialData={course} courseId={course.id} />
-            </Card>
-
-            <aside className="col-span-1">
-              <SideNav />
-            </aside>
-          </div>
-        </section>
+        <Content course={course} />
       </div>
     </>
   );

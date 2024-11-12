@@ -1,53 +1,56 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+import axios from "@/config/axios";
+import { useQuery } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+
 import { Button } from "@/components/shadcn/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/shadcn/ui/card";
-import { Combobox } from "@/components/shadcn/ui/combobox";
+import { CardContent } from "@/components/shadcn/ui/card";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
 } from "@/components/shadcn/ui/form";
-import { Textarea } from "@/components/shadcn/ui/textarea";
-import axios from "@/config/axios";
-import { cn } from "@/libs/shadcn/utils";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/shadcn/ui/select";
 import messages from "@/libs/validations/schemas/messages";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Pencil } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { z } from "zod";
+import { getLevels } from "../_api/get-levels";
+import { Level } from "@/types/models/Level";
+import { Skeleton } from "@/components/shadcn/ui/skeleton";
 
 interface LevelFormProps {
   initialData: {
     levelId: string;
   };
   courseId: string;
-  options: { label: string; value: string }[];
 }
 
 const formSchema = z.object({
   levelId: z.string(messages.requiredError).min(1, messages.min(1)),
 });
 
-export default function LevelForm({
-  initialData,
-  courseId,
-  options,
-}: LevelFormProps) {
-  const [isEditing, setIsEditing] = useState(false);
-
-  const toggleEdit = () => setIsEditing((current) => !current);
+export default function LevelForm({ initialData, courseId }: LevelFormProps) {
+  const {
+    isPending,
+    error,
+    data: levels,
+  } = useQuery({
+    queryKey: ["levels"],
+    queryFn: getLevels,
+  });
 
   const router = useRouter();
 
@@ -64,71 +67,68 @@ export default function LevelForm({
     try {
       await axios.patch(`/api/courses/${courseId}`, values);
       toast.success("Nivel del curso actualizado!");
-      toggleEdit();
       router.refresh();
     } catch (error) {
       toast.error("Something wrong");
     }
   };
 
-  const selectedOption = options.find(
-    (option) => option.value === initialData.levelId
-  );
-
   return (
     <>
-      <CardHeader>
-        <CardTitle className="flex justify-between gap-3 text-lg">
-          Nivel del curso
-          <Button onClick={toggleEdit} variant="ghost">
-            {isEditing ? (
-              <>Cancelar</>
-            ) : (
-              <>
-                <Pencil className="h-4 w-4 mr-2" />
-                Editar nivel
-              </>
-            )}
-          </Button>
-        </CardTitle>
-        {!isEditing && (
-          <CardDescription
-            className={cn(
-              "text-sm mt-2",
-              !initialData.levelId && "text-slate-500 italic"
-            )}
-          >
-            {selectedOption?.label || "Sin nivel"}
-          </CardDescription>
-        )}
-      </CardHeader>
       <CardContent>
-        {isEditing && (
-          <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              className="space-y-4 mt-4"
-            >
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="space-y-4 mt-4"
+          >
+            {isPending ? (
+              <>
+                <Skeleton className="py-5" />
+
+                <Skeleton className="py-2" />
+              </>
+            ) : (
               <FormField
                 control={form.control}
                 name="levelId"
                 render={({ field }) => (
                   <FormItem>
-                    <FormControl>
-                      <Combobox options={...options} {...field} />
-                    </FormControl>
+                    <FormLabel>Nivel del curso</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Selecciona el nivel apropiado para tu curso" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {levels &&
+                          levels.map((level: Level) => (
+                            <SelectItem key={level.id} value={level.id}>
+                              {level.levelCode + " - " + level.title}
+                            </SelectItem>
+                          ))}
+                      </SelectContent>
+                    </Select>
+                    <FormDescription>
+                      Elige el nivel adecuado para garantizar que tus
+                      estudiantes puedan seguir el ritmo del curso y alcanzar
+                      sus objetivos.
+                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              <div className="flex items-center gap-x-2">
-                <Button disabled={!isValid || isSubmitting} type="submit">
-                  Guardar
-                </Button>
-              </div>
-            </form>
-          </Form>
-        )}
+            )}
+            <div className="flex items-center gap-x-2">
+              <Button disabled={!isValid || isSubmitting} type="submit">
+                Guardar
+              </Button>
+            </div>
+          </form>
+        </Form>
       </CardContent>
     </>
   );
