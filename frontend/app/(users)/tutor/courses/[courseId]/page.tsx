@@ -70,7 +70,7 @@ export default async function CourseIdPage({
         <Separator />
 
         {!course.isPublished && (
-          <AlertBanner label="Este curso no está publicado, por lo que no será visible para el estudiante." />
+          <AlertBanner label="Este curso aun no está aprobado, por lo que no será visible para el estudiante." />
         )}
         <div className="flex items-center gap-4">
           <Link href={"/tutor/courses"}>
