@@ -16,7 +16,7 @@ import asset from "@/libs/asset";
 
 interface ImageFormProps {
   initialData: {
-    imageUrl: string;
+    image: string;
   };
   courseId: string;
 }
@@ -40,7 +40,7 @@ export default function ImageForm({ course }: any) {
     if (typeof selectedFile === "undefined") return;
 
     const formData = new FormData();
-    formData.set("imageUrl", selectedFile);
+    formData.set("image", selectedFile);
 
     try {
       await axios.post(`/api/courses/${course.courseId}/image`, formData);
@@ -59,9 +59,9 @@ export default function ImageForm({ course }: any) {
         <form onSubmit={onSubmit}>
           <section className="flex md:flex-row flex-col items-center gap-3">
             {/** File upload */}
-            {course.imageUrl ? (
+            {course.image ? (
               <div className="h-[240px] w-[240px] rounded-lg">
-                <Image src={asset(course.imageUrl)} alt={course.title} />
+                <Image src={asset(course.image)} alt={course.title} />
               </div>
             ) : (
               <div className="grid h-[240px] w-[240px] place-items-center rounded-lg bg-zinc-100 dark:bg-zinc-800">

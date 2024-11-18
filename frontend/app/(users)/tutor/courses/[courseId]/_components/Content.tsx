@@ -13,6 +13,7 @@ import PriceForm from "./PriceForm";
 import AttachmentForm from "./AttachmentForm";
 import { cn } from "@/libs/shadcn/utils";
 import Title from "@/components/common/Title";
+import SubTitleForm from "./SubTitleForm";
 
 export default function Content({ course }: { course: any }) {
   const [content, setContent] = useState("mainContent");
@@ -38,6 +39,7 @@ export default function Content({ course }: { course: any }) {
             {content === "mainContent" && (
               <>
                 <TitleForm initialData={course} courseId={course.id} />
+                <SubTitleForm initialData={course} courseId={course.id} />
                 <DescriptionForm initialData={course} courseId={course.id} />
                 <LevelForm initialData={course} courseId={course.id} />
                 <ImageForm course={course} />

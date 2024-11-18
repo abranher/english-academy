@@ -44,7 +44,7 @@ export class CoursesController {
 
   @Post(':id/image')
   @UseInterceptors(
-    FileInterceptor('imageUrl', {
+    FileInterceptor('image', {
       fileFilter: imageFileFilter,
       storage: diskStorage({
         destination: './storage/images',

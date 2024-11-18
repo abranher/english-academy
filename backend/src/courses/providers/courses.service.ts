@@ -41,13 +41,13 @@ export class CoursesService {
     return attachment;
   }
 
-  async uploadImage(id: string, imageUrl: string) {
+  async uploadImage(id: string, image: string) {
     const course = await this.prisma.course.update({
       where: {
         id,
       },
       data: {
-        imageUrl,
+        image,
       },
     });
 
@@ -125,7 +125,7 @@ export class CoursesService {
     if (
       !course.title ||
       !course.description ||
-      !course.imageUrl ||
+      !course.image ||
       !course.levelId ||
       !hasPublishedChapter
     ) {
