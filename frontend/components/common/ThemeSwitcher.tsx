@@ -21,7 +21,7 @@ export function ThemeSwitcher() {
       {theme === "light" ? (
         <>
           <Button
-            variant="outline"
+            variant="ghost"
             size="icon"
             className="rounded-full"
             type="button"
@@ -35,7 +35,7 @@ export function ThemeSwitcher() {
       ) : (
         <>
           <Button
-            variant="outline"
+            variant="ghost"
             size="icon"
             className="rounded-full"
             type="button"

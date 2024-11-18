@@ -1,5 +1,5 @@
 import SectionTitle from "../common/SectionTitle";
-import BoxBase from "../../common/BoxBase";
+import BoxBase from "../../../../components/common/BoxBase";
 import SingleFeature from "./SingleFeature";
 import featuresData from "./featuresData";
 

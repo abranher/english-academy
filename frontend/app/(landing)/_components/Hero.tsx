@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { Image } from "@nextui-org/react";
 import { Button } from "@/components/shadcn/ui/button";
-import BoxBase from "../common/BoxBase";
+import BoxBase from "../../../components/common/BoxBase";
 
 export default function Hero() {
   return (

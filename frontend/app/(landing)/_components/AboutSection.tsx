@@ -1,5 +1,5 @@
 import Image from "next/image";
-import BoxBase from "../common/BoxBase";
+import BoxBase from "../../../components/common/BoxBase";
 import SectionTitle from "./common/SectionTitle";
 
 const checkIcon = (

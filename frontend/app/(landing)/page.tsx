@@ -1,13 +1,17 @@
-import Features from "@/components/landing-page/Features/Features";
-import AboutSection from "@/components/landing-page/AboutSection";
-import Hero from "@/components/landing-page/Hero";
-import SectionDivider from "@/components/landing-page/common/SectionDivider";
-import TutorSection from "@/components/landing-page/TutorSection";
+import Features from "./_components/Features/Features";
+import AboutSection from "./_components/AboutSection";
+import Hero from "./_components/Hero";
+import SectionDivider from "./_components/common/SectionDivider";
+import TutorSection from "./_components/TutorSection";
+import FeaturedCoursesSection from "./_components/FeaturedCoursesSection";
 
 export default function LandingPage() {
   return (
     <>
       <Hero />
+      <SectionDivider />
+
+      <FeaturedCoursesSection />
       <SectionDivider />
 
       <Features />

@@ -18,9 +18,9 @@ export default auth((req) => {
   }
 
   // guest for student
-  if (isAuthenticated && isPublicRoute && role === Roles.STUDENT) {
-    return Response.redirect(new URL(STUDENT.DEFAULT_REDIRECT, req.nextUrl));
-  }
+  // if (isAuthenticated && isPublicRoute && role === Roles.STUDENT) {
+  //   return Response.redirect(new URL(STUDENT.DEFAULT_REDIRECT, req.nextUrl));
+  // }
 
   if (!(role === Roles.ADMIN) && ADMIN.ROUTES.includes(nextUrl.pathname)) {
     return NextResponse.json({ message: "Not Found" }, { status: 404 });
