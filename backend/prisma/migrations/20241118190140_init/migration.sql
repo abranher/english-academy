@@ -128,8 +128,10 @@ CREATE TABLE "SubCategory" (
 CREATE TABLE "Course" (
     "id" TEXT NOT NULL,
     "title" TEXT NOT NULL,
+    "subtitle" TEXT,
     "description" TEXT,
-    "imageUrl" TEXT,
+    "image" TEXT,
+    "promotionalVideo" TEXT,
     "price" DOUBLE PRECISION,
     "status" "CourseStatus" NOT NULL DEFAULT 'DRAFT',
     "isPublished" BOOLEAN NOT NULL DEFAULT false,

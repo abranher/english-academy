@@ -156,13 +156,15 @@ model SubCategory {
 // *
 
 model Course {
-  id          String       @id @default(uuid())
-  title       String       @db.Text
-  description String?      @db.Text
-  imageUrl    String?      @db.Text
-  price       Float?
-  status      CourseStatus @default(DRAFT)
-  isPublished Boolean      @default(false)
+  id               String       @id @default(uuid())
+  title            String       @db.Text
+  subtitle         String?      @db.Text
+  description      String?      @db.Text
+  image            String?      @db.Text
+  promotionalVideo String?      @db.Text
+  price            Float?
+  status           CourseStatus @default(DRAFT)
+  isPublished      Boolean      @default(false)
 
   levelId String?
   level   Level?  @relation(fields: [levelId], references: [id])
