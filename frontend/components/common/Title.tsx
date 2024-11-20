@@ -4,6 +4,9 @@ const titleSizes = {
   md: "text-md",
   lg: "text-lg",
   xl: "text-xl",
+  sxl: "text-2xl",
+  mxl: "text-3xl",
+  lxl: "text-4xl",
   // ... other sizes as needed
 };
 
@@ -16,7 +19,7 @@ export default function Title({
 }>) {
   return (
     <>
-      <h2 className={`font-bold ${titleSizes[size]}`}>{children}</h2>
+      <h2 className={`font-bold ${titleSizes[size]} py-3`}>{children}</h2>
     </>
   );
 }

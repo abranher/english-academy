@@ -6,10 +6,6 @@ import {
   Patch,
   Param,
   Delete,
-  UseInterceptors,
-  UploadedFile,
-  Req,
-  BadRequestException,
   Query,
   NotFoundException,
   Put,
@@ -17,14 +13,7 @@ import {
 import { CoursesService } from '../providers/courses.service';
 import { CreateCourseDto } from '../dto/create-course.dto';
 import { UpdateCourseDto } from '../dto/update-course.dto';
-import { FileInterceptor } from '@nestjs/platform-express';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { diskStorage } from 'multer';
-import {
-  attachmentFilter,
-  createFileName,
-  imageFileFilter,
-} from 'libs/storage';
 
 @Controller('courses')
 export class CoursesController {
@@ -40,54 +29,6 @@ export class CoursesController {
   @Post()
   create(@Body() createCourseDto: CreateCourseDto) {
     return this.coursesService.create(createCourseDto);
-  }
-
-  @Post(':id/image')
-  @UseInterceptors(
-    FileInterceptor('image', {
-      fileFilter: imageFileFilter,
-      storage: diskStorage({
-        destination: './storage/images',
-        filename: createFileName,
-      }),
-    }),
-  )
-  async uploadImage(
-    @Req() req,
-    @UploadedFile() file: Express.Multer.File,
-    @Param('id') id: string,
-  ) {
-    if (!file || req.fileValidationError) {
-      throw new BadRequestException(
-        'Archivo proporcionado no válido, [archivos de imagen permitidos]',
-      );
-    }
-
-    return this.coursesService.uploadImage(id, file.filename);
-  }
-
-  @Post(':id/attachments')
-  @UseInterceptors(
-    FileInterceptor('url', {
-      fileFilter: attachmentFilter,
-      storage: diskStorage({
-        destination: './storage/attachments',
-        filename: createFileName,
-      }),
-    }),
-  )
-  createAttachment(
-    @Req() req,
-    @UploadedFile() file: Express.Multer.File,
-    @Param('id') id: string,
-  ) {
-    if (!file || req.fileValidationError) {
-      throw new BadRequestException(
-        'Archivo proporcionado no válido, [archivos de imagen permitidos]',
-      );
-    }
-
-    return this.coursesService.createAttachment(id, file.filename);
   }
 
   /**

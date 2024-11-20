@@ -29,11 +29,11 @@ export default function Actions({
 
       if (isPublished) {
         const res = await axios.patch(`/api/courses/${courseId}/unpublish`);
-console.log(res)
+        console.log(res);
         toast.success("Curso no publicado!");
       } else {
-        const res=await axios.patch(`/api/courses/${courseId}/publish`);
-        console.log(res)
+        const res = await axios.patch(`/api/courses/${courseId}/publish`);
+        console.log(res);
 
         toast.success("Curso publicado!");
       }
@@ -61,6 +61,7 @@ console.log(res)
       setIsLoading(false);
     }
   };
+  
   return (
     <>
       <div className="flex items-center gap-x-2">

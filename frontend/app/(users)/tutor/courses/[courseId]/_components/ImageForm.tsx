@@ -11,8 +11,17 @@ import { Button } from "@/components/shadcn/ui/button";
 import { CardContent } from "@/components/shadcn/ui/card";
 import { toast } from "sonner";
 import { Image } from "@nextui-org/react";
-import { File, ImageIcon } from "lucide-react";
+import { ImageIcon, UploadCloud, XIcon } from "lucide-react";
 import asset from "@/libs/asset";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/shadcn/ui/dialog";
+import { Progress } from "@/components/shadcn/ui/progress";
 
 interface ImageFormProps {
   initialData: {
@@ -22,8 +31,8 @@ interface ImageFormProps {
 }
 
 export default function ImageForm({ course }: any) {
-  console.log(course);
   const [selectedFile, setSelectedFile] = useState<File | undefined>(undefined);
+  const [progress, setProgress] = useState(13);
 
   // drop zone
   const onDrop = useCallback((acceptedFiles: any) => {
@@ -53,24 +62,32 @@ export default function ImageForm({ course }: any) {
     }
   };
 
+  const clearFileInput = () => {
+    setSelectedFile(undefined);
+  };
+
   return (
     <>
       <CardContent>
         <form onSubmit={onSubmit}>
-          <section className="flex md:flex-row flex-col items-center gap-3">
+          <section className="grid grid-cols-1 md:grid-cols-2">
             {/** File upload */}
             {course.image ? (
-              <div className="h-[240px] w-[240px] rounded-lg">
-                <Image src={asset(course.image)} alt={course.title} />
+              <div className="h-[240px] w-[290px] rounded-lg">
+                <Image
+                  src={asset(course.image)}
+                  className="aspect-video"
+                  alt={course.title}
+                />
               </div>
             ) : (
-              <div className="grid h-[240px] w-[240px] place-items-center rounded-lg bg-zinc-100 dark:bg-zinc-800">
-                <ImageIcon className="h-9 w-9 text-gray-500" />
+              <div className="grid aspect-video place-items-center rounded-lg bg-zinc-200 dark:bg-zinc-800">
+                <ImageIcon className="h-9 w-9 text-gray-600 aspect-video" />
               </div>
             )}
 
             {/** Description */}
-            <article className="p-5 flex flex-col gap-3 w-96">
+            <article className="px-5 py-2 flex flex-col gap-3">
               <h2 className="font-semibold">Imagen del curso</h2>
               <div className="text-small flex flex-col gap-3">
                 <p>
@@ -83,32 +100,92 @@ export default function ImageForm({ course }: any) {
                 </p>
               </div>
 
-              {/** Drop zone */}
-              <article
-                {...getRootProps()}
-                className="flex items-center justify-center w-full h-20 bg-gray-100 rounded-lg border-2 border-dashed border-gray-400 cursor-pointer mt-2 p-4"
-              >
-                <div className="flex flex-col items-center justify-center">
-                  <File className="w-7 h-7 text-gray-400" />
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button className="flex gap-3">
+                    <UploadCloud />
+                    Subir imagen
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[425px]">
+                  <DialogHeader>
+                    <DialogTitle>Subir imagen</DialogTitle>
+                  </DialogHeader>
+                  <div className="grid gap-4 py-4">
+                    {selectedFile ? (
+                      <>
+                        {selectedFile.type.startsWith("image/") && (
+                          <img
+                            src={URL.createObjectURL(selectedFile)}
+                            alt="Preview"
+                            className="rounded-md border-3 border-gray-500"
+                          />
+                        )}
+                      </>
+                    ) : (
+                      <>
+                        <div className="grid aspect-video place-items-center rounded-lg bg-zinc-200 dark:bg-zinc-800">
+                          <ImageIcon className="h-9 w-9 text-gray-600" />
+                        </div>
+                      </>
+                    )}
+                    {/** upload input */}
+                    <label
+                      {...getRootProps()}
+                      className="p-5 bg-gray-100 text-gray-600 font-semibold text-xs rounded h-32 flex flex-col items-center justify-center cursor-pointer border-3 border-gray-300 border-dashed"
+                    >
+                      <UploadCloud className="w-11 mb-2" />
+                      Subir archivo
+                      <input {...getInputProps()} className="hidden" />
+                      {isDragActive ? (
+                        <p>Suelta los archivos aquí ...</p>
+                      ) : (
+                        <p>
+                          Arrastra y suelta tus archivos aquí o{" "}
+                          <span className="font-medium text-blue-600 hover:underline">
+                            explora
+                          </span>
+                        </p>
+                      )}
+                      <p className="text-xs font-medium mt-2">
+                        Se permiten PNG, JPG, WEBP.
+                      </p>
+                    </label>
 
-                  {isDragActive ? (
-                    <p className="mt-2 text-sm text-gray-500">
-                      Suelta los archivos aquí ...
-                    </p>
-                  ) : (
-                    <p className="mt-2 text-sm text-gray-500">
-                      Arrastra y suelta tus archivos aquí o{" "}
-                      <span className="font-medium text-blue-600 hover:underline">
-                        explora
-                      </span>
-                    </p>
-                  )}
-                </div>
-                <input
-                  {...getInputProps()}
-                  className="opacity-0 w-full h-full absolute"
-                />
-              </article>
+                    {selectedFile && (
+                      <>
+                        <section className="grid grid-cols-8 py-3 rounded-lg text-gray-700 bg-zinc-200 dark:bg-zinc-800">
+                          <div className="col-span-1 flex justify-center items-center">
+                            <ImageIcon />
+                          </div>
+                          <div className="text-xs col-span-6 flex flex-col justify-center gap-1">
+                            <p>{selectedFile.name}</p>
+                            <p>
+                              {`${(selectedFile.size / 1024).toFixed(
+                                2
+                              )} KB o ${(
+                                selectedFile.size /
+                                1024 /
+                                1024
+                              ).toFixed(2)} MB`}
+                            </p>
+                            <Progress value={progress} className="h-2" />
+                          </div>
+                          <div className="col-span-1 flex justify-center items-center">
+                            <XIcon
+                              className="cursor-pointer"
+                              onClick={clearFileInput}
+                            />
+                          </div>
+                        </section>
+                        <Button type="submit">
+                          <UploadCloud />
+                        </Button>
+                      </>
+                    )}
+                  </div>
+                </DialogContent>
+              </Dialog>
             </article>
           </section>
 
@@ -134,11 +211,6 @@ export default function ImageForm({ course }: any) {
                       <dt className="sr-only">Rating</dt>
                       <dd className="px-1.5 ring-1 ring-slate-200 rounded">
                         Tamaño del archivo:{" "}
-                        {`${(selectedFile.size / 1024).toFixed(2)} KB o ${(
-                          selectedFile.size /
-                          1024 /
-                          1024
-                        ).toFixed(2)} MB`}
                       </dd>
                     </div>
                   </dl>

@@ -3,7 +3,7 @@ const paddingClasses = {
   sm: "px-4 py-12",
   md: "px-6 py-20",
   lg: "px-8 py-24",
-  xl: "px-16 py-24",
+  xl: "px-16 py-8",
 };
 
 export default function BoxBase({
