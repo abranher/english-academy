@@ -14,6 +14,7 @@ import AttachmentForm from "./AttachmentForm";
 import { cn } from "@/libs/shadcn/utils";
 import Title from "@/components/common/Title";
 import SubTitleForm from "./SubTitleForm";
+import TrailerForm from "./TrailerForm";
 
 export default function Content({ course }: { course: any }) {
   const [content, setContent] = useState("mainContent");
@@ -34,15 +35,26 @@ export default function Content({ course }: { course: any }) {
         <div className="lg:grid lg:grid-cols-4 w-full space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
           <Card className="lg:col-span-3 flex w-full flex-col gap-4 p-5">
             <h2 className="text-xl px-5">{sectionTitles[content]}</h2>
-            <Separator className="mx-5 my-2" />
+            <Separator />
 
             {content === "mainContent" && (
               <>
                 <TitleForm initialData={course} courseId={course.id} />
+                <Separator />
+
                 <SubTitleForm initialData={course} courseId={course.id} />
+                <Separator />
+
                 <DescriptionForm initialData={course} courseId={course.id} />
+                <Separator />
+
                 <LevelForm initialData={course} courseId={course.id} />
+                <Separator />
+
                 <ImageForm course={course} />
+                <Separator />
+
+                <TrailerForm course={course} />
               </>
             )}
 
