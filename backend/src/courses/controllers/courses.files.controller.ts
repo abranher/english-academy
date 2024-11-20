@@ -48,6 +48,30 @@ export class CoursesFilesController {
     return this.coursesService.uploadImage(id, file.filename);
   }
 
+  @Post(':id/trailer')
+  @UseInterceptors(
+    FileInterceptor('trailer', {
+      fileFilter: imageFileFilter,
+      storage: diskStorage({
+        destination: './storage/videos',
+        filename: createFileName,
+      }),
+    }),
+  )
+  async uploadTrailer(
+    @Req() req,
+    @UploadedFile() file: Express.Multer.File,
+    @Param('id') id: string,
+  ) {
+    if (!file || req.fileValidationError) {
+      throw new BadRequestException(
+        'Archivo proporcionado no válido, [archivos de imagen permitidos]',
+      );
+    }
+
+    return this.coursesService.uploadImage(id, file.filename);
+  }
+
   @Post(':id/attachments')
   @UseInterceptors(
     FileInterceptor('url', {

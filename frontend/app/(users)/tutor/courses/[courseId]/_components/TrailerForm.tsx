@@ -15,6 +15,7 @@ import {
   ImageIcon,
   Loader2,
   UploadCloud,
+  Video,
   XIcon,
 } from "lucide-react";
 import asset from "@/libs/asset";
@@ -107,7 +108,7 @@ export default function TrailerForm({ course }: any) {
             </div>
           ) : (
             <div className="grid aspect-video place-items-center rounded-lg bg-zinc-200 dark:bg-zinc-800">
-              <ImageIcon className="h-9 w-9 text-gray-600 aspect-video" />
+              <Video className="h-9 w-9 text-gray-600 aspect-video" />
             </div>
           )}
 
@@ -131,12 +132,12 @@ export default function TrailerForm({ course }: any) {
               <DialogTrigger asChild>
                 <Button className="flex gap-3">
                   <UploadCloud />
-                  Subir video
+                  Subir trailer
                 </Button>
               </DialogTrigger>
               <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                  <DialogTitle>Subir video</DialogTitle>
+                  <DialogTitle>Subir trailer</DialogTitle>
                 </DialogHeader>
                 <form onSubmit={onSubmit}>
                   <div className="grid gap-4 py-4">
@@ -153,7 +154,7 @@ export default function TrailerForm({ course }: any) {
                     ) : (
                       <>
                         <div className="grid aspect-video place-items-center rounded-lg bg-zinc-200 dark:bg-zinc-800">
-                          <ImageIcon className="h-9 w-9 text-gray-600" />
+                          <Video className="h-9 w-9 text-gray-600" />
                         </div>
                       </>
                     )}
@@ -178,7 +179,7 @@ export default function TrailerForm({ course }: any) {
                           </p>
                         )}
                         <p className="text-xs font-medium mt-2">
-                          Se permiten PNG, JPG, WEBP.
+                          Se permiten MP4.
                         </p>
                       </label>
                     )}

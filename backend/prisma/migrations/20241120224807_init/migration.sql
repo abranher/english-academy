@@ -131,7 +131,7 @@ CREATE TABLE "Course" (
     "subtitle" TEXT,
     "description" TEXT,
     "image" TEXT,
-    "promotionalVideo" TEXT,
+    "trailer" TEXT,
     "price" DOUBLE PRECISION,
     "status" "CourseStatus" NOT NULL DEFAULT 'DRAFT',
     "isPublished" BOOLEAN NOT NULL DEFAULT false,
