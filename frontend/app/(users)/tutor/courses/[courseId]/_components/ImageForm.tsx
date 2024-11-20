@@ -20,7 +20,6 @@ import {
 import asset from "@/libs/asset";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogHeader,
   DialogTitle,
@@ -99,11 +98,11 @@ export default function ImageForm({ course }: any) {
         <section className="grid grid-cols-1 md:grid-cols-2">
           {/** File upload */}
           {course.image ? (
-            <div className="h-[240px] w-[290px] rounded-lg">
+            <div className="aspect-video rounded-lg">
               <Image
                 src={asset(course.image)}
-                className="aspect-video"
                 alt={course.title}
+                className="rounded-md"
               />
             </div>
           ) : (
@@ -142,7 +141,7 @@ export default function ImageForm({ course }: any) {
                     {selectedFile ? (
                       <>
                         {selectedFile.type.startsWith("image/") && (
-                          <img
+                          <Image
                             src={URL.createObjectURL(selectedFile)}
                             alt="Preview"
                             className="rounded-md border-3 border-gray-500"
@@ -161,7 +160,7 @@ export default function ImageForm({ course }: any) {
                       uploadStatus === "uploading") && (
                       <label
                         {...getRootProps()}
-                        className="p-5 bg-gray-100 text-gray-600 font-semibold text-xs rounded h-32 flex flex-col items-center justify-center cursor-pointer border-3 border-gray-300 border-dashed"
+                        className="p-5 bg-gray-100 dark:bg-zinc-900 text-gray-600 dark:text-gray-100 font-semibold text-xs rounded h-32 flex flex-col items-center justify-center cursor-pointer border-3 border-gray-300 dark:border-zinc-700 border-dashed"
                       >
                         <UploadCloud className="w-11 mb-2" />
                         Subir archivo
@@ -183,7 +182,7 @@ export default function ImageForm({ course }: any) {
                     )}
 
                     <>
-                      <section className="grid grid-cols-8 py-3 rounded-lg text-gray-700 bg-zinc-200 dark:bg-zinc-800">
+                      <section className="grid grid-cols-8 py-3 rounded-lg text-gray-700 dark:text-gray-100 bg-zinc-200 dark:bg-zinc-900">
                         <div className="col-span-1 flex justify-center items-center">
                           <ImageIcon />
                         </div>
