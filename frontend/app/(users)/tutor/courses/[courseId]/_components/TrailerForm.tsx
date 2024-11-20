@@ -116,12 +116,14 @@ export default function TrailerForm({ course }: any) {
             <h2 className="font-semibold">Trailer del curso</h2>
             <div className="text-small flex flex-col gap-3">
               <p>
-                Es lo primero que ven los estudiantes. Una imagen atractiva
-                genera curiosidad y ganas de conocer más sobre el curso.
+                El video trailer es la primera impresión que tendrán los
+                estudiantes sobre tu curso. Debe ser visualmente atractivo y
+                captar su atención desde el primer segundo.
               </p>
               <p>
-                Recomendamos un tamaño de 1024x576 píxeles para una mejor
-                visualización
+                Recomendamos una duración de entre 30 segundos y 1 minuto y una
+                resolución de 1080p (1920x1080 píxeles) para una óptima
+                visualización en diferentes dispositivos.
               </p>
             </div>
 
@@ -129,12 +131,12 @@ export default function TrailerForm({ course }: any) {
               <DialogTrigger asChild>
                 <Button className="flex gap-3">
                   <UploadCloud />
-                  Subir imagen
+                  Subir video
                 </Button>
               </DialogTrigger>
               <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                  <DialogTitle>Subir imagen</DialogTitle>
+                  <DialogTitle>Subir video</DialogTitle>
                 </DialogHeader>
                 <form onSubmit={onSubmit}>
                   <div className="grid gap-4 py-4">
