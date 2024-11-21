@@ -165,10 +165,11 @@ export default function TrailerForm({ course }: any) {
                     {selectedFile ? (
                       <>
                         {selectedFile.type.startsWith("video/") && (
-                          <Image
-                            src={URL.createObjectURL(selectedFile)}
-                            alt="Preview"
-                            className="rounded-md border-3 border-gray-500"
+                          <ReactPlayer
+                            controls
+                            width={"100%"}
+                            height={"100%"}
+                            url={URL.createObjectURL(selectedFile)}
                           />
                         )}
                       </>
