@@ -1,12 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param } from '@nestjs/common';
 import { SubcategoriesService } from '../providers/subcategories.service';
 import { CreateSubcategoryDto } from '../dto/create-subcategory.dto';
 import { UpdateSubcategoryDto } from '../dto/update-subcategory.dto';
@@ -36,10 +28,5 @@ export class SubcategoriesController {
     @Body() updateSubcategoryDto: UpdateSubcategoryDto,
   ) {
     return this.subcategoriesService.update(+id, updateSubcategoryDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.subcategoriesService.remove(+id);
   }
 }
