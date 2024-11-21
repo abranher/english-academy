@@ -15,6 +15,7 @@ import { cn } from "@/libs/shadcn/utils";
 import Title from "@/components/common/Title";
 import SubTitleForm from "./SubTitleForm";
 import TrailerForm from "./TrailerForm";
+import CategoryForm from "./CategoryForm";
 
 // Define un tipo para las posibles claves de sectionTitles
 type SectionTitleKey = "mainContent" | "price" | "studyPlan";
@@ -57,6 +58,9 @@ export default function Content({ course }: { course: any }) {
                 <Separator />
 
                 <LevelForm initialData={course} courseId={course.id} />
+                <Separator />
+
+                <CategoryForm initialData={course} courseId={course.id} />
                 <Separator />
 
                 <ImageForm course={course} />

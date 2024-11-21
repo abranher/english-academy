@@ -16,6 +16,9 @@ import {
 import { Separator } from "@/components/shadcn/ui/separator";
 import AlertBanner from "@/components/courses/tutor/AlertBanner";
 import Content from "./_components/Content";
+import { Image } from "@nextui-org/react";
+import { assetImg } from "@/libs/asset";
+import TitleSection from "./_components/TitleSection";
 
 export default async function CourseIdPage({
   params,
@@ -49,23 +52,7 @@ export default async function CourseIdPage({
   return (
     <>
       <div className="space-y-6">
-        <div className="flex flex-wrap items-center gap-8">
-          <div className="grid h-24 w-24 place-items-center rounded-lg bg-zinc-100 dark:bg-zinc-800">
-            <ImageIcon className="h-12 w-12 text-gray-500" />
-          </div>
-          <div className="w-max flex gap-2">
-            <h3 className="text-2xl font-bold"> {course.title}</h3>{" "}
-            {course.isPublished ? (
-              <Badge variant="default" className="ml-auto sm:ml-0">
-                Publicado
-              </Badge>
-            ) : (
-              <Badge variant="outline" className="ml-auto sm:ml-0">
-                Borrador
-              </Badge>
-            )}
-          </div>
-        </div>
+        <TitleSection course={course} />
 
         <Separator />
 

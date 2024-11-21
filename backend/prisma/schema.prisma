@@ -132,6 +132,7 @@ model Category {
   description String
 
   subCategories SubCategory[]
+  courses       Course[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -144,6 +145,8 @@ model SubCategory {
 
   category   Category? @relation(fields: [categoryId], references: [id])
   categoryId String?
+
+  courses Course[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -168,6 +171,12 @@ model Course {
 
   levelId String?
   level   Level?  @relation(fields: [levelId], references: [id])
+
+  categoryId String?
+  category   Category? @relation(fields: [categoryId], references: [id])
+
+  subcategoryId String?
+  subcategory   SubCategory? @relation(fields: [subcategoryId], references: [id])
 
   attachments Attachment[]
   chapters    Chapter[]

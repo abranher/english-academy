@@ -64,6 +64,10 @@ export default function PriceForm({ initialData, courseId }: PriceFormProps) {
 
   return (
     <>
+      <h2 className="text-lg font-semibold px-3">
+        Tu conocimiento tiene valor. ¡Demuéstralo fijando un precio justo por tu
+        curso!
+      </h2>
       <CardContent>
         <Form {...form}>
           <form
@@ -100,6 +104,12 @@ export default function PriceForm({ initialData, courseId }: PriceFormProps) {
           </form>
         </Form>
       </CardContent>
+
+      <h2 className="text-lg font-semibold px-3">Importancia del precio:</h2>
+      <p className="px-3">
+        Fijar un precio demuestra un compromiso profesional con tu trabajo y te
+        posiciona como un experto en la materia.
+      </p>
     </>
   );
 }

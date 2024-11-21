@@ -42,7 +42,10 @@ const formSchema = z.object({
   levelId: z.string(messages.requiredError).min(1, messages.min(1)),
 });
 
-export default function LevelForm({ initialData, courseId }: LevelFormProps) {
+export default function CategoryForm({
+  initialData,
+  courseId,
+}: LevelFormProps) {
   const {
     isPending,
     error,
