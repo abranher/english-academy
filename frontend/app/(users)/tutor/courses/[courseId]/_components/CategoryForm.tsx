@@ -30,6 +30,8 @@ import { toast } from "sonner";
 import { getLevels } from "../_services/get-levels";
 import { Level } from "@/types/models/Level";
 import { Skeleton } from "@/components/shadcn/ui/skeleton";
+import { getCategories } from "../_services/get-categories";
+import { Category } from "@/types/models/Category";
 
 interface LevelFormProps {
   initialData: {
@@ -39,28 +41,39 @@ interface LevelFormProps {
 }
 
 const formSchema = z.object({
-  levelId: z.string(messages.requiredError).min(1, messages.min(1)),
+  categoryId: z.string(messages.requiredError).min(1, messages.min(1)),
+  subcategoryId: z.string(messages.requiredError).min(1, messages.min(1)),
 });
 
 export default function CategoryForm({
   initialData,
   courseId,
 }: LevelFormProps) {
+  const router = useRouter();
+
   const {
-    isPending,
-    error,
-    data: levels,
+    isPending: isPendingCategories,
+    error: errorCategories,
+    data: categories,
   } = useQuery({
-    queryKey: ["levels"],
-    queryFn: getLevels,
+    queryKey: ["categories"],
+    queryFn: getCategories,
   });
 
-  const router = useRouter();
+  const {
+    isPending: isPendingSubCategories,
+    error: errorSubCategories,
+    data: subcategories,
+  } = useQuery({
+    queryKey: ["subcategories"],
+    queryFn: getCategories,
+  });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      levelId: initialData?.levelId || "",
+      categoryId: initialData?.levelId || "",
+      subcategoryId: initialData?.levelId || "",
     },
   });
 
@@ -93,7 +106,7 @@ export default function CategoryForm({
             ) : (
               <FormField
                 control={form.control}
-                name="levelId"
+                name="categoryId"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Nivel del curso</FormLabel>
@@ -107,10 +120,10 @@ export default function CategoryForm({
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {levels &&
-                          levels.map((level: Level) => (
-                            <SelectItem key={level.id} value={level.id}>
-                              {level.levelCode + " - " + level.title}
+                        {categories &&
+                          categories.map((category: Category) => (
+                            <SelectItem key={category.id} value={category.id}>
+                              {category.title}
                             </SelectItem>
                           ))}
                       </SelectContent>
