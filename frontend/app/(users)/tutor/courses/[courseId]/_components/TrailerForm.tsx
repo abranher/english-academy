@@ -3,8 +3,9 @@
 import axios from "@/config/axios";
 import { useRouter } from "next/navigation";
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
+import ReactPlayer from "react-player";
 
 import { Button } from "@/components/shadcn/ui/button";
 import { CardContent } from "@/components/shadcn/ui/card";
@@ -18,7 +19,6 @@ import {
   Video,
   XIcon,
 } from "lucide-react";
-import asset from "@/libs/asset";
 import {
   Dialog,
   DialogContent,
@@ -27,6 +27,8 @@ import {
   DialogTrigger,
 } from "@/components/shadcn/ui/dialog";
 import { Progress } from "@/components/shadcn/ui/progress";
+import { assetVideo } from "@/libs/asset";
+import { Skeleton } from "@/components/shadcn/ui/skeleton";
 
 interface ImageFormProps {
   initialData: {
@@ -58,9 +60,12 @@ export default function TrailerForm({ course }: any) {
       setUploadStatus("uploading");
 
       const formData = new FormData();
-      formData.set("image", selectedFile);
+      formData.set("trailer", selectedFile);
 
-      await axios.post(`/api/courses/${course.id}/image`, formData, {
+      await axios.post(`/api/courses/${course.id}/trailer`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
         onUploadProgress: (progressEvent) => {
           const percentCompleted = Math.round(
             (progressEvent.loaded * 100) / (progressEvent.total || 1)
@@ -71,7 +76,7 @@ export default function TrailerForm({ course }: any) {
       });
 
       setUploadStatus("done");
-      toast.success("Imagen actualizada!");
+      toast.success("Trailer actualizada!");
       setSelectedFile(undefined);
       router.refresh();
     } catch (error) {
@@ -93,19 +98,35 @@ export default function TrailerForm({ course }: any) {
     )} MB`;
   };
 
+  const [playerReady, setPlayerReady] = useState(false);
+  useEffect(() => {
+    setPlayerReady(true);
+  }, []);
+
   return (
     <>
       <CardContent>
         <section className="grid grid-cols-1 md:grid-cols-2">
           {/** File upload */}
-          {course.image ? (
-            <div className="aspect-video rounded-lg">
-              <Image
-                src={asset(course.image)}
-                alt={course.title}
-                className="rounded-md"
-              />
-            </div>
+          {course.trailer ? (
+            <>
+              {playerReady ? (
+                <div className="aspect-video rounded-lg">
+                  <ReactPlayer
+                    controls
+                    width={"100%"}
+                    height={"100%"}
+                    url={assetVideo(course.trailer)}
+                  />
+                </div>
+              ) : (
+                <>
+                  <Skeleton className="w-full h-full flex justify-center items-center">
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  </Skeleton>
+                </>
+              )}
+            </>
           ) : (
             <div className="grid aspect-video place-items-center rounded-lg bg-zinc-200 dark:bg-zinc-800">
               <Video className="h-9 w-9 text-gray-600 aspect-video" />
@@ -143,7 +164,7 @@ export default function TrailerForm({ course }: any) {
                   <div className="grid gap-4 py-4">
                     {selectedFile ? (
                       <>
-                        {selectedFile.type.startsWith("image/") && (
+                        {selectedFile.type.startsWith("video/") && (
                           <Image
                             src={URL.createObjectURL(selectedFile)}
                             alt="Preview"

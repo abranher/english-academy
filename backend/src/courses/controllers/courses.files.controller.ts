@@ -7,7 +7,7 @@ import {
   Req,
   BadRequestException,
 } from '@nestjs/common';
-import { CoursesService } from '../providers/courses.service';
+import { CoursesFilesService } from '../providers/courses.files.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { diskStorage } from 'multer';
@@ -15,15 +15,17 @@ import {
   attachmentFilter,
   createFileName,
   imageFileFilter,
+  videoFileFilter,
 } from 'libs/storage';
 
 @Controller('courses')
 export class CoursesFilesController {
   constructor(
-    private readonly coursesService: CoursesService,
+    private readonly coursesFilesService: CoursesFilesService,
     private prisma: PrismaService,
   ) {}
 
+  // Upload image
   @Post(':id/image')
   @UseInterceptors(
     FileInterceptor('image', {
@@ -45,13 +47,14 @@ export class CoursesFilesController {
       );
     }
 
-    return this.coursesService.uploadImage(id, file.filename);
+    return this.coursesFilesService.uploadImage(id, file.filename);
   }
 
+  // Upload trailer
   @Post(':id/trailer')
   @UseInterceptors(
     FileInterceptor('trailer', {
-      fileFilter: imageFileFilter,
+      fileFilter: videoFileFilter,
       storage: diskStorage({
         destination: './storage/videos',
         filename: createFileName,
@@ -65,11 +68,11 @@ export class CoursesFilesController {
   ) {
     if (!file || req.fileValidationError) {
       throw new BadRequestException(
-        'Archivo proporcionado no válido, [archivos de imagen permitidos]',
+        'Archivo proporcionado no válido, [archivos de video permitidos]',
       );
     }
 
-    return this.coursesService.uploadImage(id, file.filename);
+    return this.coursesFilesService.uploadTrailer(id, file.filename);
   }
 
   @Post(':id/attachments')
@@ -93,6 +96,6 @@ export class CoursesFilesController {
       );
     }
 
-    return this.coursesService.createAttachment(id, file.filename);
+    return this.coursesFilesService.createAttachment(id, file.filename);
   }
 }

@@ -15,7 +15,7 @@ import { TutorsModule } from './tutors/tutors.module';
 @Module({
   imports: [
     ServeStaticModule.forRoot({
-      rootPath: join(process.cwd(), './storage/images'),
+      rootPath: join(process.cwd(), './storage'),
     }),
     PrismaModule,
     ConfigModule.forRoot({

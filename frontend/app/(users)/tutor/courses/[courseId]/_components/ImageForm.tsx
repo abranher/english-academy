@@ -17,7 +17,7 @@ import {
   UploadCloud,
   XIcon,
 } from "lucide-react";
-import asset from "@/libs/asset";
+import { assetImg } from "@/libs/asset";
 import {
   Dialog,
   DialogContent,
@@ -60,6 +60,9 @@ export default function ImageForm({ course }: any) {
       formData.set("image", selectedFile);
 
       await axios.post(`/api/courses/${course.id}/image`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
         onUploadProgress: (progressEvent) => {
           const percentCompleted = Math.round(
             (progressEvent.loaded * 100) / (progressEvent.total || 1)
@@ -100,7 +103,7 @@ export default function ImageForm({ course }: any) {
           {course.image ? (
             <div className="aspect-video rounded-lg">
               <Image
-                src={asset(course.image)}
+                src={assetImg(course.image)}
                 alt={course.title}
                 className="rounded-md"
               />
