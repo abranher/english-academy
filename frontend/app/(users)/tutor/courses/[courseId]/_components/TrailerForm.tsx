@@ -41,6 +41,7 @@ export default function TrailerForm({ course }: any) {
   const [selectedFile, setSelectedFile] = useState<File | undefined>(undefined);
   const [progress, setProgress] = useState(0);
   const [uploadStatus, setUploadStatus] = useState("select");
+  const [playerReady, setPlayerReady] = useState(false);
 
   // drop zone
   const onDrop = useCallback((acceptedFiles: any) => {
@@ -98,7 +99,6 @@ export default function TrailerForm({ course }: any) {
     )} MB`;
   };
 
-  const [playerReady, setPlayerReady] = useState(false);
   useEffect(() => {
     setPlayerReady(true);
   }, []);

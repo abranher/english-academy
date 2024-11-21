@@ -16,16 +16,24 @@ import Title from "@/components/common/Title";
 import SubTitleForm from "./SubTitleForm";
 import TrailerForm from "./TrailerForm";
 
+// Define un tipo para las posibles claves de sectionTitles
+type SectionTitleKey = "mainContent" | "price" | "studyPlan";
+
+// Define el tipo del objeto sectionTitles
+type SectionTitles = {
+  [key in SectionTitleKey]: string;
+};
+
+const sectionTitles: SectionTitles = {
+  mainContent: "Contenido principal",
+  price: "Precios",
+  studyPlan: "Plan de estudio",
+};
+
 export default function Content({ course }: { course: any }) {
-  const [content, setContent] = useState("mainContent");
+  const [content, setContent] = useState<SectionTitleKey>("mainContent");
 
-  const sectionTitles = {
-    mainContent: "Contenido principal",
-    price: "Precios",
-    studyPlan: "Plan de estudio",
-  };
-
-  const handleNavigation = (value: string) => {
+  const handleNavigation = (value: SectionTitleKey) => {
     setContent(value);
   };
 

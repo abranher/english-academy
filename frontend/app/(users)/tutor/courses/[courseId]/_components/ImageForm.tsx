@@ -3,7 +3,7 @@
 import axios from "@/config/axios";
 import { useRouter } from "next/navigation";
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 
 import { Button } from "@/components/shadcn/ui/button";
@@ -26,6 +26,7 @@ import {
   DialogTrigger,
 } from "@/components/shadcn/ui/dialog";
 import { Progress } from "@/components/shadcn/ui/progress";
+import { Skeleton } from "@/components/shadcn/ui/skeleton";
 
 interface ImageFormProps {
   initialData: {
@@ -38,6 +39,7 @@ export default function ImageForm({ course }: any) {
   const [selectedFile, setSelectedFile] = useState<File | undefined>(undefined);
   const [progress, setProgress] = useState(0);
   const [uploadStatus, setUploadStatus] = useState("select");
+  const [imageReady, setImageReady] = useState(false);
 
   // drop zone
   const onDrop = useCallback((acceptedFiles: any) => {
@@ -95,19 +97,33 @@ export default function ImageForm({ course }: any) {
     )} MB`;
   };
 
+  useEffect(() => {
+    setImageReady(true);
+  }, []);
+
   return (
     <>
       <CardContent>
         <section className="grid grid-cols-1 md:grid-cols-2">
           {/** File upload */}
           {course.image ? (
-            <div className="aspect-video rounded-lg">
-              <Image
-                src={assetImg(course.image)}
-                alt={course.title}
-                className="rounded-md"
-              />
-            </div>
+            <>
+              {imageReady ? (
+                <div className="aspect-video rounded-lg">
+                  <Image
+                    src={assetImg(course.image)}
+                    alt={course.title}
+                    className="rounded-md"
+                  />
+                </div>
+              ) : (
+                <>
+                  <Skeleton className="w-full h-full flex justify-center items-center">
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  </Skeleton>
+                </>
+              )}
+            </>
           ) : (
             <div className="grid aspect-video place-items-center rounded-lg bg-zinc-200 dark:bg-zinc-800">
               <ImageIcon className="h-9 w-9 text-gray-600 aspect-video" />
