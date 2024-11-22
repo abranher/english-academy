@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { hash } from 'bcrypt';
 import levels from './data/levels';
+import prices from './data/prices';
 import {
   cultureCategories,
   grammarCategories,
@@ -16,6 +17,10 @@ const prisma = new PrismaClient();
 async function main() {
   const levelsResult = await prisma.level.createManyAndReturn({
     data: levels,
+  });
+
+  const pricesResult = await prisma.price.createManyAndReturn({
+    data: prices,
   });
 
   // seed categories and subcategories
@@ -164,6 +169,7 @@ async function main() {
     { abran },
     { carlos },
     { levels: levelsResult },
+    { prices: pricesResult },
     { multipleChoiceExercise },
     { multipleChoiceOption1 },
     { multipleChoiceOption2 },
