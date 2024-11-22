@@ -15,6 +15,10 @@ export class CreateCourseDto {
 
   @IsString()
   @IsOptional()
+  priceId: string;
+
+  @IsString()
+  @IsOptional()
   levelId: string;
 
   @IsString()
@@ -24,7 +28,4 @@ export class CreateCourseDto {
   @IsString()
   @IsOptional()
   subcategoryId: string;
-
-  @IsOptional()
-  price: number;
 }
