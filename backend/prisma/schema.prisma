@@ -152,6 +152,16 @@ model SubCategory {
   updatedAt DateTime @updatedAt
 }
 
+model Price {
+  id     String @id @default(uuid())
+  amount Float
+
+  courses Course[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 // *
 // *
 // * Courses
@@ -165,9 +175,11 @@ model Course {
   description String?      @db.Text
   image       String?      @db.Text
   trailer     String?      @db.Text
-  price       Float?
   status      CourseStatus @default(DRAFT)
   isPublished Boolean      @default(false)
+
+  priceId String?
+  price   Price?  @relation(fields: [priceId], references: [id])
 
   levelId String?
   level   Level?  @relation(fields: [levelId], references: [id])

@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import axios from "@/config/axios";
 import { useQuery } from "@tanstack/react-query";
 import { z } from "zod";
@@ -34,26 +35,36 @@ import { Skeleton } from "@/components/shadcn/ui/skeleton";
 import { SubCategory } from "@/types/models/SubCategory";
 import { Course } from "@/types/models/Course";
 
-interface LevelFormProps {
-  course: Course;
-  courseId: string;
-}
-
 const formSchema = z.object({
   subcategoryId: z.string(messages.requiredError).min(1, messages.min(1)),
 });
 
-export default function SubCategoryForm({ course, courseId }: LevelFormProps) {
+export default function SubCategoryForm({
+  course,
+  courseId,
+}: {
+  course: Course;
+  courseId: string;
+}) {
+  const [subcategories, setSubcategories] = useState([]);
   const router = useRouter();
 
-  const {
-    isPending,
-    error,
-    data: subcategories,
-  } = useQuery({
+  const { categoryId } = course;
+
+  const { isPending, error, data } = useQuery({
     queryKey: ["subcategories"],
     queryFn: getSubCategories,
   });
+
+  useEffect(() => {
+    if (!data) return;
+
+    const filtered = data.filter(
+      (subcategory: SubCategory) => subcategory.categoryId == categoryId
+    );
+
+    setSubcategories(filtered);
+  }, [categoryId, data]);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
