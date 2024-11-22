@@ -17,6 +17,14 @@ export class CreateCourseDto {
   @IsOptional()
   levelId: string;
 
+  @IsString()
+  @IsOptional()
+  categoryId: string;
+
+  @IsString()
+  @IsOptional()
+  subcategoryId: string;
+
   @IsOptional()
   price: number;
 }

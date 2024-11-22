@@ -16,6 +16,7 @@ import Title from "@/components/common/Title";
 import SubTitleForm from "./SubTitleForm";
 import TrailerForm from "./TrailerForm";
 import CategoryForm from "./CategoryForm";
+import SubCategoryForm from "./SubCategoryForm";
 
 // Define un tipo para las posibles claves de sectionTitles
 type SectionTitleKey = "mainContent" | "price" | "studyPlan";
@@ -60,7 +61,10 @@ export default function Content({ course }: { course: any }) {
                 <LevelForm initialData={course} courseId={course.id} />
                 <Separator />
 
-                <CategoryForm initialData={course} courseId={course.id} />
+                <section className="flex flex-col md:flex-row gap-5 w-full">
+                  <CategoryForm course={course} courseId={course.id} />
+                  <SubCategoryForm course={course} courseId={course.id} />
+                </section>
                 <Separator />
 
                 <ImageForm course={course} />

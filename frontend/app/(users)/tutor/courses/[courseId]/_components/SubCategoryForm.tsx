@@ -6,7 +6,18 @@ import { useQuery } from "@tanstack/react-query";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import messages from "@/libs/validations/schemas/messages";
+import { getSubCategories } from "../_services/get-subcategories";
 
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/shadcn/ui/form";
 import { Button } from "@/components/shadcn/ui/button";
 import { CardContent } from "@/components/shadcn/ui/card";
 import {
@@ -20,46 +31,34 @@ import {
 } from "@/components/shadcn/ui/select";
 import { toast } from "sonner";
 import { Skeleton } from "@/components/shadcn/ui/skeleton";
-import { getCategories } from "../_services/get-categories";
-import { Category } from "@/types/models/Category";
+import { SubCategory } from "@/types/models/SubCategory";
 import { Course } from "@/types/models/Course";
-import messages from "@/libs/validations/schemas/messages";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/shadcn/ui/form";
 
-const formSchema = z.object({
-  categoryId: z.string(messages.requiredError).min(1, messages.min(1)),
-});
-
-export default function CategoryForm({
-  course,
-  courseId,
-}: {
+interface LevelFormProps {
   course: Course;
   courseId: string;
-}) {
+}
+
+const formSchema = z.object({
+  subcategoryId: z.string(messages.requiredError).min(1, messages.min(1)),
+});
+
+export default function SubCategoryForm({ course, courseId }: LevelFormProps) {
   const router = useRouter();
 
   const {
     isPending,
     error,
-    data: categories,
+    data: subcategories,
   } = useQuery({
-    queryKey: ["categories"],
-    queryFn: getCategories,
+    queryKey: ["subcategories"],
+    queryFn: getSubCategories,
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      categoryId: course?.categoryId || "",
+      subcategoryId: course?.subcategoryId || "",
     },
   });
 
@@ -68,7 +67,7 @@ export default function CategoryForm({
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       await axios.patch(`/api/courses/${courseId}`, values);
-      toast.success("Categoría del curso actualizada!");
+      toast.success("Subcategoría del curso actualizada!");
       router.refresh();
     } catch (error) {
       toast.error("Something wrong");
@@ -93,40 +92,42 @@ export default function CategoryForm({
               <>
                 <FormField
                   control={form.control}
-                  name="categoryId"
+                  name="subcategoryId"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Categoría del curso</FormLabel>
+                      <FormLabel>Subcategoría del curso</FormLabel>
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}
                       >
                         <FormControl>
                           <SelectTrigger>
-                            <SelectValue placeholder="Elige una categoría para tu curso" />
+                            <SelectValue placeholder="Elige una subcategoría para tu curso" />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
                           <SelectGroup>
-                            {categories && (
+                            {subcategories && (
                               <>
-                                <SelectLabel>Categorías</SelectLabel>
-                                {categories.map((category: Category) => (
-                                  <SelectItem
-                                    key={category.id}
-                                    value={category.id}
-                                  >
-                                    {category.title}
-                                  </SelectItem>
-                                ))}
+                                <SelectLabel>Subcategorías</SelectLabel>
+                                {subcategories.map(
+                                  (subcategory: SubCategory) => (
+                                    <SelectItem
+                                      key={subcategory.id}
+                                      value={subcategory.id}
+                                    >
+                                      {subcategory.title}
+                                    </SelectItem>
+                                  )
+                                )}
                               </>
                             )}
                           </SelectGroup>
                         </SelectContent>
                       </Select>
                       <FormDescription>
-                        Selecciona la categoría que mejor se ajuste al tema
-                        general de tu curso.
+                        La subcategoría te permite especificar aún más el tema
+                        de tu curso.
                       </FormDescription>
                       <FormMessage />
                     </FormItem>

@@ -84,49 +84,52 @@ export default function LevelForm({ initialData, courseId }: LevelFormProps) {
             {isPending ? (
               <>
                 <Skeleton className="py-5" />
-
                 <Skeleton className="py-2" />
+                <Skeleton className="h-10 w-20 py-2" />
               </>
             ) : (
-              <FormField
-                control={form.control}
-                name="levelId"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Nivel del curso</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Selecciona el nivel apropiado para tu curso" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {levels &&
-                          levels.map((level: Level) => (
-                            <SelectItem key={level.id} value={level.id}>
-                              {level.levelCode + " - " + level.title}
-                            </SelectItem>
-                          ))}
-                      </SelectContent>
-                    </Select>
-                    <FormDescription>
-                      Elige el nivel adecuado para garantizar que tus
-                      estudiantes puedan seguir el ritmo del curso y alcanzar
-                      sus objetivos.
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <>
+                <FormField
+                  control={form.control}
+                  name="levelId"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Nivel del curso</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Selecciona el nivel apropiado para tu curso" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {levels &&
+                            levels.map((level: Level) => (
+                              <SelectItem key={level.id} value={level.id}>
+                                {level.levelCode + " - " + level.title}
+                              </SelectItem>
+                            ))}
+                        </SelectContent>
+                      </Select>
+                      <FormDescription>
+                        Elige el nivel adecuado para garantizar que tus
+                        estudiantes puedan seguir el ritmo del curso y alcanzar
+                        sus objetivos.
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <div className="flex items-center gap-x-2">
+                  <Button disabled={!isValid || isSubmitting} type="submit">
+                    Guardar
+                  </Button>
+                </div>
+              </>
             )}
-            <div className="flex items-center gap-x-2">
-              <Button disabled={!isValid || isSubmitting} type="submit">
-                Guardar
-              </Button>
-            </div>
           </form>
         </Form>
       </CardContent>
