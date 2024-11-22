@@ -1,13 +1,16 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+import axios from "@/config/axios";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useQuery } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { getPrices } from "../_services/get-prices";
+
 import { Button } from "@/components/shadcn/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/shadcn/ui/card";
+import { toast } from "sonner";
+import { CardContent } from "@/components/shadcn/ui/card";
 import {
   Form,
   FormControl,
@@ -17,36 +20,46 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/shadcn/ui/form";
-import { Input } from "@/components/shadcn/ui/input";
-import axios from "@/config/axios";
-import { formatPrice } from "@/libs/format";
-import { cn } from "@/libs/shadcn/utils";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Pencil } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { z } from "zod";
-
-interface PriceFormProps {
-  initialData: {
-    price: number;
-  };
-  courseId: string;
-}
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/shadcn/ui/select";
+import { Skeleton } from "@/components/shadcn/ui/skeleton";
+import messages from "@/libs/validations/schemas/messages";
+import { Course } from "@/types/models/Course";
+import { Price } from "@/types/models/Price";
 
 const formSchema = z.object({
-  price: z.coerce.number(),
+  priceId: z.string(messages.requiredError).min(1, messages.min(1)),
 });
 
-export default function PriceForm({ initialData, courseId }: PriceFormProps) {
+export default function PriceForm({
+  course,
+  courseId,
+}: {
+  course: Course;
+  courseId: string;
+}) {
   const router = useRouter();
+
+  const {
+    isPending,
+    error,
+    data: prices,
+  } = useQuery({
+    queryKey: ["prices"],
+    queryFn: getPrices,
+  });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      price: initialData?.price || undefined,
+      priceId: course?.priceId || "",
     },
   });
 
@@ -68,39 +81,67 @@ export default function PriceForm({ initialData, courseId }: PriceFormProps) {
         Tu conocimiento tiene valor. ¡Demuéstralo fijando un precio justo por tu
         curso!
       </h2>
-      <CardContent>
+
+      <CardContent className="w-full">
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-4 mt-4"
+            className="space-y-4 mt-4 w-full"
           >
-            <FormField
-              control={form.control}
-              name="price"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Precio del curso</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      step="0.01"
-                      disabled={isSubmitting}
-                      placeholder="Establece un precio para tu curso"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormDescription>
-                    Este será el monto que pagaran los estudiantes por tu curso
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <div className="flex items-center gap-x-2">
-              <Button disabled={!isValid || isSubmitting} type="submit">
-                Guardar
-              </Button>
-            </div>
+            {isPending ? (
+              <>
+                <Skeleton className="py-5" />
+                <Skeleton className="py-2" />
+                <Skeleton className="h-10 w-20 py-2" />
+              </>
+            ) : (
+              <>
+                <FormField
+                  control={form.control}
+                  name="priceId"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Precio del curso</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Elige un precio para tu curso" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectGroup>
+                            {prices && (
+                              <>
+                                <SelectLabel>Precios</SelectLabel>
+                                {prices.map((price: Price) => (
+                                  <SelectItem key={price.id} value={price.id}>
+                                    {price.amount}
+                                  </SelectItem>
+                                ))}
+                              </>
+                            )}
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
+                      <FormDescription>
+                        Selecciona un precio que consideres adecuado para tu
+                        curso.
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <div className="flex items-center gap-x-2">
+                  <Button disabled={!isValid || isSubmitting} type="submit">
+                    Guardar
+                  </Button>
+                </div>
+              </>
+            )}
           </form>
         </Form>
       </CardContent>

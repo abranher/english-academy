@@ -1,15 +1,20 @@
 import { Injectable } from '@nestjs/common';
 import { CreatePriceDto } from '../dto/create-price.dto';
 import { UpdatePriceDto } from '../dto/update-price.dto';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class PricesService {
+  constructor(private readonly prisma: PrismaService) {}
+
   create(createPriceDto: CreatePriceDto) {
     return 'This action adds a new price';
   }
 
-  findAll() {
-    return `This action returns all prices`;
+  async findAll() {
+    const prices = await this.prisma.price.findMany();
+
+    return prices;
   }
 
   findOne(id: number) {

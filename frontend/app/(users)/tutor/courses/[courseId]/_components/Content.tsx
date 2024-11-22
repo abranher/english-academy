@@ -76,7 +76,7 @@ export default function Content({ course }: { course: any }) {
 
             {content === "price" && (
               <>
-                <PriceForm initialData={course} courseId={course.id} />
+                <PriceForm course={course} courseId={course.id} />
               </>
             )}
 
