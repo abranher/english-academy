@@ -44,7 +44,9 @@ export default function Content({ course }: { course: any }) {
       <section className="w-full flex">
         <div className="lg:grid lg:grid-cols-4 w-full space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
           <Card className="lg:col-span-3 flex w-full flex-col gap-4 p-5">
-            <h2 className="text-xl px-5">{sectionTitles[content]}</h2>
+            <h2 className="text-2xl px-5 font-semibold">
+              {sectionTitles[content]}
+            </h2>
             <Separator />
 
             {content === "mainContent" && (
