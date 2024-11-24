@@ -39,7 +39,7 @@ export default async function CourseIdPage({
     course.imageUrl,
     course.price,
     course.levelId,
-    course.chapters.some((chapter) => chapter.isPublished),
+    course.chapters.some((chapter: any) => chapter.isPublished),
   ];
 
   const totalFields = requieredFields.length;

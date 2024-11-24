@@ -99,17 +99,17 @@ export default function ChaptersForm({
   };
 
   const onEdit = (id: string) => {
-    router.push(`/admin/courses/${courseId}/chapters/${id}`);
+    router.push(`/tutor/courses/${courseId}/chapters/${id}`);
   };
 
   return (
     <>
-      {isUpdating && (
-        <div className="absolute h-full w-full bg-slate-500/20 top-0 right-0 rounded-md flex items-center justify-center">
-          <Spinner size="lg" />
-        </div>
-      )}
-      <CardContent>
+      <CardContent className="relative">
+        {isUpdating && (
+          <div className="absolute h-full w-full bg-slate-500/20 top-0 right-0 rounded-md flex items-center justify-center">
+            <Spinner size="lg" />
+          </div>
+        )}
         <CardTitle className="flex justify-between gap-3 text-lg mb-3">
           Capítulos del curso
         </CardTitle>
