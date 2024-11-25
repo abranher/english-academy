@@ -8,7 +8,7 @@ import {
   Droppable,
   DropResult,
 } from "@hello-pangea/dnd";
-import { Grip, Pencil } from "lucide-react";
+import { ClipboardList, FileVideo, Pencil } from "lucide-react";
 import { Lesson } from "@/types/models/Lesson";
 import { LessonType } from "@/types/enums";
 
@@ -77,12 +77,21 @@ export default function LessonsList({
                       {...provided.draggableProps}
                     >
                       <div
-                        className="px-2 py-3 border-r border-r-zinc-200 hover:bg-zinc-300 rounded-l-md transition"
+                        className="flex gap-3 px-2 py-3 border-r border-r-zinc-200 hover:bg-zinc-300 rounded-l-md transition"
                         {...provided.dragHandleProps}
                       >
-                        <Grip className="h-5 w-5" />
+                        {lesson.type === LessonType.CLASS && (
+                          <FileVideo className="h-5 w-5" />
+                        )}
+
+                        {lesson.type === LessonType.QUIZ && (
+                          <ClipboardList className="h-5 w-5" />
+                        )}
                       </div>
-                      {lesson.type === LessonType.CLASS && lesson.class.title}
+                      {lesson.type === LessonType.CLASS &&
+                        `Clase: ${lesson.class.title}`}
+                      {lesson.type === LessonType.QUIZ &&
+                        `Quiz: ${lesson.quiz.title}`}
 
                       <div className="ml-auto p-4 flex items-center gap-x-4">
                         <Pencil

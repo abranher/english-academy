@@ -98,11 +98,11 @@ export default function LessonsForm({
     try {
       setIsUpdating(true);
 
-      const response = await axios.put(`/api/chapters/${chapterId}/reorder`, {
+      const response = await axios.put(`/api/lessons/${chapterId}/reorder`, {
         list: updateData,
       });
 
-      toast.success("Capítulos reordenados");
+      toast.success("Lecciones reordenados");
       router.refresh();
     } catch (error) {
       console.log(error);

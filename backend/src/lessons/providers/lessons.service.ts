@@ -67,6 +67,33 @@ export class LessonsService {
     }
   }
 
+  async reorderChapters(chapterId: string, updateLessonDto: UpdateLessonDto) {
+    const { list } = updateLessonDto;
+
+    const ownChapter = await this.prisma.chapter.findUnique({
+      where: {
+        id: chapterId,
+      },
+    });
+
+    if (!ownChapter) throw new NotFoundException('Capítulo no encontrado.');
+
+    for (const { id, position } of list) {
+      await this.prisma.lesson.update({
+        where: {
+          id,
+        },
+        data: {
+          position,
+        },
+      });
+    }
+
+    return {
+      message: 'Actualización exitosa.',
+    };
+  }
+
   findAll() {
     return `This action returns all lessons`;
   }

@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Put,
 } from '@nestjs/common';
 import { LessonsService } from '../providers/lessons.service';
 import { CreateLessonDto } from '../dto/create-lesson.dto';
@@ -21,6 +22,14 @@ export class LessonsController {
     @Body() createLessonDto: CreateLessonDto,
   ) {
     return this.lessonsService.create(createLessonDto, chapterId);
+  }
+
+  @Put(':chapterId/reorder')
+  reorderLessons(
+    @Param('chapterId') chapterId: string,
+    @Body() updateChapterDto: UpdateLessonDto,
+  ) {
+    return this.lessonsService.reorderChapters(chapterId, updateChapterDto);
   }
 
   @Get()
