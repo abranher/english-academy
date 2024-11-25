@@ -80,6 +80,9 @@ export class ChaptersService {
         id,
         courseId,
       },
+      include: {
+        lessons: true,
+      },
     });
 
     return chapter;

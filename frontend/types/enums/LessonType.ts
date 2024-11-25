@@ -1,0 +1,4 @@
+enum LessonType {
+  CLASS,
+  QUIZ,
+}

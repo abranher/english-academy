@@ -1,12 +1,9 @@
-import { IconBadge } from "@/components/icons/IconBadge";
-import { Button } from "@/components/shadcn/ui/button";
-import axios from "@/config/axios";
-import { ChevronLeft, Eye } from "lucide-react";
-import Link from "next/link";
 import { redirect } from "next/navigation";
-import ChapterTitleForm from "./_components/ChapterTitleForm";
-import ChapterDescriptionForm from "./_components/ChapterDescriptionForm";
-import ChapterAccessForm from "./_components/ChapterAccessForm";
+import Link from "next/link";
+import axios from "@/config/axios";
+
+import { Button } from "@/components/shadcn/ui/button";
+import { ChevronLeft } from "lucide-react";
 import ChapterActions from "./_components/ChapterActions";
 import {
   Tooltip,
@@ -16,8 +13,8 @@ import {
 } from "@/components/shadcn/ui/tooltip";
 import AlertBanner from "@/components/courses/tutor/AlertBanner";
 import { Separator } from "@/components/shadcn/ui/separator";
-import { Card } from "@/components/shadcn/ui/card";
 import Content from "./_components/Content";
+import TitleSection from "./_components/TitleSection";
 
 export default async function ChapterIdPage({
   params,
@@ -51,6 +48,8 @@ export default async function ChapterIdPage({
   return (
     <>
       <div className="space-y-6">
+        <TitleSection chapter={chapter} />
+
         <Separator />
 
         {!chapter.isPublished && (

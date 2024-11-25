@@ -17,6 +17,7 @@ import SubTitleForm from "./SubTitleForm";
 import TrailerForm from "./TrailerForm";
 import CategoryForm from "./CategoryForm";
 import SubCategoryForm from "./SubCategoryForm";
+import { BookOpen, CalendarCog, DollarSign, Globe, Map } from "lucide-react";
 
 // Define un tipo para las posibles claves de sectionTitles
 type SectionTitleKey = "mainContent" | "price" | "studyPlan";
@@ -44,9 +45,20 @@ export default function Content({ course }: { course: any }) {
       <section className="w-full flex">
         <div className="lg:grid lg:grid-cols-4 w-full space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
           <Card className="lg:col-span-3 flex w-full flex-col gap-4 p-5">
-            <h2 className="text-2xl px-5 font-semibold">
+            <h2 className="text-2xl px-5 font-semibold flex gap-3 items-center">
+              {content === "mainContent" ? (
+                <BookOpen />
+              ) : content === "price" ? (
+                <DollarSign />
+              ) : content === "studyPlan" ? (
+                <CalendarCog />
+              ) : (
+                <Globe />
+              )}
+
               {sectionTitles[content]}
             </h2>
+
             <Separator />
 
             {content === "mainContent" && (
@@ -92,46 +104,55 @@ export default function Content({ course }: { course: any }) {
 
           <aside className="hidden lg:block lg:col-span-1">
             <div className="group flex flex-col gap-4 py-2">
-              <Title>General</Title>
+              <Title>
+                <Globe />
+                General
+              </Title>
 
               <nav className="grid gap-3 px-2">
                 <div
                   className={cn(
-                    "flex px-3 py-2 items-center justify-center whitespace-nowrap text-md font-medium transition-colors cursor-pointer",
+                    "flex gap-2 px-3 py-2 items-center justify-center whitespace-nowrap text-md font-medium transition-colors cursor-pointer",
                     content === "mainContent" &&
                       "bg-zinc-100 text-zinc-900 border-l-3 border-zinc-400 dark:bg-zinc-800/50 dark:text-zinc-50",
                     "justify-start"
                   )}
                   onClick={() => handleNavigation("mainContent")}
                 >
+                  <BookOpen />
                   Contenido principal
                 </div>
 
                 <div
                   className={cn(
-                    "flex px-3 py-2 items-center justify-center whitespace-nowrap text-md font-medium transition-colors cursor-pointer",
+                    "flex gap-2 px-3 py-2 items-center justify-center whitespace-nowrap text-md font-medium transition-colors cursor-pointer",
                     content === "price" &&
                       "bg-zinc-100 text-zinc-900 border-l-3 border-zinc-400 dark:bg-zinc-800/50 dark:text-zinc-50",
                     "justify-start"
                   )}
                   onClick={() => handleNavigation("price")}
                 >
+                  <DollarSign />
                   Precios
                 </div>
               </nav>
 
-              <Title>Planifica tu curso</Title>
+              <Title>
+                <Map />
+                Planifica tu curso
+              </Title>
 
               <nav className="grid gap-3 px-2">
                 <div
                   className={cn(
-                    "flex px-3 py-2 items-center justify-center whitespace-nowrap text-md font-medium transition-colors cursor-pointer",
+                    "flex gap-2 px-3 py-2 items-center justify-center whitespace-nowrap text-md font-medium transition-colors cursor-pointer",
                     content === "studyPlan" &&
                       "bg-zinc-100 text-zinc-900 border-l-3 border-zinc-400 dark:bg-zinc-800/50 dark:text-zinc-50",
                     "justify-start"
                   )}
                   onClick={() => handleNavigation("studyPlan")}
                 >
+                  <CalendarCog />
                   Plan de estudio
                 </div>
               </nav>

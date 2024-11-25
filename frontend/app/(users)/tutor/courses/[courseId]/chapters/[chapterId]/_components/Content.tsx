@@ -10,6 +10,7 @@ import ChapterTitleForm from "./ChapterTitleForm";
 import ChapterDescriptionForm from "./ChapterDescriptionForm";
 import { useParams } from "next/navigation";
 import { BookOpen, ClipboardPen, Globe } from "lucide-react";
+import LessonsForm from "./LessonsForm";
 
 // Define un tipo para las posibles claves de sectionTitles
 type SectionTitleKey = "mainContent" | "lessons" | "studyPlan";
@@ -29,8 +30,6 @@ export default function Content({ chapter }: { chapter: any }) {
   const [content, setContent] = useState<SectionTitleKey>("mainContent");
 
   const { chapterId, courseId } = useParams();
-
-  console.log(chapterId);
 
   const handleNavigation = (value: SectionTitleKey) => {
     setContent(value);
@@ -52,7 +51,6 @@ export default function Content({ chapter }: { chapter: any }) {
               {sectionTitles[content]}
             </h2>
             <Separator />
-
             {content === "mainContent" && (
               <>
                 <ChapterTitleForm
@@ -61,11 +59,18 @@ export default function Content({ chapter }: { chapter: any }) {
                   chapterId={chapterId as string}
                 />
 
+                <Separator />
+
                 <ChapterDescriptionForm
                   initialData={chapter}
                   courseId={courseId as string}
                   chapterId={chapterId as string}
                 />
+              </>
+            )}
+            {content === "lessons" && (
+              <>
+                <LessonsForm initialData={chapter} chapterId={chapter.id} />
               </>
             )}
           </Card>
