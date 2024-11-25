@@ -3,9 +3,8 @@ import { redirect } from "next/navigation";
 
 import axios from "@/config/axios";
 
-import { Badge } from "@/components/shadcn/ui/badge";
 import { Button } from "@/components/shadcn/ui/button";
-import { ChevronLeft, Image as ImageIcon } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 import Actions from "./_components/Actions";
 import {
   Tooltip,
@@ -16,8 +15,6 @@ import {
 import { Separator } from "@/components/shadcn/ui/separator";
 import AlertBanner from "@/components/courses/tutor/AlertBanner";
 import Content from "./_components/Content";
-import { Image } from "@nextui-org/react";
-import { assetImg } from "@/libs/asset";
 import TitleSection from "./_components/TitleSection";
 
 export default async function CourseIdPage({
@@ -30,7 +27,7 @@ export default async function CourseIdPage({
   const { data: course } = await axios.get(`/api/courses/${params.courseId}`);
 
   if (!course) {
-    return redirect("/tutor");
+    return redirect("/tutor/courses");
   }
 
   const requieredFields = [

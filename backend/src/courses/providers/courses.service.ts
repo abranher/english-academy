@@ -108,11 +108,7 @@ export class CoursesService {
         id,
       },
       include: {
-        chapters: {
-          include: {
-            muxData: true,
-          },
-        },
+        chapters: true,
       },
     });
 
@@ -192,11 +188,7 @@ export class CoursesService {
         id,
       },
       include: {
-        chapters: {
-          include: {
-            muxData: true,
-          },
-        },
+        chapters: true,
       },
     });
 

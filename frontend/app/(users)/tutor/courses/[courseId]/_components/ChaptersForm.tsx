@@ -27,7 +27,7 @@ import { cn } from "@/libs/shadcn/utils";
 import messages from "@/libs/validations/schemas/messages";
 import { Chapter } from "@/types/models/Chapter";
 import { Course } from "@/types/models/Course";
-import { Plus } from "lucide-react";
+import { FolderOpen, Plus } from "lucide-react";
 import { toast } from "sonner";
 import ChaptersList from "./ChaptersList";
 import { Spinner } from "@nextui-org/react";
@@ -122,11 +122,18 @@ export default function ChaptersForm({
 
         <div
           className={cn(
-            "text-sm my-6",
+            "text-sm my-6 w-full",
             !initialData.chapters.length && "text-slate-500 italic"
           )}
         >
-          {!initialData.chapters.length && "Sin capítulos"}
+          {!initialData.chapters.length && (
+            <div className="text-lg w-full">
+              <p className="flex justify-center flex-col items-center">
+                <FolderOpen className="w-20 h-20" />
+                Sin capítulos
+              </p>
+            </div>
+          )}
           <ChaptersList
             onEdit={onEdit}
             onReorder={onReorder}

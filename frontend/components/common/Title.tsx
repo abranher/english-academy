@@ -19,7 +19,7 @@ export default function Title({
 }>) {
   return (
     <>
-      <h2 className={`font-bold ${titleSizes[size]} py-3`}>{children}</h2>
+      <h2 className={`font-bold ${titleSizes[size]} py-3 flex gap-2`}>{children}</h2>
     </>
   );
 }

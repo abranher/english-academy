@@ -2,13 +2,16 @@
 CREATE TYPE "Roles" AS ENUM ('ADMIN', 'STUDENT', 'TUTOR');
 
 -- CreateEnum
+CREATE TYPE "LessonType" AS ENUM ('CLASS', 'QUIZ');
+
+-- CreateEnum
 CREATE TYPE "AccountStatus" AS ENUM ('ACTIVE', 'INACTIVE', 'SUSPENDED', 'DELETED');
 
 -- CreateEnum
 CREATE TYPE "CourseStatus" AS ENUM ('DRAFT', 'PUBLISHED', 'ARCHIVED', 'DELETED');
 
 -- CreateEnum
-CREATE TYPE "LessonStatus" AS ENUM ('DRAFT', 'PUBLISHED', 'REVIEWED', 'ARCHIVED', 'DELETED');
+CREATE TYPE "LessonStatus" AS ENUM ('DRAFT', 'PUBLISHED', 'ARCHIVED', 'DELETED');
 
 -- CreateEnum
 CREATE TYPE "Language" AS ENUM ('ES', 'EN');
@@ -171,7 +174,6 @@ CREATE TABLE "Chapter" (
     "id" TEXT NOT NULL,
     "title" TEXT NOT NULL,
     "description" TEXT,
-    "videoUrl" TEXT,
     "position" INTEGER NOT NULL,
     "isPublished" BOOLEAN NOT NULL DEFAULT false,
     "isFree" BOOLEAN NOT NULL DEFAULT false,
@@ -183,15 +185,40 @@ CREATE TABLE "Chapter" (
 );
 
 -- CreateTable
-CREATE TABLE "MuxData" (
+CREATE TABLE "Lesson" (
     "id" TEXT NOT NULL,
-    "assetId" TEXT NOT NULL,
-    "playbackId" TEXT,
+    "type" "LessonType" NOT NULL,
+    "position" INTEGER NOT NULL,
+    "status" "LessonStatus" NOT NULL,
     "chapterId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "MuxData_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Lesson_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Class" (
+    "id" TEXT NOT NULL,
+    "title" TEXT NOT NULL,
+    "description" TEXT,
+    "video" TEXT,
+    "lessonId" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Class_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Quiz" (
+    "id" TEXT NOT NULL,
+    "title" TEXT NOT NULL,
+    "lessonId" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Quiz_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -204,17 +231,6 @@ CREATE TABLE "StudentProgress" (
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "StudentProgress_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "Lesson" (
-    "id" TEXT NOT NULL,
-    "status" "LessonStatus" NOT NULL,
-    "chapterId" TEXT NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
-
-    CONSTRAINT "Lesson_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -304,9 +320,6 @@ CREATE INDEX "Attachment_courseId_idx" ON "Attachment"("courseId");
 CREATE INDEX "Chapter_courseId_idx" ON "Chapter"("courseId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "MuxData_chapterId_key" ON "MuxData"("chapterId");
-
--- CreateIndex
 CREATE INDEX "StudentProgress_chapterId_idx" ON "StudentProgress"("chapterId");
 
 -- CreateIndex
@@ -361,13 +374,16 @@ ALTER TABLE "Attachment" ADD CONSTRAINT "Attachment_courseId_fkey" FOREIGN KEY (
 ALTER TABLE "Chapter" ADD CONSTRAINT "Chapter_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "Course"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "MuxData" ADD CONSTRAINT "MuxData_chapterId_fkey" FOREIGN KEY ("chapterId") REFERENCES "Chapter"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "Lesson" ADD CONSTRAINT "Lesson_chapterId_fkey" FOREIGN KEY ("chapterId") REFERENCES "Chapter"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Class" ADD CONSTRAINT "Class_lessonId_fkey" FOREIGN KEY ("lessonId") REFERENCES "Lesson"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Quiz" ADD CONSTRAINT "Quiz_lessonId_fkey" FOREIGN KEY ("lessonId") REFERENCES "Lesson"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "StudentProgress" ADD CONSTRAINT "StudentProgress_chapterId_fkey" FOREIGN KEY ("chapterId") REFERENCES "Chapter"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Lesson" ADD CONSTRAINT "Lesson_chapterId_fkey" FOREIGN KEY ("chapterId") REFERENCES "Chapter"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "MultipleChoiceExercise" ADD CONSTRAINT "MultipleChoiceExercise_levelId_fkey" FOREIGN KEY ("levelId") REFERENCES "Level"("id") ON DELETE SET NULL ON UPDATE CASCADE;

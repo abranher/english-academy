@@ -213,26 +213,23 @@ model Attachment {
 }
 
 // *
-// *
 // * Course chapter
-// *
 // *
 
 model Chapter {
   id          String  @id @default(uuid())
   title       String
   description String? @db.Text
-  videoUrl    String? @db.Text
   position    Int
   isPublished Boolean @default(false)
   isFree      Boolean @default(false)
 
-  muxData  MuxData?
   courseId String
-  course   Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  lessons Lesson[]
 
   studentProgress StudentProgress[]
-  lessons         Lesson[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -240,13 +237,53 @@ model Chapter {
   @@index([courseId])
 }
 
-model MuxData {
-  id         String  @id @default(uuid())
-  assetId    String
-  playbackId String?
+// *
+// * Chapter lesson
+// *
 
-  chapterId String  @unique
-  chapter   Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+model Lesson {
+  id       String       @id @default(uuid())
+  type     LessonType
+  position Int
+  status   LessonStatus
+
+  chapterId String
+  chapter   Chapter @relation(fields: [chapterId], references: [id])
+
+  classes Class[]
+  quizzes Quiz[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// *
+// * Lesson class
+// *
+
+model Class {
+  id          String  @id @default(uuid())
+  title       String
+  description String? @db.Text
+  video       String? @db.Text
+
+  lessonId String
+  lesson   Lesson @relation(fields: [lessonId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// *
+// * Lesson quiz
+// *
+
+model Quiz {
+  id    String @id @default(uuid())
+  title String
+
+  lessonId String
+  lesson   Lesson @relation(fields: [lessonId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -272,18 +309,6 @@ model StudentProgress {
 
   @@unique([studentId, chapterId])
   @@index([chapterId])
-}
-
-// Modelo de Lección
-model Lesson {
-  id     String       @id @default(uuid())
-  status LessonStatus
-
-  chapterId String
-  chapter   Chapter @relation(fields: [chapterId], references: [id])
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }
 
 // *
@@ -371,6 +396,11 @@ enum Roles {
   TUTOR
 }
 
+enum LessonType {
+  CLASS
+  QUIZ
+}
+
 enum AccountStatus {
   ACTIVE
   INACTIVE
@@ -388,7 +418,6 @@ enum CourseStatus {
 enum LessonStatus {
   DRAFT
   PUBLISHED
-  REVIEWED
   ARCHIVED
   DELETED
 }

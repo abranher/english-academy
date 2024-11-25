@@ -80,9 +80,6 @@ export class ChaptersService {
         id,
         courseId,
       },
-      include: {
-        muxData: true,
-      },
     });
 
     return chapter;
@@ -131,12 +128,6 @@ export class ChaptersService {
     }
 
     if (chapter.isFree || purchase) {
-      muxData = await this.prisma.muxData.findUnique({
-        where: {
-          chapterId,
-        },
-      });
-
       nextChapter = await this.prisma.chapter.findFirst({
         where: {
           courseId,
