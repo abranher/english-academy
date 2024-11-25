@@ -4,7 +4,7 @@ import axios from "@/config/axios";
 
 import { Button } from "@/components/shadcn/ui/button";
 import { ChevronLeft } from "lucide-react";
-import ChapterActions from "./_components/ChapterActions";
+import ClassActions from "./_components/ClassActions";
 import {
   Tooltip,
   TooltipContent,
@@ -53,7 +53,9 @@ export default async function ChapterIdPage({
         <Separator />
 
         <div className="flex items-center gap-4">
-          <Link href={`/tutor/courses/${params.courseId}`}>
+          <Link
+            href={`/tutor/courses/${params.courseId}/chapters/${params.chapterId}`}
+          >
             <Button variant="outline" size="icon" className="h-7 w-7">
               <ChevronLeft className="h-4 w-4" />
               <span className="sr-only">atrás</span>
@@ -74,7 +76,7 @@ export default async function ChapterIdPage({
           </p>
 
           <div className="hidden items-center gap-2 md:ml-auto md:flex">
-            <ChapterActions
+            <ClassActions
               disabled={!isComplete}
               courseId={params.courseId}
               chapterId={params.chapterId}

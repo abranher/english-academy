@@ -1,5 +1,5 @@
 import { PartialType } from '@nestjs/mapped-types';
-import { CreateLessonDto } from './create-lesson.dto';
+import { CreateLessonClassDto } from './create-lesson-class.dto';
 import {
   IsArray,
   IsInt,
@@ -9,7 +9,7 @@ import {
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
-export class UpdateLessonDto extends PartialType(CreateLessonDto) {
+export class UpdateLessonClassDto extends PartialType(CreateLessonClassDto) {
   @IsArray()
   @IsOptional()
   @Type(() => UpdateLessonItemDto)

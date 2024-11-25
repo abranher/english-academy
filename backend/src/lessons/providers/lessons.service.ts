@@ -3,6 +3,7 @@ import { CreateLessonDto } from '../dto/create-lesson.dto';
 import { UpdateLessonDto } from '../dto/update-lesson.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { LessonStatus, LessonType } from '@prisma/client';
+import { UpdateLessonClassDto } from '../dto/update-lesson-class.dto';
 
 @Injectable()
 export class LessonsService {
@@ -110,11 +111,35 @@ export class LessonsService {
       },
     });
 
-    return lesson;
+    return {
+      ...lesson,
+      title: lesson.class.title,
+      description: lesson.class.description,
+      video: lesson.class.video,
+    };
   }
 
-  update(id: number, updateLessonDto: UpdateLessonDto) {
-    return `This action updates a #${id} lesson`;
+  async updateClass(
+    id: string,
+    chapterId: string,
+    updateLessonClassDto: UpdateLessonClassDto,
+  ) {
+    const ownLesson = await this.prisma.lesson.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!ownLesson) throw new NotFoundException('Lección no encontrada.');
+
+    const lessonClass = await this.prisma.class.update({
+      where: {
+        lessonId: ownLesson.id,
+      },
+      data: updateLessonClassDto,
+    });
+
+    return lessonClass;
   }
 
   remove(id: number) {

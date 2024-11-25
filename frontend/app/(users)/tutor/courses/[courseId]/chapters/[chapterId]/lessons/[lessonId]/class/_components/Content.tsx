@@ -10,6 +10,7 @@ import ClassDescriptionForm from "./ClassDescriptionForm";
 import { useParams } from "next/navigation";
 import { BookOpen, Globe } from "lucide-react";
 import ClassTitleForm from "./ClassTitleForm";
+import VideoForm from "./VideoForm";
 
 // Define un tipo para las posibles claves de sectionTitles
 type SectionTitleKey = "mainContent";
@@ -26,7 +27,7 @@ const sectionTitles: SectionTitles = {
 export default function Content({ lesson }: { lesson: any }) {
   const [content, setContent] = useState<SectionTitleKey>("mainContent");
 
-  const { chapterId, courseId } = useParams();
+  const { chapterId, lessonId } = useParams();
 
   const handleNavigation = (value: SectionTitleKey) => {
     setContent(value);
@@ -46,17 +47,18 @@ export default function Content({ lesson }: { lesson: any }) {
               <>
                 <ClassTitleForm
                   initialData={lesson}
-                  courseId={courseId as string}
                   chapterId={chapterId as string}
+                  lessonId={lessonId as string}
                 />
-
                 <Separator />
 
                 <ClassDescriptionForm
                   initialData={lesson}
-                  courseId={courseId as string}
                   chapterId={chapterId as string}
+                  lessonId={lessonId as string}
                 />
+
+                <VideoForm lesson={lesson} />
               </>
             )}
           </Card>

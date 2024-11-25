@@ -8,19 +8,19 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 
-interface ChapterActionsProps {
+interface ClassActionsProps {
   disabled: boolean;
   courseId: string;
   chapterId: string;
   isPublished: boolean;
 }
 
-export default function ChapterActions({
+export default function ClassActions({
   disabled,
   courseId,
   chapterId,
   isPublished,
-}: ChapterActionsProps) {
+}: ClassActionsProps) {
   const [isLoading, setIsLoading] = useState(false);
 
   const router = useRouter();

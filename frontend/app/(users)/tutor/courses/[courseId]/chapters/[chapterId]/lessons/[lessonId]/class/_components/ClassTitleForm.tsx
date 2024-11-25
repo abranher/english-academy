@@ -25,7 +25,7 @@ interface ClassFormProps {
   initialData: {
     title: string;
   };
-  courseId: string;
+  lessonId: string;
   chapterId: string;
 }
 
@@ -35,7 +35,7 @@ const formSchema = z.object({
 
 export default function ClassTitleForm({
   initialData,
-  courseId,
+  lessonId,
   chapterId,
 }: ClassFormProps) {
   const router = useRouter();
@@ -50,10 +50,10 @@ export default function ClassTitleForm({
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       await axios.patch(
-        `/api/chapters/${chapterId}/course/${courseId}`,
+        `/api/lessons/${lessonId}/chapter/${chapterId}/class`,
         values
       );
-      toast.success("Título del capítulo actualizado!");
+      toast.success("Título de la clase actualizada!");
       router.refresh();
     } catch (error) {
       toast.error("Something wrong");
@@ -73,7 +73,7 @@ export default function ClassTitleForm({
               name="title"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Título del capítulo</FormLabel>
+                  <FormLabel>Título de la clase</FormLabel>
                   <FormControl>
                     <Input
                       disabled={isSubmitting}
@@ -82,8 +82,8 @@ export default function ClassTitleForm({
                     />
                   </FormControl>
                   <FormDescription>
-                    Define el título que mejor represente el contenido del
-                    capítulo.
+                    Define el título que mejor represente el contenido de la
+                    clase.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>

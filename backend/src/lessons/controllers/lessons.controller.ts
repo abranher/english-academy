@@ -11,6 +11,7 @@ import {
 import { LessonsService } from '../providers/lessons.service';
 import { CreateLessonDto } from '../dto/create-lesson.dto';
 import { UpdateLessonDto } from '../dto/update-lesson.dto';
+import { UpdateLessonClassDto } from '../dto/update-lesson-class.dto';
 
 @Controller('lessons')
 export class LessonsController {
@@ -42,9 +43,13 @@ export class LessonsController {
     return this.lessonsService.findOne(id, chapterId);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateLessonDto: UpdateLessonDto) {
-    return this.lessonsService.update(+id, updateLessonDto);
+  @Patch(':id/chapter/:chapterId/class')
+  updateClass(
+    @Param('id') id: string,
+    @Param('chapterId') chapterId: string,
+    @Body() updateLessonClassDto: UpdateLessonClassDto,
+  ) {
+    return this.lessonsService.updateClass(id, chapterId, updateLessonClassDto);
   }
 
   @Delete(':id')
