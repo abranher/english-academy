@@ -57,6 +57,7 @@ export default function Content({ lesson }: { lesson: any }) {
                   chapterId={chapterId as string}
                   lessonId={lessonId as string}
                 />
+                <Separator />
 
                 <VideoForm lesson={lesson} />
               </>
