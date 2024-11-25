@@ -1,4 +1,4 @@
-enum LessonType {
-  CLASS,
-  QUIZ,
+export enum LessonType {
+  CLASS = "CLASS",
+  QUIZ = "QUIZ",
 }

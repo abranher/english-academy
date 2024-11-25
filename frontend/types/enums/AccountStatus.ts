@@ -1,6 +1,6 @@
-enum AccountStatus {
-  ACTIVE,
-  INACTIVE,
-  SUSPENDED,
-  DELETED,
+export enum AccountStatus {
+  ACTIVE = "ACTIVE",
+  INACTIVE = "INACTIVE",
+  SUSPENDED = "SUSPENDED",
+  DELETED = "DELETED",
 }

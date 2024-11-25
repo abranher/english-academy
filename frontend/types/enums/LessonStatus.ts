@@ -1,7 +1,7 @@
-enum LessonStatus {
-  DRAFT,
-  PUBLISHED,
-  REVIEWED,
-  ARCHIVED,
-  DELETED,
+export enum LessonStatus {
+  DRAFT = "DRAFT",
+  PUBLISHED = "PUBLISHED",
+  REVIEWED = "REVIEWED",
+  ARCHIVED = "ARCHIVED",
+  DELETED = "DELETED",
 }

@@ -320,6 +320,12 @@ CREATE INDEX "Attachment_courseId_idx" ON "Attachment"("courseId");
 CREATE INDEX "Chapter_courseId_idx" ON "Chapter"("courseId");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Class_lessonId_key" ON "Class"("lessonId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Quiz_lessonId_key" ON "Quiz"("lessonId");
+
+-- CreateIndex
 CREATE INDEX "StudentProgress_chapterId_idx" ON "StudentProgress"("chapterId");
 
 -- CreateIndex

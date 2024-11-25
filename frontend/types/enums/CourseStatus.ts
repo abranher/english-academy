@@ -1,6 +1,6 @@
-enum CourseStatus {
-  DRAFT,
-  PUBLISHED,
-  ARCHIVED,
-  DELETED,
+export enum CourseStatus {
+  DRAFT = "DRAFT",
+  PUBLISHED = "PUBLISHED",
+  ARCHIVED = "ARCHIVED",
+  DELETED = "DELETED",
 }

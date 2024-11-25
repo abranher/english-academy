@@ -10,6 +10,7 @@ import {
 } from "@hello-pangea/dnd";
 import { Grip, Pencil } from "lucide-react";
 import { Lesson } from "@/types/models/Lesson";
+import { LessonType } from "@/types/enums";
 
 interface LessonsListProps {
   items: Lesson[];
@@ -81,7 +82,7 @@ export default function LessonsList({
                       >
                         <Grip className="h-5 w-5" />
                       </div>
-                      {/**chapter.title*/}
+                      {lesson.type === LessonType.CLASS && lesson.class.title}
 
                       <div className="ml-auto p-4 flex items-center gap-x-4">
                         <Pencil

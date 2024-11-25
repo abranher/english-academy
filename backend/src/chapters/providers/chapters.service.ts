@@ -81,7 +81,12 @@ export class ChaptersService {
         courseId,
       },
       include: {
-        lessons: true,
+        lessons: {
+          include: {
+            class: true,
+            quiz: true,
+          },
+        },
       },
     });
 

@@ -250,8 +250,8 @@ model Lesson {
   chapterId String
   chapter   Chapter @relation(fields: [chapterId], references: [id])
 
-  classes Class[]
-  quizzes Quiz[]
+  class Class?
+  quiz  Quiz?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -267,7 +267,7 @@ model Class {
   description String? @db.Text
   video       String? @db.Text
 
-  lessonId String
+  lessonId String @unique
   lesson   Lesson @relation(fields: [lessonId], references: [id])
 
   createdAt DateTime @default(now())
@@ -282,7 +282,7 @@ model Quiz {
   id    String @id @default(uuid())
   title String
 
-  lessonId String
+  lessonId String @unique
   lesson   Lesson @relation(fields: [lessonId], references: [id])
 
   createdAt DateTime @default(now())
