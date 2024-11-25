@@ -1,18 +1,13 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import axios from "@/config/axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useState } from "react";
 
-import {
-  Apple,
-  ClipboardList,
-  ClipboardPenLine,
-  FileVideo,
-} from "lucide-react";
+import { ClipboardList, ClipboardPenLine, FileVideo } from "lucide-react";
 import { Button } from "@/components/shadcn/ui/button";
 import {
   CardContent,
@@ -67,6 +62,7 @@ export default function LessonsForm({
   const [lessonType, setLessonType] = useState("CLASS");
 
   const router = useRouter();
+  const { courseId } = useParams();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -113,7 +109,9 @@ export default function LessonsForm({
   };
 
   const onEdit = (id: string) => {
-    router.push(`/tutor/courses/${chapterId}/chapters/${id}`);
+    router.push(
+      `/tutor/courses/${courseId}/chapters/${chapterId}/lessons/${id}/class`
+    );
   };
 
   return (

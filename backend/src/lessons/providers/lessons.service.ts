@@ -98,8 +98,19 @@ export class LessonsService {
     return `This action returns all lessons`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} lesson`;
+  async findOne(id: string, chapterId: string) {
+    const lesson = await this.prisma.lesson.findUnique({
+      where: {
+        id,
+        chapterId,
+      },
+      include: {
+        class: true,
+        quiz: true,
+      },
+    });
+
+    return lesson;
   }
 
   update(id: number, updateLessonDto: UpdateLessonDto) {

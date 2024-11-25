@@ -1,5 +1,12 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+import { z } from "zod";
+import axios from "@/config/axios";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+
 import { Button } from "@/components/shadcn/ui/button";
 import {
   Card,
@@ -9,27 +16,17 @@ import {
   CardTitle,
 } from "@/components/shadcn/ui/card";
 import { Checkbox } from "@/components/shadcn/ui/checkbox";
-import Editor from "@/components/shadcn/ui/editor";
 import {
   Form,
   FormControl,
   FormDescription,
   FormField,
   FormItem,
-  FormMessage,
 } from "@/components/shadcn/ui/form";
-import Preview from "@/components/shadcn/ui/preview";
-import axios from "@/config/axios";
 import { cn } from "@/libs/shadcn/utils";
-import messages from "@/libs/validations/schemas/messages";
 import { Chapter } from "@/types/models/Chapter";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Pencil } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { z } from "zod";
 
 interface ChapterAccessFormProps {
   initialData: Chapter;
