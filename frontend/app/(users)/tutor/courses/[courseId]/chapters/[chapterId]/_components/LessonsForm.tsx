@@ -7,6 +7,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useState } from "react";
 
+import {
+  Apple,
+  ClipboardList,
+  ClipboardPenLine,
+  FileVideo,
+} from "lucide-react";
 import { Button } from "@/components/shadcn/ui/button";
 import {
   CardContent,
@@ -40,6 +46,8 @@ import {
 } from "@/components/shadcn/ui/dialog";
 import LessonsList from "./LessonsList";
 import { Lesson } from "@/types/models/Lesson";
+import { RadioGroup, RadioGroupItem } from "@/components/shadcn/ui/radio-group";
+import { Label } from "@/components/shadcn/ui/label";
 
 interface LessonsFormProps {
   initialData: Chapter & { lessons: Lesson[] };
@@ -56,6 +64,7 @@ export default function LessonsForm({
 }: LessonsFormProps) {
   const [isUpdating, setIsUpdating] = useState(false);
   const [open, setOpen] = useState(false);
+  const [lessonType, setLessonType] = useState("CLASS");
 
   const router = useRouter();
 
@@ -70,9 +79,14 @@ export default function LessonsForm({
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await axios.post(`/api/chapters/${chapterId}`, values);
-      toast.success("Capítulo creado!");
+      await axios.post(`/api/lessons/chapter/${chapterId}`, {
+        ...values,
+        type: lessonType,
+      });
+
+      toast.success("Lección creada!");
       setOpen(false);
+      form.reset();
       router.refresh();
     } catch (error) {
       console.log(error);
@@ -111,13 +125,12 @@ export default function LessonsForm({
           </div>
         )}
         <CardTitle className="flex justify-between gap-3 text-lg mb-3">
-          Capítulos del curso
+          Lecciones del capítulo
         </CardTitle>
 
         <CardDescription>
-          El primer paso para darle vida a tu curso es definir los capítulos,
-          diseñar las clases y crear ejercicios prácticos que refuercen el
-          aprendizaje.
+          Es hora de diseñar las clases y crear ejercicios prácticos que
+          refuercen el aprendizaje.
         </CardDescription>
 
         <div
@@ -130,7 +143,7 @@ export default function LessonsForm({
             <div className="text-lg w-full">
               <p className="flex justify-center flex-col items-center">
                 <FolderOpen className="w-20 h-20" />
-                Sin capítulos
+                Sin lecciones
               </p>
             </div>
           )}
@@ -142,7 +155,7 @@ export default function LessonsForm({
         </div>
 
         <p className="text-xs text-muted-foreground my-4">
-          Arrastre y suelte para reordenar los capítulos
+          Arrastre y suelte para reordenar las lecciones
         </p>
 
         <Dialog open={open} onOpenChange={setOpen}>
@@ -155,7 +168,13 @@ export default function LessonsForm({
           </DialogTrigger>
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
-              <DialogTitle>Crear capítulo</DialogTitle>
+              <DialogTitle>
+                {lessonType === "CLASS"
+                  ? "Crear Clase"
+                  : lessonType === "QUIZ"
+                  ? "Crear Quiz"
+                  : "Crear Test"}
+              </DialogTitle>
               <DialogDescription>
                 Haz clic en Crear cuando hayas terminado.
               </DialogDescription>
@@ -166,12 +185,69 @@ export default function LessonsForm({
                   onSubmit={form.handleSubmit(onSubmit)}
                   className="space-y-4 mt-4"
                 >
+                  {/** Lesson type */}
+                  <RadioGroup
+                    value={lessonType}
+                    onValueChange={setLessonType}
+                    className="grid grid-cols-3 gap-4"
+                  >
+                    <div>
+                      <RadioGroupItem
+                        value="CLASS"
+                        id="CLASS"
+                        className="peer sr-only"
+                      />
+                      <Label
+                        htmlFor="CLASS"
+                        className="flex flex-col items-center justify-between cursor-pointer rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
+                      >
+                        <FileVideo className="mb-3 h-6 w-6" />
+                        Clase
+                      </Label>
+                    </div>
+                    <div>
+                      <RadioGroupItem
+                        value="QUIZ"
+                        id="QUIZ"
+                        className="peer sr-only"
+                      />
+                      <Label
+                        htmlFor="QUIZ"
+                        className="flex flex-col items-center justify-between cursor-pointer rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
+                      >
+                        <ClipboardList className="mb-3 h-6 w-6" />
+                        Quiz
+                      </Label>
+                    </div>
+                    <div>
+                      <RadioGroupItem
+                        value="TEST"
+                        id="TEST"
+                        className="peer sr-only"
+                      />
+                      <Label
+                        htmlFor="TEST"
+                        className="flex flex-col items-center justify-between cursor-pointer rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
+                      >
+                        <ClipboardPenLine className="mb-3 h-6 w-6" />
+                        Test
+                      </Label>
+                    </div>
+                  </RadioGroup>
+
+                  {/** Lesson title */}
                   <FormField
                     control={form.control}
                     name="title"
                     render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Título del capítulo</FormLabel>
+                      <FormItem className="flex flex-col gap-2">
+                        <FormLabel>
+                          {lessonType === "CLASS"
+                            ? "Título de la Clase"
+                            : lessonType === "QUIZ"
+                            ? "Título del Quiz"
+                            : "Título del Test"}
+                        </FormLabel>
 
                         <FormControl>
                           <Input
@@ -181,9 +257,13 @@ export default function LessonsForm({
                           />
                         </FormControl>
                         <FormDescription>
-                          Define el título de tu capítulo de manera clara y
-                          concisa, asegurando que transmita de forma efectiva
-                          los objetivos de aprendizaje.
+                          Define el título de tu{" "}
+                          {lessonType === "CLASS"
+                            ? "clase"
+                            : lessonType === "QUIZ"
+                            ? "quiz"
+                            : "test"}{" "}
+                          de manera clara y concisa.
                         </FormDescription>
                         <FormMessage />
                       </FormItem>

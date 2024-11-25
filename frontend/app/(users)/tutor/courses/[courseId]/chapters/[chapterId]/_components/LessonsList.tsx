@@ -23,33 +23,33 @@ export default function LessonsList({
   onReorder,
 }: LessonsListProps) {
   const [isMounted, setIsMounted] = useState(false);
-  const [chapters, setChapters] = useState(items);
+  const [lessons, setLessons] = useState(items);
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
   useEffect(() => {
-    setChapters(items);
+    setLessons(items);
   }, [items]);
 
   const onDragEnd = (result: DropResult) => {
     if (!result.destination) return;
 
-    const items = Array.from(chapters);
+    const items = Array.from(lessons);
     const [reorderedItem] = items.splice(result.source.index, 1);
     items.splice(result.destination.index, 0, reorderedItem);
 
     const startIndex = Math.min(result.source.index, result.destination.index);
     const endIndex = Math.max(result.source.index, result.destination.index);
 
-    const updatedChapters = items.slice(startIndex, endIndex + 1);
+    const updatedLessons = items.slice(startIndex, endIndex + 1);
 
-    setChapters(items);
+    setLessons(items);
 
-    const bulkUpdateData = updatedChapters.map((chapter) => ({
-      id: chapter.id,
-      position: items.findIndex((item) => item.id === chapter.id),
+    const bulkUpdateData = updatedLessons.map((lesson) => ({
+      id: lesson.id,
+      position: items.findIndex((item) => item.id === lesson.id),
     }));
 
     onReorder(bulkUpdateData);
@@ -60,13 +60,13 @@ export default function LessonsList({
   return (
     <>
       <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable droppableId="chapters">
+        <Droppable droppableId="lessons">
           {(provided) => (
             <div {...provided.droppableProps} ref={provided.innerRef}>
-              {chapters.map((chapter, index) => (
+              {lessons.map((lesson, index) => (
                 <Draggable
-                  key={chapter.id}
-                  draggableId={chapter.id}
+                  key={lesson.id}
+                  draggableId={lesson.id}
                   index={index}
                 >
                   {(provided) => (
@@ -85,7 +85,7 @@ export default function LessonsList({
 
                       <div className="ml-auto p-4 flex items-center gap-x-4">
                         <Pencil
-                          onClick={() => onEdit(chapter.id)}
+                          onClick={() => onEdit(lesson.id)}
                           className="w-4 h-4 cursor-pointer hover:opacity-75 transition"
                         />
                       </div>
