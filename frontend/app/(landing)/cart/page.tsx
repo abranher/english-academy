@@ -2,8 +2,11 @@
 
 import { Button } from "@/components/shadcn/ui/button";
 import { Card } from "@/components/shadcn/ui/card";
+import { assetImg } from "@/libs/asset";
+import { formatPrice } from "@/libs/format";
 import { useCartStore } from "@/store/cart";
-import { Trash } from "lucide-react";
+import { Chip, Image } from "@nextui-org/react";
+import { ShoppingCart, Trash } from "lucide-react";
 
 export default function ShoppingCartPage() {
   const cart = useCartStore((state) => state.cart);
@@ -11,42 +14,51 @@ export default function ShoppingCartPage() {
 
   return (
     <>
-      <div className="font-sans max-w-5xl max-md:max-w-xl mx-auto bg-white py-4">
-        <h1 className="text-3xl font-bold text-gray-800 text-center">
+      <div className="font-sans max-w-5xl max-md:max-w-xl mx-auto p-4">
+        <h1 className="text-3xl font-bold text-gray-800 dark:text-zinc-50 text-center">
           Carrito de compra
         </h1>
 
-        {cart.length ? (
+        {cart.length === 0 ? (
           <>
-            <div className="grid md:grid-cols-3 gap-8 mt-16">
-              <div className="md:col-span-2 space-y-4">
+            <section className="dark:text-zinc-300 text-xl font-semibold flex flex-col items-center w-full my-36 gap-4">
+              <ShoppingCart className="w-28 h-28" />
+              <p>Tu carro esta vacio</p>
+            </section>
+          </>
+        ) : (
+          <>
+            <div className="grid lg:grid-cols-3 gap-8 my-16 mx-5">
+              <div className="lg:col-span-2 space-y-4">
                 {cart &&
                   cart.map((course) => (
                     <>
                       <div
-                        className="grid grid-cols-3 items-start gap-4"
+                        className="grid grid-cols-8 items-start gap-4"
                         key={course.id}
                       >
-                        <div className="col-span-2 flex items-start gap-4">
-                          <div className="w-28 h-28 max-sm:w-24 max-sm:h-24 shrink-0 bg-gray-100 p-2 rounded-md">
-                            <img
-                              src="https://readymadeui.com/images/product14.webp"
+                        <div className="col-span-7 flex items-start gap-4">
+                          <div className="aspect-video w-52 shrink-0">
+                            <Image
+                              src={assetImg(course.image)}
+                              alt={course.title}
                               className="w-full h-full object-contain"
                             />
                           </div>
 
-                          <div className="flex flex-col gap-3">
-                            <h3 className="text-base font-bold text-gray-800">
-                              {course.title}
+                          <div className="flex flex-col gap-3 w-full">
+                            <h3 className="text-sm font-bold text-gray-800">
+                              {`${course.title} - ${course.subtitle}`}
                             </h3>
 
-                            <p className="text-xs font-semibold text-gray-500 mt-0.5">
-                              Categoria
-                            </p>
-
                             <h4 className="text-lg max-sm:text-base font-bold text-gray-800">
-                              $20.00
+                              {formatPrice(course.price?.amount ?? 0)}
                             </h4>
+
+                            <div className="flex gap-2">
+                              <Chip>{course.category?.title}</Chip>
+                              <Chip>{course.subcategory?.title}</Chip>
+                            </div>
                           </div>
                         </div>
 
@@ -193,8 +205,6 @@ export default function ShoppingCartPage() {
               </Card>
             </div>
           </>
-        ) : (
-          <>Tu carro esta vacio</>
         )}
       </div>
     </>

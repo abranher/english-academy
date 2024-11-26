@@ -89,7 +89,7 @@ export default function FeaturedCoursesSection() {
                                 {formatPrice(course.price?.amount ?? 0)}
                               </h2>
 
-                              <h6 className="mb-2 text-zinc-800 dark:text-zinc-50 text-xl font-semibold">
+                              <h6 className="mb-2 text-zinc-800 dark:text-zinc-50 text-xl md:text-md font-semibold">
                                 {`${course.title} - ${course.subtitle}`}
                               </h6>
 
