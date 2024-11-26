@@ -65,6 +65,9 @@ export class CoursesService {
             isPublished: true,
           },
         },
+        price: true,
+        category: true,
+        subcategory: true,
       },
     });
 

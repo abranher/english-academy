@@ -1,6 +1,9 @@
 "use client";
 
-import { Card, CardContent } from "@/components/shadcn/ui/card";
+import { useQuery } from "@tanstack/react-query";
+import { getCourses } from "../_services/getCourses";
+
+import { Card } from "@/components/shadcn/ui/card";
 import {
   Carousel,
   CarouselContent,
@@ -10,17 +13,21 @@ import {
 } from "@/components/shadcn/ui/carousel";
 import BoxBase from "@/components/common/BoxBase";
 import Title from "@/components/common/Title";
-import { Badge } from "@/components/shadcn/ui/badge";
 import { Button } from "@/components/shadcn/ui/button";
-import { ShoppingCart, XIcon } from "lucide-react";
+import { ShoppingCart, Star, XIcon } from "lucide-react";
 import { useCartStore } from "@/store/cart";
 import { Course } from "@/types/models/Course";
+import { Chip, Image } from "@nextui-org/react";
+import { assetImg } from "@/libs/asset";
+import { formatPrice } from "@/libs/format";
+import { Skeleton } from "@/components/shadcn/ui/skeleton";
 
-export default function FeaturedCoursesSection({
-  courses,
-}: {
-  courses: Course[];
-}) {
+export default function FeaturedCoursesSection() {
+  const { isPending, data: courses } = useQuery<Course[]>({
+    queryKey: ["courses"],
+    queryFn: getCourses,
+  });
+
   const cart = useCartStore((state) => state.cart);
   const addToCart = useCartStore((state) => state.addToCart);
   const removeFromCart = useCartStore((state) => state.removeFromCart);
@@ -41,63 +48,99 @@ export default function FeaturedCoursesSection({
 
         <Carousel className="w-full">
           <CarouselContent className="-ml-1">
-            {courses &&
-              courses.map((course) => {
-                const isCourseInCart = checkCourseInCart(course);
-
-                return (
+            {isPending ? (
+              <>
+                {Array.from({ length: 3 }).map((_, index) => (
                   <CarouselItem
-                    key={course.id}
-                    className="p-3 md:basis-1/2 lg:basis-1/3"
+                    className="p-3 md:basis-1/2 lg:basis-1/3 flex flex-col gap-3 mt-1"
+                    key={index}
                   >
-                    <Card>
-                      <a href={`/courses/${course.id}`}>
-                        <div className="relative h-56 m-2.5 overflow-hidden text-white rounded-md">
-                          <img
-                            src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=1471&amp;q=80"
-                            alt="card-image"
-                          />
-                        </div>
-
-                        <div className="p-4">
-                          <h6 className="mb-2 text-slate-800 text-xl font-semibold">
-                            {course.title}
-                          </h6>
-                          <h2 className="text-3xl">{course.price}</h2>
-                        </div>
-
-                        <div className="px-4">
-                          <Badge>POPULAR</Badge>
-                        </div>
-                      </a>
-
-                      <div className="p-4 w-full">
-                        <Button
-                          className="flex gap-2 w-full"
-                          variant={isCourseInCart ? "outline" : "default"}
-                          onClick={() => {
-                            isCourseInCart
-                              ? removeFromCart(course)
-                              : addToCart(course);
-                          }}
-                        >
-                          {isCourseInCart ? (
-                            <>
-                              <XIcon className="h-4 w-4" />
-                              Remover
-                            </>
-                          ) : (
-                            <>
-                              <ShoppingCart className="h-4 w-4" />
-                              Añadir al carrito
-                            </>
-                          )}
-                        </Button>
-                      </div>
-                    </Card>
+                    <Skeleton className="w-full h-52" />
+                    <Skeleton className="w-full h-10" />
+                    <Skeleton className="w-full h-10" />
+                    <Skeleton className="w-full h-10" />
+                    <Skeleton className="w-full h-10" />
+                    <Skeleton className="w-full h-10" />
                   </CarouselItem>
-                );
-              })}
+                ))}
+              </>
+            ) : (
+              <>
+                {courses &&
+                  courses.map((course) => {
+                    const isCourseInCart = checkCourseInCart(course);
+
+                    return (
+                      <CarouselItem
+                        key={course.id}
+                        className="p-3 md:basis-1/2 lg:basis-1/3"
+                      >
+                        <Card>
+                          <a href={`/courses/${course.id}`}>
+                            <div className="relative aspect-video m-2.5 overflow-hidden text-white rounded-md">
+                              <Image
+                                src={assetImg(course.image)}
+                                alt="card-image"
+                              />
+                            </div>
+
+                            <div className="px-4">
+                              <h2 className="text-3xl font-bold">
+                                {formatPrice(course.price?.amount ?? 0)}
+                              </h2>
+
+                              <h6 className="mb-2 text-zinc-800 dark:text-zinc-50 text-xl font-semibold">
+                                {`${course.title} - ${course.subtitle}`}
+                              </h6>
+
+                              <div className="flex items-center mb-2">
+                                <Star className="w-6 h-6 text-yellow-300 me-1" />
+                                <Star className="w-6 h-6 text-yellow-300 me-1" />
+                                <Star className="w-6 h-6 text-yellow-300 me-1" />
+                                <Star className="w-6 h-6 text-yellow-300 me-1" />
+                                <Star className="w-6 h-6 text-gray-300 me-1 dark:text-gray-500" />
+
+                                <p className="ms-1 text-sm font-medium text-gray-500 dark:text-gray-400">
+                                  4.95 de 5
+                                </p>
+                              </div>
+                            </div>
+
+                            <div className="px-4 flex gap-2">
+                              <Chip>{course.category?.title}</Chip>
+                              <Chip>{course.subcategory?.title}</Chip>
+                            </div>
+                          </a>
+
+                          <div className="p-4 w-full">
+                            <Button
+                              className="flex gap-2 w-full"
+                              variant={isCourseInCart ? "outline" : "default"}
+                              onClick={() => {
+                                isCourseInCart
+                                  ? removeFromCart(course)
+                                  : addToCart(course);
+                              }}
+                            >
+                              {isCourseInCart ? (
+                                <>
+                                  <XIcon className="h-4 w-4" />
+                                  Remover
+                                </>
+                              ) : (
+                                <>
+                                  <ShoppingCart className="h-4 w-4" />
+                                  Añadir al carrito
+                                </>
+                              )}
+                            </Button>
+                          </div>
+                        </Card>
+                      </CarouselItem>
+                    );
+                  })}
+              </>
+            )}
           </CarouselContent>
           <CarouselPrevious />
           <CarouselNext />

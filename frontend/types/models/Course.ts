@@ -1,3 +1,8 @@
+import { CourseStatus } from "../enums";
+import { Category } from "./Category";
+import { Price } from "./Price";
+import { SubCategory } from "./SubCategory";
+
 export interface Course {
   id: string;
   title: string;
@@ -7,6 +12,11 @@ export interface Course {
   trailer: string | null;
   status: CourseStatus;
   isPublished: boolean;
+
+  price: Price | null;
+  category: Category | null;
+  subcategory: SubCategory | null;
+
   priceId: string | null;
   levelId: string | null;
   categoryId: string | null;
