@@ -80,9 +80,20 @@ export class CoursesService {
         id,
       },
       include: {
+        category: true,
+        subcategory: true,
+        price: true,
         chapters: {
           orderBy: {
             position: 'asc',
+          },
+          include: {
+            lessons: {
+              include: {
+                class: true,
+                quiz: true,
+              },
+            },
           },
         },
         attachments: {

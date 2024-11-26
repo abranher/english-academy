@@ -21,6 +21,7 @@ import { Chip, Image } from "@nextui-org/react";
 import { assetImg } from "@/libs/asset";
 import { formatPrice } from "@/libs/format";
 import { Skeleton } from "@/components/shadcn/ui/skeleton";
+import Link from "next/link";
 
 export default function FeaturedCoursesSection() {
   const { isPending, data: courses } = useQuery<Course[]>({
@@ -76,7 +77,7 @@ export default function FeaturedCoursesSection() {
                         className="p-3 md:basis-1/2 lg:basis-1/3"
                       >
                         <Card>
-                          <a href={`/courses/${course.id}`}>
+                          <Link href={`/courses/${course.id}`}>
                             <div className="relative aspect-video m-2.5 overflow-hidden text-white rounded-md">
                               <Image
                                 src={assetImg(course.image)}
@@ -110,7 +111,7 @@ export default function FeaturedCoursesSection() {
                               <Chip>{course.category?.title}</Chip>
                               <Chip>{course.subcategory?.title}</Chip>
                             </div>
-                          </a>
+                          </Link>
 
                           <div className="p-4 w-full">
                             <Button
