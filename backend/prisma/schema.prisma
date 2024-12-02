@@ -69,9 +69,11 @@ model Tutor {
   location      String?
   curriculumUrl String?
 
-  userId         String          @unique
-  user           User            @relation(fields: [userId], references: [id])
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id])
+
   certifications Certification[]
+  courses        Course[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -177,6 +179,9 @@ model Course {
   trailer     String?      @db.Text
   status      CourseStatus @default(DRAFT)
   isPublished Boolean      @default(false)
+
+  tutorId String
+  tutor   Tutor  @relation(fields: [tutorId], references: [id])
 
   priceId String?
   price   Price?  @relation(fields: [priceId], references: [id])

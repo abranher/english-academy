@@ -20,12 +20,17 @@ import {
 import { Label } from "@/components/shadcn/ui/label";
 import messages from "@/libs/validations/schemas/messages";
 import { Separator } from "@/components/shadcn/ui/separator";
+import { useSession } from "next-auth/react";
 
 const formSchema = z.object({
   title: z.string(messages.requiredError).min(4, messages.min(4)),
 });
 
 export default function CreateCoursePage() {
+  const { data: session } = useSession();
+
+  console.log(session?.user);
+
   const {
     register,
     handleSubmit,

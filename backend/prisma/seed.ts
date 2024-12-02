@@ -143,6 +143,22 @@ async function main() {
     },
   });
 
+  const pedro = await prisma.user.create({
+    data: {
+      name: 'Pedro',
+      lastName: 'Perez',
+      email: 'pedro@gmail.com',
+      username: 'pedro12',
+      password: await hash('pedro123', 10),
+      role: 'TUTOR',
+      tutor: {
+        create: {
+          biography: 'soy un profesor',
+        },
+      },
+    },
+  });
+
   const multipleChoiceExercise = await prisma.multipleChoiceExercise.create({
     data: {
       question: 'Que significa esta palabra en español:',
@@ -168,6 +184,7 @@ async function main() {
   console.log(
     { abran },
     { carlos },
+    { pedro },
     { levels: levelsResult },
     { prices: pricesResult },
     { multipleChoiceExercise },

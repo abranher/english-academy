@@ -39,6 +39,7 @@ export class UsersService {
       },
       include: {
         student: true,
+        tutor: true,
       },
     });
   }

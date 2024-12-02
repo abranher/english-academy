@@ -1,44 +1,25 @@
-import { getProgress } from "@/app/_actions/get-progress";
-import axios from "@/config/axios";
-import CourseSidebar from "./_components/CourseSidebar";
-import CourseNavbar from "./_components/CourseNavbar";
+"use client";
 
-export default async function CoursesLayout({
+import Box from "@/components/common/Box";
+import { useParams } from "next/navigation";
+
+export default function CoursesLayout({
   children,
-  params,
 }: {
   children: React.ReactNode;
-  params: { courseId: string };
 }) {
-  try {
-    const { data: course } = await axios.get(
-      `/api/courses/${params.courseId}/all`
-    );
+  const { courseId } = useParams();
 
-    const progressCount = await getProgress(
-      "2dd1501a-b4a3-41c1-91da-e7520d792945",
-      params.courseId
-    );
+  return (
+    <Box>
+      <div className="space-y-6 p-6">
+        {/* Contenedor con grilla ajustada */}
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-3 lg:gap-8">
+          {children}
 
-    return (
-      <div className="h-full">
-        <div className="h-[180px] md:pl-80 fixed inset-y-0 left-full z-50">
-          <CourseNavbar course={course} progressCount={progressCount} />
+          <div className="h-32 rounded-lg">hola</div>
         </div>
-        <div className="hidden md:flex h-full w-80 flex-col fixed inset-y-0 z-50">
-          <CourseSidebar course={course} progressCount={progressCount} />
-        </div>
-
-        <main className="md:pl-80 pt-[80px] h-full">{children}</main>
       </div>
-    );
-  } catch (error) {
-    console.log(error);
-    return (
-      <div>
-        Errror
-        {children}
-      </div>
-    );
-  }
+    </Box>
+  );
 }

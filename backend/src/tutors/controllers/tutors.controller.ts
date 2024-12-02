@@ -25,9 +25,9 @@ export class TutorsController {
     return this.tutorsService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.tutorsService.findOne(+id);
+  @Get('user/:userId')
+  findOne(@Param('userId') userId: string) {
+    return this.tutorsService.findOne(userId);
   }
 
   @Patch(':id')

@@ -47,8 +47,17 @@ export class TutorsService {
     return `This action returns all tutors`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} tutor`;
+  async findOne(userId: string) {
+    const tutorUser = await this.prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+      include: {
+        tutor: true,
+      },
+    });
+
+    return tutorUser;
   }
 
   update(id: number, updateTutorDto: UpdateTutorDto) {

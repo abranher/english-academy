@@ -1,29 +1,16 @@
 "use client";
 
-import { Separator } from "@/components/shadcn/ui/separator";
+import Link from "next/link";
 import Image from "next/image";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/shadcn/ui/card";
+
+import { Separator } from "@/components/shadcn/ui/separator";
+import { Card, CardTitle } from "@/components/shadcn/ui/card";
 import { Avatar, Chip } from "@nextui-org/react";
 import BadgeLevel from "./_components/BadgeLevel";
 import FlagIcon from "@/components/common/FlagIcon";
 import { Button } from "@/components/shadcn/ui/button";
-import {
-  BookmarkCheck,
-  Clock,
-  CreditCard,
-  DollarSign,
-  Medal,
-  Pencil,
-  Users,
-} from "lucide-react";
+import { BookmarkCheck, BookOpen, Clock, Medal, Pencil } from "lucide-react";
 import Box from "@/components/common/Box";
-import Link from "next/link";
-import { assetImg } from "@/libs/asset";
 
 export default function StudentHomePage() {
   return (
@@ -64,7 +51,8 @@ export default function StudentHomePage() {
                 </Card>
               </div>
 
-              <h2 className="text-2xl mt-5 font-bold tracking-tight">
+              <h2 className="text-2xl mt-5 font-bold tracking-tight flex gap-3 items-center">
+                <BookOpen />
                 Cursos pendientes
               </h2>
 

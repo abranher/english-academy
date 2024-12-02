@@ -147,6 +147,7 @@ CREATE TABLE "Course" (
     "trailer" TEXT,
     "status" "CourseStatus" NOT NULL DEFAULT 'DRAFT',
     "isPublished" BOOLEAN NOT NULL DEFAULT false,
+    "tutorId" TEXT NOT NULL,
     "priceId" TEXT,
     "levelId" TEXT,
     "categoryId" TEXT,
@@ -360,6 +361,9 @@ ALTER TABLE "Certification" ADD CONSTRAINT "Certification_tutorId_fkey" FOREIGN 
 
 -- AddForeignKey
 ALTER TABLE "SubCategory" ADD CONSTRAINT "SubCategory_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "Category"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Course" ADD CONSTRAINT "Course_tutorId_fkey" FOREIGN KEY ("tutorId") REFERENCES "Tutor"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Course" ADD CONSTRAINT "Course_priceId_fkey" FOREIGN KEY ("priceId") REFERENCES "Price"("id") ON DELETE SET NULL ON UPDATE CASCADE;
