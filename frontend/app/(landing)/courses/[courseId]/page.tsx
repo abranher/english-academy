@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
-import { assetVideo } from "@/libs/asset";
+import { assetImg, assetVideo } from "@/libs/asset";
 import { getCourse } from "./_services/getCourse";
 
 import ReactPlayer from "react-player";
@@ -22,7 +22,7 @@ import { Button } from "@/components/shadcn/ui/button";
 import { useCartStore } from "@/store/cart";
 import { Course } from "@/types/models/Course";
 import { Card } from "@/components/shadcn/ui/card";
-import { Image } from "@nextui-org/react";
+import { Chip, Image } from "@nextui-org/react";
 import { Star } from "@/components/icons/Star";
 import Preview from "@/components/shadcn/ui/preview";
 import {
@@ -60,7 +60,7 @@ export default function CourseDetailsPage() {
 
   return (
     <>
-      <div className="bg-zinc-950 py-16 px-20">
+      <div className="bg-zinc-950 py-16 lg:px-10 xl:px-20">
         <div className="max-w-[1536px] w-full mx-auto">
           <div className="grid lg:grid-cols-2 justify-center items-center gap-10">
             {!isPending ? (
@@ -85,6 +85,15 @@ export default function CourseDetailsPage() {
                       <p className="ms-1 text-lg font-medium text-gray-400">
                         4.95 de 5
                       </p>
+                    </div>
+
+                    <div className="flex gap-2">
+                      <Chip color="danger" size="lg">
+                        {course.category?.title}
+                      </Chip>
+                      <Chip color="primary" size="lg">
+                        {course.subcategory?.title}
+                      </Chip>
                     </div>
                   </div>
 

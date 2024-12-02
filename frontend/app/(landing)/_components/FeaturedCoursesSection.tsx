@@ -1,6 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
+import Link from "next/link";
 import { getCourses } from "../_services/getCourses";
 
 import { Card } from "@/components/shadcn/ui/card";
@@ -14,14 +15,14 @@ import {
 import BoxBase from "@/components/common/BoxBase";
 import Title from "@/components/common/Title";
 import { Button } from "@/components/shadcn/ui/button";
-import { ShoppingCart, Star, XIcon } from "lucide-react";
+import { ShoppingCart, XIcon } from "lucide-react";
 import { useCartStore } from "@/store/cart";
 import { Course } from "@/types/models/Course";
 import { Chip, Image } from "@nextui-org/react";
 import { assetImg } from "@/libs/asset";
 import { formatPrice } from "@/libs/format";
 import { Skeleton } from "@/components/shadcn/ui/skeleton";
-import Link from "next/link";
+import { Star } from "@/components/icons/Star";
 
 export default function FeaturedCoursesSection() {
   const { isPending, data: courses } = useQuery<Course[]>({
@@ -94,22 +95,26 @@ export default function FeaturedCoursesSection() {
                                 {`${course.title} - ${course.subtitle}`}
                               </h6>
 
-                              <div className="flex items-center mb-2">
-                                <Star className="w-6 h-6 text-yellow-300 me-1" />
-                                <Star className="w-6 h-6 text-yellow-300 me-1" />
-                                <Star className="w-6 h-6 text-yellow-300 me-1" />
-                                <Star className="w-6 h-6 text-yellow-300 me-1" />
-                                <Star className="w-6 h-6 text-gray-300 me-1 dark:text-gray-500" />
+                              <div className="flex items-center my-3">
+                                <Star className="w-8 h-8 fill-yellow-300 me-1" />
+                                <Star className="w-8 h-8 fill-yellow-300 me-1" />
+                                <Star className="w-8 h-8 fill-yellow-300 me-1" />
+                                <Star className="w-8 h-8 fill-yellow-300 me-1" />
+                                <Star className="w-8 h-8 fill-gray-300 me-1 dark:fill-gray-500" />
 
-                                <p className="ms-1 text-sm font-medium text-gray-500 dark:text-gray-400">
+                                <p className="ms-1 text-lg font-medium text-gray-400">
                                   4.95 de 5
                                 </p>
                               </div>
                             </div>
 
                             <div className="px-4 flex gap-2">
-                              <Chip>{course.category?.title}</Chip>
-                              <Chip>{course.subcategory?.title}</Chip>
+                              <Chip color="danger" size="lg">
+                                {course.category?.title}
+                              </Chip>
+                              <Chip color="primary" size="lg">
+                                {course.subcategory?.title}
+                              </Chip>
                             </div>
                           </Link>
 
