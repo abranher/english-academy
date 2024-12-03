@@ -11,8 +11,22 @@ export class PurchasesService {
     return 'This action adds a new purchase';
   }
 
-  findAll() {
-    return `This action returns all purchases`;
+  async findAll(studentId: string) {
+    const purchases = await this.prisma.purchase.findMany({
+      where: {
+        studentId,
+      },
+      include: {
+        course: {
+          include: {
+            category: true,
+            subcategory: true,
+          },
+        },
+      },
+    });
+
+    return purchases;
   }
 
   findOne(id: number) {
