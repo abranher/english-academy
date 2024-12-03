@@ -22,9 +22,7 @@ export const useCartStore = create<State>()(
 
         // Si el curso no está en el carrito, lo agregamos con cantidad 1
         if (!isCourseInCart) {
-          set({
-            cart: [...cart, { ...course }],
-          });
+          set({ cart: [...cart, { ...course }] });
         }
       },
 
@@ -37,6 +35,7 @@ export const useCartStore = create<State>()(
       clearCart: () => {
         set({
           cart: [],
+          total: 0,
         });
       },
     }),

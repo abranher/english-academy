@@ -18,6 +18,7 @@ import { z } from "zod";
 import { signInSchema } from "@/libs/validations/schemas/signin/signIn";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Roles } from "@/types/enums/Roles";
+import SignInButton from "@/components/auth/SignInButton";
 
 export default function SignInForm() {
   const {
@@ -42,8 +43,6 @@ export default function SignInForm() {
         type: Roles.TUTOR,
         redirect: false,
       });
-
-      console.log(response);
 
       if (response === undefined || response.error) {
         setError("Usuario no encontrado.");
@@ -105,9 +104,7 @@ export default function SignInForm() {
             <span className="text-red-500">{errors.password.message}</span>
           )}
         </div>
-        <Button type="submit" className="w-full">
-          Iniciar sesión
-        </Button>
+        <SignInButton isLoading={isLoading} />
       </form>
       <div className="mt-4 text-center text-sm">
         No tienes una cuenta?{" "}
