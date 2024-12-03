@@ -25,9 +25,9 @@ export class PurchasesController {
     return this.purchasesService.findAll(studentId);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.purchasesService.findOne(+id);
+  @Get('course/:courseId')
+  findOne(@Param('courseId') courseId: string) {
+    return this.purchasesService.findOne(courseId);
   }
 
   @Patch(':id')

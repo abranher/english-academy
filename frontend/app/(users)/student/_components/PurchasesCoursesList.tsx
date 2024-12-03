@@ -69,7 +69,7 @@ export default function PurchasesCoursesList({
                   </div>
 
                   <div className="p-4 w-full">
-                    <Link href={`/courses/1`}>
+                    <Link href={`/student/courses/${purchase.course.id}`}>
                       <Button className="flex gap-2 w-full">
                         Continuar...
                       </Button>

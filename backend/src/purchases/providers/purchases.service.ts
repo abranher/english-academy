@@ -29,8 +29,26 @@ export class PurchasesService {
     return purchases;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} purchase`;
+  async findOne(courseId: string) {
+    const coursePurchased = await this.prisma.course.findUnique({
+      where: {
+        id: courseId,
+      },
+      include: {
+        chapters: {
+          include: {
+            lessons: {
+              include: {
+                class: true,
+                quiz: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    return coursePurchased;
   }
 
   update(id: number, updatePurchaseDto: UpdatePurchaseDto) {
