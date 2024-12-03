@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/config/auth";
-import { ADMIN, PUBLIC_ROUTES, ROOT, STUDENT } from "@/libs/routes";
+import { ADMIN, PUBLIC_ROUTES, ROOT, STUDENT, TUTOR } from "@/libs/routes";
 import { Roles } from "@/types/enums/Roles";
 
 export default auth((req) => {
@@ -27,6 +27,10 @@ export default auth((req) => {
   }
 
   if (!(role === Roles.STUDENT) && STUDENT.ROUTES.includes(nextUrl.pathname)) {
+    return NextResponse.json({ message: "Not Found" }, { status: 404 });
+  }
+
+  if (!(role === Roles.TUTOR) && TUTOR.ROUTES.includes(nextUrl.pathname)) {
     return NextResponse.json({ message: "Not Found" }, { status: 404 });
   }
 });

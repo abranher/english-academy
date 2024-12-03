@@ -48,8 +48,8 @@ export default function SignInForm() {
       if (response === undefined || response.error) {
         setError("Usuario no encontrado.");
       } else {
-        // router.push("/student");
-        //router.refresh();
+        router.push("/tutor/courses");
+        router.refresh();
       }
     } catch (error) {
       console.error("Error during login:", error);

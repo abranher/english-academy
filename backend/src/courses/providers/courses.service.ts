@@ -95,10 +95,12 @@ export class CoursesService {
       },
     });
 
-    return courses.map((course) => ({
+    const coursesData = courses.map((course) => ({
       ...course,
-      price: course.price.amount,
+      price: course.price?.amount,
     }));
+
+    return coursesData;
   }
 
   async findOne(id: string) {
