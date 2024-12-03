@@ -2,6 +2,11 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import axios from "@/config/axios";
+import { z } from "zod";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Card } from "@/components/shadcn/ui/card";
 import {
@@ -34,25 +39,25 @@ import { RadioGroup, RadioGroupItem } from "@/components/shadcn/ui/radio-group";
 import { Label } from "@/components/shadcn/ui/label";
 import { toast } from "sonner";
 import { Input } from "@/components/shadcn/ui/input";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import axios from "@/config/axios";
-import { z } from "zod";
-import messages from "@/libs/validations/schemas/messages";
-import { useRouter } from "next/navigation";
 import { formatPrice } from "@/libs/format";
 import { Button } from "@/components/shadcn/ui/button";
 import { useCartStore } from "@/store/cart";
+import { useSession } from "next-auth/react";
 
 const formSchema = z.object({
-  payment_reference: z.string(messages.requiredError).min(4, messages.min(4)),
+  payment_reference: z
+    .string()
+    .regex(/^\d{6}$/, { message: "Debe ser un número de 6 dígitos." }),
 });
 
 export default function PurchaseSummary() {
   const [open, setOpen] = useState(false);
   const [lessonType, setLessonType] = useState("CLASS");
 
+  const { data: session } = useSession();
+
   const cart = useCartStore((state) => state.cart);
+  const clearCart = useCartStore((state) => state.clearCart);
 
   const total = cart.reduce((acc, item) => acc + item.price?.amount, 0);
 
@@ -65,15 +70,30 @@ export default function PurchaseSummary() {
   const { isSubmitting, isValid } = form.formState;
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    try {
-      await axios.post(`/api/lessons/chapter/1`, {
-        ...values,
-        type: lessonType,
-      });
+    const courses = cart.map((course) => ({ courseId: course.id }));
 
-      toast.success("Lección creada!");
+    console.log({
+      ...values,
+      courses,
+      total,
+    });
+
+    try {
+      await axios.post(
+        `/api/purchase-orders/student/${session?.user.student?.id}`,
+        {
+          ...values,
+          courses,
+          total,
+        }
+      );
+
+      toast.success(
+        "Envio exitoso, recibirás una notificación cuando el pago haya sido verificado!"
+      );
       setOpen(false);
       form.reset();
+      clearCart();
       router.refresh();
     } catch (error) {
       console.log(error);
