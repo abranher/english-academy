@@ -6,7 +6,6 @@ export const ROOT = "/";
 
 export const PUBLIC_ROUTES = [
   "/",
-  "/cart",
   "/students/signin",
   "/students/signup",
   "/tutors/signup",

@@ -48,7 +48,10 @@ export default function ShoppingCartPage() {
                         className="grid grid-cols-8 items-start gap-4"
                         key={course.id}
                       >
-                        <div className="col-span-7 flex items-start gap-4">
+                        <Link
+                          href={`/courses/${course.id}`}
+                          className="col-span-7 flex items-start gap-4"
+                        >
                           <div className="aspect-video w-52 shrink-0">
                             <Image
                               src={assetImg(course.image)}
@@ -75,8 +78,7 @@ export default function ShoppingCartPage() {
                               </Chip>
                             </div>
                           </div>
-                        </div>
-
+                        </Link>
                         <div className="flex flex-col gap-4 items-end">
                           <Button
                             variant="outline"

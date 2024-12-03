@@ -58,7 +58,8 @@ model Student {
   levelId String?
   level   Level?  @relation(fields: [levelId], references: [id])
 
-  purchases Purchase[]
+  purchases      Purchase[]
+  purchaseOrders PurchaseOrder[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -369,8 +370,30 @@ model TranslationExercise {
 // *
 // *
 
+model PurchaseOrder {
+  id String @id @default(uuid())
+
+  status            PurchaseOrderStatus @default(UNVERIFIED)
+  total             Float
+  payment_method    String              @default("MOBILE_PAYMENT")
+  payment_reference Int
+
+  studentId String
+  student   Student @relation(fields: [studentId], references: [id])
+
+  purchases Purchase[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([studentId])
+}
+
 model Purchase {
   id String @id @default(uuid())
+
+  purchaseOrderId String
+  purchaseOrder   PurchaseOrder @relation(fields: [purchaseOrderId], references: [id])
 
   studentId String
   student   Student @relation(fields: [studentId], references: [id])
@@ -404,6 +427,12 @@ enum Roles {
   ADMIN
   STUDENT
   TUTOR
+}
+
+enum PurchaseOrderStatus {
+  UNVERIFIED
+  COMPLETED
+  CANCELED
 }
 
 enum LessonType {

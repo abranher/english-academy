@@ -8,7 +8,6 @@ import { LevelsModule } from './levels/levels.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'node:path';
 import { ChaptersModule } from './chapters/chapters.module';
-import { PurchasesModule } from './purchases/purchases.module';
 import { StudentsModule } from './students/students.module';
 import { TutorsModule } from './tutors/tutors.module';
 import { CategoriesModule } from './categories/categories.module';
@@ -30,7 +29,6 @@ import { LessonsModule } from './lessons/lessons.module';
     CoursesModule,
     LevelsModule,
     ChaptersModule,
-    PurchasesModule,
     StudentsModule,
     TutorsModule,
     CategoriesModule,
