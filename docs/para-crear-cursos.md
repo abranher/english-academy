@@ -2,14 +2,17 @@
 
 Este curso de nivel A1 está diseñado para aquellos que quieran iniciarse en el aprendizaje del español. A lo largo de este curso, los alumnos adquirirán las bases esenciales del idioma, lo que les permitirá desenvolverse en situaciones cotidianas y establecer interacciones sencillas.
 
-### Capítulo 1: **Fundamentos del Inglés: Gramática y Vocabulario Básico**
-En este capítulo, los estudiantes se sumergirán en las bases del idioma inglés. Aprenderán sobre la estructura gramatical fundamental, incluyendo tiempos verbales y el uso de sustantivos y adjetivos. Además, se presentará un vocabulario esencial que les permitirá comenzar a formar frases simples y comunicarse en situaciones cotidianas.
+### Capítulo 1: **Fundamentos del inglés: gramática y vocabulario básico**
 
-### Capítulo 2: **Conversación Práctica: Habilidades de Habla y Escucha**
-Este capítulo se centra en mejorar las habilidades de conversación. A través de actividades interactivas, como diálogos y juegos de roles, los estudiantes practicarán la pronunciación y la entonación. También se incluirán ejercicios de escucha activa para ayudarles a comprender mejor el inglés hablado en diferentes contextos.
+En este capítulo, los estudiantes se sumergirán en los conceptos básicos del idioma inglés. Aprenderán sobre la estructura gramatical fundamental, incluidos los tiempos verbales y el uso de sustantivos y adjetivos. Además, se les presentará el vocabulario que les permitirá comenzar a formar frases esenciales y comunicarse en situaciones cotidianas.
 
-### Capítulo 3: **Lectura y Comprensión: Textos y Cultura**
-Aquí, los estudiantes explorarán diversos textos en inglés, desde artículos hasta cuentos cortos. Se trabajará en la comprensión lectora y el análisis de contenido, así como en la discusión sobre aspectos culturales que influyen en el idioma. Este capítulo busca enriquecer el vocabulario y fomentar una apreciación más profunda del inglés en su contexto cultural.
+### Capítulo 2: **Práctica de conversación: habilidades para hablar y escuchar**
+
+Este capítulo se centra en mejorar las habilidades de conversación. A través de actividades interactivas, como diálogos y juegos de roles, los estudiantes practicarán la pronunciación y la entonación. También se incluirán ejercicios de escucha activa para ayudarlos a comprender mejor el inglés hablado en diferentes contextos.
+
+### Capítulo 3: **Lectura y comprensión: textos y cultura**
+
+Aquí, los estudiantes explorarán una variedad de textos en inglés, desde artículos hasta cuentos cortos. Se trabajará la comprensión lectora y el análisis de contenido, así como la discusión de los aspectos culturales que influyen en el idioma. Este capítulo busca enriquecer el vocabulario y fomentar una apreciación más profunda del inglés en su contexto cultural.
 
 ## Curso 2
 
@@ -18,4 +21,14 @@ El curso de inglés intermedio B2 está diseñado para estudiantes que ya poseen
 Objetivos del Curso:
 El principal objetivo es ayudar a los estudiantes a comunicarse con mayor fluidez y precisión. Al finalizar el curso, los participantes podrán entender las ideas principales de textos complejos y expresar opiniones sobre temas variados, así como interactuar con hablantes nativos con un grado razonable de espontaneidad.
 
+### Capítulo 1: **Vocabulario empresarial esencial**
 
+En este capítulo, los estudiantes aprenderán vocabulario clave utilizado en el mundo empresarial. Se explorarán términos relacionados con el marketing, las finanzas y los recursos humanos. A través de ejercicios prácticos y juegos de roles, los participantes podrán aplicar este vocabulario en situaciones de la vida real, mejorando su confianza al comunicarse en un entorno profesional.
+
+### Capítulo 2: **Redacción de correos electrónicos y documentos comerciales**
+
+Este capítulo se centra en la redacción eficaz en el entorno empresarial. Los estudiantes aprenderán a escribir correos electrónicos claros y concisos, así como informes y propuestas. Se analizarán las diferencias culturales en la comunicación escrita y se proporcionarán plantillas útiles para facilitar la redacción. Al finalizar, cada participante habrá creado ejemplos de documentos comerciales relevantes.
+
+### Capítulo 3: **Presentaciones efectivas: hablar en público en inglés**
+
+Aquí, los estudiantes desarrollarán habilidades para realizar presentaciones efectivas en inglés. Aprenderán sobre la estructura de una buena presentación, técnicas para captar la atención de la audiencia y cómo manejar preguntas y respuestas. A través de la práctica grupal, los participantes recibirán retroalimentación constructiva y mejorarán su capacidad para comunicar ideas con claridad y confianza.
