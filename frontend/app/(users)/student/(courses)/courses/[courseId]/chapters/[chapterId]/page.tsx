@@ -1,8 +1,12 @@
 "use client";
 
+import { Card, CardTitle } from "@/components/shadcn/ui/card";
+import Preview from "@/components/shadcn/ui/preview";
 import axios from "@/config/axios";
 import { Chapter } from "@/types/models/Chapter";
 import { useQuery } from "@tanstack/react-query";
+import { Video } from "lucide-react";
+import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -35,10 +39,53 @@ export default function ChapterIdPage() {
     <>
       {!isPending ? (
         <>
-          <div className="rounded-lg lg:col-span-2 flex flex-col gap-5">
-            <h2>{chapter.title}</h2>
-            <p>{chapter.description}</p>
-          </div>
+          {chapter && (
+            <>
+              <div className="rounded-lg lg:col-span-2 flex flex-col gap-5">
+                <h2 className="text-2xl font-semibold">{chapter.title}</h2>
+                <section>
+                  <Preview value={chapter.description} />
+                </section>
+
+                <h2 className="text-2xl font-semibold">Aprenderás</h2>
+
+                <ul className="list-disc px-12">
+                  <li className="text-lg font-semibold">Frases comunes</li>
+                  <li className="text-lg font-semibold">Palabras comunes</li>
+                  <li className="text-lg font-semibold">
+                    Situaciones cotidianas
+                  </li>
+                  <li className="text-lg font-semibold">
+                    Leer de manera fluida
+                  </li>
+                  <li className="text-lg font-semibold">Hablar fluido</li>
+                </ul>
+
+                <h2 className="text-2xl font-semibold">Lecciones</h2>
+
+                <div className="grid gap-4 md:grid-cols-2 md:gap-8 xl:grid-cols-3">
+                  {chapter &&
+                    chapter.lessons.map((lesson: any, index: any) => (
+                      <Card key={lesson.id}>
+                        <Link
+                          href={`/student/courses/${courseId}/chapters/${chapter.id}/lessons/${lesson.id}/class`}
+                        >
+                          <div className="flex flex-col gap-2 items-center py-4">
+                            <Video className="h-9 w-9 text-muted-foreground" />
+                            <CardTitle className="text-sm font-medium">
+                              Clase {index + 1}
+                            </CardTitle>
+                            <div className="text-lg font-bold">
+                              {lesson.class.title}
+                            </div>
+                          </div>
+                        </Link>
+                      </Card>
+                    ))}
+                </div>
+              </div>
+            </>
+          )}
         </>
       ) : (
         <>

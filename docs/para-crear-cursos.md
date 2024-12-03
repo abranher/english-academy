@@ -25,6 +25,15 @@ El principal objetivo es ayudar a los estudiantes a comunicarse con mayor fluide
 
 En este capítulo, los estudiantes aprenderán vocabulario clave utilizado en el mundo empresarial. Se explorarán términos relacionados con el marketing, las finanzas y los recursos humanos. A través de ejercicios prácticos y juegos de roles, los participantes podrán aplicar este vocabulario en situaciones de la vida real, mejorando su confianza al comunicarse en un entorno profesional.
 
+
+### clase 1
+
+En esta clase, los estudiantes se centrarán en desarrollar habilidades de conversación en inglés para situaciones cotidianas. A través de diálogos prácticos y juegos de roles, los participantes practicarán cómo presentarse, hacer preguntas y mantener conversaciones sobre temas cotidianos como pasatiempos, trabajo y viajes. La clase incluye ejercicios de escucha activa para mejorar la comprensión auditiva, lo que garantiza que cada estudiante gane confianza al comunicarse en inglés.
+
+## clase 2 
+
+Esta clase está diseñada para profesionales que quieran mejorar su inglés en el ámbito laboral. Se abordarán temas clave como la redacción de correos electrónicos formales, la preparación de presentaciones y la participación en reuniones. Los estudiantes aprenderán vocabulario empresarial específico y practicarán situaciones de la vida real mediante simulaciones. Al finalizar la clase, cada participante estará mejor preparado para comunicarse de manera eficaz en su entorno laboral en inglés.
+
 ### Capítulo 2: **Redacción de correos electrónicos y documentos comerciales**
 
 Este capítulo se centra en la redacción eficaz en el entorno empresarial. Los estudiantes aprenderán a escribir correos electrónicos claros y concisos, así como informes y propuestas. Se analizarán las diferencias culturales en la comunicación escrita y se proporcionarán plantillas útiles para facilitar la redacción. Al finalizar, cada participante habrá creado ejemplos de documentos comerciales relevantes.
