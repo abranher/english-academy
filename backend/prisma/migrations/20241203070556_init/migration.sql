@@ -2,6 +2,9 @@
 CREATE TYPE "Roles" AS ENUM ('ADMIN', 'STUDENT', 'TUTOR');
 
 -- CreateEnum
+CREATE TYPE "PurchaseOrderStatus" AS ENUM ('UNVERIFIED', 'COMPLETED', 'CANCELED');
+
+-- CreateEnum
 CREATE TYPE "LessonType" AS ENUM ('CLASS', 'QUIZ');
 
 -- CreateEnum
@@ -272,8 +275,23 @@ CREATE TABLE "TranslationExercise" (
 );
 
 -- CreateTable
+CREATE TABLE "PurchaseOrder" (
+    "id" TEXT NOT NULL,
+    "status" "PurchaseOrderStatus" NOT NULL DEFAULT 'UNVERIFIED',
+    "total" DOUBLE PRECISION NOT NULL,
+    "payment_method" TEXT NOT NULL DEFAULT 'MOBILE_PAYMENT',
+    "payment_reference" INTEGER NOT NULL,
+    "studentId" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "PurchaseOrder_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "Purchase" (
     "id" TEXT NOT NULL,
+    "purchaseOrderId" TEXT NOT NULL,
     "studentId" TEXT NOT NULL,
     "courseId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -331,6 +349,9 @@ CREATE INDEX "StudentProgress_chapterId_idx" ON "StudentProgress"("chapterId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "StudentProgress_studentId_chapterId_key" ON "StudentProgress"("studentId", "chapterId");
+
+-- CreateIndex
+CREATE INDEX "PurchaseOrder_studentId_idx" ON "PurchaseOrder"("studentId");
 
 -- CreateIndex
 CREATE INDEX "Purchase_courseId_idx" ON "Purchase"("courseId");
@@ -403,6 +424,12 @@ ALTER TABLE "MultipleChoiceOptions" ADD CONSTRAINT "MultipleChoiceOptions_multip
 
 -- AddForeignKey
 ALTER TABLE "TranslationExercise" ADD CONSTRAINT "TranslationExercise_levelId_fkey" FOREIGN KEY ("levelId") REFERENCES "Level"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "PurchaseOrder" ADD CONSTRAINT "PurchaseOrder_studentId_fkey" FOREIGN KEY ("studentId") REFERENCES "Student"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Purchase" ADD CONSTRAINT "Purchase_purchaseOrderId_fkey" FOREIGN KEY ("purchaseOrderId") REFERENCES "PurchaseOrder"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Purchase" ADD CONSTRAINT "Purchase_studentId_fkey" FOREIGN KEY ("studentId") REFERENCES "Student"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
