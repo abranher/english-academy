@@ -1,4 +1,6 @@
+import { AccountStatus, Roles } from "../enums";
 import { Student } from "./Student";
+import { Tutor } from "./Tutor";
 
 export interface User {
   id: string;
@@ -18,7 +20,8 @@ export interface User {
   secretToken: string | null;
   profileComplete: boolean;
   countryId: string | null;
-  student: Student;
+  student: Student | null;
+  tutor: Tutor | null;
   createdAt: Date;
   updatedAt: Date;
 }

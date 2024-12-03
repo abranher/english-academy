@@ -29,8 +29,6 @@ const formSchema = z.object({
 export default function CreateCoursePage() {
   const { data: session } = useSession();
 
-  console.log(session?.user);
-
   const {
     register,
     handleSubmit,
@@ -43,7 +41,10 @@ export default function CreateCoursePage() {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const response = await axios.post("/api/courses", values);
+      const response = await axios.post(
+        `/api/courses/tutor/${session?.user.tutor?.id} `,
+        values
+      );
 
       router.push(`/tutor/courses/${response.data.id}`);
       toast.success("Curso creado!");

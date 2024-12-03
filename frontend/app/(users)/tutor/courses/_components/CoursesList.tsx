@@ -1,13 +1,11 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import axios from "@/config/axios";
 import { useQuery } from "@tanstack/react-query";
-import { Card, CardContent, CardTitle } from "@/components/shadcn/ui/card";
+import { Card, CardContent } from "@/components/shadcn/ui/card";
 import { Course } from "@/types/models/Course";
 import { formatPrice } from "@/libs/format";
-import asset from "@/libs/asset";
 import { DollarSign, Star, Users } from "lucide-react";
 import { Badge } from "@/components/shadcn/ui/badge";
 

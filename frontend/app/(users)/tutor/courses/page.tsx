@@ -10,9 +10,14 @@ import { Separator } from "@/components/shadcn/ui/separator";
 import { Activity, CreditCard, DollarSign, Users } from "lucide-react";
 import { DataTable } from "./_components/data-table";
 import { columns } from "./_components/columns";
+import { auth } from "@/config/auth";
 
 export default async function TutorHomePage() {
-  const { data } = await axios.get("/api/courses");
+  const session = await auth();
+
+  const { data: courses } = await axios.get(
+    `/api/courses/tutor/${session?.user.tutor?.id} `
+  );
 
   return (
     <>
@@ -83,7 +88,7 @@ export default async function TutorHomePage() {
           </Card>
         </div>
 
-        <DataTable columns={columns} data={data} />
+        <DataTable columns={columns} data={courses} />
       </div>
     </>
   );

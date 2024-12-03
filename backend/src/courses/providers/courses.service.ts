@@ -11,10 +11,11 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class CoursesService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(createCourseDto: CreateCourseDto) {
+  async create(tutorId: string, createCourseDto: CreateCourseDto) {
     const course = await this.prisma.course.create({
       data: {
         title: createCourseDto.title,
+        tutorId,
       },
     });
 
@@ -72,6 +73,32 @@ export class CoursesService {
     });
 
     return courses;
+  }
+
+  async findCoursesFromTutor(tutorId: string) {
+    const courses = await this.prisma.course.findMany({
+      where: {
+        tutorId,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+      include: {
+        chapters: {
+          where: {
+            isPublished: true,
+          },
+        },
+        price: true,
+        category: true,
+        subcategory: true,
+      },
+    });
+
+    return courses.map((course) => ({
+      ...course,
+      price: course.price.amount,
+    }));
   }
 
   async findOne(id: string) {

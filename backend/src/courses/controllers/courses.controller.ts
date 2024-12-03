@@ -26,14 +26,22 @@ export class CoursesController {
    * Create routes
    */
 
-  @Post()
-  create(@Body() createCourseDto: CreateCourseDto) {
-    return this.coursesService.create(createCourseDto);
+  @Post('tutor/:tutorId')
+  create(
+    @Param('tutorId') tutorId: string,
+    @Body() createCourseDto: CreateCourseDto,
+  ) {
+    return this.coursesService.create(tutorId, createCourseDto);
   }
 
   /**
    * Get routes
    */
+
+  @Get('tutor/:tutorId')
+  getCoursesFromTutor(@Param('tutorId') tutorId: string) {
+    return this.coursesService.findCoursesFromTutor(tutorId);
+  }
 
   @Get()
   findAll() {

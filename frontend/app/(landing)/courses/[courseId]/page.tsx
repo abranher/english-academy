@@ -50,10 +50,6 @@ export default function CourseDetailsPage() {
   const checkCourseInCart = (course: Course) =>
     cart.some((item) => item.id === course.id);
 
-  console.log(course);
-
-  const isCourseInCart = checkCourseInCart(course);
-
   useEffect(() => {
     setPlayerReady(true);
   }, []);
@@ -100,15 +96,17 @@ export default function CourseDetailsPage() {
                   <div className="flex my-10">
                     <Button
                       className="flex gap-4 items-center text-2xl py-9"
-                      variant={isCourseInCart ? "default" : "outline"}
+                      variant={
+                        checkCourseInCart(course) ? "default" : "outline"
+                      }
                       size="lg"
                       onClick={() => {
-                        isCourseInCart
+                        checkCourseInCart(course)
                           ? removeFromCart(course)
                           : addToCart(course);
                       }}
                     >
-                      {isCourseInCart ? (
+                      {checkCourseInCart(course) ? (
                         <>
                           <XIcon className="h-8 w-8" />
                           Remover
