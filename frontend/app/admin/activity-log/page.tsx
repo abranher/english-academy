@@ -11,20 +11,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/shadcn/ui/card";
-import { Input } from "@/components/shadcn/ui/input";
-import { Label } from "@/components/shadcn/ui/label";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/shadcn/ui/table";
-import {
-  ToggleGroup,
-  ToggleGroupItem,
-} from "@/components/shadcn/ui/toggle-group";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -33,6 +19,9 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/shadcn/ui/breadcrumb";
+import { DataTable } from "./_components/data-table";
+import { columns } from "./_components/columns";
+import axios from "@/config/axios";
 
 export default async function ActivityLogPage() {
   const session = await auth();
@@ -40,6 +29,8 @@ export default async function ActivityLogPage() {
   if (session!.user.role !== Roles.ADMIN) {
     redirect("/");
   }
+
+  const { data: activityLogs } = await axios.get(`/api/activity-logs`);
 
   return (
     <>
@@ -129,96 +120,7 @@ export default async function ActivityLogPage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="w-[100px]">SKU</TableHead>
-                  <TableHead>Stock</TableHead>
-                  <TableHead>Price</TableHead>
-                  <TableHead className="w-[100px]">Size</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                <TableRow>
-                  <TableCell className="font-semibold">GGPC-001</TableCell>
-                  <TableCell>
-                    <Label htmlFor="stock-1" className="sr-only">
-                      Stock
-                    </Label>
-                    <Input id="stock-1" type="number" defaultValue="100" />
-                  </TableCell>
-                  <TableCell>
-                    <Label htmlFor="price-1" className="sr-only">
-                      Price
-                    </Label>
-                    <Input id="price-1" type="number" defaultValue="99.99" />
-                  </TableCell>
-                  <TableCell>
-                    <ToggleGroup
-                      type="single"
-                      defaultValue="s"
-                      variant="outline"
-                    >
-                      <ToggleGroupItem value="s">S</ToggleGroupItem>
-                      <ToggleGroupItem value="m">M</ToggleGroupItem>
-                      <ToggleGroupItem value="l">L</ToggleGroupItem>
-                    </ToggleGroup>
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell className="font-semibold">GGPC-002</TableCell>
-                  <TableCell>
-                    <Label htmlFor="stock-2" className="sr-only">
-                      Stock
-                    </Label>
-                    <Input id="stock-2" type="number" defaultValue="143" />
-                  </TableCell>
-                  <TableCell>
-                    <Label htmlFor="price-2" className="sr-only">
-                      Price
-                    </Label>
-                    <Input id="price-2" type="number" defaultValue="99.99" />
-                  </TableCell>
-                  <TableCell>
-                    <ToggleGroup
-                      type="single"
-                      defaultValue="m"
-                      variant="outline"
-                    >
-                      <ToggleGroupItem value="s">S</ToggleGroupItem>
-                      <ToggleGroupItem value="m">M</ToggleGroupItem>
-                      <ToggleGroupItem value="l">L</ToggleGroupItem>
-                    </ToggleGroup>
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell className="font-semibold">GGPC-003</TableCell>
-                  <TableCell>
-                    <Label htmlFor="stock-3" className="sr-only">
-                      Stock
-                    </Label>
-                    <Input id="stock-3" type="number" defaultValue="32" />
-                  </TableCell>
-                  <TableCell>
-                    <Label htmlFor="price-3" className="sr-only">
-                      Stock
-                    </Label>
-                    <Input id="price-3" type="number" defaultValue="99.99" />
-                  </TableCell>
-                  <TableCell>
-                    <ToggleGroup
-                      type="single"
-                      defaultValue="s"
-                      variant="outline"
-                    >
-                      <ToggleGroupItem value="s">S</ToggleGroupItem>
-                      <ToggleGroupItem value="m">M</ToggleGroupItem>
-                      <ToggleGroupItem value="l">L</ToggleGroupItem>
-                    </ToggleGroup>
-                  </TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
+            <DataTable columns={columns} data={activityLogs} />
           </CardContent>
         </Card>
       </div>

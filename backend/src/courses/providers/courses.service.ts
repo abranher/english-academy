@@ -30,7 +30,7 @@ export class CoursesService {
 
     this.activityLogsService.create(
       userHeader,
-      activityLogMessages['course.create'],
+      activityLogMessages['course_create'],
     );
 
     return course;

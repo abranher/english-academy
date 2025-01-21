@@ -16,8 +16,17 @@ export class ActivityLogsService {
     return activityLog;
   }
 
-  findAll() {
-    return `This action returns all activityLogs`;
+  async findAll() {
+    const activityLogs = await this.prisma.activityLog.findMany({
+      include: {
+        user: true,
+      },
+    });
+
+    return activityLogs.map((activityLog) => ({
+      ...activityLog,
+      username: activityLog.user.username,
+    }));
   }
 
   findOne(id: number) {
