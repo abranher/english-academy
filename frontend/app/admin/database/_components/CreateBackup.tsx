@@ -46,7 +46,7 @@ export default function CreateBackup() {
 
   return (
     <>
-      <Card>
+      <Card className="w-full">
         <CardHeader>
           <CardTitle>Crear Respaldo</CardTitle>
           <CardDescription>

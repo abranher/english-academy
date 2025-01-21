@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { spawn } from 'node:child_process';
+import { readdir } from 'node:fs/promises';
 
 @Injectable()
 export class BackupService {
@@ -39,8 +40,9 @@ export class BackupService {
     }
   }
 
-  findAll() {
-    return `This action returns all backup`;
+  async findAll(directory: string): Promise<{ name: string }[]> {
+    const fileNames = await readdir(directory);
+    return fileNames.map((fileName) => ({ name: fileName }));
   }
 
   findOne(id: number) {

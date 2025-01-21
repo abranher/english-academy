@@ -16,7 +16,6 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/shadcn/ui/form";
-import { Textarea } from "@/components/shadcn/ui/textarea";
 import axios from "@/config/axios";
 import { cn } from "@/libs/shadcn/utils";
 import messages from "@/libs/validations/schemas/messages";

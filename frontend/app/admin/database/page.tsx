@@ -46,7 +46,7 @@ export default async function DatabasePage() {
         </CardDescription>
       </div>
 
-      <div className="flex gap-3 w-full flex-col">
+      <div className="flex gap-3">
         <CreateBackup />
 
         <BackupList />

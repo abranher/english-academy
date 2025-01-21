@@ -1,3 +1,5 @@
+"use client";
+
 import { Label } from "@/components/shadcn/ui/label";
 import {
   Select,
@@ -13,11 +15,25 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/shadcn/ui/card";
+import { useQuery } from "@tanstack/react-query";
+import { getBackups } from "../_services/getBackups";
+import { Skeleton } from "@/components/shadcn/ui/skeleton";
+import { Button } from "@/components/shadcn/ui/button";
+import { DatabaseBackup } from "lucide-react";
 
 export default function BackupList() {
+  const {
+    isPending,
+    error,
+    data: backups,
+  } = useQuery({
+    queryKey: ["backups-list"],
+    queryFn: getBackups,
+  });
+
   return (
     <>
-      <Card>
+      <Card className="w-full">
         <CardHeader>
           <CardTitle>Listado de Respaldos</CardTitle>
           <CardDescription>
@@ -30,17 +46,34 @@ export default function BackupList() {
         <CardContent>
           <div className="grid gap-6">
             <div className="grid gap-3">
-              <Label htmlFor="status">Respaldos</Label>
-              <Select>
-                <SelectTrigger id="status" aria-label="Select status">
-                  <SelectValue placeholder="Select status" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="draft">Draft</SelectItem>
-                  <SelectItem value="published">Active</SelectItem>
-                  <SelectItem value="archived">Archived</SelectItem>
-                </SelectContent>
-              </Select>
+              {isPending ? (
+                <>
+                  <Skeleton className="py-2" />
+                  <Skeleton className="py-5" />
+                </>
+              ) : (
+                <>
+                  <Label htmlFor="backups">Respaldos</Label>
+                  <Select>
+                    <SelectTrigger id="backups">
+                      <SelectValue placeholder="-- Selecciona la copia a restaurar --" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {backups &&
+                        backups.map((backup: any, index: any) => (
+                          <SelectItem key={index} value={index}>
+                            {backup.name}
+                          </SelectItem>
+                        ))}
+                    </SelectContent>
+                  </Select>
+
+                  <Button className="flex gap-3">
+                    <DatabaseBackup />
+                    Restaurar
+                  </Button>
+                </>
+              )}
             </div>
           </div>
         </CardContent>
