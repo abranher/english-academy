@@ -1,12 +1,21 @@
 import { Injectable } from '@nestjs/common';
 import { spawn } from 'node:child_process';
-import { readdir } from 'node:fs/promises';
+import { readdir, mkdir } from 'node:fs/promises';
+import { format } from 'date-fns';
+import { join } from 'node:path';
 
 @Injectable()
 export class BackupService {
   async createBackup() {
     try {
-      const process = spawn('pg_dump', [
+      const currentDate = format(new Date(), 'dd_MM_yyyy__HH-mm-ss-aa');
+      const backupFileName = `backup_${currentDate}.sql`;
+      const backupDirectory = join(process.cwd(), 'storage', 'backups');
+      const backupFilePath = join(backupDirectory, backupFileName);
+
+      await mkdir(backupDirectory, { recursive: true });
+
+      const commandProcess = spawn('pg_dump', [
         '-h',
         'localhost',
         '-U',
@@ -14,19 +23,19 @@ export class BackupService {
         '-d',
         'academy',
         '-f',
-        '/home/abraham/Proyecto/english-academy/backend/storage/backups/backup.sql',
+        backupFilePath,
       ]);
 
-      process.stdout.on('data', (data) => {
+      commandProcess.stdout.on('data', (data) => {
         console.log(data.toString());
       });
 
-      process.stderr.on('data', (data) => {
+      commandProcess.stderr.on('data', (data) => {
         console.error(data.toString());
       });
 
       return new Promise((resolve, reject) => {
-        process.on('close', (code) => {
+        commandProcess.on('close', (code) => {
           if (code === 0) {
             resolve('Backup realizado correctamente');
           } else {
