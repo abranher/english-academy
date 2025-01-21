@@ -1,14 +1,13 @@
-import { Controller, Get, Post, Body, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Param, Delete } from '@nestjs/common';
 import { BackupService } from '../providers/backup.service';
-import { CreateBackupDto } from '../dto/create-backup.dto';
 
 @Controller('backup')
 export class BackupController {
   constructor(private readonly backupService: BackupService) {}
 
-  @Post()
-  create(@Body() createBackupDto: CreateBackupDto) {
-    return this.backupService.create(createBackupDto);
+  @Get()
+  async create() {
+    return await this.backupService.createBackup();
   }
 
   @Get()

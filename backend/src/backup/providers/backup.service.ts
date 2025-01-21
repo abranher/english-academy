@@ -1,10 +1,42 @@
 import { Injectable } from '@nestjs/common';
-import { CreateBackupDto } from '../dto/create-backup.dto';
+import { spawn } from 'node:child_process';
 
 @Injectable()
 export class BackupService {
-  create(createBackupDto: CreateBackupDto) {
-    return 'This action adds a new backup';
+  async createBackup() {
+    try {
+      const process = spawn('pg_dump', [
+        '-h',
+        'localhost',
+        '-U',
+        'postgres',
+        '-d',
+        'academy',
+        '-f',
+        '/home/abraham/Proyecto/english-academy/backend/storage/backups/backup.sql',
+      ]);
+
+      process.stdout.on('data', (data) => {
+        console.log(data.toString());
+      });
+
+      process.stderr.on('data', (data) => {
+        console.error(data.toString());
+      });
+
+      return new Promise((resolve, reject) => {
+        process.on('close', (code) => {
+          if (code === 0) {
+            resolve('Backup realizado correctamente');
+          } else {
+            reject('Error al realizar el backup');
+          }
+        });
+      });
+    } catch (error) {
+      console.error('Error al ejecutar pg_dump:', error);
+      throw error;
+    }
   }
 
   findAll() {
