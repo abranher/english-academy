@@ -43,7 +43,12 @@ export default function CreateCoursePage() {
     try {
       const response = await axios.post(
         `/api/courses/tutor/${session?.user.tutor?.id} `,
-        values
+        values,
+        {
+          headers: {
+            "X-User-Header": `${session?.user.id}`,
+          },
+        }
       );
 
       router.push(`/tutor/courses/${response.data.id}`);

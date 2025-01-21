@@ -9,6 +9,7 @@ import {
   Query,
   NotFoundException,
   Put,
+  Headers,
 } from '@nestjs/common';
 import { CoursesService } from '../providers/courses.service';
 import { CreateCourseDto } from '../dto/create-course.dto';
@@ -28,10 +29,11 @@ export class CoursesController {
 
   @Post('tutor/:tutorId')
   create(
+    @Headers('X-User-Header') userHeader: string,
     @Param('tutorId') tutorId: string,
     @Body() createCourseDto: CreateCourseDto,
   ) {
-    return this.coursesService.create(tutorId, createCourseDto);
+    return this.coursesService.create(tutorId, createCourseDto, userHeader);
   }
 
   /**

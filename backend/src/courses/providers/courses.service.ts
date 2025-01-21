@@ -6,18 +6,32 @@ import {
 import { CreateCourseDto } from '../dto/create-course.dto';
 import { UpdateCourseDto } from '../dto/update-course.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { ActivityLogsService } from 'src/activity-logs/providers/activity-logs.service';
+import { activityLogMessages } from 'libs/activity-logs';
 
 @Injectable()
 export class CoursesService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly activityLogsService: ActivityLogsService,
+  ) {}
 
-  async create(tutorId: string, createCourseDto: CreateCourseDto) {
+  async create(
+    tutorId: string,
+    createCourseDto: CreateCourseDto,
+    userHeader: string,
+  ) {
     const course = await this.prisma.course.create({
       data: {
         title: createCourseDto.title,
         tutorId,
       },
     });
+
+    this.activityLogsService.create(
+      userHeader,
+      activityLogMessages['course.create'],
+    );
 
     return course;
   }
