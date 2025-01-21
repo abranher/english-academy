@@ -2,7 +2,14 @@
 
 import Link from "next/link";
 
-import { Bell, GraduationCap, Home, Package2 } from "lucide-react";
+import {
+  Bell,
+  ClipboardList,
+  DatabaseBackup,
+  GraduationCap,
+  Home,
+  Package2,
+} from "lucide-react";
 import { Button } from "@/components/shadcn/ui/button";
 import SideNav from "@/components/common/SideNav";
 
@@ -28,13 +35,21 @@ export default function AsideAdmin() {
                   title: "Dashboard",
                   href: "/admin",
                   icon: Home,
-                  variant: "default",
                 },
                 {
                   title: "Cursos",
                   href: "/admin/courses",
                   icon: GraduationCap,
-                  variant: "default",
+                },
+                {
+                  title: "Bitácora",
+                  href: "/admin/activity-log",
+                  icon: ClipboardList,
+                },
+                {
+                  title: "Base de datos",
+                  href: "/admin/database",
+                  icon: DatabaseBackup,
                 },
               ]}
             />

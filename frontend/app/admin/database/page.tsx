@@ -1,6 +1,4 @@
-import { redirect } from "next/navigation";
 import Image from "next/image";
-
 import { PlusCircle, Upload } from "lucide-react";
 import { Button } from "@/components/shadcn/ui/button";
 import {
@@ -33,14 +31,7 @@ import {
   ToggleGroup,
   ToggleGroupItem,
 } from "@/components/shadcn/ui/toggle-group";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/shadcn/ui/breadcrumb";
+
 import {
   Tabs,
   TabsContent,
@@ -49,8 +40,9 @@ import {
 } from "@/components/shadcn/ui/tabs";
 import { auth } from "@/config/auth";
 import { Roles } from "@/types/enums/Roles";
+import { redirect } from "next/navigation";
 
-export default async function DashboardAdminPage() {
+export default async function DatabasePage() {
   const session = await auth();
 
   if (session!.user.role !== Roles.ADMIN) {
@@ -59,21 +51,8 @@ export default async function DashboardAdminPage() {
 
   return (
     <>
-      <Breadcrumb>
-        <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbPage>Dashboard</BreadcrumbPage>
-          </BreadcrumbItem>
-        </BreadcrumbList>
-      </Breadcrumb>
-
-      <div>
-        <CardTitle>Tablero de Control</CardTitle>
-        <CardDescription>
-          Visualiza y analiza el registro de actividades de los usuarios. Obtén
-          información valiosa sobre el uso de la aplicación y las interacciones
-          más relevantes.
-        </CardDescription>
+      <div className="flex items-center">
+        <h1 className="text-lg font-semibold md:text-2xl">Panel</h1>
       </div>
 
       <div className="w-full">
@@ -191,26 +170,6 @@ export default async function DashboardAdminPage() {
                   <p className="text-xs text-muted-foreground">
                     +201 since last hour
                   </p>
-                </CardContent>
-              </Card>
-            </div>
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-              <Card className="col-span-4">
-                <CardHeader>
-                  <CardTitle>Overview</CardTitle>
-                </CardHeader>
-                <CardContent className="pl-2">{/*  <Overview />*/}</CardContent>
-              </Card>
-              <Card className="col-span-3">
-                <CardHeader>
-                  <CardTitle>Recent Sales</CardTitle>
-                  <CardDescription>
-                    You made 265 sales this month.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  {/*
-                  <RecentSales />*/}
                 </CardContent>
               </Card>
             </div>
