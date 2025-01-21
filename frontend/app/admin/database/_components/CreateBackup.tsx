@@ -57,7 +57,7 @@ export default function CreateBackup() {
         <CardContent>
           <AlertDialog open={open} onOpenChange={setOpen}>
             <AlertDialogTrigger asChild>
-              <Button className="flex gap-2">
+              <Button className="flex gap-2 w-full">
                 <CloudDownload />
                 Crear
               </Button>

@@ -54,6 +54,45 @@ export class BackupService {
     return fileNames.map((fileName) => ({ name: fileName }));
   }
 
+  async restoreBackup(fileName: string) {
+    const backupDirectory = join(process.cwd(), 'storage', 'backups');
+    const backupFilePath = join(backupDirectory, fileName);
+
+    try {
+      const commandProcess = spawn('pg_restore', [
+        '-d',
+        'academy',
+        '-U',
+        'postgres',
+        '-h',
+        'localhost',
+        '-f',
+        backupFilePath,
+      ]);
+
+      commandProcess.stdout.on('data', (data) => {
+        console.log(data.toString());
+      });
+
+      commandProcess.stderr.on('data', (data) => {
+        console.error(data.toString());
+      });
+
+      return new Promise((resolve, reject) => {
+        commandProcess.on('close', (code) => {
+          if (code === 0) {
+            resolve('Restaurado realizado correctamente');
+          } else {
+            reject('Error al realizar el Restaurado');
+          }
+        });
+      });
+    } catch (error) {
+      console.error('Error al restaurar la base de datos:', error);
+      throw error;
+    }
+  }
+
   findOne(id: number) {
     return `This action returns a #${id} backup`;
   }
