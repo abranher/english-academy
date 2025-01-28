@@ -16,7 +16,7 @@ export const useStepStudentStore = create<StepStudentState>()(
     (set, get) => ({
       userId: "",
       step: 1,
-      totalSteps: 5,
+      totalSteps: 6,
       nextStep: () => set((state) => ({ step: state.step + 1 })),
       prevStep: () => set((state) => ({ step: state.step - 1 })),
       setStep: (newStep: number) => set({ step: newStep }),

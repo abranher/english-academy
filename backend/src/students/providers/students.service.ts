@@ -65,37 +65,39 @@ export class StudentsService {
     };
   }
 
-  async createUsername(createStudentDto: CreateStudentDto) {
-    const userFound = await this.findByEmail(createStudentDto.email);
-
-    if (userFound)
-      throw new ConflictException(
-        'La dirección de correo electrónico ya está en uso.',
-      );
-
+  async createUsername(createStudentDto: CreateStudentDto, id: string) {
     const usernameFound = await this.findByUsername(createStudentDto.username);
 
     if (usernameFound)
       throw new ConflictException('El nombre de usuario ya está en uso.');
 
-    const newUser = await this.prisma.user.create({
-      data: {
-        name: createStudentDto.name,
-        lastName: createStudentDto.lastName,
-        email: createStudentDto.email,
-        username: createStudentDto.username,
-        password: await hash(createStudentDto.password, 10),
+    await this.prisma.user.update({
+      where: {
+        id,
       },
-    });
-
-    await this.prisma.student.create({
       data: {
-        userId: newUser.id,
+        username: createStudentDto.username,
       },
     });
 
     return {
-      message: 'Usuario creado exitosamente.',
+      message:
+        '¡Casi terminamos! Solo unos pasos más para completar tu registro.',
+    };
+  }
+
+  async createBirth(createStudentDto: CreateStudentDto, id: string) {
+    await this.prisma.user.update({
+      where: {
+        id,
+      },
+      data: {
+        birth: createStudentDto.birth,
+      },
+    });
+
+    return {
+      message: '¡Genial! Solo falta un paso.',
     };
   }
 

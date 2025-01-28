@@ -36,6 +36,22 @@ export class StudentsController {
     return this.studentsService.createNames(createStudentDto, userId);
   }
 
+  @Post('signup/:userId/username')
+  createUsername(
+    @Body() createStudentDto: CreateStudentDto,
+    @Param('userId') userId: string,
+  ) {
+    return this.studentsService.createUsername(createStudentDto, userId);
+  }
+
+  @Post('signup/:userId/birth')
+  createBirth(
+    @Body() createStudentDto: CreateStudentDto,
+    @Param('userId') userId: string,
+  ) {
+    return this.studentsService.createBirth(createStudentDto, userId);
+  }
+
   @Get()
   findAll() {
     return this.studentsService.findAll();

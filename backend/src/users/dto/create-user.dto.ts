@@ -1,4 +1,5 @@
 import {
+  IsDate,
   IsEmail,
   IsOptional,
   IsString,
@@ -34,4 +35,8 @@ export class CreateUserDto {
   @IsString()
   @MinLength(8, messages.min)
   password: string;
+
+  @IsOptional()
+  @IsDate()
+  birth: Date;
 }
