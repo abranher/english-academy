@@ -36,7 +36,7 @@ export class CreateUserDto {
   @MinLength(8, messages.min)
   password: string;
 
+  // agregar validacion para la fecha
   @IsOptional()
-  @IsDate()
   birth: Date;
 }
