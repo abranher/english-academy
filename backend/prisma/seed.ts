@@ -153,7 +153,7 @@ async function main() {
       role: 'TUTOR',
       tutor: {
         create: {
-          biography: 'soy un profesor',
+          bio: 'soy un profesor',
         },
       },
     },

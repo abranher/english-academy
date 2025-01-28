@@ -29,9 +29,10 @@ export default function StudentSignupPage() {
                 Crear una cuenta
               </h1>
               <p className="text-xl text-muted-foreground">
-                Introduce algunos datos a continuación para crear tu cuenta
+                Crea tu cuenta totalmente gratis!!
               </p>
             </div>
+
             <SignUpForm />
 
             <p className="px-8 text-center text-md text-muted-foreground">

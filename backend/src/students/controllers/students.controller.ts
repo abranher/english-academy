@@ -15,9 +15,14 @@ import { UpdateStudentDto } from '../dto/update-student.dto';
 export class StudentsController {
   constructor(private readonly studentsService: StudentsService) {}
 
-  @Post('signup')
-  create(@Body() createStudentDto: CreateStudentDto) {
-    return this.studentsService.create(createStudentDto);
+  @Post('signup/email')
+  createEmail(@Body() createStudentDto: CreateStudentDto) {
+    return this.studentsService.createEmail(createStudentDto);
+  }
+
+  @Post('signup/password')
+  createPassword(@Body() createStudentDto: CreateStudentDto) {
+    return this.studentsService.createPassword(createStudentDto);
   }
 
   @Get()

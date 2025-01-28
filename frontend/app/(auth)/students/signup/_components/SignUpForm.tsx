@@ -1,135 +1,63 @@
 "use client";
 
-import axios from "@/config/axios";
 import Link from "next/link";
-import { firstSignUpSchema } from "@/libs/validations/schemas/signup/firstSignUp";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
+import { useState } from "react";
+
 import { Button } from "@/components/shadcn/ui/button";
-import { Input } from "@/components/shadcn/ui/input";
-import { Label } from "@/components/shadcn/ui/label";
-import { toast } from "sonner";
-import { useMutation } from "@tanstack/react-query";
+import { useStepStudentStore } from "@/store/auth/student/stepStudent";
+import { ArrowBigLeft } from "lucide-react";
+import { Progress } from "@/components/shadcn/ui/progress";
+import { StepOne } from "./StepOne";
+
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/shadcn/ui/alert-dialog";
+import { StepTwo } from "./StepTwo";
 
 export default function SignUpForm() {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<z.infer<typeof firstSignUpSchema>>({
-    resolver: zodResolver(firstSignUpSchema),
-  });
+  const [open, setOpen] = useState(false);
+  const step = useStepStudentStore((state) => state.step);
+  const totalSteps = useStepStudentStore((state) => state.totalSteps);
+  const setStep = useStepStudentStore((state) => state.setStep);
 
-  const router = useRouter();
-
-  const createUserMutation = useMutation({
-    mutationFn: (user: {
-      name: string;
-      lastName: string;
-      username: string;
-      email: string;
-      password: string;
-    }) => axios.post("/api/students/signup", user),
-    onSuccess: (response) => {
-      if (response.status === 201) {
-        toast.success(response.data.message);
-        router.push("/student/signin");
-      }
-    },
-    onError: (error) => {
-      console.log(error);
-      if (error.response.status === 409) {
-        toast.error(error.response.data.message);
-      }
-    },
-  });
-
-  async function onSubmit(data: z.infer<typeof firstSignUpSchema>) {
-    createUserMutation.mutate({
-      name: data.name,
-      lastName: data.lastName,
-      username: data.username,
-      email: data.email,
-      password: data.password,
-    });
-  }
+  const progressValue = (step / totalSteps) * 100;
 
   return (
     <>
-      <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4">
-        <div className="grid grid-cols-2 gap-4">
-          <div className="grid gap-2">
-            <Label htmlFor="first-name">Nombre</Label>
-            <Input id="name" placeholder="Max" {...register("name")} />
-            {errors.name && (
-              <span className="text-red-500">{errors.name.message}</span>
-            )}
-          </div>
-          <div className="grid gap-2">
-            <Label htmlFor="lastName">Apellido</Label>
-            <Input
-              id="lastName"
-              placeholder="Robinson"
-              {...register("lastName")}
-            />
-            {errors.lastName && (
-              <span className="text-red-500">{errors.lastName.message}</span>
-            )}
-          </div>
-        </div>
-        <div className="grid gap-2">
-          <Label htmlFor="username">Nombre de usuario</Label>
-          <Input
-            id="username"
-            type="text"
-            placeholder="max12"
-            {...register("username")}
-          />
-          {errors.username && (
-            <span className="text-red-500">{errors.username.message}</span>
-          )}
-        </div>
-
-        <div className="grid gap-2">
-          <Label htmlFor="email">Correo Electrónico</Label>
-          <Input
-            id="email"
-            type="email"
-            placeholder="m@example.com"
-            {...register("email")}
-          />
-          {errors.email && (
-            <span className="text-red-500">{errors.email.message}</span>
-          )}
-        </div>
-
-        <div className="grid gap-2">
-          <Label htmlFor="password">Contraseña</Label>
-          <Input id="password" type="password" {...register("password")} />
-          {errors.password && (
-            <span className="text-red-500">{errors.password.message}</span>
-          )}
-        </div>
-
-        <div className="grid gap-2">
-          <Label htmlFor="confirmPassword">Confirma Contraseña</Label>
-          <Input
-            id="confirmPassword"
-            type="password"
-            {...register("confirmPassword")}
-          />
-          {errors.confirmPassword && (
-            <span className="text-red-500">
-              {errors.confirmPassword.message}
-            </span>
-          )}
-        </div>
-        <Button type="submit" className="w-full">
-          Crear cuenta
-        </Button>
-      </form>
+      <section className="grid gap-4">
+        <AlertDialog open={open} onOpenChange={setOpen}>
+          <AlertDialogTrigger asChild>
+            <Button className="w-full" type="submit">
+              Crear cuenta
+            </Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>
+                <article className="mb-3 text-center font-medium">
+                  Paso {step} de {totalSteps}
+                </article>
+                <Progress value={progressValue} className="mb-6" />
+              </AlertDialogTitle>
+              <section>
+                {step === 1 && <StepOne />}
+                {step === 2 && <StepTwo />}
+                {step === 3 && <p>paso 3</p>}
+                {step === 4 && <p>paso 4</p>}
+                {step === 5 && <p>paso 5</p>}
+              </section>
+            </AlertDialogHeader>
+          </AlertDialogContent>
+        </AlertDialog>
+      </section>
       <div className="mt-4 text-center text-md">
         Ya tienes una cuenta?{" "}
         <Link href="/students/signin" className="underline">
