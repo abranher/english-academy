@@ -22,19 +22,15 @@ datasource db {
 model User {
   id              String        @id @default(uuid())
   role            Roles         @default(STUDENT)
-  name            String
-  secondName      String?
-  lastName        String
-  secondLastName  String?
-  username        String        @unique
-  email           String        @unique
+  name            String?
+  lastName        String?
+  username        String?       @unique
+  email           String?       @unique
   emailVerifiedAt DateTime?
-  password        String
-  birthdate       DateTime?
+  password        String?
+  birth           DateTime?
   avatarUrl       String?
   accountStatus   AccountStatus @default(ACTIVE)
-  lastConnection  DateTime?
-  secretToken     String?
   profileComplete Boolean       @default(false)
 
   countryId String?
@@ -52,7 +48,8 @@ model User {
 }
 
 model Student {
-  id String @id @default(uuid())
+  id  String  @id @default(uuid())
+  bio String?
 
   userId String @unique
   user   User   @relation(fields: [userId], references: [id])
@@ -70,10 +67,9 @@ model Student {
 model Tutor {
   id String @id @default(uuid())
 
-  biography     String?
-  approvedAt    DateTime?
-  location      String?
-  curriculumUrl String?
+  bio        String?
+  approvedAt DateTime?
+  cvUrl      String?
 
   userId String @unique
   user   User   @relation(fields: [userId], references: [id])
@@ -86,12 +82,12 @@ model Tutor {
 }
 
 model Certification {
-  id            String   @id @default(uuid())
-  title         String
-  certification String
-  institution   String
-  issueDate     DateTime
-  language      String
+  id          String   @id @default(uuid())
+  title       String
+  url         String
+  institution String
+  issueDate   DateTime
+  language    String
 
   tutorId String
   tutor   Tutor  @relation(fields: [tutorId], references: [id])
@@ -373,8 +369,7 @@ model TranslationExercise {
 // *
 
 model PurchaseOrder {
-  id String @id @default(uuid())
-
+  id                String              @id @default(uuid())
   status            PurchaseOrderStatus @default(UNVERIFIED)
   total             Float
   payment_method    String              @default("MOBILE_PAYMENT")
@@ -408,15 +403,6 @@ model Purchase {
 
   @@unique([studentId, courseId])
   @@index([courseId])
-}
-
-model StripeCustomer {
-  id               String @id @default(uuid())
-  studentId        String @unique
-  stripeCustomerId String @unique
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }
 
 // *
