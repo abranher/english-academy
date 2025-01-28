@@ -22,6 +22,8 @@ import {
 
 export function StepOne() {
   const nextStep = useStepStudentStore((state) => state.nextStep);
+  const setUserId = useStepStudentStore((state) => state.setUserId);
+
   const form = useForm<z.infer<typeof StepOneSchema>>({
     resolver: zodResolver(StepOneSchema),
     defaultValues: {
@@ -35,6 +37,7 @@ export function StepOne() {
     onSuccess: (response) => {
       if (response.status === 201) {
         toast.success(response.data.message);
+        setUserId(response.data.userId);
         nextStep();
       }
     },

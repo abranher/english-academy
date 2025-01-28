@@ -20,9 +20,12 @@ export class StudentsController {
     return this.studentsService.createEmail(createStudentDto);
   }
 
-  @Post('signup/password')
-  createPassword(@Body() createStudentDto: CreateStudentDto) {
-    return this.studentsService.createPassword(createStudentDto);
+  @Post('signup/:userId/password')
+  createPassword(
+    @Body() createStudentDto: CreateStudentDto,
+    @Param('userId') userId: string,
+  ) {
+    return this.studentsService.createPassword(createStudentDto, userId);
   }
 
   @Get()

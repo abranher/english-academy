@@ -5,17 +5,12 @@ import { useState } from "react";
 
 import { Button } from "@/components/shadcn/ui/button";
 import { useStepStudentStore } from "@/store/auth/student/stepStudent";
-import { ArrowBigLeft } from "lucide-react";
 import { Progress } from "@/components/shadcn/ui/progress";
 import { StepOne } from "./StepOne";
 
 import {
   AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
   AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,

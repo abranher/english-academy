@@ -26,6 +26,7 @@ export function StepTwo() {
   const [visibleConfirmPassword, setVisibleConfirmPassword] = useState(false);
 
   const nextStep = useStepStudentStore((state) => state.nextStep);
+  const userId = useStepStudentStore((state) => state.userId);
 
   const form = useForm<z.infer<typeof StepTwoSchema>>({
     resolver: zodResolver(StepTwoSchema),
@@ -33,7 +34,7 @@ export function StepTwo() {
 
   const createUserMutation = useMutation({
     mutationFn: (user: { password: string }) =>
-      axios.post("/api/students/signup/password", user),
+      axios.post(`/api/students/signup/${userId}/password`, user),
     onSuccess: (response) => {
       if (response.status === 201) {
         toast.success(response.data.message);

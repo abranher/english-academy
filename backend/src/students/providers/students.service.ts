@@ -29,41 +29,23 @@ export class StudentsService {
     });
 
     return {
+      userId: newUser.id,
       message: 'Usuario creado!.',
     };
   }
 
-  async createPassword(createStudentDto: CreateStudentDto) {
-    const userFound = await this.findByEmail(createStudentDto.email);
-
-    if (userFound)
-      throw new ConflictException(
-        'La dirección de correo electrónico ya está en uso.',
-      );
-
-    const usernameFound = await this.findByUsername(createStudentDto.username);
-
-    if (usernameFound)
-      throw new ConflictException('El nombre de usuario ya está en uso.');
-
-    const newUser = await this.prisma.user.create({
+  async createPassword(createStudentDto: CreateStudentDto, id: string) {
+    await this.prisma.user.update({
+      where: {
+        id,
+      },
       data: {
-        name: createStudentDto.name,
-        lastName: createStudentDto.lastName,
-        email: createStudentDto.email,
-        username: createStudentDto.username,
         password: await hash(createStudentDto.password, 10),
       },
     });
 
-    await this.prisma.student.create({
-      data: {
-        userId: newUser.id,
-      },
-    });
-
     return {
-      message: 'Usuario creado exitosamente.',
+      message: 'Contraseña creada!!.',
     };
   }
 
