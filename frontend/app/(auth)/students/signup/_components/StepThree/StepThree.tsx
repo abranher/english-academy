@@ -1,7 +1,7 @@
 import axios from "@/config/axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { StepOneSchema } from "./StepOneSchema";
+import { StepThreeSchema } from "./StepThreeSchema";
 import { useMutation } from "@tanstack/react-query";
 import { z } from "zod";
 import { useStepStudentStore } from "@/store/auth/student/stepStudent";
@@ -20,21 +20,20 @@ import {
   FormMessage,
 } from "@/components/shadcn/ui/form";
 
-export function StepOne() {
+export function StepThree() {
   const nextStep = useStepStudentStore((state) => state.nextStep);
-  const setUserId = useStepStudentStore((state) => state.setUserId);
+  const userId = useStepStudentStore((state) => state.userId);
 
-  const form = useForm<z.infer<typeof StepOneSchema>>({
-    resolver: zodResolver(StepOneSchema),
+  const form = useForm<z.infer<typeof StepThreeSchema>>({
+    resolver: zodResolver(StepThreeSchema),
   });
 
   const createUserMutation = useMutation({
-    mutationFn: (user: { email: string }) =>
-      axios.post("/api/students/signup/email", user),
+    mutationFn: (user: { name: string; lastName: string }) =>
+      axios.post(`/api/students/signup/${userId}/names`, user),
     onSuccess: (response) => {
       if (response.status === 201) {
         toast.success(response.data.message);
-        setUserId(response.data.userId);
         nextStep();
       }
     },
@@ -46,9 +45,10 @@ export function StepOne() {
     },
   });
 
-  async function onSubmit(data: z.infer<typeof StepOneSchema>) {
+  async function onSubmit(data: z.infer<typeof StepThreeSchema>) {
     createUserMutation.mutate({
-      email: data.email,
+      name: data.name,
+      lastName: data.lastName,
     });
   }
 
@@ -57,10 +57,10 @@ export function StepOne() {
   return (
     <>
       <section className="text-center mb-6">
-        <CardTitle className="mb-3">Ingresa tu Email</CardTitle>
+        <CardTitle className="mb-3">Completa tus Datos Personales</CardTitle>
         <CardDescription>
-          Proporciona una dirección de correo electrónico válida para crear tu
-          cuenta y recibir notificaciones.
+          Escribe tu nombre y apellido para personalizar tu perfil y facilitar
+          la identificación.
         </CardDescription>
       </section>
 
@@ -69,14 +69,34 @@ export function StepOne() {
           <section className="mb-32">
             <FormField
               control={form.control}
-              name="email"
+              name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>Nombre</FormLabel>
                   <FormControl>
                     <Input
                       disabled={isSubmitting}
-                      placeholder="example@example.com"
+                      placeholder="Ej: Jonh"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <br />
+
+            <FormField
+              control={form.control}
+              name="lastName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Apellido</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={isSubmitting}
+                      placeholder="Ej: Doe"
                       {...field}
                     />
                   </FormControl>

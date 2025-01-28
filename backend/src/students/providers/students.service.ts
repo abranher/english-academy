@@ -49,6 +49,22 @@ export class StudentsService {
     };
   }
 
+  async createNames(createStudentDto: CreateStudentDto, id: string) {
+    await this.prisma.user.update({
+      where: {
+        id,
+      },
+      data: {
+        name: createStudentDto.name,
+        lastName: createStudentDto.lastName,
+      },
+    });
+
+    return {
+      message: 'Ya casi terminamos, solo un poco más.',
+    };
+  }
+
   async createUsername(createStudentDto: CreateStudentDto) {
     const userFound = await this.findByEmail(createStudentDto.email);
 

@@ -28,6 +28,14 @@ export class StudentsController {
     return this.studentsService.createPassword(createStudentDto, userId);
   }
 
+  @Post('signup/:userId/names')
+  createNames(
+    @Body() createStudentDto: CreateStudentDto,
+    @Param('userId') userId: string,
+  ) {
+    return this.studentsService.createNames(createStudentDto, userId);
+  }
+
   @Get()
   findAll() {
     return this.studentsService.findAll();

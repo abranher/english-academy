@@ -16,6 +16,8 @@ import {
   AlertDialogTrigger,
 } from "@/components/shadcn/ui/alert-dialog";
 import { StepTwo } from "./StepTwo";
+import { StepThree } from "./StepThree";
+import { StepFour } from "./StepFour";
 
 export default function SignUpForm() {
   const [open, setOpen] = useState(false);
@@ -45,8 +47,8 @@ export default function SignUpForm() {
               <section>
                 {step === 1 && <StepOne />}
                 {step === 2 && <StepTwo />}
-                {step === 3 && <p>paso 3</p>}
-                {step === 4 && <p>paso 4</p>}
+                {step === 3 && <StepThree />}
+                {step === 4 && <StepFour />}
                 {step === 5 && <p>paso 5</p>}
               </section>
             </AlertDialogHeader>
