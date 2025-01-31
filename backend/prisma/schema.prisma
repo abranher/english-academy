@@ -14,9 +14,7 @@ datasource db {
 }
 
 // *
-// *
 // * Users models
-// *
 // *
 
 model User {
@@ -48,8 +46,9 @@ model User {
 }
 
 model Student {
-  id  String  @id @default(uuid())
-  bio String?
+  id            String    @id @default(uuid())
+  bio           String?
+  initialTestAt DateTime?
 
   userId String @unique
   user   User   @relation(fields: [userId], references: [id])
