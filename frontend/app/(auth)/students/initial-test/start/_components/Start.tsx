@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/shadcn/ui/button";
-import { useInitialTestStore } from "@/store/initial-test";
+import { useInitialTestStore } from "@/services/store/initial-test";
 
 export default function Start() {
   const fetchExercises = useInitialTestStore((state) => state.fetchExercises);

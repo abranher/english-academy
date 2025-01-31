@@ -7,7 +7,7 @@ import {
   Pencil,
   UserPenIcon,
 } from "lucide-react";
-import { useLinksCourseStore } from "@/store/tutor/courses/links-course";
+import { useLinksCourseStore } from "@/services/store/tutor/courses/links-course";
 
 export default function SideNav() {
   const href = useLinksCourseStore((state) => state.href);

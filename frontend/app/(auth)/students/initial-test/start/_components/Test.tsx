@@ -1,4 +1,4 @@
-import { useInitialTestStore } from "@/store/initial-test";
+import { useInitialTestStore } from "@/services/store/initial-test";
 import ProgressTest from "./ProgressTest";
 import Exercise from "./Exercise";
 

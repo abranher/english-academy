@@ -1,10 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
 
 import { Button } from "@/components/shadcn/ui/button";
-import { useStepStudentStore } from "@/store/auth/student/stepStudent";
+import { useStepStudentStore } from "@/services/store/auth/student/stepStudent";
 import { Progress } from "@/components/shadcn/ui/progress";
 import { StepOne } from "./StepOne";
 
@@ -21,10 +20,10 @@ import { StepFour } from "./StepFour";
 import { StepFive } from "./StepFive";
 
 export default function SignUpForm() {
-  const [open, setOpen] = useState(false);
   const step = useStepStudentStore((state) => state.step);
+  const open = useStepStudentStore((state) => state.open);
+  const setOpen = useStepStudentStore((state) => state.setOpen);
   const totalSteps = useStepStudentStore((state) => state.totalSteps);
-  const setStep = useStepStudentStore((state) => state.setStep);
 
   const progressValue = (step / totalSteps) * 100;
 

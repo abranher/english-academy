@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Button } from "@/components/shadcn/ui/button";
 import { assetImg } from "@/libs/asset";
 import { formatPrice } from "@/libs/format";
-import { useCartStore } from "@/store/cart";
+import { useCartStore } from "@/services/store/cart";
 import { Chip, Image } from "@nextui-org/react";
 import { ArrowUpLeft, ShoppingCart, Trash } from "lucide-react";
 import PurchaseSummary from "./_components/PurchaseSummary";

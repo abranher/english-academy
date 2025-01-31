@@ -1,4 +1,4 @@
-import { useInitialTestStore } from "@/store/initial-test";
+import { useInitialTestStore } from "@/services/store/initial-test";
 
 const calculateProgress = (
   correctAnswer: number,

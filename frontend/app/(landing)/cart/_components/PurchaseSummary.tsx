@@ -41,7 +41,7 @@ import { toast } from "sonner";
 import { Input } from "@/components/shadcn/ui/input";
 import { formatPrice } from "@/libs/format";
 import { Button } from "@/components/shadcn/ui/button";
-import { useCartStore } from "@/store/cart";
+import { useCartStore } from "@/services/store/cart";
 import { useSession } from "next-auth/react";
 
 const formSchema = z.object({

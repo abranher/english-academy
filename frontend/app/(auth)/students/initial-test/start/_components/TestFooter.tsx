@@ -1,4 +1,4 @@
-import { useInitialTestStore } from "@/store/initial-test";
+import { useInitialTestStore } from "@/services/store/initial-test";
 import { Button, buttonVariants } from "@/components/shadcn/ui/button";
 import { CardFooter } from "@/components/shadcn/ui/card";
 import { useInitialTestData } from "@/components/hooks/useInitialTestData";

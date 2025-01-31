@@ -1,10 +1,11 @@
+import { useRouter } from "next/navigation";
 import axios from "@/config/axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { StepFiveSchema } from "./StepFiveSchema";
 import { useMutation } from "@tanstack/react-query";
 import { z } from "zod";
-import { useStepStudentStore } from "@/store/auth/student/stepStudent";
+import { useStepStudentStore } from "@/services/store/auth/student/stepStudent";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 
@@ -30,8 +31,11 @@ import {
 import { cn } from "@/libs/shadcn/utils";
 
 export function StepFive() {
-  const nextStep = useStepStudentStore((state) => state.nextStep);
+  const setOpen = useStepStudentStore((state) => state.setOpen);
+  const resetSteps = useStepStudentStore((state) => state.resetSteps);
   const userId = useStepStudentStore((state) => state.userId);
+
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof StepFiveSchema>>({
     resolver: zodResolver(StepFiveSchema),
@@ -43,7 +47,8 @@ export function StepFive() {
     onSuccess: (response) => {
       if (response.status === 201) {
         toast.success(response.data.message);
-        nextStep();
+        router.push("/students/signin");
+        resetSteps();
       }
     },
     onError: (error) => {
@@ -55,7 +60,7 @@ export function StepFive() {
   });
 
   async function onSubmit(data: z.infer<typeof StepFiveSchema>) {
-    console.log(data.birth)
+    console.log(data.birth);
     createUserMutation.mutate({
       birth: data.birth,
     });
@@ -127,7 +132,7 @@ export function StepFive() {
           <div className="w-full flex justify-end">
             {!createUserMutation.isPending ? (
               <Button disabled={!isValid || isSubmitting} type="submit">
-                Continuar
+                Finalizar
               </Button>
             ) : (
               <Button disabled>

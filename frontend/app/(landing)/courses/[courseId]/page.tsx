@@ -19,7 +19,7 @@ import {
 } from "lucide-react";
 import { formatPrice } from "@/libs/format";
 import { Button } from "@/components/shadcn/ui/button";
-import { useCartStore } from "@/store/cart";
+import { useCartStore } from "@/services/store/cart";
 import { Course } from "@/types/models/Course";
 import { Card } from "@/components/shadcn/ui/card";
 import { Chip, Image } from "@nextui-org/react";

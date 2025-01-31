@@ -5,10 +5,9 @@ import {
   CardTitle,
 } from "@/components/shadcn/ui/card";
 import { RadioGroup } from "@/components/shadcn/ui/radio-group";
-import { useInitialTestStore } from "@/store/initial-test";
+import { useInitialTestStore } from "@/services/store/initial-test";
 import { Question } from "@/types/Question";
 import TestFooter from "./TestFooter";
-import { cn } from "@/libs/shadcn/utils";
 
 const getBackgroundColor = (info: Question, index: number) => {
   const { userSelectedAnswer, correctAnswer } = info;

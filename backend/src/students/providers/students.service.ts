@@ -97,7 +97,7 @@ export class StudentsService {
     });
 
     return {
-      message: '¡Genial! Solo falta un paso.',
+      message: '¡Genial! Inicia sesión en tu nueva cuenta!',
     };
   }
 

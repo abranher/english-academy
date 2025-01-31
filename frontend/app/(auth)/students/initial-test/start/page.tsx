@@ -1,6 +1,6 @@
 "use client";
 
-import { useInitialTestStore } from "@/store/initial-test";
+import { useInitialTestStore } from "@/services/store/initial-test";
 import Start from "./_components/Start";
 import Test from "./_components/Test";
 

@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { StepTwoSchema } from "./StepTwoSchema";
 import { useMutation } from "@tanstack/react-query";
 import { z } from "zod";
-import { useStepStudentStore } from "@/store/auth/student/stepStudent";
+import { useStepStudentStore } from "@/services/store/auth/student/stepStudent";
 
 import { Input } from "@/components/shadcn/ui/input";
 import { toast } from "sonner";

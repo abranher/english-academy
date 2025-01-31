@@ -16,7 +16,7 @@ import BoxBase from "@/components/common/BoxBase";
 import Title from "@/components/common/Title";
 import { Button } from "@/components/shadcn/ui/button";
 import { ShoppingCart, XIcon } from "lucide-react";
-import { useCartStore } from "@/store/cart";
+import { useCartStore } from "@/services/store/cart";
 import { Course } from "@/types/models/Course";
 import { Chip, Image } from "@nextui-org/react";
 import { assetImg } from "@/libs/asset";
