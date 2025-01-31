@@ -3,6 +3,7 @@ import Link from "next/link";
 import SignUpForm from "./_components/SignUpForm";
 import HomeLink from "../../_components/HomeLink";
 import { Roles } from "@/types/enums/Roles";
+import { assetPublicImg } from "@/libs/asset";
 
 export default function TutorSignupPage() {
   return (
@@ -44,7 +45,7 @@ export default function TutorSignupPage() {
           <div className="absolute inset-0 bg-zinc-900" />
           <div className="hidden bg-muted lg:block">
             <Image
-              src="/tutor.jpg"
+              src={assetPublicImg("tutor.jpg")}
               alt="Image"
               width="1920"
               height="1080"

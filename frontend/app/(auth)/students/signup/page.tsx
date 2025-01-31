@@ -3,6 +3,7 @@ import SignUpForm from "./_components/SignUpForm";
 import Link from "next/link";
 import HomeLink from "../../_components/HomeLink";
 import { Roles } from "@/types/enums/Roles";
+import { assetPublicImg } from "@/libs/asset";
 
 export default function StudentSignupPage() {
   return (
@@ -14,7 +15,7 @@ export default function StudentSignupPage() {
           <div className="absolute inset-0 bg-zinc-900" />
           <div className="hidden bg-muted lg:block">
             <Image
-              src="/student.jpg"
+              src={assetPublicImg("student.jpg")}
               alt="Image"
               width="1920"
               height="1080"

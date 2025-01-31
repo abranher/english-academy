@@ -3,6 +3,7 @@ import Image from "next/image";
 import SignInForm from "./_components/SignInForm";
 import HomeLink from "../../_components/HomeLink";
 import { Roles } from "@/types/enums/Roles";
+import { assetPublicImg } from "@/libs/asset";
 
 export default function StudentSigninPage() {
   return (
@@ -14,7 +15,7 @@ export default function StudentSigninPage() {
           <div className="absolute inset-0 bg-zinc-900" />
           <div className="hidden bg-muted lg:block">
             <Image
-              src="/student.jpg"
+              src={assetPublicImg("student.jpg")}
               alt="Image"
               width="1920"
               height="1080"

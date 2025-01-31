@@ -5,6 +5,7 @@ import { Image } from "@nextui-org/react";
 import { Button } from "@/components/shadcn/ui/button";
 import BoxBase from "../../../components/common/BoxBase";
 import { ArrowRight } from "lucide-react";
+import { assetPublicImg } from "@/libs/asset";
 
 export default function TutorSection() {
   return (
@@ -16,7 +17,7 @@ export default function TutorSection() {
               <Image
                 isBlurred
                 width={240}
-                src="/tutor.jpg"
+                src={assetPublicImg("tutor.jpg")}
                 alt="Estudiante"
                 className="m-5"
               />

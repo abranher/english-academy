@@ -22,7 +22,7 @@ import { BackupModule } from './backup/backup.module';
 @Module({
   imports: [
     ServeStaticModule.forRoot({
-      rootPath: join(process.cwd(), './storage'),
+      rootPath: join(process.cwd(), './public'),
     }),
     PrismaModule,
     ConfigModule.forRoot({

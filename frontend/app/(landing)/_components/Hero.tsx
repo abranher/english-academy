@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Image } from "@nextui-org/react";
 import { Button } from "@/components/shadcn/ui/button";
 import BoxBase from "../../../components/common/BoxBase";
+import { assetPublicImg } from "@/libs/asset";
 
 export default function Hero() {
   return (
@@ -32,7 +33,7 @@ export default function Hero() {
               <Image
                 isBlurred
                 width={240}
-                src="/student.jpg"
+                src={assetPublicImg("student.jpg")}
                 alt="Estudiante"
                 className="m-5"
               />
