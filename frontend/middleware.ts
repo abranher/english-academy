@@ -8,30 +8,56 @@ export default auth((req) => {
   const isAuthenticated = !!req.auth;
   const isPublicRoute = PUBLIC_ROUTES.includes(nextUrl.pathname);
   const role = req.auth?.user.role;
+  const isEmailVerified = req.auth?.user.emailVerifiedAt;
+  const initialTestTaken = req.auth?.user.student?.initialTestAt;
 
   if (!isAuthenticated && !isPublicRoute)
     return NextResponse.redirect(new URL(ROOT, req.nextUrl));
-
-  // guest for admin
-  if (isAuthenticated && isPublicRoute && role === Roles.ADMIN) {
-    return Response.redirect(new URL(ADMIN.DEFAULT_REDIRECT, req.nextUrl));
-  }
 
   // guest for student
   // if (isAuthenticated && isPublicRoute && role === Roles.STUDENT) {
   //   return Response.redirect(new URL(STUDENT.DEFAULT_REDIRECT, req.nextUrl));
   // }
 
-  if (!(role === Roles.ADMIN) && ADMIN.ROUTES.includes(nextUrl.pathname)) {
-    return NextResponse.json({ message: "Not Found" }, { status: 404 });
-  }
+  if (isAuthenticated) {
+    // Check email verification for all authenticated users
+    // if (!isEmailVerified) {
+    //  return NextResponse.redirect(new URL("/verify-email", req.nextUrl)); // Redirect to a verification page
+    // }
 
-  if (!(role === Roles.STUDENT) && STUDENT.ROUTES.includes(nextUrl.pathname)) {
-    return NextResponse.json({ message: "Not Found" }, { status: 404 });
-  }
+    // Specific checks for students:
+    if (
+      role === Roles.STUDENT &&
+      !initialTestTaken &&
+      !nextUrl.pathname.startsWith("/students/initial-test")
+    ) {
+      // Exclude the initial test route itself
+      return NextResponse.redirect(
+        new URL("/students/initial-test", req.nextUrl)
+      ); // Redirect to the initial test page
+    }
 
-  if (!(role === Roles.TUTOR) && TUTOR.ROUTES.includes(nextUrl.pathname)) {
-    return NextResponse.json({ message: "Not Found" }, { status: 404 });
+    //Now you can safely check the routes
+    if (isPublicRoute && role === Roles.ADMIN) {
+      return NextResponse.redirect(
+        new URL(ADMIN.DEFAULT_REDIRECT, req.nextUrl)
+      );
+    }
+
+    if (!(role === Roles.ADMIN) && ADMIN.ROUTES.includes(nextUrl.pathname)) {
+      return NextResponse.json({ message: "Not Found" }, { status: 404 });
+    }
+
+    if (
+      !(role === Roles.STUDENT) &&
+      STUDENT.ROUTES.includes(nextUrl.pathname)
+    ) {
+      return NextResponse.json({ message: "Not Found" }, { status: 404 });
+    }
+
+    if (!(role === Roles.TUTOR) && TUTOR.ROUTES.includes(nextUrl.pathname)) {
+      return NextResponse.json({ message: "Not Found" }, { status: 404 });
+    }
   }
 });
 

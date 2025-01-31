@@ -1,6 +1,7 @@
+import Link from "next/link";
+
 import { buttonVariants } from "@/components/shadcn/ui/button";
 import { cn } from "@/libs/shadcn/utils";
-import Link from "next/link";
 
 export default function InitialTestPage() {
   return (
