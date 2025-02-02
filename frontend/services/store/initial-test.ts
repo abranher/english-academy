@@ -19,7 +19,7 @@ export const useInitialTestStore = create<State>()(
       currentExercise: 0,
 
       fetchExercises: async (limit: number) => {
-        const res = await fetch("http://localhost:3000/data.json");
+        const res = await fetch("http://localhost:8000/assets/data.json");
         const json = await res.json();
 
         const exercises = json.sort(() => Math.random() - 0.5).slice(0, limit);

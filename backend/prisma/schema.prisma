@@ -120,10 +120,9 @@ model Level {
   title       String
   description String
 
-  courses                Course[]
-  student                Student[]
-  multipleChoiceExercise MultipleChoiceExercise[]
-  translationExercise    TranslationExercise[]
+  courses             Course[]
+  student             Student[]
+  translationExercise TranslationExercise[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -291,6 +290,33 @@ model Quiz {
   lessonId String @unique
   lesson   Lesson @relation(fields: [lessonId], references: [id])
 
+  quizQuestions QuizQuestion[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model QuizQuestion {
+  id   String @id @default(uuid())
+  text String
+
+  quizId String
+  quiz   Quiz   @relation(fields: [quizId], references: [id])
+
+  quizQuestionOptions QuizQuestionOption[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model QuizQuestionOption {
+  id        String  @id @default(uuid())
+  text      String
+  isCorrect Boolean @default(false)
+
+  quizQuestionId String
+  quizQuestion   QuizQuestion @relation(fields: [quizQuestionId], references: [id])
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -318,35 +344,8 @@ model StudentProgress {
 }
 
 // *
-// *
 // * Exercise type
 // *
-// *
-
-model MultipleChoiceExercise {
-  id       String @id @default(uuid())
-  question String
-  text     String
-
-  levelId               String?
-  level                 Level?                  @relation(fields: [levelId], references: [id])
-  multipleChoiceOptions MultipleChoiceOptions[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model MultipleChoiceOptions {
-  id        String  @id @default(uuid())
-  text      String
-  isCorrect Boolean @default(false)
-
-  multipleChoiceExerciseId String
-  multipleChoiceExercise   MultipleChoiceExercise @relation(fields: [multipleChoiceExerciseId], references: [id])
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
 
 model TranslationExercise {
   id          String   @id @default(uuid())
@@ -362,9 +361,7 @@ model TranslationExercise {
 }
 
 // *
-// *
 // * Purchase model
-// *
 // *
 
 model PurchaseOrder {
