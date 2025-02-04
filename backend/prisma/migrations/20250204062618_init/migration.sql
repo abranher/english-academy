@@ -223,6 +223,29 @@ CREATE TABLE "Quiz" (
 );
 
 -- CreateTable
+CREATE TABLE "QuizQuestion" (
+    "id" TEXT NOT NULL,
+    "text" TEXT NOT NULL,
+    "quizId" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "QuizQuestion_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "QuizQuestionOption" (
+    "id" TEXT NOT NULL,
+    "text" TEXT NOT NULL,
+    "isCorrect" BOOLEAN NOT NULL DEFAULT false,
+    "quizQuestionId" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "QuizQuestionOption_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "StudentProgress" (
     "id" TEXT NOT NULL,
     "studentId" TEXT NOT NULL,
@@ -232,30 +255,6 @@ CREATE TABLE "StudentProgress" (
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "StudentProgress_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "MultipleChoiceExercise" (
-    "id" TEXT NOT NULL,
-    "question" TEXT NOT NULL,
-    "text" TEXT NOT NULL,
-    "levelId" TEXT,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
-
-    CONSTRAINT "MultipleChoiceExercise_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "MultipleChoiceOptions" (
-    "id" TEXT NOT NULL,
-    "text" TEXT NOT NULL,
-    "isCorrect" BOOLEAN NOT NULL DEFAULT false,
-    "multipleChoiceExerciseId" TEXT NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
-
-    CONSTRAINT "MultipleChoiceOptions_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -405,13 +404,13 @@ ALTER TABLE "Class" ADD CONSTRAINT "Class_lessonId_fkey" FOREIGN KEY ("lessonId"
 ALTER TABLE "Quiz" ADD CONSTRAINT "Quiz_lessonId_fkey" FOREIGN KEY ("lessonId") REFERENCES "Lesson"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "QuizQuestion" ADD CONSTRAINT "QuizQuestion_quizId_fkey" FOREIGN KEY ("quizId") REFERENCES "Quiz"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "QuizQuestionOption" ADD CONSTRAINT "QuizQuestionOption_quizQuestionId_fkey" FOREIGN KEY ("quizQuestionId") REFERENCES "QuizQuestion"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "StudentProgress" ADD CONSTRAINT "StudentProgress_chapterId_fkey" FOREIGN KEY ("chapterId") REFERENCES "Chapter"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "MultipleChoiceExercise" ADD CONSTRAINT "MultipleChoiceExercise_levelId_fkey" FOREIGN KEY ("levelId") REFERENCES "Level"("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "MultipleChoiceOptions" ADD CONSTRAINT "MultipleChoiceOptions_multipleChoiceExerciseId_fkey" FOREIGN KEY ("multipleChoiceExerciseId") REFERENCES "MultipleChoiceExercise"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "TranslationExercise" ADD CONSTRAINT "TranslationExercise_levelId_fkey" FOREIGN KEY ("levelId") REFERENCES "Level"("id") ON DELETE SET NULL ON UPDATE CASCADE;

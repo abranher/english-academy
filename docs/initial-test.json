@@ -1,0 +1,72 @@
+{
+  "test": {
+    "title": "Test de Nivel de Inglés",
+    "description": "Pone a prueba tu nivel de inglés según el MCER.",
+    "questions": [
+      {
+        "id": 1,
+        "level": "A1",
+        "question": "What is your name?",
+        "options": ["John", "Banana", "Apple", "Car"],
+        "correct_answer": "John",
+        "points": 10
+      },
+      {
+        "id": 2,
+        "level": "A2",
+        "question": "Choose the correct word: She ___ a book.",
+        "options": ["read", "reads", "reading", "to read"],
+        "correct_answer": "reads",
+        "points": 15
+      },
+      {
+        "id": 3,
+        "level": "B1",
+        "question": "Which of the following sentences is correct?",
+        "options": ["She go to the park.", "She goes to the park.", "She going to the park.", "She gone to the park."],
+        "correct_answer": "She goes to the park.",
+        "points": 20
+      },
+      {
+        "id": 4,
+        "level": "B2",
+        "question": "What is the synonym of 'difficult'?",
+        "options": ["Easy", "Hard", "Fun", "Simple"],
+        "correct_answer": "Hard",
+        "points": 25
+      },
+      {
+        "id": 5,
+        "level": "C1",
+        "question": "Choose the correct phrase to complete the sentence: 'Had I known about the meeting, I ___ attended.'",
+        "options": ["would", "would have", "will", "will have"],
+        "correct_answer": "would have",
+        "points": 30
+      },
+      {
+        "id": 6,
+        "level": "C2",
+        "question": "What is the correct interpretation of the following phrase: 'It's all Greek to me.'",
+        "options": ["I don't understand it", "I love Greek food", "I’m speaking Greek", "I’m Greek"],
+        "correct_answer": "I don't understand it",
+        "points": 35
+      }
+    ]
+  },
+  "scoring_system": {
+    "A1": 0,
+    "A2": 30,
+    "B1": 60,
+    "B2": 90,
+    "C1": 120,
+    "C2": 150
+  },
+  "results": {
+    "A1": "Nivel A1: Principiante",
+    "A2": "Nivel A2: Elemental",
+    "B1": "Nivel B1: Intermedio",
+    "B2": "Nivel B2: Intermedio Alto",
+    "C1": "Nivel C1: Avanzado",
+    "C2": "Nivel C2: Maestría"
+  }
+}

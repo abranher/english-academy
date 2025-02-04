@@ -1,5 +1,7 @@
-import Link from "next/link";
+"use client"
 
+import Link from "next/link";
+import { signOut } from "next-auth/react";
 import { buttonVariants } from "@/components/shadcn/ui/button";
 import { cn } from "@/libs/shadcn/utils";
 
@@ -8,6 +10,7 @@ export default function InitialTestPage() {
     <>
       <div className="container relative h-[600px] flex flex-col items-center justify-center">
         <div className="lg:p-8">
+          <button onClick={() => signOut()}>Sign Out</button>
           <div className="mx-auto max-w-lg flex flex-col gap-4">
             <div className="text-5xl">
               <h2>¡Bienvenido a Academy!</h2>

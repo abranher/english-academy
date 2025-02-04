@@ -322,9 +322,7 @@ model QuizQuestionOption {
 }
 
 // *
-// *
 // * Student Progress
-// *
 // *
 
 model StudentProgress {
