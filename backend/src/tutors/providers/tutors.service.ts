@@ -8,7 +8,7 @@ import { hash } from 'bcrypt';
 export class TutorsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(createTutorDto: CreateTutorDto) {
+  async createEmail(createTutorDto: CreateTutorDto) {
     const userFound = await this.findByEmail(createTutorDto.email);
 
     if (userFound)
@@ -16,19 +16,10 @@ export class TutorsService {
         'La dirección de correo electrónico ya está en uso.',
       );
 
-    const usernameFound = await this.findByUsername(createTutorDto.username);
-
-    if (usernameFound)
-      throw new ConflictException('El nombre de usuario ya está en uso.');
-
     const newUser = await this.prisma.user.create({
       data: {
         role: 'TUTOR',
-        name: createTutorDto.name,
-        lastName: createTutorDto.lastName,
         email: createTutorDto.email,
-        username: createTutorDto.username,
-        password: await hash(createTutorDto.password, 10),
       },
     });
 
@@ -39,7 +30,75 @@ export class TutorsService {
     });
 
     return {
-      message: 'Usuario creado exitosamente.',
+      userId: newUser.id,
+      message: 'Usuario creado!.',
+    };
+  }
+
+  async createPassword(createTutorDto: CreateTutorDto, id: string) {
+    await this.prisma.user.update({
+      where: {
+        id,
+      },
+      data: {
+        password: await hash(createTutorDto.password, 10),
+      },
+    });
+
+    return {
+      message: 'Contraseña creada!!.',
+    };
+  }
+
+  async createNames(createTutorDto: CreateTutorDto, id: string) {
+    await this.prisma.user.update({
+      where: {
+        id,
+      },
+      data: {
+        name: createTutorDto.name,
+        lastName: createTutorDto.lastName,
+      },
+    });
+
+    return {
+      message: 'Ya casi terminamos, solo un poco más.',
+    };
+  }
+
+  async createUsername(createTutorDto: CreateTutorDto, id: string) {
+    const usernameFound = await this.findByUsername(createTutorDto.username);
+
+    if (usernameFound)
+      throw new ConflictException('El nombre de usuario ya está en uso.');
+
+    await this.prisma.user.update({
+      where: {
+        id,
+      },
+      data: {
+        username: createTutorDto.username,
+      },
+    });
+
+    return {
+      message:
+        '¡Casi terminamos! Solo unos pasos más para completar tu registro.',
+    };
+  }
+
+  async createBirth(createTutorDto: CreateTutorDto, id: string) {
+    await this.prisma.user.update({
+      where: {
+        id,
+      },
+      data: {
+        birth: createTutorDto.birth,
+      },
+    });
+
+    return {
+      message: '¡Genial! Inicia sesión en tu nueva cuenta!',
     };
   }
 

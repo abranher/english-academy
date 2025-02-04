@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { StepThreeSchema } from "./StepThreeSchema";
 import { useMutation } from "@tanstack/react-query";
 import { z } from "zod";
-import { useStepStudentStore } from "@/services/store/auth/student/stepStudent";
+import { useStepTutorStore } from "@/services/store/auth/tutor/stepTutor";
 
 import { Input } from "@/components/shadcn/ui/input";
 import { toast } from "sonner";
@@ -21,8 +21,8 @@ import {
 } from "@/components/shadcn/ui/form";
 
 export function StepThree() {
-  const nextStep = useStepStudentStore((state) => state.nextStep);
-  const userId = useStepStudentStore((state) => state.userId);
+  const nextStep = useStepTutorStore((state) => state.nextStep);
+  const userId = useStepTutorStore((state) => state.userId);
 
   const form = useForm<z.infer<typeof StepThreeSchema>>({
     resolver: zodResolver(StepThreeSchema),
@@ -30,7 +30,7 @@ export function StepThree() {
 
   const createUserMutation = useMutation({
     mutationFn: (user: { name: string; lastName: string }) =>
-      axios.post(`/api/students/signup/${userId}/names`, user),
+      axios.post(`/api/tutors/signup/${userId}/names`, user),
     onSuccess: (response) => {
       if (response.status === 201) {
         toast.success(response.data.message);

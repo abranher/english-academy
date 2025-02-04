@@ -15,9 +15,41 @@ import { UpdateTutorDto } from '../dto/update-tutor.dto';
 export class TutorsController {
   constructor(private readonly tutorsService: TutorsService) {}
 
-  @Post('signup')
-  create(@Body() createTutorDto: CreateTutorDto) {
-    return this.tutorsService.create(createTutorDto);
+  @Post('signup/email')
+  createEmail(@Body() createTutorDto: CreateTutorDto) {
+    return this.tutorsService.createEmail(createTutorDto);
+  }
+
+  @Post('signup/:userId/password')
+  createPassword(
+    @Body() createTutorDto: CreateTutorDto,
+    @Param('userId') userId: string,
+  ) {
+    return this.tutorsService.createPassword(createTutorDto, userId);
+  }
+
+  @Post('signup/:userId/names')
+  createNames(
+    @Body() createTutorDto: CreateTutorDto,
+    @Param('userId') userId: string,
+  ) {
+    return this.tutorsService.createNames(createTutorDto, userId);
+  }
+
+  @Post('signup/:userId/username')
+  createUsername(
+    @Body() createTutorDto: CreateTutorDto,
+    @Param('userId') userId: string,
+  ) {
+    return this.tutorsService.createUsername(createTutorDto, userId);
+  }
+
+  @Post('signup/:userId/birth')
+  createBirth(
+    @Body() createTutorDto: CreateTutorDto,
+    @Param('userId') userId: string,
+  ) {
+    return this.tutorsService.createBirth(createTutorDto, userId);
   }
 
   @Get()

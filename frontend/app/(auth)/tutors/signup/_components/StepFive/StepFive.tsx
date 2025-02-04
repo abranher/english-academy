@@ -5,7 +5,8 @@ import { useForm } from "react-hook-form";
 import { StepFiveSchema } from "./StepFiveSchema";
 import { useMutation } from "@tanstack/react-query";
 import { z } from "zod";
-import { useStepStudentStore } from "@/services/store/auth/student/stepStudent";
+import { useStepTutorStore } from "@/services/store/auth/tutor/stepTutor";
+
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 
@@ -31,9 +32,9 @@ import {
 import { cn } from "@/libs/shadcn/utils";
 
 export function StepFive() {
-  const setOpen = useStepStudentStore((state) => state.setOpen);
-  const resetSteps = useStepStudentStore((state) => state.resetSteps);
-  const userId = useStepStudentStore((state) => state.userId);
+  const setOpen = useStepTutorStore((state) => state.setOpen);
+  const resetSteps = useStepTutorStore((state) => state.resetSteps);
+  const userId = useStepTutorStore((state) => state.userId);
 
   const router = useRouter();
 
@@ -43,11 +44,11 @@ export function StepFive() {
 
   const createUserMutation = useMutation({
     mutationFn: (user: { birth: Date }) =>
-      axios.post(`/api/students/signup/${userId}/birth`, user),
+      axios.post(`/api/tutors/signup/${userId}/birth`, user),
     onSuccess: (response) => {
       if (response.status === 201) {
         toast.success(response.data.message);
-        router.push("/students/signin");
+        router.push("/tutors/signin");
         resetSteps();
       }
     },

@@ -3,7 +3,7 @@
 import Link from "next/link";
 
 import { Button } from "@/components/shadcn/ui/button";
-import { useStepStudentStore } from "@/services/store/auth/student/stepStudent";
+import { useStepTutorStore } from "@/services/store/auth/tutor/stepTutor";
 import { Progress } from "@/components/shadcn/ui/progress";
 import { StepOne } from "./StepOne";
 
@@ -18,12 +18,13 @@ import { StepTwo } from "./StepTwo";
 import { StepThree } from "./StepThree";
 import { StepFour } from "./StepFour";
 import { StepFive } from "./StepFive";
+import { StepInit } from "./StepInit";
 
 export default function SignUpForm() {
-  const step = useStepStudentStore((state) => state.step);
-  const open = useStepStudentStore((state) => state.open);
-  const setOpen = useStepStudentStore((state) => state.setOpen);
-  const totalSteps = useStepStudentStore((state) => state.totalSteps);
+  const step = useStepTutorStore((state) => state.step);
+  const open = useStepTutorStore((state) => state.open);
+  const setOpen = useStepTutorStore((state) => state.setOpen);
+  const totalSteps = useStepTutorStore((state) => state.totalSteps);
 
   const progressValue = (step / totalSteps) * 100;
 
@@ -38,13 +39,22 @@ export default function SignUpForm() {
           </AlertDialogTrigger>
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>
-                <article className="mb-3 text-center font-medium">
-                  Paso {step} de {totalSteps}
-                </article>
-                <Progress value={progressValue} className="mb-6" />
-              </AlertDialogTitle>
+              {step === 0 ? (
+                <AlertDialogTitle>
+                  <article className="mb-3 text-center font-medium">
+                    ¡Bienvenido a nuestra comunidad de tutores!
+                  </article>
+                </AlertDialogTitle>
+              ) : (
+                <AlertDialogTitle>
+                  <article className="mb-3 text-center font-medium">
+                    Paso {step} de {totalSteps}
+                  </article>
+                  <Progress value={progressValue} className="mb-6" />
+                </AlertDialogTitle>
+              )}
               <section>
+                {step === 0 && <StepInit />}
                 {step === 1 && <StepOne />}
                 {step === 2 && <StepTwo />}
                 {step === 3 && <StepThree />}
