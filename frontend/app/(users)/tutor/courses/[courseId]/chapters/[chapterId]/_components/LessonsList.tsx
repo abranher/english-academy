@@ -11,20 +11,19 @@ import {
 import { ClipboardList, FileVideo, Pencil } from "lucide-react";
 import { Lesson } from "@/types/models/Lesson";
 import { LessonType } from "@/types/enums";
+import { useParams, useRouter } from "next/navigation";
 
 interface LessonsListProps {
   items: Lesson[];
   onReorder: (updateData: { id: string; position: number }[]) => void;
-  onEdit: (id: string) => void;
 }
 
-export default function LessonsList({
-  items,
-  onEdit,
-  onReorder,
-}: LessonsListProps) {
+export default function LessonsList({ items, onReorder }: LessonsListProps) {
   const [isMounted, setIsMounted] = useState(false);
   const [lessons, setLessons] = useState(items);
+
+  const router = useRouter();
+  const { courseId, chapterId } = useParams();
 
   useEffect(() => {
     setIsMounted(true);
@@ -54,6 +53,18 @@ export default function LessonsList({
     }));
 
     onReorder(bulkUpdateData);
+  };
+
+  const onEdit = (id: string, lessonType: string) => {
+    if (lessonType === LessonType.CLASS) {
+      router.push(
+        `/tutor/courses/${courseId}/chapters/${chapterId}/lessons/${id}/class`
+      );
+    } else if (lessonType === LessonType.QUIZ) {
+      router.push(
+        `/tutor/courses/${courseId}/chapters/${chapterId}/lessons/${id}/quiz`
+      );
+    }
   };
 
   if (!isMounted) return null;
@@ -95,7 +106,7 @@ export default function LessonsList({
 
                       <div className="ml-auto p-4 flex items-center gap-x-4">
                         <Pencil
-                          onClick={() => onEdit(lesson.id)}
+                          onClick={() => onEdit(lesson.id, lesson.type)}
                           className="w-4 h-4 cursor-pointer hover:opacity-75 transition"
                         />
                       </div>

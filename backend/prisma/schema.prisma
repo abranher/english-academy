@@ -284,8 +284,9 @@ model Class {
 // *
 
 model Quiz {
-  id    String @id @default(uuid())
-  title String
+  id          String  @id @default(uuid())
+  title       String
+  description String?
 
   lessonId String @unique
   lesson   Lesson @relation(fields: [lessonId], references: [id])

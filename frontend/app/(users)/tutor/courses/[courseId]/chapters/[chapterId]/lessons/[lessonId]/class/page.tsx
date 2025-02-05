@@ -15,7 +15,7 @@ import { Separator } from "@/components/shadcn/ui/separator";
 import TitleSection from "./_components/TitleSection";
 import Content from "./_components/Content";
 
-export default async function ChapterIdPage({
+export default async function LessonClassPage({
   params,
 }: {
   params: {

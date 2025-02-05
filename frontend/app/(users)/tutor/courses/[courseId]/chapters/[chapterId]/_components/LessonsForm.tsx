@@ -62,7 +62,6 @@ export default function LessonsForm({
   const [lessonType, setLessonType] = useState("CLASS");
 
   const router = useRouter();
-  const { courseId } = useParams();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -108,12 +107,6 @@ export default function LessonsForm({
     }
   };
 
-  const onEdit = (id: string) => {
-    router.push(
-      `/tutor/courses/${courseId}/chapters/${chapterId}/lessons/${id}/class`
-    );
-  };
-
   return (
     <>
       <CardContent className="relative">
@@ -146,7 +139,6 @@ export default function LessonsForm({
             </div>
           )}
           <LessonsList
-            onEdit={onEdit}
             onReorder={onReorder}
             items={initialData.lessons || []}
           />

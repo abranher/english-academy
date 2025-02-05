@@ -111,6 +111,8 @@ export class LessonsService {
       },
     });
 
+    console.log(lesson.type === LessonType.QUIZ);
+
     return {
       ...lesson,
       title: lesson.class.title,
