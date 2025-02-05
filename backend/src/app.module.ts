@@ -1,23 +1,25 @@
-import { Module } from '@nestjs/common';
-import { PrismaModule } from './prisma/prisma.module';
-import { ConfigModule } from '@nestjs/config';
-import { AuthModule } from './auth/auth.module';
-import { UsersModule } from './users/users.module';
-import { CoursesModule } from './courses/courses.module';
-import { LevelsModule } from './levels/levels.module';
-import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'node:path';
-import { ChaptersModule } from './chapters/chapters.module';
-import { StudentsModule } from './students/students.module';
-import { TutorsModule } from './tutors/tutors.module';
-import { CategoriesModule } from './categories/categories.module';
-import { SubcategoriesModule } from './subcategories/subcategories.module';
-import { PricesModule } from './prices/prices.module';
-import { LessonsModule } from './lessons/lessons.module';
-import { PurchaseOrdersModule } from './purchase-orders/purchase-orders.module';
-import { PurchasesModule } from './purchases/purchases.module';
-import { ActivityLogsModule } from './activity-logs/activity-logs.module';
-import { BackupModule } from './backup/backup.module';
+
+import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+import { ServeStaticModule } from '@nestjs/serve-static';
+
+import { PrismaModule } from './modules/prisma/prisma.module';
+import { AuthModule } from './modules/auth/auth.module';
+import { UsersModule } from './modules/users/users.module';
+import { CoursesModule } from './modules/courses/courses.module';
+import { LevelsModule } from './modules/levels/levels.module';
+import { ChaptersModule } from './modules/chapters/chapters.module';
+import { StudentsModule } from './modules/students/students.module';
+import { TutorsModule } from './modules/tutors/tutors.module';
+import { CategoriesModule } from './modules/categories/categories.module';
+import { SubcategoriesModule } from './modules/subcategories/subcategories.module';
+import { PricesModule } from './modules/prices/prices.module';
+import { LessonsModule } from './modules/lessons/lessons.module';
+import { PurchaseOrdersModule } from './modules/purchase-orders/purchase-orders.module';
+import { PurchasesModule } from './modules/purchases/purchases.module';
+import { ActivityLogsModule } from './modules/activity-logs/activity-logs.module';
+import { BackupModule } from './modules/backup/backup.module';
 
 @Module({
   imports: [
