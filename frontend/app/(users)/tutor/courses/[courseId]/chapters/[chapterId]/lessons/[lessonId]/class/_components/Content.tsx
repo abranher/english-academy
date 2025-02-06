@@ -47,14 +47,14 @@ export default function Content({ lesson }: { lesson: any }) {
               <>
                 <ClassTitleForm
                   initialData={lesson}
-                  chapterId={chapterId as string}
                   lessonId={lessonId as string}
+                  classId={lesson.class.id as string}
                 />
                 <Separator />
 
                 <ClassDescriptionForm
                   initialData={lesson}
-                  chapterId={chapterId as string}
+                  classId={lesson.class.id as string}
                   lessonId={lessonId as string}
                 />
                 <Separator />

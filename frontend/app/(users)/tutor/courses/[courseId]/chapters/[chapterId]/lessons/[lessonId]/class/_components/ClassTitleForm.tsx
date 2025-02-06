@@ -26,7 +26,7 @@ interface ClassFormProps {
     title: string;
   };
   lessonId: string;
-  chapterId: string;
+  classId: string;
 }
 
 const formSchema = z.object({
@@ -36,7 +36,7 @@ const formSchema = z.object({
 export default function ClassTitleForm({
   initialData,
   lessonId,
-  chapterId,
+  classId,
 }: ClassFormProps) {
   const router = useRouter();
 
@@ -49,10 +49,7 @@ export default function ClassTitleForm({
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await axios.patch(
-        `/api/lessons/${lessonId}/chapter/${chapterId}/class`,
-        values
-      );
+      await axios.patch(`/api/classes/${classId}/lesson/${lessonId}`, values);
       toast.success("Título de la clase actualizada!");
       router.refresh();
     } catch (error) {

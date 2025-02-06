@@ -25,8 +25,8 @@ interface DescriptionFormProps {
   initialData: {
     description: string;
   };
-  chapterId: string;
   lessonId: string;
+  classId: string;
 }
 
 const formSchema = z.object({
@@ -35,8 +35,8 @@ const formSchema = z.object({
 
 export default function ClassDescriptionForm({
   initialData,
-  chapterId,
   lessonId,
+  classId,
 }: DescriptionFormProps) {
   const router = useRouter();
 
@@ -51,10 +51,7 @@ export default function ClassDescriptionForm({
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await axios.patch(
-        `/api/lessons/${lessonId}/chapter/${chapterId}/class`,
-        values
-      );
+      await axios.patch(`/api/classes/${classId}/lesson/${lessonId}`, values);
       toast.success("Descripción de la clase actualizada!");
       router.refresh();
     } catch (error) {
