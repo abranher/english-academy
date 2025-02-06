@@ -46,15 +46,15 @@ export default function Content({ lesson }: { lesson: any }) {
               <>
                 <QuizTitleForm
                   initialData={lesson}
-                  chapterId={chapterId as string}
                   lessonId={lessonId as string}
+                  quizId={lesson.quiz.id as string}
                 />
                 <Separator />
 
                 <QuizDescriptionForm
                   initialData={lesson}
-                  chapterId={chapterId as string}
                   lessonId={lessonId as string}
+                  quizId={lesson.quiz.id as string}
                 />
                 <Separator />
               </>

@@ -26,7 +26,7 @@ interface QuizFormProps {
     title: string;
   };
   lessonId: string;
-  chapterId: string;
+  quizId: string;
 }
 
 const formSchema = z.object({
@@ -36,7 +36,7 @@ const formSchema = z.object({
 export default function QuizTitleForm({
   initialData,
   lessonId,
-  chapterId,
+  quizId,
 }: QuizFormProps) {
   const router = useRouter();
 
@@ -49,10 +49,7 @@ export default function QuizTitleForm({
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await axios.patch(
-        `/api/lessons/${lessonId}/chapter/${chapterId}/class`,
-        values
-      );
+      await axios.patch(`/api/quizzes/${quizId}/lesson/${lessonId}`, values);
       toast.success("Título del quiz actualizado!");
       router.refresh();
     } catch (error) {

@@ -43,24 +43,6 @@ export class LessonsController {
     return this.lessonsService.findOne(id, chapterId);
   }
 
-  @Patch(':id/chapter/:chapterId/class')
-  updateClass(
-    @Param('id') id: string,
-    @Param('chapterId') chapterId: string,
-    @Body() updateLessonClassDto: UpdateLessonClassDto,
-  ) {
-    return this.lessonsService.updateClass(id, chapterId, updateLessonClassDto);
-  }
-
-  @Patch(':id/chapter/:chapterId/class')
-  updateQuiz(
-    @Param('id') id: string,
-    @Param('chapterId') chapterId: string,
-    @Body() updateLessonClassDto: UpdateLessonClassDto,
-  ) {
-    return this.lessonsService.updateQuiz(id, chapterId, updateLessonClassDto);
-  }
-
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.lessonsService.remove(+id);

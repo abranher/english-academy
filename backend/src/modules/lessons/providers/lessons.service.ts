@@ -127,52 +127,6 @@ export class LessonsService {
       };
   }
 
-  async updateClass(
-    id: string,
-    chapterId: string,
-    updateLessonClassDto: UpdateLessonClassDto,
-  ) {
-    const ownLesson = await this.prisma.lesson.findUnique({
-      where: {
-        id,
-      },
-    });
-
-    if (!ownLesson) throw new NotFoundException('Lección no encontrada.');
-
-    const lessonClass = await this.prisma.class.update({
-      where: {
-        lessonId: ownLesson.id,
-      },
-      data: updateLessonClassDto,
-    });
-
-    return lessonClass;
-  }
-
-  async updateQuiz(
-    id: string,
-    chapterId: string,
-    updateLessonClassDto: UpdateLessonClassDto,
-  ) {
-    const ownLesson = await this.prisma.lesson.findUnique({
-      where: {
-        id,
-      },
-    });
-
-    if (!ownLesson) throw new NotFoundException('Lección no encontrada.');
-
-    const lessonClass = await this.prisma.class.update({
-      where: {
-        lessonId: ownLesson.id,
-      },
-      data: updateLessonClassDto,
-    });
-
-    return lessonClass;
-  }
-
   remove(id: number) {
     return `This action removes a #${id} lesson`;
   }
