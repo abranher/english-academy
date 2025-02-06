@@ -4,7 +4,7 @@ import axios from "@/config/axios";
 
 import { Button } from "@/components/shadcn/ui/button";
 import { ChevronLeft } from "lucide-react";
-import ClassActions from "./_components/ClassActions";
+import QuizActions from "./_components/QuizActions";
 import {
   Tooltip,
   TooltipContent,
@@ -32,11 +32,7 @@ export default async function LessonQuizPage({
     return redirect("/tutor/courses");
   }
 
-  const requieredFields = [
-    lesson.title,
-    lesson.description,
-    //lesson.video,
-  ];
+  const requieredFields = [lesson.title, lesson.description];
 
   const totalFields = requieredFields.length;
   const completedFields = requieredFields.filter(Boolean).length;
@@ -62,7 +58,7 @@ export default async function LessonQuizPage({
             </Button>
           </Link>
           <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
-            Configuración de la Clase
+            Configuración del Quiz
           </h1>
           <p className="flex-1 shrink-0 whitespace-nowrap tracking-tight">
             <TooltipProvider>
@@ -76,7 +72,7 @@ export default async function LessonQuizPage({
           </p>
 
           <div className="hidden items-center gap-2 md:ml-auto md:flex">
-            <ClassActions
+            <QuizActions
               disabled={!isComplete}
               courseId={params.courseId}
               chapterId={params.chapterId}

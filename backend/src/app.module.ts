@@ -20,6 +20,7 @@ import { PurchaseOrdersModule } from './modules/purchase-orders/purchase-orders.
 import { PurchasesModule } from './modules/purchases/purchases.module';
 import { ActivityLogsModule } from './modules/activity-logs/activity-logs.module';
 import { BackupModule } from './modules/backup/backup.module';
+import { ClassesModule } from './modules/classes/classes.module';
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ import { BackupModule } from './modules/backup/backup.module';
     PurchasesModule,
     ActivityLogsModule,
     BackupModule,
+    ClassesModule,
   ],
 })
 export class AppModule {}

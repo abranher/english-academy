@@ -6,11 +6,10 @@ import { Card } from "@/components/shadcn/ui/card";
 import { Separator } from "@/components/shadcn/ui/separator";
 import { cn } from "@/libs/shadcn/utils";
 import Title from "@/components/common/Title";
-import ClassDescriptionForm from "./ClassDescriptionForm";
+import QuizDescriptionForm from "./QuizDescriptionForm";
 import { useParams } from "next/navigation";
 import { BookOpen, Globe } from "lucide-react";
-import ClassTitleForm from "./ClassTitleForm";
-import VideoForm from "./VideoForm";
+import QuizTitleForm from "./QuizTitleForm";
 
 // Define un tipo para las posibles claves de sectionTitles
 type SectionTitleKey = "mainContent";
@@ -45,21 +44,19 @@ export default function Content({ lesson }: { lesson: any }) {
             <Separator />
             {content === "mainContent" && (
               <>
-                <ClassTitleForm
+                <QuizTitleForm
                   initialData={lesson}
                   chapterId={chapterId as string}
                   lessonId={lessonId as string}
                 />
                 <Separator />
 
-                <ClassDescriptionForm
+                <QuizDescriptionForm
                   initialData={lesson}
                   chapterId={chapterId as string}
                   lessonId={lessonId as string}
                 />
                 <Separator />
-
-                <VideoForm lesson={lesson} />
               </>
             )}
           </Card>

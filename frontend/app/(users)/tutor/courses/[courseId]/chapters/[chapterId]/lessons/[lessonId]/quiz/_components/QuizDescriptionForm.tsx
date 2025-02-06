@@ -33,7 +33,7 @@ const formSchema = z.object({
   description: z.string(messages.requiredError).min(4, messages.min(4)),
 });
 
-export default function ClassDescriptionForm({
+export default function QuizDescriptionForm({
   initialData,
   chapterId,
   lessonId,
@@ -55,7 +55,7 @@ export default function ClassDescriptionForm({
         `/api/lessons/${lessonId}/chapter/${chapterId}/class`,
         values
       );
-      toast.success("Descripción de la clase actualizada!");
+      toast.success("Descripción del quiz actualizado!");
       router.refresh();
     } catch (error) {
       toast.error("Something wrong");
@@ -75,7 +75,7 @@ export default function ClassDescriptionForm({
               name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Descripción de la clase</FormLabel>
+                  <FormLabel>Descripción del quiz</FormLabel>
 
                   <FormControl>
                     <Editor {...field} />
@@ -83,7 +83,7 @@ export default function ClassDescriptionForm({
 
                   <FormDescription>
                     Define la descripción que represente el contenido de tu
-                    clase.
+                    quiz.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>

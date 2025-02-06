@@ -8,19 +8,19 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 
-interface ClassActionsProps {
+interface QuizActionsProps {
   disabled: boolean;
   courseId: string;
   chapterId: string;
   isPublished: boolean;
 }
 
-export default function ClassActions({
+export default function QuizActions({
   disabled,
   courseId,
   chapterId,
   isPublished,
-}: ClassActionsProps) {
+}: QuizActionsProps) {
   const [isLoading, setIsLoading] = useState(false);
 
   const router = useRouter();

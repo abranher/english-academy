@@ -21,7 +21,7 @@ import { Input } from "@/components/shadcn/ui/input";
 import messages from "@/libs/validations/schemas/messages";
 import { toast } from "sonner";
 
-interface ClassFormProps {
+interface QuizFormProps {
   initialData: {
     title: string;
   };
@@ -33,11 +33,11 @@ const formSchema = z.object({
   title: z.string(messages.requiredError).min(4, messages.min(4)),
 });
 
-export default function ClassTitleForm({
+export default function QuizTitleForm({
   initialData,
   lessonId,
   chapterId,
-}: ClassFormProps) {
+}: QuizFormProps) {
   const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -53,7 +53,7 @@ export default function ClassTitleForm({
         `/api/lessons/${lessonId}/chapter/${chapterId}/class`,
         values
       );
-      toast.success("Título de la clase actualizada!");
+      toast.success("Título del quiz actualizado!");
       router.refresh();
     } catch (error) {
       toast.error("Something wrong");
@@ -73,7 +73,7 @@ export default function ClassTitleForm({
               name="title"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Título de la clase</FormLabel>
+                  <FormLabel>Título del quiz</FormLabel>
                   <FormControl>
                     <Input
                       disabled={isSubmitting}
@@ -82,8 +82,7 @@ export default function ClassTitleForm({
                     />
                   </FormControl>
                   <FormDescription>
-                    Define el título que mejor represente el contenido de la
-                    clase.
+                    Define el título que mejor represente el contenido del quiz.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>

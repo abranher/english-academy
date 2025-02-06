@@ -7,7 +7,7 @@ export default function TitleSection({ lesson }: { lesson: any }) {
     <>
       <div className="flex flex-wrap items-center gap-8">
         <div className="w-max flex gap-2">
-          <h3 className="text-2xl font-bold">{lesson.class.title}</h3>{" "}
+          <h3 className="text-2xl font-bold">{lesson.quiz.title}</h3>{" "}
           {lesson.isPublished ? (
             <Badge variant="default" className="ml-auto sm:ml-0">
               Publicado
