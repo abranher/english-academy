@@ -291,32 +291,21 @@ model Quiz {
   lessonId String @unique
   lesson   Lesson @relation(fields: [lessonId], references: [id])
 
-  quizQuestions QuizQuestion[]
+  multipleChoiceQuestions MultipleChoiceQuestion[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-model QuizQuestion {
-  id   String @id @default(uuid())
-  text String
+model MultipleChoiceQuestion {
+  id            String  @id @default(uuid())
+  question      String?
+  text          String?
+  options       Json?
+  correctAnswer String?
 
   quizId String
   quiz   Quiz   @relation(fields: [quizId], references: [id])
-
-  quizQuestionOptions QuizQuestionOption[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model QuizQuestionOption {
-  id        String  @id @default(uuid())
-  text      String
-  isCorrect Boolean @default(false)
-
-  quizQuestionId String
-  quizQuestion   QuizQuestion @relation(fields: [quizQuestionId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

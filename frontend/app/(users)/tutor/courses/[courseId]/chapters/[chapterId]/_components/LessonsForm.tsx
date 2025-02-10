@@ -1,6 +1,6 @@
 "use client";
 
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import axios from "@/config/axios";
 import { zodResolver } from "@hookform/resolvers/zod";

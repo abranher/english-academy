@@ -10,6 +10,7 @@ import QuizDescriptionForm from "./QuizDescriptionForm";
 import { useParams } from "next/navigation";
 import { BookOpen, Globe } from "lucide-react";
 import QuizTitleForm from "./QuizTitleForm";
+import { ExercisesForm } from "./ExercisesForm";
 
 // Define un tipo para las posibles claves de sectionTitles
 type SectionTitleKey = "mainContent";
@@ -57,6 +58,8 @@ export default function Content({ lesson }: { lesson: any }) {
                   quizId={lesson.quiz.id as string}
                 />
                 <Separator />
+
+                <ExercisesForm />
               </>
             )}
           </Card>
