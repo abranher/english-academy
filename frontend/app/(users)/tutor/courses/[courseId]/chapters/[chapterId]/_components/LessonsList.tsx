@@ -55,14 +55,14 @@ export default function LessonsList({ items, onReorder }: LessonsListProps) {
     onReorder(bulkUpdateData);
   };
 
-  const onEdit = (id: string, lessonType: string) => {
+  const onEdit = (id: string, lessonType: string, lesson: Lesson) => {
     if (lessonType === LessonType.CLASS) {
       router.push(
         `/tutor/courses/${courseId}/chapters/${chapterId}/lessons/${id}/class`
       );
     } else if (lessonType === LessonType.QUIZ) {
       router.push(
-        `/tutor/courses/${courseId}/chapters/${chapterId}/lessons/${id}/quiz`
+        `/tutor/courses/${courseId}/chapters/${chapterId}/lessons/${id}/quiz/${lesson.quiz?.id}`
       );
     }
   };
@@ -100,13 +100,13 @@ export default function LessonsList({ items, onReorder }: LessonsListProps) {
                         )}
                       </div>
                       {lesson.type === LessonType.CLASS &&
-                        `Clase: ${lesson.class.title}`}
+                        `Clase: ${lesson.class?.title ?? "N/A"}`}
                       {lesson.type === LessonType.QUIZ &&
-                        `Quiz: ${lesson.quiz.title}`}
+                        `Quiz: ${lesson.quiz?.title ?? "N/A"}`}
 
                       <div className="ml-auto p-4 flex items-center gap-x-4">
                         <Pencil
-                          onClick={() => onEdit(lesson.id, lesson.type)}
+                          onClick={() => onEdit(lesson.id, lesson.type, lesson)}
                           className="w-4 h-4 cursor-pointer hover:opacity-75 transition"
                         />
                       </div>

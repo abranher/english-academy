@@ -59,7 +59,7 @@ export default function Content({ lesson }: { lesson: any }) {
                 />
                 <Separator />
 
-                <ExercisesForm />
+                <ExercisesForm quizId={lesson.quiz.id as string} />
               </>
             )}
           </Card>

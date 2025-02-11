@@ -114,6 +114,7 @@ export class LessonsService {
     if (lesson.type === LessonType.CLASS)
       return {
         ...lesson,
+        classId: lesson.class.id,
         title: lesson.class.title,
         description: lesson.class.description,
         video: lesson.class.video,
@@ -122,6 +123,7 @@ export class LessonsService {
     if (lesson.type === LessonType.QUIZ)
       return {
         ...lesson,
+        quizId: lesson.quiz.id,
         title: lesson.quiz.title,
         description: lesson.quiz.description,
       };

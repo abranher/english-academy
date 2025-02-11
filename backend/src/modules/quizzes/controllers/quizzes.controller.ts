@@ -20,6 +20,14 @@ export class QuizzesController {
     return this.quizzesService.create(createQuizDto);
   }
 
+  @Post(':id')
+  createExercise(
+    @Param('id') id: string,
+    @Body() createQuizDto: CreateQuizDto,
+  ) {
+    return this.quizzesService.createExercise(id, createQuizDto);
+  }
+
   @Get()
   findAll() {
     return this.quizzesService.findAll();

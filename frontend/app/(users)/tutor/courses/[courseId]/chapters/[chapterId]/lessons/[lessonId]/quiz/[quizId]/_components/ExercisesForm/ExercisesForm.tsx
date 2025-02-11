@@ -24,8 +24,11 @@ import {
 import { RadioGroup, RadioGroupItem } from "@/components/shadcn/ui/radio-group";
 import { Label } from "@/components/shadcn/ui/label";
 import { ExerciseType } from "@/types/enums/ExerciseType";
+import axios from "@/config/axios";
+import { toast } from "sonner";
+import { ExercisesList } from "../ExercisesList";
 
-export function ExercisesForm() {
+export function ExercisesForm({ quizId }: { quizId: string }) {
   const [open, setOpen] = useState(false);
   const [exerciseType, setExerciseType] = useState(
     ExerciseType.MULTIPLE_CHOICE
@@ -45,23 +48,20 @@ export function ExercisesForm() {
     }
   };
 
-  const onSubmit = async () => {
-    /*
+  const onSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
     try {
-      await axios.post(`/api/lessons/chapter/:chapterId`, {
-        ...values,
-        type: lessonType,
+      await axios.post(`/api/quizzes/${quizId}`, {
+        type: exerciseType,
       });
 
-      toast.success("Lección creada!");
+      toast.success("Ejercicio creado!");
       setOpen(false);
-      form.reset();
       router.refresh();
     } catch (error) {
-      console.log(error);
-      toast.error("Something wrong");
+      console.error("Error creating exercise:", error);
+      toast.error("Error creating exercise. Please try again.");
     }
-      */
   };
 
   return (
@@ -76,14 +76,7 @@ export function ExercisesForm() {
         </CardDescription>
 
         <div className={cn("text-sm my-6 w-full", "text-slate-500 italic")}>
-          {
-            <div className="text-lg w-full">
-              <p className="flex justify-center flex-col items-center">
-                <FolderOpen className="w-20 h-20" />
-                Sin ejercicios
-              </p>
-            </div>
-          }
+          <ExercisesList />
         </div>
 
         <Dialog open={open} onOpenChange={setOpen}>

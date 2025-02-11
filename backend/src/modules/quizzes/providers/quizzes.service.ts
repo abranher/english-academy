@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateQuizDto } from '../dto/create-quiz.dto';
 import { UpdateQuizDto } from '../dto/update-quiz.dto';
 import { PrismaService } from 'src/modules/prisma/prisma.service';
+import { ExerciseType } from '@prisma/client';
 
 @Injectable()
 export class QuizzesService {
@@ -9,6 +10,26 @@ export class QuizzesService {
 
   create(createQuizDto: CreateQuizDto) {
     return 'This action adds a new quiz';
+  }
+
+  async createExercise(id: string, createQuizDto: CreateQuizDto) {
+    const ownQuiz = await this.prisma.quiz.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!ownQuiz) throw new NotFoundException('Quiz no encontrado.');
+
+    if (createQuizDto.type === ExerciseType.MULTIPLE_CHOICE) {
+      const multipleChoice = await this.prisma.multipleChoiceQuestion.create({
+        data: {
+          quizId: ownQuiz.id,
+        },
+      });
+
+      return multipleChoice;
+    }
   }
 
   findAll() {
