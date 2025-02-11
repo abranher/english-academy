@@ -9,6 +9,7 @@ import {
   GraduationCap,
   Home,
   Package2,
+  Users,
 } from "lucide-react";
 import { Button } from "@/components/shadcn/ui/button";
 import SideNav from "@/components/common/SideNav";
@@ -35,6 +36,11 @@ export default function AsideAdmin() {
                   title: "Dashboard",
                   href: "/admin",
                   icon: Home,
+                },
+                {
+                  title: "Tutores",
+                  href: "/admin/tutors",
+                  icon: Users,
                 },
                 {
                   title: "Cursos",
