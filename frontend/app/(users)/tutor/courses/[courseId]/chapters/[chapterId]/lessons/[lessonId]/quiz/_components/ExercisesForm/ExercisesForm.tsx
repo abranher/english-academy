@@ -1,33 +1,17 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
-import axios from "@/config/axios";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { useState } from "react";
 
-import { ClipboardList, ClipboardPenLine, FileVideo } from "lucide-react";
+import { FilePen, LayoutGrid } from "lucide-react";
 import { Button } from "@/components/shadcn/ui/button";
 import {
   CardContent,
   CardDescription,
   CardTitle,
 } from "@/components/shadcn/ui/card";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/shadcn/ui/form";
-import { Input } from "@/components/shadcn/ui/input";
 import { cn } from "@/libs/shadcn/utils";
-import messages from "@/libs/validations/schemas/messages";
 import { FolderOpen, Plus } from "lucide-react";
-import { toast } from "sonner";
 import {
   Dialog,
   DialogContent,
@@ -39,12 +23,27 @@ import {
 } from "@/components/shadcn/ui/dialog";
 import { RadioGroup, RadioGroupItem } from "@/components/shadcn/ui/radio-group";
 import { Label } from "@/components/shadcn/ui/label";
+import { ExerciseType } from "@/types/enums/ExerciseType";
 
 export function ExercisesForm() {
   const [open, setOpen] = useState(false);
-  const [lessonType, setLessonType] = useState("CLASS");
+  const [exerciseType, setExerciseType] = useState(
+    ExerciseType.MULTIPLE_CHOICE
+  );
 
   const router = useRouter();
+
+  const handleRadioGroupChange = (value: string) => {
+    const selectedType = Object.values(ExerciseType).find(
+      (type) => type === value
+    );
+
+    if (selectedType) {
+      setExerciseType(selectedType);
+    } else {
+      console.error("Tipo de ejercicio seleccionado no válido:", value);
+    }
+  };
 
   const onSubmit = async () => {
     /*
@@ -106,50 +105,36 @@ export function ExercisesForm() {
               <form onSubmit={onSubmit} className="space-y-4 mt-4">
                 {/** Lesson type */}
                 <RadioGroup
-                  value={lessonType}
-                  onValueChange={setLessonType}
-                  className="grid grid-cols-3 gap-4"
+                  value={exerciseType}
+                  onValueChange={handleRadioGroupChange}
+                  className="flex gap-4 text-center"
                 >
-                  <div>
+                  <div className="w-full">
                     <RadioGroupItem
-                      value="CLASS"
-                      id="CLASS"
+                      value={ExerciseType.MULTIPLE_CHOICE}
+                      id={ExerciseType.MULTIPLE_CHOICE}
                       className="peer sr-only"
                     />
                     <Label
-                      htmlFor="CLASS"
-                      className="flex flex-col items-center justify-between cursor-pointer rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
+                      htmlFor={ExerciseType.MULTIPLE_CHOICE}
+                      className="flex text-xs flex-col items-center justify-between cursor-pointer rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
                     >
-                      <FileVideo className="mb-3 h-6 w-6" />
-                      Clase
+                      <LayoutGrid className="mb-3 h-6 w-6" />
+                      Selección multiple
                     </Label>
                   </div>
-                  <div>
+                  <div className="w-full">
                     <RadioGroupItem
-                      value="QUIZ"
-                      id="QUIZ"
+                      value={ExerciseType.FILL_IN_THE_BLANK}
+                      id={ExerciseType.FILL_IN_THE_BLANK}
                       className="peer sr-only"
                     />
                     <Label
-                      htmlFor="QUIZ"
-                      className="flex flex-col items-center justify-between cursor-pointer rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
+                      htmlFor={ExerciseType.FILL_IN_THE_BLANK}
+                      className="flex text-xs flex-col items-center justify-between cursor-pointer rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
                     >
-                      <ClipboardList className="mb-3 h-6 w-6" />
-                      Quiz
-                    </Label>
-                  </div>
-                  <div>
-                    <RadioGroupItem
-                      value="TEST"
-                      id="TEST"
-                      className="peer sr-only"
-                    />
-                    <Label
-                      htmlFor="TEST"
-                      className="flex flex-col items-center justify-between cursor-pointer rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
-                    >
-                      <ClipboardPenLine className="mb-3 h-6 w-6" />
-                      Test
+                      <FilePen className="mb-3 h-6 w-6" />
+                      Llenar espacio en blanco
                     </Label>
                   </div>
                 </RadioGroup>
