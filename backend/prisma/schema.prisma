@@ -171,15 +171,15 @@ model Price {
 // *
 
 model Course {
-  id          String       @id @default(uuid())
-  title       String       @db.Text
-  subtitle    String?      @db.Text
-  description String?      @db.Text
-  image       String?      @db.Text
-  trailer     String?      @db.Text
-   reviewStatus CourseReviewStatus @default(DRAFT) // Estado de revisión
-  platformStatus CoursePlatformStatus @default(DRAFT) // Estado en la plataforma
-  isPublished Boolean      @default(false)
+  id             String               @id @default(uuid())
+  title          String               @db.Text
+  subtitle       String?              @db.Text
+  description    String?              @db.Text
+  image          String?              @db.Text
+  trailer        String?              @db.Text
+  reviewStatus   CourseReviewStatus   @default(DRAFT)
+  platformStatus CoursePlatformStatus @default(DRAFT)
+  isPublished    Boolean              @default(false)
 
   tutorId String
   tutor   Tutor  @relation(fields: [tutorId], references: [id])
@@ -199,7 +199,7 @@ model Course {
   attachments Attachment[]
   chapters    Chapter[]
   purchases   Purchase[]
-  reviews     CourseReview[] 
+  reviews     CourseReview[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -407,12 +407,12 @@ model ActivityLog {
 }
 
 model CourseReview {
-  id        String   @id @default(uuid())
-  feedback  String?  
-  decision  CourseReviewDecision
+  id       String               @id @default(uuid())
+  feedback String?
+  decision CourseReviewDecision
 
-  courseId  String
-  course    Course   @relation(fields: [courseId], references: [id])
+  courseId String
+  course   Course @relation(fields: [courseId], references: [id])
 
   createdAt DateTime @default(now())
 }
@@ -447,27 +447,25 @@ enum AccountStatus {
   DELETED
 }
 
-
-
 enum CourseReviewStatus {
-  DRAFT          // El tutor está trabajando en el curso
+  DRAFT // El tutor está trabajando en el curso
   PENDING_REVIEW // El tutor envió el curso para revisión
-  APPROVED       // El administrador aprobó el curso
+  APPROVED // El administrador aprobó el curso
   NEEDS_REVISION // El administrador solicitó cambios
-  REJECTED       // El administrador rechazó el curso
+  REJECTED // El administrador rechazó el curso
 }
 
 enum CoursePlatformStatus {
-  DRAFT      // El curso está en borrador (no visible)
-  PUBLISHED  // El curso está disponible para los estudiantes
-  ARCHIVED   // El curso ya no está activo pero se conserva
-  DELETED    // El curso fue eliminado (soft delete)
+  DRAFT // El curso está en borrador (no visible)
+  PUBLISHED // El curso está disponible para los estudiantes
+  ARCHIVED // El curso ya no está activo pero se conserva
+  DELETED // El curso fue eliminado (soft delete)
 }
 
 enum CourseReviewDecision {
-  APPROVED       // El curso fue aprobado
-  REJECTED       // El curso fue rechazado
-  NEEDS_CHANGES  // El curso necesita cambios
+  APPROVED // El curso fue aprobado
+  REJECTED // El curso fue rechazado
+  NEEDS_CHANGES // El curso necesita cambios
 }
 
 enum LessonStatus {
