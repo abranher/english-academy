@@ -22,6 +22,7 @@ import { ActivityLogsModule } from './modules/activity-logs/activity-logs.module
 import { BackupModule } from './modules/backup/backup.module';
 import { ClassesModule } from './modules/classes/classes.module';
 import { QuizzesModule } from './modules/quizzes/quizzes.module';
+import { CourseReviewsModule } from './modules/course-reviews/course-reviews.module';
 
 @Module({
   imports: [
@@ -49,6 +50,7 @@ import { QuizzesModule } from './modules/quizzes/quizzes.module';
     BackupModule,
     ClassesModule,
     QuizzesModule,
+    CourseReviewsModule,
   ],
 })
 export class AppModule {}

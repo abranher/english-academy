@@ -10,7 +10,7 @@ import {
 } from "@/components/shadcn/ui/dropdown-menu";
 import { formatPrice } from "@/libs/format";
 import { cn } from "@/libs/shadcn/utils";
-import { CoursePlatformStatus, CourseReviewStatus } from "@/types/enums";
+import { CourseReviewStatus } from "@/types/enums";
 import { Course } from "@/types/models/Course";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, Clock, MoreHorizontal, Pencil } from "lucide-react";
@@ -50,52 +50,6 @@ export const columns: ColumnDef<Course>[] = [
       return <div>{formatted}</div>;
     },
   },
-  {
-    accessorKey: "platformStatus", // Use platformStatus
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Estado en la plataforma
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-    cell: ({ row }) => {
-      const platformStatus: CoursePlatformStatus =
-        row.getValue("platformStatus");
-
-      let statusText: string;
-      let badgeColor: string;
-
-      switch (platformStatus) {
-        case CoursePlatformStatus.DRAFT:
-          statusText = "Borrador";
-          badgeColor = "bg-slate-500";
-          break;
-        case CoursePlatformStatus.PUBLISHED:
-          statusText = "Publicado";
-          badgeColor = "bg-sky-700";
-          break;
-        case CoursePlatformStatus.ARCHIVED:
-          statusText = "Archivado";
-          badgeColor = "bg-gray-500";
-          break;
-        case CoursePlatformStatus.DELETED:
-          statusText = "Eliminado";
-          badgeColor = "bg-red-500";
-          break;
-        default: // Handle unexpected cases
-          statusText = "Desconocido";
-          badgeColor = "bg-yellow-500";
-      }
-
-      return <Badge className={cn(badgeColor)}>{statusText}</Badge>;
-    },
-  },
-
   {
     accessorKey: "reviewStatus", // Use reviewStatus
     header: ({ column }) => {
