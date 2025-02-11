@@ -47,7 +47,13 @@ export class CourseReviewsService {
       },
     });
 
-    return courseReviews;
+    return courseReviews.map((courseReview) => {
+      const { ...rest } = courseReview;
+      return {
+        ...rest,
+        reviewStatus: courseReview.course.reviewStatus,
+      };
+    });
   }
   findOne(id: number) {
     return `This action returns a #${id} courseReview`;

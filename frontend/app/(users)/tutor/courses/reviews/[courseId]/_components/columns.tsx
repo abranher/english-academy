@@ -98,7 +98,6 @@ export const columns: ColumnDef<Course>[] = [
       return <Badge className={cn(badgeColor)}>{statusText}</Badge>;
     },
   },
-
   {
     id: "actions",
     header: "Acciones",

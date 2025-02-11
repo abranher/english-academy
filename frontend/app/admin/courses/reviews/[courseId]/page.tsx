@@ -9,13 +9,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/shadcn/ui/breadcrumb";
 import { CourseReviewsList } from "./_components/CourseReviewsList/CourseReviewsList";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/shadcn/ui/card";
+import { CardDescription, CardTitle } from "@/components/shadcn/ui/card";
 
 export default function CourseReviewPage() {
   return (

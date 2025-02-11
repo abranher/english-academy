@@ -88,13 +88,6 @@ export class CoursesController {
       },
       include: {
         chapters: {
-          include: {
-            studentProgress: {
-              where: {
-                id: '2dd1501a-b4a3-41c1-91da-e7520d792945',
-              },
-            },
-          },
           orderBy: {
             position: 'asc',
           },

@@ -3,7 +3,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { DataTable } from "../data-table";
 import { getCourseReviews } from "../../_services/get-course-reviews";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { columns } from "../columns";
 import { CourseReviewsSkeleton } from "./CourseReviewsSkeleton";
 import {
@@ -16,6 +16,7 @@ import {
 
 export function CourseReviewsList() {
   const { courseId } = useParams();
+  const searchParams = useSearchParams();
 
   const {
     isPending,
@@ -25,8 +26,6 @@ export function CourseReviewsList() {
     queryKey: ["course-reviews-list", courseId], // Incluye courseId en la queryKey
     queryFn: () => getCourseReviews(courseId as string),
   });
-
-  console.log(courseReviews);
 
   return (
     <>
@@ -38,8 +37,10 @@ export function CourseReviewsList() {
         <>
           <Card>
             <CardHeader>
-              <CardTitle>Curso: </CardTitle>
-              <CardDescription>Tutor:</CardDescription>
+              <CardTitle>Curso: {searchParams.get("courseTitle")}</CardTitle>
+              <CardDescription>
+                Tutor: {`@${searchParams.get("tutor")}`}
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <DataTable columns={columns} data={courseReviews} />

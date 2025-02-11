@@ -101,7 +101,7 @@ export const columns: ColumnDef<Course>[] = [
     id: "actions",
     header: "Acciones",
     cell: ({ row }) => {
-      const { id } = row.original;
+      const { id, title, tutorUsername } = row.original;
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -117,7 +117,9 @@ export const columns: ColumnDef<Course>[] = [
                 Revisar
               </DropdownMenuItem>
             </Link>
-            <Link href={`/admin/courses/reviews/${id}`}>
+            <Link
+              href={`/admin/courses/reviews/${id}?courseTitle=${title}&tutor=${tutorUsername}`}
+            >
               <DropdownMenuItem>
                 <Clock className="h-4 w-4 mr-2" />
                 Historial de revisiones

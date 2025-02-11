@@ -1,21 +1,13 @@
 "use client";
 
-import Link from "next/link";
-
 import { Badge } from "@/components/shadcn/ui/badge";
 import { Button } from "@/components/shadcn/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/shadcn/ui/dropdown-menu";
 import { formatDate } from "@/libs/date";
 import { cn } from "@/libs/shadcn/utils";
 import { CourseReviewStatus } from "@/types/enums";
 import { Course } from "@/types/models/Course";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, Clock, MoreHorizontal, Pencil } from "lucide-react";
+import { ArrowUpDown } from "lucide-react";
 
 export const columns: ColumnDef<Course>[] = [
   {
