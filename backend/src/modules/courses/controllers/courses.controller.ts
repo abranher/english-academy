@@ -14,7 +14,7 @@ import {
 import { CoursesService } from '../providers/courses.service';
 import { CreateCourseDto } from '../dto/create-course.dto';
 import { UpdateCourseDto } from '../dto/update-course.dto';
-import { PrismaService } from 'src/modules/prisma/prisma.service';
+import { PrismaService } from 'src/modules/prisma/providers/prisma.service';
 
 @Controller('courses')
 export class CoursesController {

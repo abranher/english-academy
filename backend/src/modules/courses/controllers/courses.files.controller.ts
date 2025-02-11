@@ -11,7 +11,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 
 import { CoursesFilesService } from '../providers/courses.files.service';
-import { PrismaService } from 'src/modules/prisma/prisma.service';
+import { PrismaService } from 'src/modules/prisma/providers/prisma.service';
 import {
   attachmentFilter,
   createFileName,

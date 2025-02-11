@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateChapterDto } from '../dto/create-chapter.dto';
 import { UpdateChapterDto } from '../dto/update-chapter.dto';
-import { PrismaService } from 'src/modules/prisma/prisma.service';
+import { PrismaService } from 'src/modules/prisma/providers/prisma.service';
 import { Attachment, Chapter } from '@prisma/client';
 
 @Injectable()

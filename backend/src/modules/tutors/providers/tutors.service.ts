@@ -1,7 +1,7 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { CreateTutorDto } from '../dto/create-tutor.dto';
 import { UpdateTutorDto } from '../dto/update-tutor.dto';
-import { PrismaService } from 'src/modules/prisma/prisma.service';
+import { PrismaService } from 'src/modules/prisma/providers/prisma.service';
 import { hash } from 'bcrypt';
 
 @Injectable()

@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateQuizDto } from '../dto/create-quiz.dto';
 import { UpdateQuizDto } from '../dto/update-quiz.dto';
-import { PrismaService } from 'src/modules/prisma/prisma.service';
+import { PrismaService } from 'src/modules/prisma/providers/prisma.service';
 import { ExerciseType } from '@prisma/client';
 
 @Injectable()

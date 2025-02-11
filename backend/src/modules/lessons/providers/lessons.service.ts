@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateLessonDto } from '../dto/create-lesson.dto';
 import { UpdateLessonDto } from '../dto/update-lesson.dto';
-import { PrismaService } from 'src/modules/prisma/prisma.service';
+import { PrismaService } from 'src/modules/prisma/providers/prisma.service';
 import { LessonType } from '@prisma/client';
 import { UpdateLessonClassDto } from '../dto/update-lesson-class.dto';
 

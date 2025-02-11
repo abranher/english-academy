@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateCourseDto } from '../dto/create-course.dto';
 import { UpdateCourseDto } from '../dto/update-course.dto';
-import { PrismaService } from 'src/modules/prisma/prisma.service';
+import { PrismaService } from 'src/modules/prisma/providers/prisma.service';
 import { ActivityLogsService } from 'src/modules/activity-logs/providers/activity-logs.service';
 import { activityLogMessages } from 'src/libs/activity-logs';
 import { CourseReviewStatus } from '@prisma/client';

@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateCourseReviewDto } from '../dto/create-course-review.dto';
 import { UpdateCourseReviewDto } from '../dto/update-course-review.dto';
-import { PrismaService } from 'src/modules/prisma/prisma.service';
+import { PrismaService } from 'src/modules/prisma/providers/prisma.service';
 
 @Injectable()
 export class CourseReviewsService {

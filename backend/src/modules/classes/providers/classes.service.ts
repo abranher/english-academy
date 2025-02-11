@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 
 import { CreateClassDto } from '../dto/create-class.dto';
 import { UpdateClassDto } from '../dto/update-class.dto';
-import { PrismaService } from 'src/modules/prisma/prisma.service';
+import { PrismaService } from 'src/modules/prisma/providers/prisma.service';
 
 @Injectable()
 export class ClassesService {
