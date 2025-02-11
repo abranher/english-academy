@@ -45,6 +45,11 @@ export class CoursesController {
     return this.coursesService.findCoursesFromTutor(tutorId);
   }
 
+  @Get('pending-review')
+  findAllWithPendingReview() {
+    return this.coursesService.findAllWithPendingReview();
+  }
+
   @Get()
   findAll() {
     return this.coursesService.findAll();

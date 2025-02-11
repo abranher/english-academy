@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 import * as React from "react";
 import {
   ColumnDef,
@@ -24,7 +26,6 @@ import {
 import { Button } from "@/components/shadcn/ui/button";
 import { Input } from "@/components/shadcn/ui/input";
 import { ArrowBigLeft, ArrowBigRight, PlusCircle } from "lucide-react";
-import Link from "next/link";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -66,12 +67,6 @@ export function DataTable<TData, TValue>({
           }
           className="max-w-sm"
         />
-        <Link href="/admin/courses/create">
-          <Button>
-            <PlusCircle className="h-6 w-6 mr-2" />
-            Nuevo curso
-          </Button>
-        </Link>
       </div>
 
       <div className="rounded-md border">

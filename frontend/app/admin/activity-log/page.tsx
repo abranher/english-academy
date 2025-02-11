@@ -111,7 +111,7 @@ export default async function ActivityLogPage() {
       </div>
 
       <div className="w-full">
-        <Card x-chunk="dashboard-07-chunk-1">
+        <Card>
           <CardHeader>
             <CardTitle>Historial de Acciones</CardTitle>
             <CardDescription>

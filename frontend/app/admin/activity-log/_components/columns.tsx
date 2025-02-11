@@ -1,17 +1,11 @@
 "use client";
 
+import { ColumnDef } from "@tanstack/react-table";
+
 import { Button } from "@/components/shadcn/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/shadcn/ui/dropdown-menu";
 import { formatDate } from "@/libs/date";
 import { Course } from "@/types/models/Course";
-import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, MoreHorizontal, Pencil } from "lucide-react";
-import Link from "next/link";
+import { ArrowUpDown } from "lucide-react";
 
 export const columns: ColumnDef<Course>[] = [
   {

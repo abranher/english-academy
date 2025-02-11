@@ -4,6 +4,7 @@ import { UpdateCourseDto } from '../dto/update-course.dto';
 import { PrismaService } from 'src/modules/prisma/prisma.service';
 import { ActivityLogsService } from 'src/modules/activity-logs/providers/activity-logs.service';
 import { activityLogMessages } from 'src/libs/activity-logs';
+import { CourseReviewStatus } from '@prisma/client';
 
 @Injectable()
 export class CoursesService {
@@ -63,6 +64,29 @@ export class CoursesService {
     });
 
     return course;
+  }
+
+  async findAllWithPendingReview() {
+    const courses = await this.prisma.course.findMany({
+      where: {
+        reviewStatus: CourseReviewStatus.PENDING_REVIEW,
+      },
+      include: {
+        tutor: {
+          include: {
+            user: true,
+          },
+        },
+      },
+    });
+
+    return courses.map((course) => {
+      const { tutor, ...rest } = course;
+      return {
+        ...rest,
+        tutorUsername: tutor.user.username,
+      };
+    });
   }
 
   async findAll() {
