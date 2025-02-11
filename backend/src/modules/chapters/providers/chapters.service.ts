@@ -1,8 +1,4 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateChapterDto } from '../dto/create-chapter.dto';
 import { UpdateChapterDto } from '../dto/update-chapter.dto';
 import { PrismaService } from 'src/modules/prisma/prisma.service';
@@ -116,14 +112,12 @@ export class ChaptersService {
     const chapter = await this.prisma.chapter.findUnique({
       where: {
         id: chapterId,
-        isPublished: true,
       },
     });
 
     if (!chapter || !course)
       throw new NotFoundException('Curso o capítulo no encontrado.');
 
-    let muxData = null;
     let attachments: Attachment[] = [];
     let nextChapter: Chapter | null = null;
 
@@ -139,7 +133,6 @@ export class ChaptersService {
       nextChapter = await this.prisma.chapter.findFirst({
         where: {
           courseId,
-          isPublished: true,
           position: {
             gt: chapter?.position,
           },
@@ -162,7 +155,6 @@ export class ChaptersService {
     return {
       chapter,
       course,
-      muxData,
       attachments,
       nextChapter,
       studentProgress,
@@ -194,94 +186,6 @@ export class ChaptersService {
     // TODO: handle video upload
 
     return chapter;
-  }
-
-  async publishChapter(id: string, courseId: string) {
-    const ownCourse = await this.prisma.course.findUnique({
-      where: {
-        id: courseId,
-      },
-    });
-
-    if (!ownCourse) throw new NotFoundException('Curso no encontrado.');
-
-    const chapter = await this.prisma.chapter.findUnique({
-      where: {
-        id,
-        courseId,
-      },
-    });
-
-    /*
-    const muxData = this.prisma.muxData.findUnique({
-      where: {
-        chapterId: id,
-      },
-    });
-
-    */
-
-    if (
-      !chapter ||
-      //!muxData ||
-      !chapter.title ||
-      !chapter.description
-      // !chapter.videoUrl
-    ) {
-      throw new BadRequestException('Faltan campos obligatorios.');
-    }
-
-    const publishedChapter = this.prisma.chapter.update({
-      where: {
-        id,
-        courseId,
-      },
-      data: {
-        isPublished: true,
-      },
-    });
-
-    return publishedChapter;
-  }
-
-  async unpublishChapter(id: string, courseId: string) {
-    const ownCourse = await this.prisma.course.findUnique({
-      where: {
-        id: courseId,
-      },
-    });
-
-    if (!ownCourse) throw new NotFoundException('Curso no encontrado.');
-
-    const unpublishedChapter = await this.prisma.chapter.update({
-      where: {
-        id,
-        courseId,
-      },
-      data: {
-        isPublished: false,
-      },
-    });
-
-    const publishedChaptersInCourse = await this.prisma.chapter.findMany({
-      where: {
-        courseId,
-        isPublished: true,
-      },
-    });
-
-    if (!publishedChaptersInCourse.length) {
-      await this.prisma.course.update({
-        where: {
-          id: courseId,
-        },
-        data: {
-          isPublished: false,
-        },
-      });
-    }
-
-    return unpublishedChapter;
   }
 
   async remove(id: string, courseId: string) {
@@ -330,7 +234,6 @@ export class ChaptersService {
     const publishedChaptersInCourse = await this.prisma.chapter.findMany({
       where: {
         courseId,
-        isPublished: true,
       },
     });
 

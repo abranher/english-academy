@@ -63,9 +63,6 @@ export class CoursesController {
       },
       include: {
         chapters: {
-          where: {
-            isPublished: true,
-          },
           orderBy: {
             position: 'asc',
           },
@@ -86,9 +83,6 @@ export class CoursesController {
       },
       include: {
         chapters: {
-          where: {
-            isPublished: true,
-          },
           include: {
             studentProgress: {
               where: {
@@ -114,7 +108,7 @@ export class CoursesController {
     return this.coursesService.update(id, updateCourseDto);
   }
 
-  @Patch(':id/publish')
+  /*@Patch(':id/publish')
   publishCourse(@Param('id') id: string) {
     return this.coursesService.publishCourse(id);
   }
@@ -123,6 +117,7 @@ export class CoursesController {
   unpublishCourse(@Param('id') id: string) {
     return this.coursesService.unpublishCourse(id);
   }
+    */
 
   @Put()
   updateProgress(
@@ -156,7 +151,6 @@ export class CoursesController {
       const publishedChapters = await this.prisma.chapter.findMany({
         where: {
           courseId,
-          isPublished: true,
         },
         select: {
           id: true,
@@ -204,9 +198,6 @@ export class CoursesController {
         include: {
           level: true,
           chapters: {
-            where: {
-              isPublished: true,
-            },
             select: {
               id: true,
             },

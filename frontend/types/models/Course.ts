@@ -1,4 +1,4 @@
-import { CourseStatus } from "../enums";
+import { CoursePlatformStatus, CourseReviewStatus } from "../enums";
 import { Category } from "./Category";
 import { Price } from "./Price";
 import { SubCategory } from "./SubCategory";
@@ -10,7 +10,8 @@ export interface Course {
   description: string | null;
   image: string | null;
   trailer: string | null;
-  status: CourseStatus;
+  reviewStatus: CourseReviewStatus;
+  platformStatus: CoursePlatformStatus;
   isPublished: boolean;
 
   price: Price | null;

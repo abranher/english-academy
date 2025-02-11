@@ -1,8 +1,4 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateCourseDto } from '../dto/create-course.dto';
 import { UpdateCourseDto } from '../dto/update-course.dto';
 import { PrismaService } from 'src/modules/prisma/prisma.service';
@@ -75,11 +71,7 @@ export class CoursesService {
         createdAt: 'desc',
       },
       include: {
-        chapters: {
-          where: {
-            isPublished: true,
-          },
-        },
+        chapters: true,
         price: true,
         category: true,
         subcategory: true,
@@ -98,11 +90,7 @@ export class CoursesService {
         createdAt: 'desc',
       },
       include: {
-        chapters: {
-          where: {
-            isPublished: true,
-          },
-        },
+        chapters: true,
         price: true,
         category: true,
         subcategory: true,
@@ -159,7 +147,7 @@ export class CoursesService {
     return course;
   }
 
-  async publishCourse(id: string) {
+  /* async publishCourse(id: string) {
     const course = await this.prisma.course.findUnique({
       where: {
         id,
@@ -197,6 +185,8 @@ export class CoursesService {
     return publishedCourse;
   }
 
+  
+
   async unpublishCourse(id: string) {
     const course = await this.prisma.course.findUnique({
       where: {
@@ -217,6 +207,8 @@ export class CoursesService {
 
     return unpublishedCourse;
   }
+
+  */
 
   async updateProgress(id: string, chapterId: string, data: any) {
     const studentProgress = await this.prisma.studentProgress.upsert({

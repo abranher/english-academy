@@ -11,10 +11,16 @@ CREATE TYPE "LessonType" AS ENUM ('CLASS', 'QUIZ');
 CREATE TYPE "AccountStatus" AS ENUM ('ACTIVE', 'INACTIVE', 'SUSPENDED', 'DELETED');
 
 -- CreateEnum
-CREATE TYPE "CourseStatus" AS ENUM ('DRAFT', 'PUBLISHED', 'ARCHIVED', 'DELETED');
+CREATE TYPE "CourseReviewStatus" AS ENUM ('DRAFT', 'PENDING_REVIEW', 'APPROVED', 'NEEDS_REVISION', 'REJECTED');
 
 -- CreateEnum
-CREATE TYPE "LessonStatus" AS ENUM ('DRAFT', 'PUBLISHED', 'ARCHIVED', 'DELETED');
+CREATE TYPE "CoursePlatformStatus" AS ENUM ('DRAFT', 'PUBLISHED', 'ARCHIVED', 'DELETED');
+
+-- CreateEnum
+CREATE TYPE "CourseReviewDecision" AS ENUM ('APPROVED', 'REJECTED', 'NEEDS_CHANGES');
+
+-- CreateEnum
+CREATE TYPE "ExerciseType" AS ENUM ('MULTIPLE_CHOICE', 'FILL_IN_THE_BLANK');
 
 -- CreateEnum
 CREATE TYPE "Language" AS ENUM ('ES', 'EN');
@@ -145,7 +151,8 @@ CREATE TABLE "Course" (
     "description" TEXT,
     "image" TEXT,
     "trailer" TEXT,
-    "status" "CourseStatus" NOT NULL DEFAULT 'DRAFT',
+    "reviewStatus" "CourseReviewStatus" NOT NULL DEFAULT 'DRAFT',
+    "platformStatus" "CoursePlatformStatus" NOT NULL DEFAULT 'DRAFT',
     "isPublished" BOOLEAN NOT NULL DEFAULT false,
     "tutorId" TEXT NOT NULL,
     "priceId" TEXT,
@@ -176,7 +183,6 @@ CREATE TABLE "Chapter" (
     "title" TEXT NOT NULL,
     "description" TEXT,
     "position" INTEGER NOT NULL,
-    "isPublished" BOOLEAN NOT NULL DEFAULT false,
     "isFree" BOOLEAN NOT NULL DEFAULT false,
     "courseId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -190,7 +196,6 @@ CREATE TABLE "Lesson" (
     "id" TEXT NOT NULL,
     "type" "LessonType" NOT NULL,
     "position" INTEGER NOT NULL,
-    "status" "LessonStatus" NOT NULL,
     "chapterId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -215,6 +220,7 @@ CREATE TABLE "Class" (
 CREATE TABLE "Quiz" (
     "id" TEXT NOT NULL,
     "title" TEXT NOT NULL,
+    "description" TEXT,
     "lessonId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -223,26 +229,17 @@ CREATE TABLE "Quiz" (
 );
 
 -- CreateTable
-CREATE TABLE "QuizQuestion" (
+CREATE TABLE "MultipleChoiceQuestion" (
     "id" TEXT NOT NULL,
-    "text" TEXT NOT NULL,
+    "question" TEXT,
+    "text" TEXT,
+    "options" JSONB,
+    "correctAnswer" TEXT,
     "quizId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "QuizQuestion_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "QuizQuestionOption" (
-    "id" TEXT NOT NULL,
-    "text" TEXT NOT NULL,
-    "isCorrect" BOOLEAN NOT NULL DEFAULT false,
-    "quizQuestionId" TEXT NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
-
-    CONSTRAINT "QuizQuestionOption_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "MultipleChoiceQuestion_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -305,6 +302,17 @@ CREATE TABLE "ActivityLog" (
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "ActivityLog_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "CourseReview" (
+    "id" TEXT NOT NULL,
+    "feedback" TEXT,
+    "decision" "CourseReviewDecision" NOT NULL,
+    "courseId" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "CourseReview_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
@@ -404,10 +412,7 @@ ALTER TABLE "Class" ADD CONSTRAINT "Class_lessonId_fkey" FOREIGN KEY ("lessonId"
 ALTER TABLE "Quiz" ADD CONSTRAINT "Quiz_lessonId_fkey" FOREIGN KEY ("lessonId") REFERENCES "Lesson"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "QuizQuestion" ADD CONSTRAINT "QuizQuestion_quizId_fkey" FOREIGN KEY ("quizId") REFERENCES "Quiz"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "QuizQuestionOption" ADD CONSTRAINT "QuizQuestionOption_quizQuestionId_fkey" FOREIGN KEY ("quizQuestionId") REFERENCES "QuizQuestion"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "MultipleChoiceQuestion" ADD CONSTRAINT "MultipleChoiceQuestion_quizId_fkey" FOREIGN KEY ("quizId") REFERENCES "Quiz"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "StudentProgress" ADD CONSTRAINT "StudentProgress_chapterId_fkey" FOREIGN KEY ("chapterId") REFERENCES "Chapter"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -429,3 +434,6 @@ ALTER TABLE "Purchase" ADD CONSTRAINT "Purchase_courseId_fkey" FOREIGN KEY ("cou
 
 -- AddForeignKey
 ALTER TABLE "ActivityLog" ADD CONSTRAINT "ActivityLog_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "CourseReview" ADD CONSTRAINT "CourseReview_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "Course"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

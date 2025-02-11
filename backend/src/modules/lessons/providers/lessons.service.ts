@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateLessonDto } from '../dto/create-lesson.dto';
 import { UpdateLessonDto } from '../dto/update-lesson.dto';
 import { PrismaService } from 'src/modules/prisma/prisma.service';
-import { LessonStatus, LessonType } from '@prisma/client';
+import { LessonType } from '@prisma/client';
 import { UpdateLessonClassDto } from '../dto/update-lesson-class.dto';
 
 @Injectable()
@@ -34,7 +34,6 @@ export class LessonsService {
         data: {
           type: LessonType.CLASS,
           position: newPosition,
-          status: LessonStatus.DRAFT,
           chapterId,
         },
       });
@@ -52,7 +51,6 @@ export class LessonsService {
         data: {
           type: LessonType.QUIZ,
           position: newPosition,
-          status: LessonStatus.DRAFT,
           chapterId,
         },
       });

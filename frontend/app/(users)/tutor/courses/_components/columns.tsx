@@ -10,6 +10,7 @@ import {
 } from "@/components/shadcn/ui/dropdown-menu";
 import { formatPrice } from "@/libs/format";
 import { cn } from "@/libs/shadcn/utils";
+import { CoursePlatformStatus, CourseReviewStatus } from "@/types/enums";
 import { Course } from "@/types/models/Course";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal, Pencil } from "lucide-react";
@@ -50,28 +51,100 @@ export const columns: ColumnDef<Course>[] = [
     },
   },
   {
-    accessorKey: "isPublished",
+    accessorKey: "platformStatus", // Use platformStatus
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Publicado
+          Estado en la plataforma
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
     cell: ({ row }) => {
-      const isPublished = row.getValue("isPublished") || false;
+      const platformStatus: CoursePlatformStatus =
+        row.getValue("platformStatus");
 
-      return (
-        <Badge className={cn("bg-slate-500", isPublished && "bg-sky-700")}>
-          {isPublished ? "Publicado" : "Borrador"}
-        </Badge>
-      );
+      let statusText: string;
+      let badgeColor: string;
+
+      switch (platformStatus) {
+        case CoursePlatformStatus.DRAFT:
+          statusText = "Borrador";
+          badgeColor = "bg-slate-500";
+          break;
+        case CoursePlatformStatus.PUBLISHED:
+          statusText = "Publicado";
+          badgeColor = "bg-sky-700";
+          break;
+        case CoursePlatformStatus.ARCHIVED:
+          statusText = "Archivado";
+          badgeColor = "bg-gray-500";
+          break;
+        case CoursePlatformStatus.DELETED:
+          statusText = "Eliminado";
+          badgeColor = "bg-red-500";
+          break;
+        default: // Handle unexpected cases
+          statusText = "Desconocido";
+          badgeColor = "bg-yellow-500";
+      }
+
+      return <Badge className={cn(badgeColor)}>{statusText}</Badge>;
     },
   },
+
+  {
+    accessorKey: "reviewStatus", // Use reviewStatus
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Estado de revisión
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const reviewStatus: CourseReviewStatus = row.getValue("reviewStatus");
+
+      let statusText: string;
+      let badgeColor: string;
+
+      switch (reviewStatus) {
+        case CourseReviewStatus.DRAFT:
+          statusText = "Borrador";
+          badgeColor = "bg-slate-500";
+          break;
+        case CourseReviewStatus.PENDING_REVIEW:
+          statusText = "Pendiente de revisión";
+          badgeColor = "bg-yellow-500";
+          break;
+        case CourseReviewStatus.APPROVED:
+          statusText = "Aprobado";
+          badgeColor = "bg-green-500";
+          break;
+        case CourseReviewStatus.NEEDS_REVISION:
+          statusText = "Necesita revisión";
+          badgeColor = "bg-orange-500";
+          break;
+        case CourseReviewStatus.REJECTED:
+          statusText = "Rechazado";
+          badgeColor = "bg-red-500";
+          break;
+        default: // Handle unexpected cases
+          statusText = "Desconocido";
+          badgeColor = "bg-yellow-500";
+      }
+
+      return <Badge className={cn(badgeColor)}>{statusText}</Badge>;
+    },
+  },
+
   {
     id: "actions",
     header: "Acciones",
