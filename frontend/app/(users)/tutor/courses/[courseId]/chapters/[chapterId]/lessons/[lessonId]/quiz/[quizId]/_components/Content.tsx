@@ -27,7 +27,7 @@ const sectionTitles: SectionTitles = {
 export default function Content({ lesson }: { lesson: any }) {
   const [content, setContent] = useState<SectionTitleKey>("mainContent");
 
-  const { chapterId, lessonId } = useParams();
+  const { lessonId } = useParams();
 
   const handleNavigation = (value: SectionTitleKey) => {
     setContent(value);
@@ -59,7 +59,7 @@ export default function Content({ lesson }: { lesson: any }) {
                 />
                 <Separator />
 
-                <ExercisesForm quizId={lesson.quiz.id as string} />
+                <ExercisesForm />
               </>
             )}
           </Card>

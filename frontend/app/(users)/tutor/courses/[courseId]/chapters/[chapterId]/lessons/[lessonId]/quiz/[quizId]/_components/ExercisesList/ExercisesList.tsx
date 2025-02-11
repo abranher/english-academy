@@ -1,6 +1,11 @@
+"use client";
+
 import { FolderOpen } from "lucide-react";
+import { useParams } from "next/navigation";
 
 export function ExercisesList() {
+  const { quizId } = useParams();
+
   return (
     <>
       {

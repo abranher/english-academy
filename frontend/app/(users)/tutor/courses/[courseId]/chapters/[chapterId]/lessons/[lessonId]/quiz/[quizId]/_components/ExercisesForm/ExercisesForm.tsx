@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { FilePen, LayoutGrid } from "lucide-react";
@@ -28,11 +28,13 @@ import axios from "@/config/axios";
 import { toast } from "sonner";
 import { ExercisesList } from "../ExercisesList";
 
-export function ExercisesForm({ quizId }: { quizId: string }) {
+export function ExercisesForm() {
   const [open, setOpen] = useState(false);
   const [exerciseType, setExerciseType] = useState(
     ExerciseType.MULTIPLE_CHOICE
   );
+
+  const { quizId } = useParams();
 
   const router = useRouter();
 
