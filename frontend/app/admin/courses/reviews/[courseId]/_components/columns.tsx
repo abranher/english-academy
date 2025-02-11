@@ -10,42 +10,29 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/shadcn/ui/dropdown-menu";
+import { formatDate } from "@/libs/date";
 import { cn } from "@/libs/shadcn/utils";
 import { CourseReviewStatus } from "@/types/enums";
 import { Course } from "@/types/models/Course";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, Clock, MoreHorizontal, TextSearch } from "lucide-react";
+import { ArrowUpDown, Clock, MoreHorizontal, Pencil } from "lucide-react";
 
 export const columns: ColumnDef<Course>[] = [
   {
-    accessorKey: "title",
+    accessorKey: "feedback",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Título
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-  },
-  {
-    accessorKey: "tutorUsername",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Usuario
+          Feedback
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
     cell: ({ row }) => {
-      return <div>{`@${row.getValue("tutorUsername")}` || ""}</div>;
+      return <div>{`${row.getValue("feedback")}` || ""}</div>;
     },
   },
   {
@@ -96,36 +83,21 @@ export const columns: ColumnDef<Course>[] = [
       return <Badge className={cn(badgeColor)}>{statusText}</Badge>;
     },
   },
-
   {
-    id: "actions",
-    header: "Acciones",
-    cell: ({ row }) => {
-      const { id } = row.original;
+    accessorKey: "createdAt",
+    header: ({ column }) => {
       return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button className="h-4 w-8 p-0" variant="ghost">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-6 w-6" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <Link href={`/tutor/courses/${id}`}>
-              <DropdownMenuItem>
-                <TextSearch className="h-4 w-4 mr-2" />
-                Revisar
-              </DropdownMenuItem>
-            </Link>
-            <Link href={`/admin/courses/reviews/${id}`}>
-              <DropdownMenuItem>
-                <Clock className="h-4 w-4 mr-2" />
-                Historial de revisiones
-              </DropdownMenuItem>
-            </Link>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Fecha
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
       );
+    },
+    cell: ({ row }) => {
+      return <div>{formatDate(row.getValue("createdAt")) || ""}</div>;
     },
   },
 ];

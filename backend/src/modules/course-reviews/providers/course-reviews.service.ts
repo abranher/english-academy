@@ -29,6 +29,26 @@ export class CourseReviewsService {
     return courseReviews;
   }
 
+  async findAllForAdmin(courseId: string) {
+    const ownCourse = await this.prisma.course.findUnique({
+      where: {
+        id: courseId,
+      },
+    });
+
+    if (!ownCourse) throw new NotFoundException('Curso no encontrado.');
+
+    const courseReviews = await this.prisma.courseReview.findMany({
+      where: {
+        courseId: ownCourse.id,
+      },
+      include: {
+        course: true,
+      },
+    });
+
+    return courseReviews;
+  }
   findOne(id: number) {
     return `This action returns a #${id} courseReview`;
   }

@@ -25,6 +25,11 @@ export class CourseReviewsController {
     return this.courseReviewsService.findAll(courseId);
   }
 
+  @Get('course/:courseId/admin')
+  findAllForAdmin(@Param('courseId') courseId: string) {
+    return this.courseReviewsService.findAllForAdmin(courseId);
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.courseReviewsService.findOne(+id);
