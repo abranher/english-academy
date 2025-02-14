@@ -29,10 +29,10 @@ import { CourseReviewsModule } from './modules/course-reviews/course-reviews.mod
     ServeStaticModule.forRoot({
       rootPath: join(process.cwd(), './public'),
     }),
-    PrismaModule,
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    PrismaModule,
     AuthModule,
     UsersModule,
     CoursesModule,
