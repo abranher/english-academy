@@ -64,11 +64,12 @@ model Student {
 }
 
 model Tutor {
-  id String @id @default(uuid())
-
-  bio        String?
-  approvedAt DateTime?
-  cvUrl      String?
+  id               String      @id @default(uuid())
+  bio              String?
+  cvUrl            String?
+  status           TutorStatus @default(PENDING)
+  approvedAt       DateTime?
+  rejectionHistory Json?
 
   userId String @unique
   user   User   @relation(fields: [userId], references: [id])
@@ -81,12 +82,11 @@ model Tutor {
 }
 
 model Certification {
-  id          String   @id @default(uuid())
-  title       String
-  url         String
-  institution String
-  issueDate   DateTime
-  language    String
+  id                  String   @id @default(uuid())
+  name                String
+  issuingOrganization String
+  issueDate           DateTime
+  url                 String
 
   tutorId String
   tutor   Tutor  @relation(fields: [tutorId], references: [id])
@@ -233,7 +233,7 @@ model Chapter {
   courseId String
   course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
-  lessons Lesson[]
+  lessons         Lesson[]
   studentProgress StudentProgress[]
 
   createdAt DateTime @default(now())
@@ -424,6 +424,12 @@ enum Roles {
   ADMIN
   STUDENT
   TUTOR
+}
+
+enum TutorStatus {
+  PENDING
+  APPROVED
+  REJECTED
 }
 
 enum PurchaseOrderStatus {
