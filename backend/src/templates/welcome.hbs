@@ -1,59 +1,130 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{{title}}</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background-color: #ffffff;
+    }
+
+    .container {
+      width: 600px;
+      margin: 20px auto;
+      background-color: #ffffff;
+      padding: 20px;
+      border: 1px solid #e5e7eb;
+      box-sizing: border-box;
+    }
+  </style>
 </head>
-<body style="margin: 0; padding: 0; background-color: #18181b; font-family: Arial, sans-serif;"> 
-  <!-- Contenedor principal -->
-  <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0">
-    <tr>
-      <td align="center" style="padding: 20px 0;">
-        <!-- Contenedor del contenido -->
-        <table role="presentation" width="600" border="0" cellspacing="0" cellpadding="0" style="background-color: #ffffff;">
-          <!-- Encabezado -->
-          <tr>
-            <td style="padding: 30px 20px; background-color: #2c3e50; text-align: center;">
-              <h1 style="margin: 0; color: #ffffff; font-size: 24px;">{{headerTitle}}</h1>
-            </td>
-          </tr>
-          
-          <!-- Cuerpo del mensaje -->
-          <tr>
-            <td style="padding: 40px 30px;">
-              <h2 style="margin: 0 0 20px 0; color: #333333; font-size: 20px;">Hola {{name}},</h2>
-              <div style="color: #666666; font-size: 16px; line-height: 1.6;">
-                {{{content}}}
-              </div>
-              
-              {{#if buttonUrl}}
-              <!-- Botón CTA -->
-              <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="margin: 30px 0;">
-                <tr>
-                  <td align="center">
-                    <a href="{{buttonUrl}}" style="background-color: #3498db; color: #ffffff; padding: 12px 25px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold;">
-                      {{buttonText}}
-                    </a>
-                  </td>
-                </tr>
+
+<body>
+
+  <div
+    style="min-width:100%;width:100%!important;color:#1a2e44;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Fira Sans,Droid Sans,Helvetica Neue,sans-serif;font-size:14px;line-height:1.5;margin:0;padding:0">
+    <div style="min-width:100%;width:100%!important;background-color:#f8fafa;margin:0;padding:32px 0">
+      <table style="width:100%;border-collapse:collapse;border-spacing:0;table-layout:fixed;padding:0;border-width:0"
+        height="100%">
+        <tbody>
+          <tr style="padding:0">
+            <td
+              style="border-collapse:collapse!important;word-break:break-word;min-width:100%;width:100%!important;margin:0;padding:0"
+              align="center" valign="top">
+              <img
+                src="https://ci3.googleusercontent.com/meips/ADKq_NY1jVujPAunT9I87u12AZEEXkC1KNS5w2MYqAexiznDy-tkmD5iTNUEP17EuHQrtOpPq2jTrk39Qy7GQ_zRnw3zKlGAHXP0hNM8HKorwzHI3bzPzO_4HmzqpPchnxruOn5gt5c4=s0-d-e1-ft#https://assets.mailtrap.io/packs/assets/mailer/logo@2x-af814ed96246d3665622.png"
+                alt="mailtrap logo"
+                style="max-width:100%;width:136px!important;outline:none;text-decoration:none;height:41px!important;border-style:none">
+
+              <table
+                style="width:580px;border-collapse:separate;border-spacing:0;table-layout:auto;border-radius:8px;margin-top:24px;padding:0;border:1px solid #eee">
+                <tbody>
+                  <tr style="padding:0">
+                    <td style="border-collapse:collapse!important;word-break:break-word;padding:24px 32px 30px">
+                      <p style="font-size:14px;padding-bottom:10px;margin:0">Hi !</p>
+
+                      <p style="font-size:14px;padding-bottom:10px;margin:0">On Fri, 14 Feb 2025 05:31:24 UTC you
+                        attempted to login to Mailtrap from a new device located in Venezuela (Bolivarian Republic of).
+                      </p>
+
+                      <span>
+                        <p style="font-size:14px;padding-bottom:10px;margin:0">If this was you, please use the code
+                          below to proceed with the login.</p>
+                      </span>
+
+                      <p style="font-size:14px;padding-bottom:10px;margin:0"><strong>565339</strong></p>
+                    </td>
+                  </tr>
+
+                  <tr style="padding:0">
+                    <td style="border-collapse:collapse!important;word-break:break-word;padding:0 32px 24px">
+                      <table
+                        style="width:50%;border-collapse:collapse;border-spacing:0;table-layout:auto;padding:0;border-width:0">
+                        <tbody>
+                          <tr style="padding:0">
+                            <td
+                              style="border-collapse:collapse!important;word-break:break-word;border-top-width:1px;border-top-color:#e4e4e9;border-top-style:solid;font-size:12px;line-height:1.5;padding:15px 0 0">
+                              <table
+                                style="border-collapse:collapse;border-spacing:0;table-layout:auto;padding:0;border-width:0">
+                                <tbody>
+                                  <tr style="padding:0">
+                                    <td style="border-collapse:collapse!important;word-break:break-word;padding:0">
+                                      <span>Sincerely,</span><br>
+                                      <br>
+                                      <strong>The Mailtrap team</strong><br>
+                                      <span style="color:#a3abb4;font-size:10px">
+                                        <a href="mailto:support@mailtrap.io" target="_blank">support@mailtrap.io
+                                        </a>
+                                      </span>
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </td>
+                  </tr>
+                </tbody>
               </table>
-              {{/if}}
             </td>
           </tr>
-          
-          <!-- Pie de página -->
-          <tr>
-            <td style="padding: 20px 30px; background-color: #ecf0f1; border-top: 2px solid #d4d4d4;">
-              <p style="margin: 0; color: #666666; font-size: 14px; line-height: 1.5;">
-                Si tienes alguna duda, contáctanos en <a href="mailto:{{supportEmail}}" style="color: #3498db; text-decoration: none;">{{supportEmail}}</a><br>
-                © {{year}} {{companyName}}. Todos los derechos reservados.
-              </p>
+          <tr style="padding:0">
+            <td style="border-collapse:collapse!important;word-break:break-word;padding:24px 10px 0">
+              <table
+                style="width:580px;border-collapse:collapse;border-spacing:0;table-layout:auto;padding:0;border-width:0">
+                <tbody>
+                  <tr style="padding:0">
+                    <td
+                      style="border-collapse:collapse!important;word-break:break-word;color:#a3abb4;font-size:11px;padding:0">
+                      <table
+                        style="width:100%;border-collapse:collapse;border-spacing:0;table-layout:auto;color:#a3abb4;font-size:11px;padding:0;border-width:0">
+                        <tbody>
+                          <tr style="padding:0">
+                            <td style="border-collapse:collapse!important;word-break:break-word;padding:0">
+                              Railsware Products Studio LLC<br>
+                              925 N La Brea Ave, Suite 400, office 560, West Hollywood,<br>
+                              CA 90038, US
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </td>
           </tr>
-        </table>
-      </td>
-    </tr>
-  </table>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </body>
+
 </html>
