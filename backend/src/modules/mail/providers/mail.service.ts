@@ -1,26 +1,28 @@
 import { Injectable } from '@nestjs/common';
-import { CreateMailDto } from '../dto/create-mail.dto';
-import { UpdateMailDto } from '../dto/update-mail.dto';
+
+import { MailerService } from '@nestjs-modules/mailer';
 
 @Injectable()
 export class MailService {
-  create(createMailDto: CreateMailDto) {
-    return 'This action adds a new mail';
-  }
+  constructor(private mailerService: MailerService) {}
 
-  findAll() {
-    return `This action returns all mail`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} mail`;
-  }
-
-  update(id: number, updateMailDto: UpdateMailDto) {
-    return `This action updates a #${id} mail`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} mail`;
+  async sendUserConfirmation(user: { email: string; name: string }) {
+    console.log(process.cwd());
+    await this.mailerService.sendMail({
+      to: user.email,
+      subject: 'Welcome to Nice App! Confirm your Email',
+      template: './welcome', // ✅ template found again in v1.6.0
+      context: {
+        title: 'Nueva Actualización',
+        headerTitle: 'Academy',
+        name: user.name,
+        content: '<p>Gracias por ser parte de nuestra comunidad...</p>',
+        buttonUrl: 'https://ejemplo.com/accion',
+        buttonText: 'Ver Más',
+        supportEmail: 'soporte@empresa.com',
+        year: new Date().getFullYear(),
+        companyName: 'Academy S.A.',
+      },
+    });
   }
 }

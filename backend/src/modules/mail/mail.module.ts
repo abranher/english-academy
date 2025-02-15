@@ -28,7 +28,7 @@ import { MailController } from './controllers/mail.controller';
         },
         preview: true,
         template: {
-          dir: process.cwd() + '/src/modules/mail/templates/',
+          dir: process.cwd() + '/src/templates/',
           adapter: new HandlebarsAdapter(),
           options: {
             strict: true,
