@@ -23,6 +23,7 @@ import { BackupModule } from './modules/backup/backup.module';
 import { ClassesModule } from './modules/classes/classes.module';
 import { QuizzesModule } from './modules/quizzes/quizzes.module';
 import { CourseReviewsModule } from './modules/course-reviews/course-reviews.module';
+import { MailModule } from './mail/mail.module';
 
 @Module({
   imports: [
@@ -51,6 +52,7 @@ import { CourseReviewsModule } from './modules/course-reviews/course-reviews.mod
     ClassesModule,
     QuizzesModule,
     CourseReviewsModule,
+    MailModule,
   ],
 })
 export class AppModule {}
