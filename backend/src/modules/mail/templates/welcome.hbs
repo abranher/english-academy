@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{title}}</title>
+</head>
+<body style="margin: 0; padding: 0; background-color: #18181b; font-family: Arial, sans-serif;"> 
+  <!-- Contenedor principal -->
+  <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td align="center" style="padding: 20px 0;">
+        <!-- Contenedor del contenido -->
+        <table role="presentation" width="600" border="0" cellspacing="0" cellpadding="0" style="background-color: #ffffff;">
+          <!-- Encabezado -->
+          <tr>
+            <td style="padding: 30px 20px; background-color: #2c3e50; text-align: center;">
+              <h1 style="margin: 0; color: #ffffff; font-size: 24px;">{{headerTitle}}</h1>
+            </td>
+          </tr>
+          
+          <!-- Cuerpo del mensaje -->
+          <tr>
+            <td style="padding: 40px 30px;">
+              <h2 style="margin: 0 0 20px 0; color: #333333; font-size: 20px;">Hola {{name}},</h2>
+              <div style="color: #666666; font-size: 16px; line-height: 1.6;">
+                {{{content}}}
+              </div>
+              
+              {{#if buttonUrl}}
+              <!-- Botón CTA -->
+              <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="margin: 30px 0;">
+                <tr>
+                  <td align="center">
+                    <a href="{{buttonUrl}}" style="background-color: #3498db; color: #ffffff; padding: 12px 25px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold;">
+                      {{buttonText}}
+                    </a>
+                  </td>
+                </tr>
+              </table>
+              {{/if}}
+            </td>
+          </tr>
+          
+          <!-- Pie de página -->
+          <tr>
+            <td style="padding: 20px 30px; background-color: #ecf0f1; border-top: 2px solid #d4d4d4;">
+              <p style="margin: 0; color: #666666; font-size: 14px; line-height: 1.5;">
+                Si tienes alguna duda, contáctanos en <a href="mailto:{{supportEmail}}" style="color: #3498db; text-decoration: none;">{{supportEmail}}</a><br>
+                © {{year}} {{companyName}}. Todos los derechos reservados.
+              </p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
