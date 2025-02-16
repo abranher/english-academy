@@ -24,7 +24,7 @@ import { ClassesModule } from './modules/classes/classes.module';
 import { QuizzesModule } from './modules/quizzes/quizzes.module';
 import { CourseReviewsModule } from './modules/course-reviews/course-reviews.module';
 import { MailModule } from './modules/mail/mail.module';
-import { NotificationsModule } from './notifications/notifications.module';
+import { NotificationsModule } from './modules/notifications/notifications.module';
 
 @Module({
   imports: [
