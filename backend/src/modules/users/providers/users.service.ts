@@ -49,6 +49,10 @@ export class UsersService {
       where: {
         username,
       },
+      include: {
+        student: true,
+        tutor: true,
+      },
     });
   }
 
@@ -56,6 +60,10 @@ export class UsersService {
     return await this.prisma.user.findUnique({
       where: {
         id,
+      },
+      include: {
+        student: true,
+        tutor: true,
       },
     });
   }

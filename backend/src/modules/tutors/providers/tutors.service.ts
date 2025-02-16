@@ -1,24 +1,34 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 
+import { ConfigService } from '@nestjs/config';
 import { Roles } from '@prisma/client';
 import { hash } from 'bcrypt';
+import { totp } from 'otplib';
 
-import { NotificationsService } from 'src/modules/notifications/providers/notifications.service';
 import { PrismaService } from 'src/modules/prisma/providers/prisma.service';
+import { MailService } from 'src/modules/mail/providers/mail.service';
 import { CreateTutorDto } from '../dto/create-tutor.dto';
-import { UpdateTutorDto } from '../dto/update-tutor.dto';
 import { BIOGRAPHY_DEFAULT } from '../constants';
-import { NotificationType } from 'src/modules/notifications/types/notifications.types';
+import { VerifyTokenDto } from '../dto/verify-token.dto';
+import { UsersService } from 'src/modules/users/providers/users.service';
 
 @Injectable()
 export class TutorsService {
   constructor(
     private readonly prisma: PrismaService,
-    private readonly notifications: NotificationsService,
+    private readonly mail: MailService,
+    private readonly userService: UsersService,
+    private readonly config: ConfigService,
   ) {}
 
   async createEmail(createTutorDto: CreateTutorDto) {
-    const userFound = await this.findByEmail(createTutorDto.email);
+    const userFound = await this.userService.findByEmail(createTutorDto.email);
 
     if (userFound)
       throw new ConflictException(
@@ -37,20 +47,43 @@ export class TutorsService {
       },
     });
 
-    await this.notifications.createNotification(
-      'email-verification',
-      newUser.id,
-      {
-        orderId: 123,
-        trackingNumber: 'ABC123',
-        user: { preferences: { receiveShippingEmails: true } },
-      },
-    );
+    this.mail.sendEmailVerification(newUser);
 
     return {
       userId: newUser.id,
       message: 'Usuario creado!.',
     };
+  }
+
+  async verifyEmail(verifyTokenDto: VerifyTokenDto, userId: string) {
+    const isValid = totp.check(
+      verifyTokenDto.token,
+      this.config.get('OTPLIB_SECRET'),
+    );
+
+    if (!isValid) {
+      throw new BadRequestException('Token inválido o vencido.');
+    }
+
+    const user = await this.userService.findById(userId);
+
+    if (!user) {
+      throw new NotFoundException('Usuario no encontrado.');
+    }
+
+    try {
+      await this.prisma.user.update({
+        where: { id: user.id },
+        data: { emailVerifiedAt: new Date() },
+      });
+    } catch (error) {
+      console.error('Error updating user:', error);
+      throw new InternalServerErrorException(
+        'Error al verificar el correo. Por favor intenta nuevamente.',
+      );
+    }
+
+    return { message: 'Email verificado exitosamente.' };
   }
 
   async createPassword(createTutorDto: CreateTutorDto, id: string) {
@@ -85,7 +118,9 @@ export class TutorsService {
   }
 
   async createUsername(createTutorDto: CreateTutorDto, id: string) {
-    const usernameFound = await this.findByUsername(createTutorDto.username);
+    const usernameFound = await this.userService.findByUsername(
+      createTutorDto.username,
+    );
 
     if (usernameFound)
       throw new ConflictException('El nombre de usuario ya está en uso.');
@@ -135,37 +170,5 @@ export class TutorsService {
     });
 
     return tutorUser;
-  }
-
-  update(id: number, updateTutorDto: UpdateTutorDto) {
-    return `This action updates a #${id} tutor`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} tutor`;
-  }
-
-  async findByEmail(email: string) {
-    return await this.prisma.user.findUnique({
-      where: {
-        email,
-      },
-    });
-  }
-
-  async findByUsername(username: string) {
-    return await this.prisma.user.findUnique({
-      where: {
-        username,
-      },
-    });
-  }
-
-  async findById(id: string) {
-    return await this.prisma.user.findUnique({
-      where: {
-        id,
-      },
-    });
   }
 }

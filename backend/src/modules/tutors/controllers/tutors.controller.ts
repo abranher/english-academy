@@ -10,6 +10,7 @@ import {
 import { TutorsService } from '../providers/tutors.service';
 import { CreateTutorDto } from '../dto/create-tutor.dto';
 import { UpdateTutorDto } from '../dto/update-tutor.dto';
+import { VerifyTokenDto } from '../dto/verify-token.dto';
 
 @Controller('tutors')
 export class TutorsController {
@@ -18,6 +19,14 @@ export class TutorsController {
   @Post('signup/email')
   createEmail(@Body() createTutorDto: CreateTutorDto) {
     return this.tutorsService.createEmail(createTutorDto);
+  }
+
+  @Post('signup/:userId/verify-email')
+  verifyEmail(
+    @Body() verifyTokenDto: VerifyTokenDto,
+    @Param('userId') userId: string,
+  ) {
+    return this.tutorsService.verifyEmail(verifyTokenDto, userId);
   }
 
   @Post('signup/:userId/password')
@@ -60,15 +69,5 @@ export class TutorsController {
   @Get('user/:userId')
   findOne(@Param('userId') userId: string) {
     return this.tutorsService.findOne(userId);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTutorDto: UpdateTutorDto) {
-    return this.tutorsService.update(+id, updateTutorDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.tutorsService.remove(+id);
   }
 }

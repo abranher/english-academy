@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
 import { MailerModule } from '@nestjs-modules/mailer';
@@ -7,6 +7,7 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
 import { MailService } from './providers/mail.service';
 import { MailController } from './controllers/mail.controller';
 
+@Global()
 @Module({
   imports: [
     MailerModule.forRootAsync({
@@ -40,5 +41,6 @@ import { MailController } from './controllers/mail.controller';
   ],
   controllers: [MailController],
   providers: [MailService],
+  exports: [MailService],
 })
 export class MailModule {}

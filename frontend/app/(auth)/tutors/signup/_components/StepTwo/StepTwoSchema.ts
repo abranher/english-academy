@@ -1,14 +1,14 @@
 "use client";
 
 import { z } from "zod";
-import messages from "@/libs/validations/schemas/messages";
 
-export const StepTwoSchema = z
-  .object({
-    password: z.string().min(8, messages.min(8)),
-    confirmPassword: z.string().min(8, messages.min(8)),
-  })
-  .refine((fields) => fields.password === fields.confirmPassword, {
-    message: "Las contraseñas deben ser iguales.",
-    path: ["confirmPassword"],
-  });
+export const StepTwoSchema = z.object({
+  token: z
+    .string()
+    .min(6, {
+      message: "Su token de un solo uso debe tener 6 caracteres.",
+    })
+    .regex(/^\d+$/, {
+      message: "El token debe contener solo números.",
+    }),
+});

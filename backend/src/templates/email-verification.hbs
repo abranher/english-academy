@@ -37,27 +37,26 @@
                     <td style="border-collapse:collapse!important;word-break:break-word;padding:24px 32px 30px">
                       <p style="font-size:16px;padding-bottom:10px;margin:0">
                         <strong>
-                          Hola Abraham!
+                          Hola!
                         </strong>
                       </p>
 
                       <p style="font-size:16px;padding-bottom:10px;margin:0">
-                        On Fri, 14 Feb 2025 05:31:24 UTC you attempted to login to Mailtrap from a new device located in
-                        Venezuela.
+                        Gracias por registrarte. Para completar el proceso de verificación de tu dirección email, por
+                        favor utiliza el siguiente código:
                       </p>
-
-                      <span>
-                        <p style="font-size:16px;padding-bottom:10px;margin:0">
-                          If this was you, please use the code
-                          below to proceed with the login.
-                        </p>
-                      </span>
                       <br>
 
                       <p style="font-size:16px;padding-bottom:10px;margin:0">
                         <strong>
-                          565339
+                          {{ token }}
                         </strong>
+                      </p>
+                      <br>
+
+                      <p style="font-size:16px;padding-bottom:10px;margin:0">
+                        Ingresa este código en la página de verificación para confirmar tu dirección email. Si no
+                        solicitaste esta verificación, puedes ignorar este mensaje.
                       </p>
                     </td>
                   </tr>
@@ -76,23 +75,23 @@
                                   <tr style="padding:0">
                                     <td style="border-collapse:collapse!important;word-break:break-word;padding:0">
                                       <span style="font-size:16px">
-                                        Gracias por usar Academy.
+                                        Gracias por usar {{ companyName }}.
                                       </span>
                                       <br>
                                       <br>
                                       <span style="font-size:16px">Atentamente,</span>
                                       <br>
-                                      <strong style="font-size:16px">El equipo de Academy</strong>
+                                      <strong style="font-size:16px">El equipo de {{ companyName }}</strong>
                                       <br>
                                       <br>
                                       <br>
                                       <span style="font-size:14px;font-weight:500">
                                         Si tienes alguna duda, contáctanos en
-                                        soporte@empresa.com
+                                        {{ supportEmail }}
                                       </span>
                                       <br>
                                       <span style="font-size:14px;font-weight:500">
-                                        © 2025 Academy. Todos los derechos
+                                        © {{ year }} {{ companyName }}. Todos los derechos
                                         reservados.
                                       </span>
                                       <br>
