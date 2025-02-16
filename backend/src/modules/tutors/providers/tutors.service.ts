@@ -1,12 +1,21 @@
 import { ConflictException, Injectable } from '@nestjs/common';
+
+import { Roles } from '@prisma/client';
+import { hash } from 'bcrypt';
+
+import { NotificationsService } from 'src/modules/notifications/providers/notifications.service';
+import { PrismaService } from 'src/modules/prisma/providers/prisma.service';
 import { CreateTutorDto } from '../dto/create-tutor.dto';
 import { UpdateTutorDto } from '../dto/update-tutor.dto';
-import { PrismaService } from 'src/modules/prisma/providers/prisma.service';
-import { hash } from 'bcrypt';
+import { BIOGRAPHY_DEFAULT } from '../constants';
+import { NotificationType } from 'src/modules/notifications/types/notifications.types';
 
 @Injectable()
 export class TutorsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly notifications: NotificationsService,
+  ) {}
 
   async createEmail(createTutorDto: CreateTutorDto) {
     const userFound = await this.findByEmail(createTutorDto.email);
@@ -18,16 +27,25 @@ export class TutorsService {
 
     const newUser = await this.prisma.user.create({
       data: {
-        role: 'TUTOR',
+        role: Roles.TUTOR,
         email: createTutorDto.email,
+        tutor: {
+          create: {
+            bio: BIOGRAPHY_DEFAULT,
+          },
+        },
       },
     });
 
-    await this.prisma.tutor.create({
-      data: {
-        userId: newUser.id,
+    await this.notifications.createNotification(
+      'email-verification',
+      newUser.id,
+      {
+        orderId: 123,
+        trackingNumber: 'ABC123',
+        user: { preferences: { receiveShippingEmails: true } },
       },
-    });
+    );
 
     return {
       userId: newUser.id,
