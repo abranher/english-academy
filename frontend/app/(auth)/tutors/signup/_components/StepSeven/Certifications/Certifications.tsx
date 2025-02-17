@@ -4,15 +4,26 @@ import axios from "@/config/axios";
 import { AxiosError } from "axios";
 import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
+import { z } from "zod";
 import { toast } from "sonner";
+import { useStepTutorStore } from "@/services/store/auth/tutor/stepTutor";
+import { CertificationSchema } from "./CertificationSchema";
 
 import { CheckCircle, File, Loader2, UploadCloud, XIcon } from "lucide-react";
 import { Card } from "@/components/shadcn/ui/card";
 import { Progress } from "@/components/shadcn/ui/progress";
 import { Button } from "@/components/shadcn/ui/button";
-import { Label } from "@/components/shadcn/ui/label";
 import { Input } from "@/components/shadcn/ui/input";
-import { useStepTutorStore } from "@/services/store/auth/tutor/stepTutor";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/shadcn/ui/form";
 
 type UploadStatus = "select" | "uploading" | "done" | "error";
 
@@ -25,10 +36,12 @@ interface CertificationsProps {
 export function Certifications({ onSuccess }: CertificationsProps) {
   const userId = useStepTutorStore((state) => state.userId);
   const [selectedFile, setSelectedFile] = useState<File | undefined>(undefined);
-  const [name, setName] = useState("");
-  const [issuingOrganization, setIssuingOrganization] = useState("");
   const [progress, setProgress] = useState(0);
   const [uploadStatus, setUploadStatus] = useState<UploadStatus>("select");
+
+  const form = useForm<z.infer<typeof CertificationSchema>>({
+    resolver: zodResolver(CertificationSchema),
+  });
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop: useCallback((acceptedFiles: File[]) => {
@@ -50,13 +63,9 @@ export function Certifications({ onSuccess }: CertificationsProps) {
     },
   });
 
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    if (!selectedFile || !name || !issuingOrganization) {
-      toast.error(
-        "Por favor, completa todos los campos y selecciona un archivo."
-      );
+  async function onSubmit(data: z.infer<typeof CertificationSchema>) {
+    if (!selectedFile) {
+      toast.error("Por favor, selecciona un archivo.");
       return;
     }
 
@@ -65,8 +74,8 @@ export function Certifications({ onSuccess }: CertificationsProps) {
 
       const formData = new FormData();
       formData.append("file", selectedFile);
-      formData.append("name", name);
-      formData.append("issuingOrganization", issuingOrganization);
+      formData.append("name", data.name);
+      formData.append("issuingOrganization", data.issuingOrganization);
 
       await axios.post(`/api/certifications/${userId}`, formData, {
         headers: {
@@ -83,8 +92,7 @@ export function Certifications({ onSuccess }: CertificationsProps) {
       setUploadStatus("done");
       toast.success("¡Certificación agregada correctamente!");
       setSelectedFile(undefined);
-      setName("");
-      setIssuingOrganization("");
+      //reset();
       onSuccess?.();
     } catch (error) {
       setProgress(0);
@@ -106,7 +114,7 @@ export function Certifications({ onSuccess }: CertificationsProps) {
         console.error("Error no controlado:", error);
       }
     }
-  };
+  }
 
   const clearFileInput = () => {
     setSelectedFile(undefined);
@@ -120,117 +128,139 @@ export function Certifications({ onSuccess }: CertificationsProps) {
     )} MB`;
   };
 
+  const { isSubmitting, isValid } = form.formState;
+
   return (
     <>
       <div className="grid gap-4">
-        <form onSubmit={onSubmit}>
-          <div className="grid gap-4">
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)}>
             <div className="grid gap-4">
-              <section className="flex gap-2">
-                <div className="flex flex-col gap-2">
-                  <Label htmlFor="name">Nombre</Label>
-                  <Input
-                    id="name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    placeholder="p.ej: CELTA"
-                    required
+              <div className="grid gap-4">
+                <section className="flex gap-2">
+                  <FormField
+                    control={form.control}
+                    name="name"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Nombre</FormLabel>
+                        <FormControl>
+                          <Input
+                            disabled={isSubmitting}
+                            placeholder="Ej: Jonh"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
                   />
-                </div>
 
-                <div className="flex flex-col gap-2">
-                  <Label htmlFor="issuingOrganization">Organismo emisor</Label>
-                  <Input
-                    id="issuingOrganization"
-                    value={issuingOrganization}
-                    onChange={(e) => setIssuingOrganization(e.target.value)}
-                    placeholder="p.ej: Cambridge Assessment English"
-                    required
+                  <FormField
+                    control={form.control}
+                    name="issuingOrganization"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Organismo emisor</FormLabel>
+                        <FormControl>
+                          <Input
+                            disabled={isSubmitting}
+                            placeholder="Ej: Doe"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
                   />
-                </div>
-              </section>
+                </section>
 
-              {(uploadStatus === "select" || uploadStatus === "uploading") && (
-                <label
-                  {...getRootProps()}
-                  className="p-1 text-center bg-gray-50 text-gray-600 dark:text-gray-100 font-semibold text-xs rounded h-28 sm:h-24 flex flex-col items-center justify-center cursor-pointer border-3 border-gray-500 dark:border-zinc-700 border-dashed"
-                >
-                  <UploadCloud className="w-11 mb-2" />
-                  <input {...getInputProps()} className="hidden" />
-                  {isDragActive ? (
-                    <p>Suelta los archivos aquí ...</p>
-                  ) : (
-                    <p>
-                      Arrastra y suelta tus archivos aquí o{" "}
-                      <span className="font-medium text-blue-600 hover:underline">
-                        explora
-                      </span>
+                {(uploadStatus === "select" ||
+                  uploadStatus === "uploading") && (
+                  <label
+                    {...getRootProps()}
+                    className="p-1 text-center bg-gray-50 text-gray-600 dark:text-gray-100 font-semibold text-xs rounded h-28 sm:h-24 flex flex-col items-center justify-center cursor-pointer border-3 border-gray-500 dark:border-zinc-700 border-dashed"
+                  >
+                    <UploadCloud className="w-11 mb-2" />
+                    <input {...getInputProps()} className="hidden" />
+                    {isDragActive ? (
+                      <p>Suelta los archivos aquí ...</p>
+                    ) : (
+                      <p>
+                        Arrastra y suelta tus archivos aquí o{" "}
+                        <span className="font-medium text-blue-600 hover:underline">
+                          explora
+                        </span>
+                      </p>
+                    )}
+                    <p className="text-xs font-medium mt-2">
+                      Formatos permitidos: PNG, JPG, WEBP, PDF (Máx. 5MB)
                     </p>
+                  </label>
+                )}
+
+                <Card className="grid grid-cols-8 py-2 border-zinc-500 border-2">
+                  <div className="col-span-1 flex justify-center items-center">
+                    <File />
+                  </div>
+                  <div className="text-xs col-span-6 flex flex-col justify-center gap-1">
+                    <p>
+                      {selectedFile
+                        ? selectedFile.name
+                        : "No hay ningún archivo seleccionado"}
+                    </p>
+                    <p>{selectedFile && formatSize(selectedFile.size)}</p>
+                    <Progress value={progress} className="h-2" />
+                  </div>
+                  {uploadStatus === "select" && selectedFile && (
+                    <>
+                      <div className="col-span-1 flex justify-center items-center">
+                        <XIcon
+                          className="cursor-pointer"
+                          onClick={clearFileInput}
+                        />
+                      </div>
+                    </>
                   )}
-                  <p className="text-xs font-medium mt-2">
-                    Formatos permitidos: PNG, JPG, WEBP, PDF (Máx. 5MB)
-                  </p>
-                </label>
-              )}
-
-              <Card className="grid grid-cols-8 py-2 border-zinc-500 border-2">
-                <div className="col-span-1 flex justify-center items-center">
-                  <File />
-                </div>
-                <div className="text-xs col-span-6 flex flex-col justify-center gap-1">
-                  <p>
-                    {selectedFile
-                      ? selectedFile.name
-                      : "No hay ningún archivo seleccionado"}
-                  </p>
-                  <p>{selectedFile && formatSize(selectedFile.size)}</p>
-                  <Progress value={progress} className="h-2" />
-                </div>
-                {uploadStatus === "select" && selectedFile && (
-                  <>
-                    <div className="col-span-1 flex justify-center items-center">
-                      <XIcon
-                        className="cursor-pointer"
-                        onClick={clearFileInput}
-                      />
-                    </div>
-                  </>
-                )}
-                {uploadStatus === "uploading" && (
-                  <>
-                    <div className="col-span-1 flex justify-center items-center">
-                      {progress}
-                    </div>
-                  </>
-                )}
-                {uploadStatus === "done" && (
-                  <>
-                    <div className="col-span-1 flex justify-center items-center">
-                      <CheckCircle />
-                    </div>
-                  </>
-                )}
-              </Card>
-
-              <div className="w-full flex">
-                <Button
-                  type="submit"
-                  disabled={
-                    uploadStatus === "uploading" || uploadStatus === "done"
-                  }
-                >
-                  {uploadStatus === "select" && <UploadCloud />}
-
                   {uploadStatus === "uploading" && (
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    <>
+                      <div className="col-span-1 flex justify-center items-center">
+                        {progress}
+                      </div>
+                    </>
                   )}
+                  {uploadStatus === "done" && (
+                    <>
+                      <div className="col-span-1 flex justify-center items-center">
+                        <CheckCircle />
+                      </div>
+                    </>
+                  )}
+                </Card>
 
-                  {uploadStatus === "done" && <CheckCircle />}
-                </Button>
+                <div className="w-full flex">
+                  <Button
+                    type="submit"
+                    disabled={
+                      !isValid ||
+                      isSubmitting ||
+                      uploadStatus === "uploading" ||
+                      uploadStatus === "done"
+                    }
+                  >
+                    {uploadStatus === "select" && <UploadCloud />}
+
+                    {uploadStatus === "uploading" && (
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    )}
+
+                    {uploadStatus === "done" && <CheckCircle />}
+                  </Button>
+                </div>
               </div>
             </div>
-          </div>
-        </form>
+          </form>
+        </Form>
       </div>
     </>
   );

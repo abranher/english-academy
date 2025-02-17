@@ -12,5 +12,6 @@ import { TutorsFilesService } from './providers/tutors.files.service';
   imports: [UsersModule],
   controllers: [TutorsController, TutorsFilesController, TutorsAdminController],
   providers: [TutorsService, TutorsFilesService, TutorsAdminService],
+  exports: [TutorsService],
 })
 export class TutorsModule {}
