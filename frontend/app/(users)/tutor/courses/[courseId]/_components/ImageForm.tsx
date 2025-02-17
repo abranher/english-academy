@@ -7,7 +7,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 
 import { Button } from "@/components/shadcn/ui/button";
-import { CardContent } from "@/components/shadcn/ui/card";
+import { Card, CardContent } from "@/components/shadcn/ui/card";
 import { Image } from "@nextui-org/react";
 import { toast } from "sonner";
 import {
@@ -201,7 +201,7 @@ export default function ImageForm({ course }: any) {
                     )}
 
                     <>
-                      <section className="grid grid-cols-8 py-3 rounded-lg text-gray-700 dark:text-gray-100 bg-zinc-200 dark:bg-zinc-900">
+                      <Card className="grid grid-cols-8 py-2">
                         <div className="col-span-1 flex justify-center items-center">
                           <ImageIcon />
                         </div>
@@ -238,7 +238,7 @@ export default function ImageForm({ course }: any) {
                             </div>
                           </>
                         )}
-                      </section>
+                      </Card>
                       <Button
                         type="submit"
                         disabled={

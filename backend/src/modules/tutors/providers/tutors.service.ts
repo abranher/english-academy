@@ -36,10 +36,7 @@ export class TutorsService {
   async createEmail(createTutorDto: CreateTutorDto) {
     const userFound = await this.userService.findByEmail(createTutorDto.email);
 
-    if (userFound)
-      throw new ConflictException(
-        'La dirección de correo electrónico ya está en uso.',
-      );
+    if (userFound) throw new ConflictException('El email ya está en uso.');
 
     const newUser = await this.prisma.user.create({
       data: {
