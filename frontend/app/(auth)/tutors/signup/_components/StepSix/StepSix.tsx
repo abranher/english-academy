@@ -148,7 +148,7 @@ export function StepSix() {
           <div className="w-full flex justify-end">
             {!createUserMutation.isPending ? (
               <Button disabled={!isValid || isSubmitting} type="submit">
-                Finalizar
+                Continuar
               </Button>
             ) : (
               <Button disabled>
