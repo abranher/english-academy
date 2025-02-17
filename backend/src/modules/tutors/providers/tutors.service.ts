@@ -99,17 +99,21 @@ export class TutorsService {
   }
 
   async createPassword(createTutorDto: CreateTutorDto, id: string) {
+    const user = await this.userService.findById(id);
+
+    if (!user) throw new NotFoundException('Usuario no encontrado');
+
+    if (user.password)
+      throw new ConflictException('La contraseña ya fue establecida');
+
+    const hashedPassword = await hash(createTutorDto.password, 10);
     await this.prisma.user.update({
-      where: {
-        id,
-      },
-      data: {
-        password: await hash(createTutorDto.password, 10),
-      },
+      where: { id },
+      data: { password: hashedPassword },
     });
 
     return {
-      message: 'Contraseña creada!!.',
+      message: 'Contraseña creada exitosamente.',
     };
   }
 
