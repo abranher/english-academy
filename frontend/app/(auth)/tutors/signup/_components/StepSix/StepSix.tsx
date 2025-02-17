@@ -1,16 +1,17 @@
 import { useRouter } from "next/navigation";
+
 import axios from "@/config/axios";
+import { AxiosError } from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { StepSixSchema } from "./StepSixSchema";
 import { useMutation } from "@tanstack/react-query";
 import { z } from "zod";
 import { useStepTutorStore } from "@/services/store/auth/tutor/stepTutor";
-
+import { toast } from "sonner";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 
-import { toast } from "sonner";
 import { Button } from "@/components/shadcn/ui/button";
 import { CardDescription, CardTitle } from "@/components/shadcn/ui/card";
 import { CalendarIcon, Loader2 } from "lucide-react";
@@ -34,6 +35,7 @@ import { cn } from "@/libs/shadcn/utils";
 export function StepSix() {
   const setOpen = useStepTutorStore((state) => state.setOpen);
   const resetSteps = useStepTutorStore((state) => state.resetSteps);
+  const nextStep = useStepTutorStore((state) => state.nextStep);
   const userId = useStepTutorStore((state) => state.userId);
 
   const router = useRouter();
@@ -46,16 +48,29 @@ export function StepSix() {
     mutationFn: (user: { birth: Date }) =>
       axios.post(`/api/tutors/signup/${userId}/birth`, user),
     onSuccess: (response) => {
-      if (response.status === 201) {
-        toast.success(response.data.message);
-        router.push("/tutors/signin");
-        resetSteps();
+      if (response.status === 200 || response.status === 201) {
+        const data = response.data;
+        toast.success(data.message);
+        nextStep();
       }
     },
     onError: (error) => {
-      console.log(error);
-      if (error.response.status === 409) {
-        toast.error(error.response.data.message);
+      if (error instanceof AxiosError) {
+        const status = error.response?.status;
+        const message = error.response?.data?.message || "Error desconocido";
+
+        const errorMessages: { [key: number]: string } = {
+          400: "Datos no válidos",
+          404: "Usuario no encontrado",
+          500: "Error del servidor",
+          "-1": "Error inesperado",
+        };
+
+        if (status) toast.error(errorMessages[status] || message);
+        else toast.error(errorMessages["-1"] || message);
+      } else {
+        toast.error("Error de conexión o error inesperado");
+        console.error("Error que no es de Axios:", error);
       }
     },
   });

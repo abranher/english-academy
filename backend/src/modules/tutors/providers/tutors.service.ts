@@ -129,11 +129,11 @@ export class TutorsService {
   }
 
   async createUsername(createTutorDto: CreateTutorDto, id: string) {
-    const usernameFound = await this.userService.findByUsername(
+    const userFound = await this.userService.findByUsername(
       createTutorDto.username,
     );
 
-    if (usernameFound)
+    if (userFound)
       throw new ConflictException('El nombre de usuario ya está en uso.');
 
     try {
@@ -155,14 +155,19 @@ export class TutorsService {
   }
 
   async createBirth(createTutorDto: CreateTutorDto, id: string) {
-    await this.prisma.user.update({
-      where: {
-        id,
-      },
-      data: {
-        birth: createTutorDto.birth,
-      },
-    });
+    const user = await this.findUserOrThrow(id);
+
+    try {
+      await this.prisma.user.update({
+        where: { id: user.id },
+        data: { birth: createTutorDto.birth },
+      });
+    } catch (error) {
+      console.error('Error updating user:', error);
+      throw new InternalServerErrorException(
+        'Error del servidor. Por favor intenta nuevamente.',
+      );
+    }
 
     return {
       message: '¡Genial! Inicia sesión en tu nueva cuenta!',

@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Roles } from '@prisma/client';
 import { hash } from 'bcrypt';
 import levels from './data/levels';
 import prices from './data/prices';
@@ -123,7 +123,7 @@ async function main() {
       email: 'abran@gmail.com',
       username: 'abranher',
       password: await hash('abran123', 10),
-      role: 'ADMIN',
+      role: Roles.ADMIN,
     },
   });
 
@@ -134,7 +134,7 @@ async function main() {
       email: 'carlos@gmail.com',
       username: 'carlos12',
       password: await hash('carlos123', 10),
-      role: 'STUDENT',
+      role: Roles.STUDENT,
       student: {
         create: {
           levelId: levelsResult[0].id,
@@ -150,7 +150,7 @@ async function main() {
       email: 'pedro@gmail.com',
       username: 'pedro12',
       password: await hash('pedro123', 10),
-      role: 'TUTOR',
+      role: Roles.TUTOR,
       tutor: {
         create: {
           bio: 'soy un profesor',
