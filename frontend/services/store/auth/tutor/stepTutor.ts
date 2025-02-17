@@ -20,7 +20,7 @@ export const useStepTutorStore = create<StepTutorState>()(
       open: false,
       userId: "",
       step: 0,
-      totalSteps: 5,
+      totalSteps: 6,
       setOpen: (value: boolean) => set({ open: value }),
       nextStep: () => set((state) => ({ step: state.step + 1 })),
       prevStep: () => set((state) => ({ step: state.step - 1 })),

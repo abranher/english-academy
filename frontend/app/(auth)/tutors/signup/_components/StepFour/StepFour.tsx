@@ -29,8 +29,8 @@ export function StepFour() {
   });
 
   const createUserMutation = useMutation({
-    mutationFn: (user: { username: string }) =>
-      axios.post(`/api/tutors/signup/${userId}/username`, user),
+    mutationFn: (user: { name: string; lastName: string }) =>
+      axios.post(`/api/tutors/signup/${userId}/names`, user),
     onSuccess: (response) => {
       if (response.status === 201) {
         toast.success(response.data.message);
@@ -47,7 +47,8 @@ export function StepFour() {
 
   async function onSubmit(data: z.infer<typeof StepFourSchema>) {
     createUserMutation.mutate({
-      username: data.username,
+      name: data.name,
+      lastName: data.lastName,
     });
   }
 
@@ -56,9 +57,10 @@ export function StepFour() {
   return (
     <>
       <section className="text-center mb-6">
-        <CardTitle className="mb-3">Crea tu Nombre de Usuario</CardTitle>
+        <CardTitle className="mb-3">Completa tus Datos Personales</CardTitle>
         <CardDescription>
-          Elige un nombre de usuario único que te represente en la plataforma.
+          Escribe tu nombre y apellido para personalizar tu perfil y facilitar
+          la identificación.
         </CardDescription>
       </section>
 
@@ -67,14 +69,34 @@ export function StepFour() {
           <section className="mb-32">
             <FormField
               control={form.control}
-              name="username"
+              name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Nombre de Usuario</FormLabel>
+                  <FormLabel>Nombre</FormLabel>
                   <FormControl>
                     <Input
                       disabled={isSubmitting}
-                      placeholder="Ej: jonhdoe12"
+                      placeholder="Ej: Jonh"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <br />
+
+            <FormField
+              control={form.control}
+              name="lastName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Apellido</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={isSubmitting}
+                      placeholder="Ej: Doe"
                       {...field}
                     />
                   </FormControl>

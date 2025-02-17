@@ -1,3 +1,4 @@
+import { useState } from "react";
 import axios from "@/config/axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -10,7 +11,7 @@ import { Input } from "@/components/shadcn/ui/input";
 import { toast } from "sonner";
 import { Button } from "@/components/shadcn/ui/button";
 import { CardDescription, CardTitle } from "@/components/shadcn/ui/card";
-import { Loader2 } from "lucide-react";
+import { EyeIcon, EyeOff, Loader2 } from "lucide-react";
 import {
   Form,
   FormControl,
@@ -21,6 +22,9 @@ import {
 } from "@/components/shadcn/ui/form";
 
 export function StepThree() {
+  const [visiblePassword, setVisiblePassword] = useState(false);
+  const [visibleConfirmPassword, setVisibleConfirmPassword] = useState(false);
+
   const nextStep = useStepTutorStore((state) => state.nextStep);
   const userId = useStepTutorStore((state) => state.userId);
 
@@ -29,8 +33,8 @@ export function StepThree() {
   });
 
   const createUserMutation = useMutation({
-    mutationFn: (user: { name: string; lastName: string }) =>
-      axios.post(`/api/tutors/signup/${userId}/names`, user),
+    mutationFn: (user: { password: string }) =>
+      axios.post(`/api/tutors/signup/${userId}/password`, user),
     onSuccess: (response) => {
       if (response.status === 201) {
         toast.success(response.data.message);
@@ -47,8 +51,7 @@ export function StepThree() {
 
   async function onSubmit(data: z.infer<typeof StepThreeSchema>) {
     createUserMutation.mutate({
-      name: data.name,
-      lastName: data.lastName,
+      password: data.password,
     });
   }
 
@@ -57,10 +60,10 @@ export function StepThree() {
   return (
     <>
       <section className="text-center mb-6">
-        <CardTitle className="mb-3">Completa tus Datos Personales</CardTitle>
+        <CardTitle className="mb-3">Crea tu Contraseña</CardTitle>
         <CardDescription>
-          Escribe tu nombre y apellido para personalizar tu perfil y facilitar
-          la identificación.
+          Establece una contraseña segura que proteja tu cuenta y mantenga tus
+          datos a salvo.
         </CardDescription>
       </section>
 
@@ -69,16 +72,25 @@ export function StepThree() {
           <section className="mb-32">
             <FormField
               control={form.control}
-              name="name"
+              name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Nombre</FormLabel>
+                  <FormLabel>Contraseña</FormLabel>
                   <FormControl>
-                    <Input
-                      disabled={isSubmitting}
-                      placeholder="Ej: Jonh"
-                      {...field}
-                    />
+                    <div className="relative">
+                      <span
+                        className="absolute right-4 top-2 cursor-pointer"
+                        onClick={() => setVisiblePassword(!visiblePassword)}
+                      >
+                        {visiblePassword ? <EyeIcon /> : <EyeOff />}
+                      </span>
+                      <Input
+                        disabled={isSubmitting}
+                        type={visiblePassword ? "text" : "password"}
+                        placeholder="************"
+                        {...field}
+                      />
+                    </div>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -89,16 +101,27 @@ export function StepThree() {
 
             <FormField
               control={form.control}
-              name="lastName"
+              name="confirmPassword"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Apellido</FormLabel>
+                  <FormLabel>Confirma Contraseña</FormLabel>
                   <FormControl>
-                    <Input
-                      disabled={isSubmitting}
-                      placeholder="Ej: Doe"
-                      {...field}
-                    />
+                    <div className="relative">
+                      <span
+                        className="absolute right-4 top-2 cursor-pointer"
+                        onClick={() =>
+                          setVisibleConfirmPassword(!visibleConfirmPassword)
+                        }
+                      >
+                        {visibleConfirmPassword ? <EyeIcon /> : <EyeOff />}
+                      </span>
+                      <Input
+                        disabled={isSubmitting}
+                        type={visibleConfirmPassword ? "text" : "password"}
+                        placeholder="************"
+                        {...field}
+                      />
+                    </div>
                   </FormControl>
                   <FormMessage />
                 </FormItem>

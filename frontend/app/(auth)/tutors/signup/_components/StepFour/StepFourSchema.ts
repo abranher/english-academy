@@ -4,5 +4,6 @@ import { z } from "zod";
 import messages from "@/libs/validations/schemas/messages";
 
 export const StepFourSchema = z.object({
-  username: z.string().min(5, messages.min(5)).max(40, messages.max(40)),
+  name: z.string().min(3, messages.min(3)).max(100, messages.max(100)),
+  lastName: z.string().min(3, messages.min(3)).max(100, messages.max(100)),
 });
