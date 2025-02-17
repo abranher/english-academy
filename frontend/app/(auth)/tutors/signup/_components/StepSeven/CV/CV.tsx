@@ -1,22 +1,20 @@
 "use client";
 
+import { useStepTutorStore } from "@/services/store/auth/tutor/stepTutor";
 import axios from "@/config/axios";
 import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { toast } from "sonner";
 
-import {
-  CheckCircle,
-  ImageIcon,
-  Loader2,
-  UploadCloud,
-  XIcon,
-} from "lucide-react";
+import { CheckCircle, File, Loader2, UploadCloud, XIcon } from "lucide-react";
 import { Card } from "@/components/shadcn/ui/card";
 import { Progress } from "@/components/shadcn/ui/progress";
 import { Button } from "@/components/shadcn/ui/button";
+import { AxiosError } from "axios";
 
 export function CV() {
+  const userId = useStepTutorStore((state) => state.userId);
+
   const [selectedFile, setSelectedFile] = useState<File | undefined>(undefined);
   const [progress, setProgress] = useState(0);
   const [uploadStatus, setUploadStatus] = useState("select");
@@ -37,9 +35,9 @@ export function CV() {
       setUploadStatus("uploading");
 
       const formData = new FormData();
-      formData.set("image", selectedFile);
+      formData.set("file", selectedFile);
 
-      await axios.post(`/api/courses/${12}/image`, formData, {
+      await axios.post(`/api/tutors/files/signup/${userId}/cv`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -59,7 +57,22 @@ export function CV() {
     } catch (error) {
       setProgress(0);
       setUploadStatus("select");
-      toast.error("Something wrong");
+
+      if (error instanceof AxiosError) {
+        const status = error.response?.status;
+        const message = error.response?.data?.message || "Error desconocido";
+
+        const errorMessages: Record<number, string> = {
+          400: "Archivo no válido o tipo no permitido",
+          404: "Usuario no encontrado",
+          500: "Error del servidor. Por favor intenta nuevamente.",
+        };
+
+        toast.error(errorMessages[status || 500] || message);
+      } else {
+        toast.error("Error de conexión o error inesperado");
+        console.error("Error no controlado:", error);
+      }
     }
   };
 
@@ -86,10 +99,9 @@ export function CV() {
           {selectedFile === undefined && (
             <label
               {...getRootProps()}
-              className="p-5 text-center bg-gray-100 dark:bg-zinc-900 text-gray-600 dark:text-gray-100 font-semibold text-xs rounded h-32 flex flex-col items-center justify-center cursor-pointer border-3 border-gray-300 dark:border-zinc-700 border-dashed"
+              className="p-1 text-center bg-gray-50 text-gray-600 dark:text-gray-100 font-semibold text-xs rounded h-28 sm:h-24 flex flex-col items-center justify-center cursor-pointer border-3 border-gray-500 dark:border-zinc-700 border-dashed"
             >
               <UploadCloud className="w-11 mb-2" />
-              Subir archivo
               <input {...getInputProps()} className="hidden" />
               {isDragActive ? (
                 <p>Suelta los archivos aquí ...</p>
@@ -107,9 +119,9 @@ export function CV() {
             </label>
           )}
 
-          <Card className="grid grid-cols-8 py-2">
+          <Card className="grid grid-cols-8 py-2 border-zinc-500 border-2">
             <div className="col-span-1 flex justify-center items-center">
-              <ImageIcon />
+              <File />
             </div>
             <div className="text-xs col-span-6 flex flex-col justify-center gap-1">
               <p>
