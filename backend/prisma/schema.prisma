@@ -83,10 +83,9 @@ model Tutor {
 }
 
 model Certification {
-  id                  String   @id @default(uuid())
+  id                  String @id @default(uuid())
   name                String
   issuingOrganization String
-  issueDate           DateTime
   url                 String
 
   tutorId String
