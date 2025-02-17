@@ -1,13 +1,10 @@
 import axios from "@/config/axios";
-import { useCallback, useEffect, useState } from "react";
-import { useDropzone } from "react-dropzone";
-import { AxiosError } from "axios";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { useStepTutorStore } from "@/services/store/auth/tutor/stepTutor";
-import { toast } from "sonner";
 
 import { Button } from "@/components/shadcn/ui/button";
-import { Card, CardDescription, CardTitle } from "@/components/shadcn/ui/card";
+import { CardDescription, CardTitle } from "@/components/shadcn/ui/card";
 
 import { CV } from "./CV";
 import { Certifications } from "./Certifications";
@@ -47,6 +44,8 @@ export function StepSeven() {
 
   const hasCV = userData?.tutor?.cvUrl;
 
+  const defaultTab = hasCV ? "certifications" : "cv";
+
   return (
     <>
       <section className="text-center mb-6">
@@ -56,7 +55,7 @@ export function StepSeven() {
         </CardDescription>
       </section>
 
-      <Tabs defaultValue="cv">
+      <Tabs defaultValue={defaultTab}>
         <TabsList className="grid w-full grid-cols-2 mb-4">
           <TabsTrigger value="cv" disabled={hasCV}>
             Currículum {hasCV && "✓"}

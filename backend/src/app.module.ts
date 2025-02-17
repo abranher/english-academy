@@ -25,6 +25,7 @@ import { QuizzesModule } from './modules/quizzes/quizzes.module';
 import { CourseReviewsModule } from './modules/course-reviews/course-reviews.module';
 import { MailModule } from './modules/mail/mail.module';
 import { NotificationsModule } from './modules/notifications/notifications.module';
+import { CertificationsModule } from './modules/certifications/certifications.module';
 
 @Module({
   imports: [
@@ -55,6 +56,7 @@ import { NotificationsModule } from './modules/notifications/notifications.modul
     CourseReviewsModule,
     MailModule,
     NotificationsModule,
+    CertificationsModule,
   ],
 })
 export class AppModule {}

@@ -212,4 +212,8 @@ export class TutorsService {
       );
     }
   }
+
+  async findUserById(userId: string) {
+    return await this.prisma.tutor.findUnique({ where: { userId } });
+  }
 }

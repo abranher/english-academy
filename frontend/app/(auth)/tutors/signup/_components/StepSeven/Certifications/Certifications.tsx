@@ -12,6 +12,7 @@ import { Progress } from "@/components/shadcn/ui/progress";
 import { Button } from "@/components/shadcn/ui/button";
 import { Label } from "@/components/shadcn/ui/label";
 import { Input } from "@/components/shadcn/ui/input";
+import { useStepTutorStore } from "@/services/store/auth/tutor/stepTutor";
 
 type UploadStatus = "select" | "uploading" | "done" | "error";
 
@@ -22,6 +23,7 @@ interface CertificationsProps {
 }
 
 export function Certifications({ onSuccess }: CertificationsProps) {
+  const userId = useStepTutorStore((state) => state.userId);
   const [selectedFile, setSelectedFile] = useState<File | undefined>(undefined);
   const [name, setName] = useState("");
   const [issuingOrganization, setIssuingOrganization] = useState("");
@@ -66,7 +68,7 @@ export function Certifications({ onSuccess }: CertificationsProps) {
       formData.append("name", name);
       formData.append("issuingOrganization", issuingOrganization);
 
-      await axios.post(`/api/courses/${12}/certifications`, formData, {
+      await axios.post(`/api/certifications/${userId}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
