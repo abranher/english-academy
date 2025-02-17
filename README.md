@@ -2,4 +2,4 @@
 
 ## Generate keys
 
-### openssl rand -base64 64
+### openssl rand -base64 32

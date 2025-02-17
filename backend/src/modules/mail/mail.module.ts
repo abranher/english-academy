@@ -15,19 +15,16 @@ import { MailController } from './controllers/mail.controller';
         // transport: config.get("MAIL_TRANSPORT"),
         // or
         transport: {
-          host: 'localhost',
-          port: 1025,
-          ignoreTLS: true,
-          secure: false,
+          host: config.get('MAIL_HOST'),
+          port: config.get('MAIL_PORT'),
           auth: {
-            user: 'hola',
-            pass: 'hola2',
+            user: config.get('MAIL_USER'),
+            pass: config.get('MAIL_PASSWORD'),
           },
         },
         defaults: {
-          from: `"No Reply" <no-reply@localhost>`,
+          from: `"No Reply" <${config.get('MAIL_FROM_ADDRESS')}>`,
         },
-        preview: true,
         template: {
           dir: process.cwd() + '/src/templates/',
           adapter: new HandlebarsAdapter(),

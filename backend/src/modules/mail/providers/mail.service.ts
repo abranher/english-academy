@@ -33,6 +33,10 @@ export class MailService {
   }
 
   async sendEmailVerification(user: User) {
+    totp.options = {
+      step: 120,
+    };
+
     const token = totp.generate(this.config.get('OTPLIB_SECRET'));
 
     await this.mailerService.sendMail({

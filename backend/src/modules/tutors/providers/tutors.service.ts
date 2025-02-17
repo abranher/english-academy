@@ -56,10 +56,10 @@ export class TutorsService {
   }
 
   async verifyEmail(verifyTokenDto: VerifyTokenDto, userId: string) {
-    const isValid = totp.check(
-      verifyTokenDto.token,
-      this.config.get('OTPLIB_SECRET'),
-    );
+    const isValid = totp.verify({
+      token: verifyTokenDto.token,
+      secret: this.config.get('OTPLIB_SECRET'),
+    });
 
     if (!isValid) {
       throw new BadRequestException('Token inválido o vencido.');

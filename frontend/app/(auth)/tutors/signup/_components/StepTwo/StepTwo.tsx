@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import axios from "@/config/axios";
 import { useStepTutorStore } from "@/services/store/auth/tutor/stepTutor";
 
@@ -26,10 +29,45 @@ import {
   InputOTPSlot,
 } from "@/components/shadcn/ui/input-otp";
 import { AxiosError } from "axios";
+import { Progress } from "@/components/shadcn/ui/progress";
 
 export function StepTwo() {
+  const initialSeconds = 120;
   const nextStep = useStepTutorStore((state) => state.nextStep);
   const userId = useStepTutorStore((state) => state.userId);
+
+  const [time, setTime] = useState(120); // Tiempo inicial en segundos
+  const [progress, setProgress] = useState(100);
+
+  useEffect(() => {
+    if (time <= 0) return; // No iniciar el contador si ya llegó a 0
+
+    const interval = setInterval(() => {
+      setTime((prevTime) => {
+        if (prevTime <= 0) {
+          clearInterval(interval);
+          return 0;
+        }
+
+        const newTime = prevTime - 1;
+        setProgress((newTime / 120) * 100);
+        return newTime;
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [time]); // Ahora depende de `time` para reiniciar el intervalo
+
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, "0")}`;
+  };
+
+  const handleReset = () => {
+    setTime(120);
+    setProgress(100);
+  };
 
   const form = useForm<z.infer<typeof StepTwoSchema>>({
     resolver: zodResolver(StepTwoSchema),
@@ -88,7 +126,7 @@ export function StepTwo() {
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 mt-4">
-          <section className="mb-32 flex w-full justify-center">
+          <section className="mb-16 flex w-full justify-center">
             <FormField
               control={form.control}
               name="token"
@@ -117,9 +155,21 @@ export function StepTwo() {
                 </FormItem>
               )}
             />
-
-            <br />
           </section>
+
+          <div className="flex flex-col items-center gap-4 w-full max-w-md">
+            <Progress value={progress} className="w-full h-2" />
+            <div className="w-full flex items-center justify-between">
+              <div className="text-xl font-semibold">
+                Tiempo restante: {formatTime(time)}
+              </div>
+              <Button onClick={handleReset} disabled={time > 0} variant="link">
+                Reenviar
+              </Button>
+            </div>
+          </div>
+          <br />
+
           <div className="w-full flex justify-end">
             {!createUserMutation.isPending ? (
               <Button disabled={!isValid || isSubmitting} type="submit">
