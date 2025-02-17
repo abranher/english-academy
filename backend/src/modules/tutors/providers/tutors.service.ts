@@ -86,6 +86,18 @@ export class TutorsService {
     return { message: 'Email verificado exitosamente.' };
   }
 
+  async resendEmail(userId: string) {
+    const user = await this.userService.findById(userId);
+
+    if (!user) {
+      throw new NotFoundException('Usuario no encontrado.');
+    }
+
+    await this.mail.sendEmailVerification(user);
+
+    return { message: 'Correo de verificación reenviado exitosamente.' };
+  }
+
   async createPassword(createTutorDto: CreateTutorDto, id: string) {
     await this.prisma.user.update({
       where: {

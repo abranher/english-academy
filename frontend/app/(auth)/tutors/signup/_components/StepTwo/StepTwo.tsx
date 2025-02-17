@@ -107,6 +107,32 @@ export function StepTwo() {
     },
   });
 
+  const resendEmailMutation = useMutation({
+    mutationFn: () => axios.post(`/api/tutors/signup/${userId}/resend-email`),
+    onSuccess: () => {
+      toast.success("Email reenviado exitosamente");
+      setTime(120);
+      setProgress(100);
+    },
+    onError: (error) => {
+      if (error instanceof AxiosError) {
+        const status = error.response?.status;
+        const message =
+          error.response?.data?.message || "Error al reenviar el email";
+
+        const errorMessages: { [key: number]: string } = {
+          404: "Usuario no encontrado",
+          500: "Error del servidor al reenviar el email",
+          "-1": "Error inesperado",
+        };
+
+        toast.error(errorMessages[status || "-1"] || message);
+      } else {
+        toast.error("Error de conexión al intentar reenviar el email");
+      }
+    },
+  });
+
   async function onSubmit(data: z.infer<typeof StepTwoSchema>) {
     createUserMutation.mutate({
       token: data.token,
@@ -160,11 +186,20 @@ export function StepTwo() {
           <div className="flex flex-col items-center gap-4 w-full max-w-md">
             <Progress value={progress} className="w-full h-2" />
             <div className="w-full flex items-center justify-between">
-              <div className="text-xl font-semibold">
+              <div className="text-lg font-semibold">
                 Tiempo restante: {formatTime(time)}
               </div>
-              <Button onClick={handleReset} disabled={time > 0} variant="link">
-                Reenviar
+
+              <Button
+                onClick={() => resendEmailMutation.mutate()}
+                disabled={time > 0 || resendEmailMutation.isPending}
+                variant="link"
+                type="button"
+              >
+                {resendEmailMutation.isPending ? (
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                ) : null}
+                {resendEmailMutation.isPending ? "Reenviando..." : "Reenviar"}
               </Button>
             </div>
           </div>

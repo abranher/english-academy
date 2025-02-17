@@ -1,15 +1,6 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Param } from '@nestjs/common';
 import { TutorsService } from '../providers/tutors.service';
 import { CreateTutorDto } from '../dto/create-tutor.dto';
-import { UpdateTutorDto } from '../dto/update-tutor.dto';
 import { VerifyTokenDto } from '../dto/verify-token.dto';
 
 @Controller('tutors')
@@ -27,6 +18,11 @@ export class TutorsController {
     @Param('userId') userId: string,
   ) {
     return this.tutorsService.verifyEmail(verifyTokenDto, userId);
+  }
+
+  @Post('signup/:userId/resend-email')
+  resendEmail(@Param('userId') userId: string) {
+    return this.tutorsService.resendEmail(userId);
   }
 
   @Post('signup/:userId/password')
