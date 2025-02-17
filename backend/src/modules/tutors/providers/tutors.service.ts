@@ -27,6 +27,12 @@ export class TutorsService {
     private readonly config: ConfigService,
   ) {}
 
+  private async findUserOrThrow(id: string) {
+    const user = await this.userService.findById(id);
+    if (!user) throw new NotFoundException('Usuario no encontrado');
+    return user;
+  }
+
   async createEmail(createTutorDto: CreateTutorDto) {
     const userFound = await this.userService.findByEmail(createTutorDto.email);
 
@@ -39,20 +45,13 @@ export class TutorsService {
       data: {
         role: Roles.TUTOR,
         email: createTutorDto.email,
-        tutor: {
-          create: {
-            bio: BIOGRAPHY_DEFAULT,
-          },
-        },
+        tutor: { create: { bio: BIOGRAPHY_DEFAULT } },
       },
     });
 
     this.mail.sendEmailVerification(newUser);
 
-    return {
-      userId: newUser.id,
-      message: 'Usuario creado!.',
-    };
+    return { userId: newUser.id, message: 'Usuario creado!.' };
   }
 
   async verifyEmail(verifyTokenDto: VerifyTokenDto, userId: string) {
@@ -61,15 +60,9 @@ export class TutorsService {
       secret: this.config.get('OTPLIB_SECRET'),
     });
 
-    if (!isValid) {
-      throw new BadRequestException('Token inválido o vencido.');
-    }
+    if (!isValid) throw new BadRequestException('Token inválido o vencido.');
 
-    const user = await this.userService.findById(userId);
-
-    if (!user) {
-      throw new NotFoundException('Usuario no encontrado.');
-    }
+    const user = await this.findUserOrThrow(userId);
 
     try {
       await this.prisma.user.update({
@@ -87,11 +80,7 @@ export class TutorsService {
   }
 
   async resendEmail(userId: string) {
-    const user = await this.userService.findById(userId);
-
-    if (!user) {
-      throw new NotFoundException('Usuario no encontrado.');
-    }
+    const user = await this.findUserOrThrow(userId);
 
     await this.mail.sendEmailVerification(user);
 
@@ -99,38 +88,44 @@ export class TutorsService {
   }
 
   async createPassword(createTutorDto: CreateTutorDto, id: string) {
-    const user = await this.userService.findById(id);
-
-    if (!user) throw new NotFoundException('Usuario no encontrado');
+    const user = await this.findUserOrThrow(id);
 
     if (user.password)
       throw new ConflictException('La contraseña ya fue establecida');
 
     const hashedPassword = await hash(createTutorDto.password, 10);
-    await this.prisma.user.update({
-      where: { id },
-      data: { password: hashedPassword },
-    });
 
-    return {
-      message: 'Contraseña creada exitosamente.',
-    };
+    try {
+      await this.prisma.user.update({
+        where: { id },
+        data: { password: hashedPassword },
+      });
+    } catch (error) {
+      console.error('Error updating user:', error);
+      throw new InternalServerErrorException(
+        'Error del servidor. Por favor intenta nuevamente.',
+      );
+    }
+
+    return { message: 'Contraseña creada exitosamente.' };
   }
 
   async createNames(createTutorDto: CreateTutorDto, id: string) {
-    await this.prisma.user.update({
-      where: {
-        id,
-      },
-      data: {
-        name: createTutorDto.name,
-        lastName: createTutorDto.lastName,
-      },
-    });
+    const user = await this.findUserOrThrow(id);
 
-    return {
-      message: 'Ya casi terminamos, solo un poco más.',
-    };
+    try {
+      await this.prisma.user.update({
+        where: { id: user.id },
+        data: { name: createTutorDto.name, lastName: createTutorDto.lastName },
+      });
+    } catch (error) {
+      console.error('Error updating user:', error);
+      throw new InternalServerErrorException(
+        'Error del servidor. Por favor intenta nuevamente.',
+      );
+    }
+
+    return { message: 'Ya casi terminamos, solo un poco más.' };
   }
 
   async createUsername(createTutorDto: CreateTutorDto, id: string) {
@@ -141,14 +136,17 @@ export class TutorsService {
     if (usernameFound)
       throw new ConflictException('El nombre de usuario ya está en uso.');
 
-    await this.prisma.user.update({
-      where: {
-        id,
-      },
-      data: {
-        username: createTutorDto.username,
-      },
-    });
+    try {
+      await this.prisma.user.update({
+        where: { id },
+        data: { username: createTutorDto.username },
+      });
+    } catch (error) {
+      console.error('Error updating user:', error);
+      throw new InternalServerErrorException(
+        'Error del servidor. Por favor intenta nuevamente.',
+      );
+    }
 
     return {
       message:
