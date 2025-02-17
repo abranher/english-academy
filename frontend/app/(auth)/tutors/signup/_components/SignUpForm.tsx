@@ -20,6 +20,7 @@ import { StepFour } from "./StepFour";
 import { StepFive } from "./StepFive";
 import { StepInit } from "./StepInit";
 import { StepSix } from "./StepSix";
+import { StepSeven } from "./StepSeven";
 
 export default function SignUpForm() {
   const step = useStepTutorStore((state) => state.step);
@@ -62,6 +63,7 @@ export default function SignUpForm() {
                 {step === 4 && <StepFour />}
                 {step === 5 && <StepFive />}
                 {step === 6 && <StepSix />}
+                {step === 7 && <StepSeven />}
               </section>
             </AlertDialogHeader>
           </AlertDialogContent>
