@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  NotFoundException,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { TutorsService } from '../providers/tutors.service';
 import { CreateTutorDto } from '../dto/create-tutor.dto';
 import { VerifyTokenDto } from '../dto/verify-token.dto';
@@ -6,6 +14,10 @@ import { VerifyTokenDto } from '../dto/verify-token.dto';
 @Controller('tutors')
 export class TutorsController {
   constructor(private readonly tutorsService: TutorsService) {}
+
+  /*
+   * @Post()
+   */
 
   @Post('signup/email')
   createEmail(@Body() createTutorDto: CreateTutorDto) {
@@ -57,6 +69,10 @@ export class TutorsController {
     return this.tutorsService.createBirth(createTutorDto, userId);
   }
 
+  /*
+   * @Get()
+   */
+
   @Get()
   findAll() {
     return this.tutorsService.findAll();
@@ -65,5 +81,10 @@ export class TutorsController {
   @Get('user/:userId')
   findOne(@Param('userId') userId: string) {
     return this.tutorsService.findOne(userId);
+  }
+
+  @Get('user/:userId/certifications')
+  async findOneWithCertifications(@Param('userId') userId: string) {
+    return await this.tutorsService.findOneWithCertifications(userId);
   }
 }

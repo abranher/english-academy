@@ -187,4 +187,29 @@ export class TutorsService {
 
     return tutorUser;
   }
+
+  async findOneWithCertifications(userId: string) {
+    const user = await this.findUserOrThrow(userId);
+
+    try {
+      const tutor = await this.prisma.tutor.findUnique({
+        where: { userId: user.id },
+        include: {
+          certifications: true,
+        },
+      });
+
+      return {
+        ...user,
+        tutor: tutor || null,
+      };
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException(error.message);
+      }
+      throw new InternalServerErrorException(
+        'Error al obtener datos del tutor',
+      );
+    }
+  }
 }

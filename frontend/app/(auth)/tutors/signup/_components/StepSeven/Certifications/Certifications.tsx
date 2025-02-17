@@ -17,7 +17,11 @@ type UploadStatus = "select" | "uploading" | "done" | "error";
 
 const MAX_SIZE = 5 * 1024 * 1024; // 5MB
 
-export function Certifications() {
+interface CertificationsProps {
+  onSuccess?: () => void; // Callback opcional que se ejecuta cuando la subida es exitosa
+}
+
+export function Certifications({ onSuccess }: CertificationsProps) {
   const [selectedFile, setSelectedFile] = useState<File | undefined>(undefined);
   const [name, setName] = useState("");
   const [issuingOrganization, setIssuingOrganization] = useState("");
@@ -79,6 +83,7 @@ export function Certifications() {
       setSelectedFile(undefined);
       setName("");
       setIssuingOrganization("");
+      onSuccess?.();
     } catch (error) {
       setProgress(0);
       setUploadStatus("select");

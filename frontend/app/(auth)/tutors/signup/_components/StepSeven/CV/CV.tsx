@@ -16,7 +16,11 @@ type UploadStatus = "select" | "uploading" | "done" | "error";
 
 const MAX_SIZE = 5 * 1024 * 1024; // 5MB
 
-export function CV() {
+interface CVProps {
+  onSuccess?: () => void; // Callback opcional que se ejecuta cuando la subida es exitosa
+}
+
+export function CV({ onSuccess }: CVProps) {
   const userId = useStepTutorStore((state) => state.userId);
 
   const [selectedFile, setSelectedFile] = useState<File | undefined>(undefined);
@@ -69,6 +73,7 @@ export function CV() {
 
       setUploadStatus("done");
       toast.success("¡CV actualizado correctamente!");
+      onSuccess?.();
       setSelectedFile(undefined);
       // router.refresh();
     } catch (error) {
