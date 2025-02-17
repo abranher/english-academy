@@ -12,19 +12,36 @@ import { Progress } from "@/components/shadcn/ui/progress";
 import { Button } from "@/components/shadcn/ui/button";
 import { AxiosError } from "axios";
 
+type UploadStatus = "select" | "uploading" | "done" | "error";
+
+const MAX_SIZE = 5 * 1024 * 1024; // 5MB
+
 export function CV() {
   const userId = useStepTutorStore((state) => state.userId);
 
   const [selectedFile, setSelectedFile] = useState<File | undefined>(undefined);
   const [progress, setProgress] = useState(0);
-  const [uploadStatus, setUploadStatus] = useState("select");
+  const [uploadStatus, setUploadStatus] = useState<UploadStatus>("select");
 
-  // drop zone
-  const onDrop = useCallback((acceptedFiles: any) => {
-    setSelectedFile(acceptedFiles[0]);
-  }, []);
-
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop: useCallback((acceptedFiles: File[]) => {
+      setSelectedFile(acceptedFiles[0]);
+    }, []),
+    accept: {
+      "application/pdf": [".pdf"],
+      "image/*": [".png", ".jpg", ".jpeg", ".webp"],
+    },
+    maxSize: MAX_SIZE,
+    onDropRejected: (fileRejections) => {
+      fileRejections.forEach((rejection) => {
+        if (rejection.errors.some((error) => error.code === "file-too-large")) {
+          toast.error("El archivo es demasiado grande (máximo 5MB)");
+        } else {
+          toast.error("Formato de archivo no permitido");
+        }
+      });
+    },
+  });
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -51,7 +68,7 @@ export function CV() {
       });
 
       setUploadStatus("done");
-      toast.success("Imagen actualizada!");
+      toast.success("¡CV actualizado correctamente!");
       setSelectedFile(undefined);
       // router.refresh();
     } catch (error) {
@@ -96,7 +113,8 @@ export function CV() {
           <h2 className="text-sm font-medium  dark:text-zinc-400">
             Currículum:
           </h2>
-          {selectedFile === undefined && (
+
+          {(uploadStatus === "select" || uploadStatus === "uploading") && (
             <label
               {...getRootProps()}
               className="p-1 text-center bg-gray-50 text-gray-600 dark:text-gray-100 font-semibold text-xs rounded h-28 sm:h-24 flex flex-col items-center justify-center cursor-pointer border-3 border-gray-500 dark:border-zinc-700 border-dashed"
@@ -154,7 +172,7 @@ export function CV() {
               </>
             )}
           </Card>
-          <div className="w-full flex justify-end">
+          <div className="w-full flex">
             <Button
               type="submit"
               disabled={uploadStatus === "uploading" || uploadStatus === "done"}

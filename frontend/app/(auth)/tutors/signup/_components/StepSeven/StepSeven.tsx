@@ -11,6 +11,12 @@ import { Card, CardDescription, CardTitle } from "@/components/shadcn/ui/card";
 
 import { CV } from "./CV";
 import { Certifications } from "./Certifications";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/shadcn/ui/tabs";
 
 export function StepSeven() {
   const nextStep = useStepTutorStore((state) => state.nextStep);
@@ -20,13 +26,24 @@ export function StepSeven() {
     <>
       <section className="text-center mb-6">
         <CardTitle className="mb-3">Datos Académicos y Tutoría</CardTitle>
-        <CardDescription>
-          Ingresa tus datos académicos para validar tu rol como tutor.
-        </CardDescription>
       </section>
 
-      <CV />
-      <Certifications />
+      <Tabs defaultValue="account">
+        <TabsList className="grid w-full grid-cols-2">
+          <TabsTrigger value="account">Currículum</TabsTrigger>
+          <TabsTrigger value="password">Certificaciones</TabsTrigger>
+        </TabsList>
+        <TabsContent value="account">
+          <CV />
+        </TabsContent>
+        <TabsContent value="password">
+          <Certifications />
+        </TabsContent>
+      </Tabs>
+
+      <section className="flex w-full justify-end mt-3">
+        <Button>Finalizar</Button>
+      </section>
     </>
   );
 }

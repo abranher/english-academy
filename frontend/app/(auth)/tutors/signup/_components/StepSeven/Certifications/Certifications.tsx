@@ -1,52 +1,68 @@
 "use client";
 
 import axios from "@/config/axios";
+import { AxiosError } from "axios";
 import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { toast } from "sonner";
 
-import {
-  CheckCircle,
-  ImageIcon,
-  Loader2,
-  UploadCloud,
-  XIcon,
-} from "lucide-react";
+import { CheckCircle, File, Loader2, UploadCloud, XIcon } from "lucide-react";
 import { Card } from "@/components/shadcn/ui/card";
 import { Progress } from "@/components/shadcn/ui/progress";
 import { Button } from "@/components/shadcn/ui/button";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/shadcn/ui/popover";
 import { Label } from "@/components/shadcn/ui/label";
 import { Input } from "@/components/shadcn/ui/input";
 
+type UploadStatus = "select" | "uploading" | "done" | "error";
+
+const MAX_SIZE = 5 * 1024 * 1024; // 5MB
+
 export function Certifications() {
   const [selectedFile, setSelectedFile] = useState<File | undefined>(undefined);
+  const [name, setName] = useState("");
+  const [issuingOrganization, setIssuingOrganization] = useState("");
   const [progress, setProgress] = useState(0);
-  const [uploadStatus, setUploadStatus] = useState("select");
+  const [uploadStatus, setUploadStatus] = useState<UploadStatus>("select");
 
-  // drop zone
-  const onDrop = useCallback((acceptedFiles: any) => {
-    setSelectedFile(acceptedFiles[0]);
-  }, []);
-
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop: useCallback((acceptedFiles: File[]) => {
+      setSelectedFile(acceptedFiles[0]);
+    }, []),
+    accept: {
+      "application/pdf": [".pdf"],
+      "image/*": [".png", ".jpg", ".jpeg", ".webp"],
+    },
+    maxSize: MAX_SIZE,
+    onDropRejected: (fileRejections) => {
+      fileRejections.forEach((rejection) => {
+        if (rejection.errors.some((error) => error.code === "file-too-large")) {
+          toast.error("El archivo es demasiado grande (máximo 5MB)");
+        } else {
+          toast.error("Formato de archivo no permitido");
+        }
+      });
+    },
+  });
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (typeof selectedFile === "undefined") return;
+    if (!selectedFile || !name || !issuingOrganization) {
+      toast.error(
+        "Por favor, completa todos los campos y selecciona un archivo."
+      );
+      return;
+    }
 
     try {
       setUploadStatus("uploading");
 
       const formData = new FormData();
-      formData.set("image", selectedFile);
+      formData.append("file", selectedFile);
+      formData.append("name", name);
+      formData.append("issuingOrganization", issuingOrganization);
 
-      await axios.post(`/api/courses/${12}/image`, formData, {
+      await axios.post(`/api/courses/${12}/certifications`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -54,19 +70,34 @@ export function Certifications() {
           const percentCompleted = Math.round(
             (progressEvent.loaded * 100) / (progressEvent.total || 1)
           );
-
           setProgress(percentCompleted);
         },
       });
 
       setUploadStatus("done");
-      toast.success("Imagen actualizada!");
+      toast.success("¡Certificación agregada correctamente!");
       setSelectedFile(undefined);
-      // router.refresh();
+      setName("");
+      setIssuingOrganization("");
     } catch (error) {
       setProgress(0);
       setUploadStatus("select");
-      toast.error("Something wrong");
+
+      if (error instanceof AxiosError) {
+        const status = error.response?.status;
+        const message = error.response?.data?.message || "Error desconocido";
+
+        const errorMessages: Record<number, string> = {
+          400: "Datos no válidos o archivo incorrecto",
+          404: "Recurso no encontrado",
+          500: "Error del servidor. Intenta nuevamente.",
+        };
+
+        toast.error(errorMessages[status || 500] || message);
+      } else {
+        toast.error("Error de conexión o error inesperado");
+        console.error("Error no controlado:", error);
+      }
     }
   };
 
@@ -84,130 +115,116 @@ export function Certifications() {
 
   return (
     <>
-      <form onSubmit={onSubmit}>
-        <div className="grid gap-4">
-          {/** upload input */}
-          <h2 className="text-sm font-medium  dark:text-zinc-400">
-            Certificaciones:
-          </h2>
-
-          <Popover modal>
-            <PopoverTrigger asChild>
-              <Button variant="outline">Añadir certificatión</Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-[500px]">
-              <div className="grid gap-4">
-                <div className="space-y-2">
-                  <h4 className="font-medium leading-none">
-                    Datos de la certificatión
-                  </h4>
+      <div className="grid gap-4">
+        <form onSubmit={onSubmit}>
+          <div className="grid gap-4">
+            <div className="grid gap-4">
+              <section className="flex gap-2">
+                <div className="flex flex-col gap-2">
+                  <Label htmlFor="name">Nombre</Label>
+                  <Input
+                    id="name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="p.ej: CELTA"
+                    required
+                  />
                 </div>
-                <div className="grid gap-4">
-                  <div className="flex flex-col gap-4">
-                    <Label htmlFor="name">Nombre</Label>
-                    <Input
-                      id="name"
-                      className="col-span-2 h-8"
-                      placeholder="p.ej: CELTA"
-                    />
-                  </div>
 
-                  <div className="flex flex-col gap-4">
-                    <Label htmlFor="issuingOrganization">
-                      Organismo emisor
-                    </Label>
-                    <Input
-                      id="issuingOrganization"
-                      className="col-span-2 h-8"
-                      placeholder="p.ej: Cambridge Assessment English"
-                    />
-                  </div>
+                <div className="flex flex-col gap-2">
+                  <Label htmlFor="issuingOrganization">Organismo emisor</Label>
+                  <Input
+                    id="issuingOrganization"
+                    value={issuingOrganization}
+                    onChange={(e) => setIssuingOrganization(e.target.value)}
+                    placeholder="p.ej: Cambridge Assessment English"
+                    required
+                  />
+                </div>
+              </section>
 
-                  {selectedFile === undefined && (
-                    <label
-                      {...getRootProps()}
-                      className="p-5 text-center bg-gray-100 dark:bg-zinc-900 text-gray-600 dark:text-gray-100 font-semibold text-xs rounded h-32 flex flex-col items-center justify-center cursor-pointer border-3 border-gray-300 dark:border-zinc-700 border-dashed"
-                    >
-                      <UploadCloud className="w-11 mb-2" />
-                      Subir archivo
-                      <input {...getInputProps()} className="hidden" />
-                      {isDragActive ? (
-                        <p>Suelta los archivos aquí ...</p>
-                      ) : (
-                        <p>
-                          Arrastra y suelta tus archivos aquí o{" "}
-                          <span className="font-medium text-blue-600 hover:underline">
-                            explora
-                          </span>
-                        </p>
-                      )}
-                      <p className="text-xs font-medium mt-2">
-                        Se permiten PNG, JPG, WEBP, PDF.
-                      </p>
-                    </label>
+              {(uploadStatus === "select" || uploadStatus === "uploading") && (
+                <label
+                  {...getRootProps()}
+                  className="p-1 text-center bg-gray-50 text-gray-600 dark:text-gray-100 font-semibold text-xs rounded h-28 sm:h-24 flex flex-col items-center justify-center cursor-pointer border-3 border-gray-500 dark:border-zinc-700 border-dashed"
+                >
+                  <UploadCloud className="w-11 mb-2" />
+                  <input {...getInputProps()} className="hidden" />
+                  {isDragActive ? (
+                    <p>Suelta los archivos aquí ...</p>
+                  ) : (
+                    <p>
+                      Arrastra y suelta tus archivos aquí o{" "}
+                      <span className="font-medium text-blue-600 hover:underline">
+                        explora
+                      </span>
+                    </p>
+                  )}
+                  <p className="text-xs font-medium mt-2">
+                    Formatos permitidos: PNG, JPG, WEBP, PDF (Máx. 5MB)
+                  </p>
+                </label>
+              )}
+
+              <Card className="grid grid-cols-8 py-2 border-zinc-500 border-2">
+                <div className="col-span-1 flex justify-center items-center">
+                  <File />
+                </div>
+                <div className="text-xs col-span-6 flex flex-col justify-center gap-1">
+                  <p>
+                    {selectedFile
+                      ? selectedFile.name
+                      : "No hay ningún archivo seleccionado"}
+                  </p>
+                  <p>{selectedFile && formatSize(selectedFile.size)}</p>
+                  <Progress value={progress} className="h-2" />
+                </div>
+                {uploadStatus === "select" && selectedFile && (
+                  <>
+                    <div className="col-span-1 flex justify-center items-center">
+                      <XIcon
+                        className="cursor-pointer"
+                        onClick={clearFileInput}
+                      />
+                    </div>
+                  </>
+                )}
+                {uploadStatus === "uploading" && (
+                  <>
+                    <div className="col-span-1 flex justify-center items-center">
+                      {progress}
+                    </div>
+                  </>
+                )}
+                {uploadStatus === "done" && (
+                  <>
+                    <div className="col-span-1 flex justify-center items-center">
+                      <CheckCircle />
+                    </div>
+                  </>
+                )}
+              </Card>
+
+              <div className="w-full flex">
+                <Button
+                  type="submit"
+                  disabled={
+                    uploadStatus === "uploading" || uploadStatus === "done"
+                  }
+                >
+                  {uploadStatus === "select" && <UploadCloud />}
+
+                  {uploadStatus === "uploading" && (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   )}
 
-                  <Card className="grid grid-cols-8 py-2">
-                    <div className="col-span-1 flex justify-center items-center">
-                      <ImageIcon />
-                    </div>
-                    <div className="text-xs col-span-6 flex flex-col justify-center gap-1">
-                      <p>
-                        {selectedFile
-                          ? selectedFile.name
-                          : "No hay ningún archivo seleccionado"}
-                      </p>
-                      <p>{selectedFile && formatSize(selectedFile.size)}</p>
-                      <Progress value={progress} className="h-2" />
-                    </div>
-                    {uploadStatus === "select" && selectedFile && (
-                      <>
-                        <div className="col-span-1 flex justify-center items-center">
-                          <XIcon
-                            className="cursor-pointer"
-                            onClick={clearFileInput}
-                          />
-                        </div>
-                      </>
-                    )}
-                    {uploadStatus === "uploading" && (
-                      <>
-                        <div className="col-span-1 flex justify-center items-center">
-                          {progress}
-                        </div>
-                      </>
-                    )}
-                    {uploadStatus === "done" && (
-                      <>
-                        <div className="col-span-1 flex justify-center items-center">
-                          <CheckCircle />
-                        </div>
-                      </>
-                    )}
-                  </Card>
-
-                  <div className="w-full flex justify-end">
-                    <Button
-                      type="submit"
-                      disabled={
-                        uploadStatus === "uploading" || uploadStatus === "done"
-                      }
-                    >
-                      {uploadStatus === "select" && <UploadCloud />}
-
-                      {uploadStatus === "uploading" && (
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      )}
-
-                      {uploadStatus === "done" && <CheckCircle />}
-                    </Button>
-                  </div>
-                </div>
+                  {uploadStatus === "done" && <CheckCircle />}
+                </Button>
               </div>
-            </PopoverContent>
-          </Popover>
-        </div>
-      </form>
+            </div>
+          </div>
+        </form>
+      </div>
     </>
   );
 }
