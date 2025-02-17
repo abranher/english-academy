@@ -11,7 +11,7 @@ import { Input } from "@/components/shadcn/ui/input";
 import { toast } from "sonner";
 import { Button } from "@/components/shadcn/ui/button";
 import { CardDescription, CardTitle } from "@/components/shadcn/ui/card";
-import { EyeIcon, EyeOff, Loader2 } from "lucide-react";
+import { Check, EyeIcon, EyeOff, Loader2, X } from "lucide-react";
 import {
   Form,
   FormControl,
@@ -31,6 +31,13 @@ export function StepThree() {
   const form = useForm<z.infer<typeof StepThreeSchema>>({
     resolver: zodResolver(StepThreeSchema),
   });
+
+  const password = form.watch("password");
+
+  const hasMinLength = password?.length >= 8;
+  const hasUppercase = /[A-Z]/.test(password);
+  const hasNumber = /\d/.test(password);
+  const hasSymbol = /[.,\-_@$]/.test(password);
 
   const createUserMutation = useMutation({
     mutationFn: (user: { password: string }) =>
@@ -69,7 +76,7 @@ export function StepThree() {
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 mt-4">
-          <section className="mb-32">
+          <section className="mb-7">
             <FormField
               control={form.control}
               name="password"
@@ -92,6 +99,58 @@ export function StepThree() {
                       />
                     </div>
                   </FormControl>
+
+                  <div className="mt-2 text-sm space-y-1">
+                    <div
+                      className={`flex items-center gap-2 ${
+                        hasMinLength ? "text-green-500" : "text-gray-500"
+                      }`}
+                    >
+                      {hasMinLength ? (
+                        <Check className="h-4 w-4" />
+                      ) : (
+                        <X className="h-4 w-4" />
+                      )}
+                      <span>Mínimo 8 caracteres</span>
+                    </div>
+                    <div
+                      className={`flex items-center gap-2 ${
+                        hasUppercase ? "text-green-500" : "text-gray-500"
+                      }`}
+                    >
+                      {hasUppercase ? (
+                        <Check className="h-4 w-4" />
+                      ) : (
+                        <X className="h-4 w-4" />
+                      )}
+                      <span>Al menos una mayúscula</span>
+                    </div>
+                    <div
+                      className={`flex items-center gap-2 ${
+                        hasNumber ? "text-green-500" : "text-gray-500"
+                      }`}
+                    >
+                      {hasNumber ? (
+                        <Check className="h-4 w-4" />
+                      ) : (
+                        <X className="h-4 w-4" />
+                      )}
+                      <span>Al menos un número</span>
+                    </div>
+                    <div
+                      className={`flex items-center gap-2 ${
+                        hasSymbol ? "text-green-500" : "text-gray-500"
+                      }`}
+                    >
+                      {hasSymbol ? (
+                        <Check className="h-4 w-4" />
+                      ) : (
+                        <X className="h-4 w-4" />
+                      )}
+                      <span>Al menos un símbolo (., - _ @ $)</span>
+                    </div>
+                  </div>
+
                   <FormMessage />
                 </FormItem>
               )}
