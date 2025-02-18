@@ -20,7 +20,13 @@ export class BackupService {
 
       await mkdir(backupDirectory, { recursive: true });
 
-      const command = `PGPASSWORD=${process.env.DB_PASSWORD} pg_dump -h localhost -U postgres -d academy -f ${backupFilePath}`;
+      const dbHost = this.config.get<string>('DB_HOST');
+      const dbPort = this.config.get<number>('DB_PORT');
+      const dbDatabase = this.config.get<string>('DB_DATABASE');
+      const dbUsername = this.config.get<string>('DB_USERNAME');
+      const dbPassword = this.config.get<string>('DB_PASSWORD');
+
+      const command = `PGPASSWORD=${dbPassword} pg_dump -h ${dbHost} -p ${dbPort} -U ${dbUsername} -d ${dbDatabase} -f ${backupFilePath}`;
 
       const commandProcess = spawn(command, [], { shell: true });
 
@@ -53,11 +59,17 @@ export class BackupService {
   }
 
   async restoreBackup(fileName: string) {
-    const backupDirectory = join(process.cwd(), 'storage', 'backups');
-    const backupFilePath = join(backupDirectory, fileName);
-
     try {
-      const command = `PGPASSWORD=${process.env.DB_PASSWORD} pg_restore -h localhost -U postgres -d academy -f ${backupFilePath}`;
+      const backupDirectory = join(process.cwd(), 'storage', 'backups');
+      const backupFilePath = join(backupDirectory, fileName);
+
+      const dbHost = this.config.get<string>('DB_HOST');
+      const dbPort = this.config.get<number>('DB_PORT');
+      const dbDatabase = this.config.get<string>('DB_DATABASE');
+      const dbUsername = this.config.get<string>('DB_USERNAME');
+      const dbPassword = this.config.get<string>('DB_PASSWORD');
+
+      const command = `PGPASSWORD=${dbPassword} pg_restore -h ${dbHost} -p ${dbPort} -U ${dbUsername} -d ${dbDatabase} -f ${backupFilePath}`;
 
       const commandProcess = spawn(command, [], { shell: true });
 
