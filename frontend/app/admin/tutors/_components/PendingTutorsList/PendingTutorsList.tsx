@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 import { Button } from "@/components/shadcn/ui/button";
 import {
   Card,
@@ -15,7 +17,6 @@ import { useQuery } from "@tanstack/react-query";
 import { getPendingTutors } from "../../_services/get-pending-tutors";
 import { Skeleton } from "@/components/shadcn/ui/skeleton";
 import { assetImg } from "@/libs/asset";
-import Link from "next/link";
 
 export function PendingTutorsList() {
   const {

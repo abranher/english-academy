@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 import { Button } from "@/components/shadcn/ui/button";
 import {
   Card,
@@ -15,7 +17,6 @@ import { assetImg } from "@/libs/asset";
 import { Avatar } from "@nextui-org/react";
 import { useQuery } from "@tanstack/react-query";
 import { getAllTutors } from "../../_services";
-import Link from "next/link";
 
 export function AllTutorsList() {
   const {

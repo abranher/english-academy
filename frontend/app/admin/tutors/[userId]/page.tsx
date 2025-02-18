@@ -21,15 +21,22 @@ export default function TutorDescriptionAdminPage() {
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
+
           <BreadcrumbItem>
-            <BreadcrumbPage>Tutores</BreadcrumbPage>
+            <BreadcrumbLink>
+              <Link href="/admin/tutors">Tutores</Link>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>Tutor</BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
 
       <div>
-        <CardTitle>Tutores</CardTitle>
-        <CardDescription>Listados de Tutores</CardDescription>
+        <CardTitle>Tutor</CardTitle>
+        <CardDescription>Datos del Tutor</CardDescription>
       </div>
     </>
   );

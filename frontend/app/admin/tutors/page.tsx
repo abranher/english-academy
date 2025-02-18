@@ -1,5 +1,4 @@
 import Link from "next/link";
-import axios from "@/config/axios";
 
 import {
   Breadcrumb,
@@ -12,9 +11,7 @@ import {
 import { CardDescription, CardTitle } from "@/components/shadcn/ui/card";
 import { ContentPage } from "./_components/ContentPage";
 
-export default async function TurorsAdminPage() {
-  const { data } = await axios.get("/api/courses");
-
+export default function TurorsAdminPage() {
   return (
     <>
       <Breadcrumb>
