@@ -69,7 +69,7 @@ export class BackupService {
       const dbUsername = this.config.get<string>('DB_USERNAME');
       const dbPassword = this.config.get<string>('DB_PASSWORD');
 
-      const command = `PGPASSWORD=${dbPassword} pg_restore -h ${dbHost} -p ${dbPort} -U ${dbUsername} -d ${dbDatabase} -f ${backupFilePath}`;
+      const command = `PGPASSWORD=${dbPassword} pg_restore -h ${dbHost} -p ${dbPort} -U ${dbUsername} -d ${dbDatabase} ${backupFilePath}`;
 
       const commandProcess = spawn(command, [], { shell: true });
 

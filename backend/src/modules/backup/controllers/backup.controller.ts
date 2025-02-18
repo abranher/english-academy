@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { BackupService } from '../providers/backup.service';
 import { join } from 'node:path';
 
@@ -16,5 +16,10 @@ export class BackupController {
     const directoryPath = join(process.cwd(), './storage/backups');
     const files = await this.backupService.findAll(directoryPath);
     return files;
+  }
+
+  @Post('restore')
+  async restoreBackup(@Body() body: { filename: string }) {
+    return this.backupService.restoreBackup(body.filename);
   }
 }

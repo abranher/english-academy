@@ -48,7 +48,7 @@ export default function BackupList() {
     }
 
     try {
-      await axios.post("/api/restore", {
+      await axios.post("/api/backup/restore", {
         filename: selectedBackup,
       });
 
@@ -105,8 +105,8 @@ export default function BackupList() {
                     </SelectTrigger>
                     <SelectContent>
                       {backups &&
-                        backups.map((backup: any, index: any) => (
-                          <SelectItem key={index} value={index}>
+                        backups.map((backup: any) => (
+                          <SelectItem key={backup.name} value={backup.name}>
                             {backup.name}
                           </SelectItem>
                         ))}
