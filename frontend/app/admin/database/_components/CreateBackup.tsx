@@ -1,7 +1,9 @@
 "use client";
 
+import axios from "@/config/axios";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { AxiosError } from "axios";
 
 import {
   AlertDialog,
@@ -23,24 +25,42 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/shadcn/ui/card";
-import axios from "@/config/axios";
 import { toast } from "sonner";
 
-export default function CreateBackup() {
+export default function CreateBackup({
+  onBackupCreated,
+}: {
+  onBackupCreated: () => void;
+}) {
   const [open, setOpen] = useState(false);
-
   const router = useRouter();
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     try {
       const response = await axios.get("api/backup");
-
       router.refresh();
       toast.success("Respaldo creado!");
+      onBackupCreated();
     } catch (error) {
-      console.log(error);
-      toast.error("something ocurred!");
+      if (error instanceof AxiosError) {
+        const status = error.response?.status;
+        const message = error.response?.data?.message || "Error desconocido";
+
+        const errorMessages: { [key: number]: string } = {
+          400: "Datos no válidos",
+          404: "Recurso no encontrado",
+          409: "Conflicto",
+          500: "Error del servidor",
+          "-1": "Error inesperado",
+        };
+
+        if (status) toast.error(errorMessages[status] || message);
+        else toast.error(errorMessages["-1"] || message);
+      } else {
+        toast.error("Error de conexión o error inesperado");
+      }
     }
   };
 

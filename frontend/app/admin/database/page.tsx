@@ -1,3 +1,8 @@
+import Link from "next/link";
+import { redirect } from "next/navigation";
+import { auth } from "@/config/auth";
+import { Roles } from "@/types/enums/Roles";
+
 import { CardDescription, CardTitle } from "@/components/shadcn/ui/card";
 import {
   Breadcrumb,
@@ -8,12 +13,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/shadcn/ui/breadcrumb";
 
-import { auth } from "@/config/auth";
-import { Roles } from "@/types/enums/Roles";
-import { redirect } from "next/navigation";
-import Link from "next/link";
-import CreateBackup from "./_components/CreateBackup";
-import BackupList from "./_components/BackupList";
+import ContentPage from "./_components/ContentPage";
 
 export default async function DatabasePage() {
   const session = await auth();
@@ -47,9 +47,7 @@ export default async function DatabasePage() {
       </div>
 
       <div className="flex gap-3">
-        <CreateBackup />
-
-        <BackupList />
+        <ContentPage />
       </div>
     </>
   );

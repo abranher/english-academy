@@ -1,5 +1,12 @@
 "use client";
 
+import axios from "@/config/axios";
+import { AxiosError } from "axios";
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+import { getBackups } from "../_services/getBackups";
+
 import { Label } from "@/components/shadcn/ui/label";
 import {
   Select,
@@ -15,13 +22,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/shadcn/ui/card";
-import { useQuery } from "@tanstack/react-query";
-import { getBackups } from "../_services/getBackups";
 import { Skeleton } from "@/components/shadcn/ui/skeleton";
 import { Button } from "@/components/shadcn/ui/button";
 import { DatabaseBackup } from "lucide-react";
+import { toast } from "sonner";
 
 export default function BackupList() {
+  const [selectedBackup, setSelectedBackup] = useState<string | null>(null);
+
   const {
     isPending,
     error,
@@ -30,6 +38,43 @@ export default function BackupList() {
     queryKey: ["backups-list"],
     queryFn: getBackups,
   });
+
+  const router = useRouter();
+
+  const handleRestore = async () => {
+    if (!selectedBackup) {
+      toast.error("Debes seleccionar un respaldo para restaurar.");
+      return;
+    }
+
+    try {
+      await axios.post("/api/restore", {
+        filename: selectedBackup,
+      });
+
+      toast.success("Respaldo restaurado con éxito.");
+      router.refresh();
+    } catch (error) {
+      console.error(error);
+      if (error instanceof AxiosError) {
+        const status = error.response?.status;
+        const message = error.response?.data?.message || "Error desconocido";
+
+        const errorMessages: { [key: number]: string } = {
+          400: "Datos no válidos",
+          404: "Recurso no encontrado",
+          409: "Conflicto",
+          500: "Error del servidor",
+          "-1": "Error inesperado",
+        };
+
+        if (status) toast.error(errorMessages[status] || message);
+        else toast.error(errorMessages["-1"] || message);
+      } else {
+        toast.error("Error de conexión o error inesperado");
+      }
+    }
+  };
 
   return (
     <>
@@ -54,7 +99,7 @@ export default function BackupList() {
               ) : (
                 <>
                   <Label htmlFor="backups">Respaldos</Label>
-                  <Select>
+                  <Select onValueChange={(value) => setSelectedBackup(value)}>
                     <SelectTrigger id="backups">
                       <SelectValue placeholder="-- Selecciona la copia a restaurar --" />
                     </SelectTrigger>
@@ -68,7 +113,11 @@ export default function BackupList() {
                     </SelectContent>
                   </Select>
 
-                  <Button className="flex gap-3">
+                  <Button
+                    className="flex gap-3"
+                    onClick={handleRestore}
+                    disabled={!selectedBackup}
+                  >
                     <DatabaseBackup />
                     Restaurar
                   </Button>
