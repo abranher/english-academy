@@ -15,6 +15,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getPendingTutors } from "../../_services/get-pending-tutors";
 import { Skeleton } from "@/components/shadcn/ui/skeleton";
 import { assetImg } from "@/libs/asset";
+import Link from "next/link";
 
 export function PendingTutorsList() {
   const {
@@ -83,12 +84,14 @@ export function PendingTutorsList() {
                     </section>
                   </CardHeader>
                   <CardFooter className="flex justify-end px-6">
-                    <Button>Ver más información</Button>
+                    <Link href={`/admin/tutors/${userTutor.id}`}>
+                      <Button>Ver más información</Button>
+                    </Link>
                   </CardFooter>
                 </Card>
               ))
             ) : (
-              <div className="text-center text-gray-500 py-4">
+              <div className="text-center text-zinc-700 dark:text-zinc-200 py-4">
                 No hay nuevos tutores actualmente.
               </div>
             )}
