@@ -1,7 +1,13 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/modules/prisma/providers/prisma.service';
 import { CreateCertificationDto } from '../dto/create-certification.dto';
 import { TutorsService } from 'src/modules/tutors/providers/tutors.service';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
 @Injectable()
 export class CertificationsService {
@@ -54,7 +60,29 @@ export class CertificationsService {
     return tutor.certifications;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} certification`;
+  async remove(id: string) {
+    const certification = await this.prisma.certification.findUnique({
+      where: { id },
+    });
+
+    if (!certification)
+      throw new NotFoundException('Certificación no encontrada');
+
+    try {
+      await this.prisma.certification.delete({
+        where: { id },
+      });
+
+      return { message: 'Certificación eliminada exitosamente' };
+    } catch (error) {
+      if (error instanceof PrismaClientKnownRequestError)
+        throw new BadRequestException(
+          'No se pudo eliminar la certificación debido a un error en la base de datos',
+        );
+
+      throw new InternalServerErrorException(
+        'Ocurrió un error inesperado al eliminar la certificación',
+      );
+    }
   }
 }

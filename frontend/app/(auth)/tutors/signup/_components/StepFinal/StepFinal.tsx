@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 
 import { Button } from "@/components/shadcn/ui/button";
@@ -5,8 +7,7 @@ import { CardTitle } from "@/components/shadcn/ui/card";
 import { useStepTutorStore } from "@/services/store/auth/tutor/stepTutor";
 
 export function StepFinal() {
-  const nextStep = useStepTutorStore((state) => state.nextStep);
-  const setOpen = useStepTutorStore((state) => state.setOpen);
+  const resetSteps = useStepTutorStore((state) => state.resetSteps);
 
   return (
     <>
@@ -29,7 +30,9 @@ export function StepFinal() {
 
         <article className="w-full flex justify-end mt-5">
           <Link href="/">
-            <Button type="button">Salir</Button>
+            <Button type="button" onClick={resetSteps}>
+              Salir
+            </Button>
           </Link>
         </article>
       </section>

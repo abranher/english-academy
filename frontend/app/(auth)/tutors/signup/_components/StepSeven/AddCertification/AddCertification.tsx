@@ -7,7 +7,7 @@ import { useDropzone } from "react-dropzone";
 import { z } from "zod";
 import { toast } from "sonner";
 import { useStepTutorStore } from "@/services/store/auth/tutor/stepTutor";
-import { CertificationSchema } from "./CertificationSchema";
+import { AddCertificationSchema } from "./AddCertificationSchema";
 
 import { CheckCircle, File, Loader2, UploadCloud, XIcon } from "lucide-react";
 import { Card } from "@/components/shadcn/ui/card";
@@ -29,18 +29,18 @@ type UploadStatus = "select" | "uploading" | "done" | "error";
 
 const MAX_SIZE = 5 * 1024 * 1024; // 5MB
 
-interface CertificationsProps {
+interface AddCertificationProps {
   onSuccess?: () => void; // Callback opcional que se ejecuta cuando la subida es exitosa
 }
 
-export function Certifications({ onSuccess }: CertificationsProps) {
+export function AddCertification({ onSuccess }: AddCertificationProps) {
   const userId = useStepTutorStore((state) => state.userId);
   const [selectedFile, setSelectedFile] = useState<File | undefined>(undefined);
   const [progress, setProgress] = useState(0);
   const [uploadStatus, setUploadStatus] = useState<UploadStatus>("select");
 
-  const form = useForm<z.infer<typeof CertificationSchema>>({
-    resolver: zodResolver(CertificationSchema),
+  const form = useForm<z.infer<typeof AddCertificationSchema>>({
+    resolver: zodResolver(AddCertificationSchema),
   });
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -63,7 +63,7 @@ export function Certifications({ onSuccess }: CertificationsProps) {
     },
   });
 
-  async function onSubmit(data: z.infer<typeof CertificationSchema>) {
+  async function onSubmit(data: z.infer<typeof AddCertificationSchema>) {
     if (!selectedFile) {
       toast.error("Por favor, selecciona un archivo.");
       return;
@@ -179,7 +179,7 @@ export function Certifications({ onSuccess }: CertificationsProps) {
                   uploadStatus === "uploading") && (
                   <label
                     {...getRootProps()}
-                    className="p-1 text-center bg-gray-50 text-gray-600 dark:text-gray-100 font-semibold text-xs rounded h-28 sm:h-24 flex flex-col items-center justify-center cursor-pointer border-3 border-gray-500 dark:border-zinc-700 border-dashed"
+                    className="p-1 text-center bg-gray-50 dark:bg-zinc-900 text-gray-600 dark:text-gray-100 font-semibold text-xs rounded h-28 sm:h-24 flex flex-col items-center justify-center cursor-pointer border-3 border-gray-500 dark:border-zinc-700 border-dashed"
                   >
                     <UploadCloud className="w-11 mb-2" />
                     <input {...getInputProps()} className="hidden" />

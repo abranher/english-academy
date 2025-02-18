@@ -122,7 +122,7 @@ export function CV({ onSuccess }: CVProps) {
           {(uploadStatus === "select" || uploadStatus === "uploading") && (
             <label
               {...getRootProps()}
-              className="p-1 text-center bg-gray-50 text-gray-600 dark:text-gray-100 font-semibold text-xs rounded h-28 sm:h-24 flex flex-col items-center justify-center cursor-pointer border-3 border-gray-500 dark:border-zinc-700 border-dashed"
+              className="p-1 text-center bg-gray-50 dark:bg-zinc-900 text-gray-600 dark:text-gray-100 font-semibold text-xs rounded h-28 sm:h-24 flex flex-col items-center justify-center cursor-pointer border-3 border-gray-500 dark:border-zinc-700 border-dashed"
             >
               <UploadCloud className="w-11 mb-2" />
               <input {...getInputProps()} className="hidden" />

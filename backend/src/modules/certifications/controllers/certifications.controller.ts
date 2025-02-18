@@ -9,6 +9,8 @@ import {
   BadRequestException,
   ParseFilePipe,
   Get,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
 import { CertificationsService } from '../providers/certifications.service';
 import { CreateCertificationDto } from '../dto/create-certification.dto';
@@ -49,13 +51,13 @@ export class CertificationsController {
     );
   }
 
-  @Get(':userId/certifications')
-  async getCertifications(@Param('userId') userId: string) {
+  @Get(':userId/tutor')
+  async getCertificationsByTutor(@Param('userId') userId: string) {
     return this.certificationsService.getCertificationsByTutor(userId);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.certificationsService.remove(+id);
+  async remove(@Param('id') id: string) {
+    return this.certificationsService.remove(id);
   }
 }

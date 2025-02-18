@@ -1,3 +1,5 @@
+"use client";
+
 import axios from "@/config/axios";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
@@ -7,13 +9,15 @@ import { Button } from "@/components/shadcn/ui/button";
 import { CardDescription, CardTitle } from "@/components/shadcn/ui/card";
 
 import { CV } from "./CV";
-import { Certifications } from "./Certifications";
+import { AddCertification } from "./AddCertification";
+import { CertificationsList } from "./CertificationsList";
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
 } from "@/components/shadcn/ui/tabs";
+import { StepSevenSkeleton } from "./StepSevenSkeleton";
 
 export function StepSeven() {
   const nextStep = useStepTutorStore((state) => state.nextStep);
@@ -22,7 +26,7 @@ export function StepSeven() {
   const [updateFlag, setUpdateFlag] = useState(0); // Para forzar re-fetch
 
   const {
-    isLoading,
+    isPending,
     isError,
     data: userData,
   } = useQuery({
@@ -39,12 +43,13 @@ export function StepSeven() {
   // Función para actualizar los datos
   const handleUpdate = () => setUpdateFlag((prev) => prev + 1);
 
-  if (isLoading) return <div>Cargando...</div>;
-  if (isError) return <div>Error cargando datos</div>;
-
   const hasCV = userData?.tutor?.cvUrl;
 
   const defaultTab = hasCV ? "certifications" : "cv";
+
+  if (isPending) return <StepSevenSkeleton />;
+
+  if (isError) return <div>Error cargando datos</div>;
 
   return (
     <>
@@ -56,9 +61,12 @@ export function StepSeven() {
       </section>
 
       <Tabs defaultValue={defaultTab}>
-        <TabsList className="grid w-full grid-cols-2 mb-4">
+        <TabsList className="grid w-full grid-cols-2 mb-4 gap-3 md:grid-cols-3">
           <TabsTrigger value="cv" disabled={hasCV}>
             Currículum {hasCV && "✓"}
+          </TabsTrigger>
+          <TabsTrigger value="add-certifications">
+            Añadir certificación
           </TabsTrigger>
           <TabsTrigger value="certifications">Certificaciones</TabsTrigger>
         </TabsList>
@@ -67,8 +75,12 @@ export function StepSeven() {
           <CV onSuccess={handleUpdate} />
         </TabsContent>
 
+        <TabsContent value="add-certifications">
+          <AddCertification onSuccess={handleUpdate} />
+        </TabsContent>
+
         <TabsContent value="certifications">
-          <Certifications onSuccess={handleUpdate} />
+          <CertificationsList userId={userId} />
         </TabsContent>
       </Tabs>
 

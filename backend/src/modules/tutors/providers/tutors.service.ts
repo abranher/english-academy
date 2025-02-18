@@ -167,7 +167,7 @@ export class TutorsService {
     }
 
     return {
-      message: '¡Genial! Inicia sesión en tu nueva cuenta!',
+      message: '¡Genial! uno más!',
     };
   }
 

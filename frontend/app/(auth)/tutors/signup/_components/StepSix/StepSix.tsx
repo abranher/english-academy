@@ -33,12 +33,8 @@ import {
 import { cn } from "@/libs/shadcn/utils";
 
 export function StepSix() {
-  const setOpen = useStepTutorStore((state) => state.setOpen);
-  const resetSteps = useStepTutorStore((state) => state.resetSteps);
   const nextStep = useStepTutorStore((state) => state.nextStep);
   const userId = useStepTutorStore((state) => state.userId);
-
-  const router = useRouter();
 
   const form = useForm<z.infer<typeof StepSixSchema>>({
     resolver: zodResolver(StepSixSchema),
