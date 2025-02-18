@@ -28,6 +28,7 @@ import {
 import { Progress } from "@/components/shadcn/ui/progress";
 import { assetVideo } from "@/libs/asset";
 import { Skeleton } from "@/components/shadcn/ui/skeleton";
+import { truncateString } from "@/libs/format";
 
 export default function VideoForm({ lesson }: any) {
   const [selectedFile, setSelectedFile] = useState<File | undefined>(undefined);
@@ -208,7 +209,7 @@ export default function VideoForm({ lesson }: any) {
                         <div className="text-xs col-span-6 flex flex-col justify-center gap-1">
                           <p>
                             {selectedFile
-                              ? selectedFile.name
+                              ? truncateString(selectedFile.name)
                               : "No hay ningún archivo seleccionado"}
                           </p>
                           <p>{selectedFile && formatSize(selectedFile.size)}</p>

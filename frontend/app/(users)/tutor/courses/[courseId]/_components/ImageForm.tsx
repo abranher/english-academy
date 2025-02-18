@@ -27,6 +27,7 @@ import {
 } from "@/components/shadcn/ui/dialog";
 import { Progress } from "@/components/shadcn/ui/progress";
 import { Skeleton } from "@/components/shadcn/ui/skeleton";
+import { truncateString } from "@/libs/format";
 
 interface ImageFormProps {
   initialData: {
@@ -193,6 +194,9 @@ export default function ImageForm({ course }: any) {
                             </span>
                           </p>
                         )}
+                        <p className="text-xs font-medium mt-2">
+                          Se permiten PNG, JPG, JPEG, WEBP (Máx. 5MB).
+                        </p>
                       </section>
                     )}
 
@@ -204,7 +208,7 @@ export default function ImageForm({ course }: any) {
                         <div className="text-xs col-span-6 flex flex-col justify-center gap-1">
                           <p>
                             {selectedFile
-                              ? selectedFile.name
+                              ? truncateString(selectedFile.name)
                               : "No hay ningún archivo seleccionado"}
                           </p>
                           <p>{selectedFile && formatSize(selectedFile.size)}</p>

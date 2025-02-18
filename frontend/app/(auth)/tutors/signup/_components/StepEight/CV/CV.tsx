@@ -11,7 +11,7 @@ import { Card } from "@/components/shadcn/ui/card";
 import { Progress } from "@/components/shadcn/ui/progress";
 import { Button } from "@/components/shadcn/ui/button";
 import { AxiosError } from "axios";
-import { formatSize } from "@/libs/format";
+import { formatSize, truncateString } from "@/libs/format";
 
 type UploadStatus = "select" | "uploading" | "done" | "error";
 
@@ -144,7 +144,7 @@ export function CV({ onSuccess }: CVProps) {
             <div className="text-xs col-span-6 flex flex-col justify-center gap-1">
               <p>
                 {selectedFile
-                  ? selectedFile.name
+                  ? truncateString(selectedFile.name)
                   : "No hay ningún archivo seleccionado"}
               </p>
               <p>{selectedFile && formatSize(selectedFile.size)}</p>

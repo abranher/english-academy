@@ -13,3 +13,14 @@ export const formatSize = (size: number) => {
     2
   )} MB`;
 };
+
+export const truncateString = (input: string): string => {
+  if (input.length <= 15) {
+    return input;
+  }
+
+  const firstFour = input.slice(0, 9);
+  const lastFour = input.slice(-4);
+
+  return `${firstFour}...${lastFour}`;
+};
