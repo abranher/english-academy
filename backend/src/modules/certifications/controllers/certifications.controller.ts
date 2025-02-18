@@ -9,8 +9,6 @@ import {
   BadRequestException,
   ParseFilePipe,
   Get,
-  HttpException,
-  HttpStatus,
 } from '@nestjs/common';
 import { CertificationsService } from '../providers/certifications.service';
 import { CreateCertificationDto } from '../dto/create-certification.dto';

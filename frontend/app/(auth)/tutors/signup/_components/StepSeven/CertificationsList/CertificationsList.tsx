@@ -1,15 +1,14 @@
 "use client";
 
 import axios from "@/config/axios";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
+import { useDeleteCertification } from "../_hooks/useDeleteCertification";
 
 import { Button } from "@/components/shadcn/ui/button";
 import { Skeleton } from "@/components/shadcn/ui/skeleton";
 import { Eye, Trash2 } from "lucide-react";
 
 export function CertificationsList({ userId }: { userId: string }) {
-  const queryClient = useQueryClient();
-
   const { data, isPending, isError } = useQuery({
     queryKey: ["certifications", userId],
     queryFn: async () => {
@@ -18,13 +17,7 @@ export function CertificationsList({ userId }: { userId: string }) {
     },
   });
 
-  const deleteMutation = useMutation({
-    mutationFn: (certificationId: string) =>
-      axios.delete(`/api/certifications/${certificationId}`),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["certifications", userId] });
-    },
-  });
+  const deleteMutation = useDeleteCertification(userId);
 
   if (isPending) {
     return (

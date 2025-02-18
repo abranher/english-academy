@@ -69,9 +69,7 @@ export class CertificationsService {
       throw new NotFoundException('Certificación no encontrada');
 
     try {
-      await this.prisma.certification.delete({
-        where: { id },
-      });
+      await this.prisma.certification.delete({ where: { id } });
 
       return { message: 'Certificación eliminada exitosamente' };
     } catch (error) {
