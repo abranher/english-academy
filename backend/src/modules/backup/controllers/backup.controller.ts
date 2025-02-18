@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Delete } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { BackupService } from '../providers/backup.service';
 import { join } from 'node:path';
 
@@ -16,15 +16,5 @@ export class BackupController {
     const directoryPath = join(process.cwd(), './storage/backups');
     const files = await this.backupService.findAll(directoryPath);
     return files;
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.backupService.findOne(+id);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.backupService.remove(+id);
   }
 }
