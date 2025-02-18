@@ -3,7 +3,7 @@ import { NEXT_PUBLIC_BACKEND_URL } from "@/config/app";
 export function assetImg(file: string | null): string {
   if (file === null) return "";
 
-  return NEXT_PUBLIC_BACKEND_URL + "/images/" + file;
+  return NEXT_PUBLIC_BACKEND_URL + "/storage/images/" + file;
 }
 
 export function assetPublicImg(file: string | null): string {
