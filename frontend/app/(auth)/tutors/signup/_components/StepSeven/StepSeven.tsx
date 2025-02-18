@@ -18,6 +18,11 @@ import {
   TabsTrigger,
 } from "@/components/shadcn/ui/tabs";
 import { StepSevenSkeleton } from "./StepSevenSkeleton";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/shadcn/ui/popover";
 
 export function StepSeven() {
   const nextStep = useStepTutorStore((state) => state.nextStep);
@@ -85,9 +90,23 @@ export function StepSeven() {
       </Tabs>
 
       <section className="flex w-full justify-end mt-3">
-        <Button disabled={!hasCV} onClick={() => nextStep()}>
-          {hasCV ? "Finalizar" : "Sube tu CV para continuar"}
-        </Button>
+        <Popover modal>
+          <PopoverTrigger asChild>
+            <Button disabled={!hasCV}>
+              {hasCV ? "Finalizar" : "Sube tu CV para continuar"}
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-80">
+            <div className="grid gap-4">
+              <div className="space-y-2 text-center">
+                <p>¿Estas seguro de finalizar?</p>
+              </div>
+              <div className="space-y-2 text-center">
+                <Button onClick={() => nextStep()}>Confirmar</Button>
+              </div>
+            </div>
+          </PopoverContent>
+        </Popover>
       </section>
     </>
   );
