@@ -2,7 +2,7 @@
 
 import { useStepTutorStore } from "@/services/store/auth/tutor/stepTutor";
 import axios from "@/config/axios";
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { toast } from "sonner";
 import {
@@ -37,10 +37,18 @@ export function StepSeven({ onSuccess }: AvatarUploadProps) {
   const nextStep = useStepTutorStore((state) => state.nextStep);
   const userId = useStepTutorStore((state) => state.userId);
 
+  const formRef = useRef<HTMLFormElement>(null);
+
   const [preview, setPreview] = useState<string>("");
   const [selectedFile, setSelectedFile] = useState<File | undefined>(undefined);
   const [progress, setProgress] = useState(0);
   const [uploadStatus, setUploadStatus] = useState<UploadStatus>("select");
+
+  const handleSubmitPopover = () => {
+    if (formRef.current) {
+      formRef.current.dispatchEvent(new Event("submit", { cancelable: true })); // or formRef.current.submit();
+    }
+  };
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop: useCallback((acceptedFiles: File[]) => {
@@ -128,7 +136,7 @@ export function StepSeven({ onSuccess }: AvatarUploadProps) {
         </CardDescription>
       </section>
 
-      <form onSubmit={onSubmit}>
+      <form ref={formRef} onSubmit={onSubmit}>
         <div className="grid gap-4">
           <h2 className="text-sm font-medium">Imagen de perfil:</h2>
 
@@ -177,7 +185,7 @@ export function StepSeven({ onSuccess }: AvatarUploadProps) {
                   className="p-3 w-full text-center bg-gray-50 dark:bg-zinc-900 text-gray-600 dark:text-gray-100 font-semibold text-xs rounded h-28 sm:h-24 flex flex-col items-center justify-center cursor-pointer border-3 border-gray-500 dark:border-zinc-700 border-dashed"
                 >
                   <UploadCloud className="w-11 mb-2" />
-                  <input {...getInputProps()} />
+                  <input {...getInputProps()} className="hidden" />
                   {isDragActive ? (
                     <p>Suelta los archivos aquí ...</p>
                   ) : (
@@ -229,34 +237,21 @@ export function StepSeven({ onSuccess }: AvatarUploadProps) {
             </section>
           </div>
 
-          <Popover modal>
-            <PopoverTrigger asChild>
-              <Button>Subir imagen</Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-80">
-              <div className="grid gap-4">
-                <div className="space-y-2 text-center">
-                  <p>¿Estas seguro?</p>
-                  <p className="text-sm">
-                    Luego la podrás cambiar desde tu perfil.
-                  </p>
-                </div>
-                <div className="space-y-2 text-center">
-                  <Button
-                    type="submit"
-                    disabled={!selectedFile || uploadStatus === "uploading"}
-                    className="w-full"
-                  >
-                    {uploadStatus === "uploading" ? (
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    ) : (
-                      "Subir"
-                    )}
-                  </Button>
-                </div>
-              </div>
-            </PopoverContent>
-          </Popover>
+          <p className="text-sm">Luego la podrás cambiar desde tu perfil.*</p>
+
+          <div className="space-y-2 text-center">
+            <Button
+              onClick={handleSubmitPopover}
+              disabled={!selectedFile || uploadStatus === "uploading"}
+              className="w-full"
+            >
+              {uploadStatus === "uploading" ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                "Subir"
+              )}
+            </Button>
+          </div>
         </div>
       </form>
     </>

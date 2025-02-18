@@ -177,12 +177,11 @@ export default function ImageForm({ course }: any) {
                     {/** upload input */}
                     {(uploadStatus === "select" ||
                       uploadStatus === "uploading") && (
-                      <label
+                      <section
                         {...getRootProps()}
-                        className="p-5 bg-gray-100 dark:bg-zinc-900 text-gray-600 dark:text-gray-100 font-semibold text-xs rounded h-32 flex flex-col items-center justify-center cursor-pointer border-3 border-gray-300 dark:border-zinc-700 border-dashed"
+                        className="p-5 text-center bg-gray-50 dark:bg-zinc-900 text-gray-600 dark:text-gray-100 font-semibold text-xs rounded h-28 sm:h-24 flex flex-col items-center justify-center cursor-pointer border-3 border-gray-500 dark:border-zinc-700 border-dashed"
                       >
                         <UploadCloud className="w-11 mb-2" />
-                        Subir archivo
                         <input {...getInputProps()} className="hidden" />
                         {isDragActive ? (
                           <p>Suelta los archivos aquí ...</p>
@@ -194,10 +193,7 @@ export default function ImageForm({ course }: any) {
                             </span>
                           </p>
                         )}
-                        <p className="text-xs font-medium mt-2">
-                          Se permiten PNG, JPG, WEBP.
-                        </p>
-                      </label>
+                      </section>
                     )}
 
                     <>

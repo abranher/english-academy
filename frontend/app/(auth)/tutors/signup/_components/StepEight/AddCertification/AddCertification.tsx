@@ -177,7 +177,7 @@ export function AddCertification({ onSuccess }: AddCertificationProps) {
 
                 {(uploadStatus === "select" ||
                   uploadStatus === "uploading") && (
-                  <label
+                  <section
                     {...getRootProps()}
                     className="p-1 text-center bg-gray-50 dark:bg-zinc-900 text-gray-600 dark:text-gray-100 font-semibold text-xs rounded h-28 sm:h-24 flex flex-col items-center justify-center cursor-pointer border-3 border-gray-500 dark:border-zinc-700 border-dashed"
                   >
@@ -196,7 +196,7 @@ export function AddCertification({ onSuccess }: AddCertificationProps) {
                     <p className="text-xs font-medium mt-2">
                       Formatos permitidos: PNG, JPG, WEBP, PDF (Máx. 5MB)
                     </p>
-                  </label>
+                  </section>
                 )}
 
                 <Card className="grid grid-cols-8 py-2 border-zinc-500 border-2">

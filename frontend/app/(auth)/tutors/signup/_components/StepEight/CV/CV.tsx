@@ -114,69 +114,64 @@ export function CV({ onSuccess }: CVProps) {
             Currículum:
           </h2>
 
-          <div className="flex flex-col items-center gap-4 w-full">
-            {(uploadStatus === "select" || uploadStatus === "uploading") && (
-              <label
-                {...getRootProps()}
-                className="p-1 text-center bg-gray-50 dark:bg-zinc-900 text-gray-600 dark:text-gray-100 font-semibold text-xs rounded h-28 sm:h-24 flex flex-col items-center justify-center cursor-pointer border-3 border-gray-500 dark:border-zinc-700 border-dashed"
-              >
-                <UploadCloud className="w-11 mb-2" />
-                <input {...getInputProps()} className="hidden" />
-                {isDragActive ? (
-                  <p>Suelta los archivos aquí ...</p>
-                ) : (
-                  <p>
-                    Arrastra y suelta tus archivos aquí o{" "}
-                    <span className="font-medium text-blue-600 hover:underline">
-                      explora
-                    </span>
-                  </p>
-                )}
-                <p className="text-xs font-medium mt-2">
-                  Se permiten PNG, JPG, WEBP, PDF.
-                </p>
-              </label>
-            )}
-
-            <Card className="grid grid-cols-8 py-2 border-zinc-500 border-2">
-              <div className="col-span-1 flex justify-center items-center">
-                <File />
-              </div>
-              <div className="text-xs col-span-6 flex flex-col justify-center gap-1">
+          {(uploadStatus === "select" || uploadStatus === "uploading") && (
+            <section
+              {...getRootProps()}
+              className="p-1 text-center bg-gray-50 dark:bg-zinc-900 text-gray-600 dark:text-gray-100 font-semibold text-xs rounded h-28 sm:h-24 flex flex-col items-center justify-center cursor-pointer border-3 border-gray-500 dark:border-zinc-700 border-dashed"
+            >
+              <UploadCloud className="w-11 mb-2" />
+              <input {...getInputProps()} className="hidden" />
+              {isDragActive ? (
+                <p>Suelta los archivos aquí ...</p>
+              ) : (
                 <p>
-                  {selectedFile
-                    ? selectedFile.name
-                    : "No hay ningún archivo seleccionado"}
+                  Arrastra y suelta tus archivos aquí o{" "}
+                  <span className="font-medium text-blue-600 hover:underline">
+                    explora
+                  </span>
                 </p>
-                <p>{selectedFile && formatSize(selectedFile.size)}</p>
-                <Progress value={progress} className="h-2" />
-              </div>
-              {uploadStatus === "select" && selectedFile && (
-                <>
-                  <div className="col-span-1 flex justify-center items-center">
-                    <XIcon
-                      className="cursor-pointer"
-                      onClick={clearFileInput}
-                    />
-                  </div>
-                </>
               )}
-              {uploadStatus === "uploading" && (
-                <>
-                  <div className="col-span-1 flex justify-center items-center">
-                    {progress}
-                  </div>
-                </>
-              )}
-              {uploadStatus === "done" && (
-                <>
-                  <div className="col-span-1 flex justify-center items-center">
-                    <CheckCircle />
-                  </div>
-                </>
-              )}
-            </Card>
-          </div>
+              <p className="text-xs font-medium mt-2">
+                Se permiten PNG, JPG, WEBP, PDF (Máx. 5MB).
+              </p>
+            </section>
+          )}
+
+          <Card className="grid grid-cols-8 py-2 border-zinc-500 border-2">
+            <div className="col-span-1 flex justify-center items-center">
+              <File />
+            </div>
+            <div className="text-xs col-span-6 flex flex-col justify-center gap-1">
+              <p>
+                {selectedFile
+                  ? selectedFile.name
+                  : "No hay ningún archivo seleccionado"}
+              </p>
+              <p>{selectedFile && formatSize(selectedFile.size)}</p>
+              <Progress value={progress} className="h-2" />
+            </div>
+            {uploadStatus === "select" && selectedFile && (
+              <>
+                <div className="col-span-1 flex justify-center items-center">
+                  <XIcon className="cursor-pointer" onClick={clearFileInput} />
+                </div>
+              </>
+            )}
+            {uploadStatus === "uploading" && (
+              <>
+                <div className="col-span-1 flex justify-center items-center">
+                  {progress}
+                </div>
+              </>
+            )}
+            {uploadStatus === "done" && (
+              <>
+                <div className="col-span-1 flex justify-center items-center">
+                  <CheckCircle />
+                </div>
+              </>
+            )}
+          </Card>
 
           <div className="w-full flex">
             <Button
