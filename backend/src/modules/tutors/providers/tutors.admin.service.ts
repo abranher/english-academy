@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Roles } from '@prisma/client';
+import { Roles, TutorStatus } from '@prisma/client';
 
 import { PrismaService } from 'src/modules/prisma/providers/prisma.service';
 
@@ -19,16 +19,31 @@ export class TutorsAdminService {
     });
   }
 
-  async findOne(userId: string) {
-    const tutorUser = await this.prisma.user.findUnique({
+  async findPending() {
+    return this.prisma.user.findMany({
       where: {
-        id: userId,
+        role: Roles.TUTOR,
+        tutor: {
+          status: TutorStatus.PENDING,
+        },
       },
       include: {
         tutor: true,
       },
     });
+  }
 
-    return tutorUser;
+  async findApproved() {
+    return this.prisma.user.findMany({
+      where: {
+        role: Roles.TUTOR,
+        tutor: {
+          status: TutorStatus.APPROVED,
+        },
+      },
+      include: {
+        tutor: true,
+      },
+    });
   }
 }

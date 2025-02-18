@@ -19,7 +19,7 @@ import { getAllTutors } from "../../_services";
 export function AllTutorsList() {
   const {
     data: tutors,
-    isLoading,
+    isPending,
     error,
   } = useQuery({
     queryKey: ["tutors"],
@@ -47,7 +47,7 @@ export function AllTutorsList() {
       <div className="relative">
         <ScrollArea>
           <div className="flex space-x-4 pb-4">
-            {isLoading ? (
+            {isPending ? (
               Array(3)
                 .fill(0)
                 .map((_, i) => (
@@ -56,39 +56,41 @@ export function AllTutorsList() {
                     className="h-[300px] w-[250px] rounded-xl"
                   />
                 ))
+            ) : tutors && tutors.length > 0 ? (
+              tutors.map((userTutor: any) => (
+                <Card key={userTutor.id}>
+                  <CardHeader className="flex flex-row items-center space-x-4 p-6">
+                    <section className="w-full flex flex-col items-center justify-center gap-3">
+                      <article className="w-full flex justify-center items-center">
+                        <Avatar
+                          isBordered
+                          className="w-40 h-40"
+                          color="default"
+                          src={
+                            assetImg(userTutor.avatarUrl) ||
+                            "https://i.pravatar.cc/150?u=a042581f4e29026704d"
+                          }
+                        />
+                      </article>
+                      <div className="w-full flex flex-col justify-center items-center">
+                        <CardTitle className="text-lg font-semibold">
+                          {userTutor.name || "Nombre no disponible"}
+                        </CardTitle>
+                        <CardDescription className="text-sm text-gray-500">
+                          @{userTutor.username}
+                        </CardDescription>
+                      </div>
+                    </section>
+                  </CardHeader>
+                  <CardFooter className="flex justify-end px-6">
+                    <Button>Ver más información</Button>
+                  </CardFooter>
+                </Card>
+              ))
             ) : (
-              <>
-                {tutors?.map((userTutor: any) => (
-                  <Card key={userTutor.id}>
-                    <CardHeader className="flex flex-row items-center space-x-4 p-6">
-                      <section className="w-full flex flex-col items-center justify-center gap-3">
-                        <article className="w-full flex justify-center items-center">
-                          <Avatar
-                            isBordered
-                            className="w-40 h-40"
-                            color="default"
-                            src={
-                              assetImg(userTutor.avatarUrl) ||
-                              "https://i.pravatar.cc/150?u=a042581f4e29026704d"
-                            }
-                          />
-                        </article>
-                        <div className="w-full flex flex-col justify-center items-center">
-                          <CardTitle className="text-lg font-semibold">
-                            {userTutor.name || "Nombre no disponible"}
-                          </CardTitle>
-                          <CardDescription className="text-sm text-gray-500">
-                            @{userTutor.username}
-                          </CardDescription>
-                        </div>
-                      </section>
-                    </CardHeader>
-                    <CardFooter className="flex justify-end px-6">
-                      <Button>Ver más información</Button>
-                    </CardFooter>
-                  </Card>
-                ))}
-              </>
+              <div className="text-center text-gray-500 py-4">
+                No hay registrados actualmente.
+              </div>
             )}
           </div>
           <ScrollBar orientation="horizontal" />

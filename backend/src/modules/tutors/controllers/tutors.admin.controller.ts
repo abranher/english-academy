@@ -9,4 +9,14 @@ export class TutorsAdminController {
   async findAll() {
     return this.tutorsAdminService.findAll();
   }
+
+  @Get('pending')
+  async findPending() {
+    return this.tutorsAdminService.findPending();
+  }
+
+  @Get('approved')
+  async findApproved() {
+    return this.tutorsAdminService.findApproved();
+  }
 }
