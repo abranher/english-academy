@@ -10,7 +10,11 @@ import {
 import { TutorsFilesService } from '../providers/tutors.files.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
-import { attachmentFilter, createFileName } from 'src/libs/storage';
+import {
+  attachmentFilter,
+  createFileName,
+  imageFileFilter,
+} from 'src/libs/storage';
 
 @Controller('tutors/files')
 export class TutorsFilesController {
@@ -39,5 +43,30 @@ export class TutorsFilesController {
     }
 
     return this.tutorsFilesService.uploadCv(userId, file.filename);
+  }
+
+  // Upload image
+  @Post('signup/:userId/avatar')
+  @UseInterceptors(
+    FileInterceptor('avatar', {
+      fileFilter: imageFileFilter,
+      storage: diskStorage({
+        destination: './storage/images',
+        filename: createFileName,
+      }),
+    }),
+  )
+  async uploadAvatar(
+    @Req() req,
+    @UploadedFile() file: Express.Multer.File,
+    @Param('userId') userId: string,
+  ) {
+    if (!file || req.fileValidationError) {
+      throw new BadRequestException(
+        'Archivo proporcionado no válido, [archivos de imagen no permitido]',
+      );
+    }
+
+    return this.tutorsFilesService.uploadAvatar(userId, file.filename);
   }
 }

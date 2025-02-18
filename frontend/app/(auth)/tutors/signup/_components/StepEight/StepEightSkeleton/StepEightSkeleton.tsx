@@ -1,6 +1,6 @@
 import { Skeleton } from "@/components/shadcn/ui/skeleton";
 
-export function StepSevenSkeleton() {
+export function StepEightSkeleton() {
   return (
     <>
       <section className="flex flex-col gap-2 mb-6">

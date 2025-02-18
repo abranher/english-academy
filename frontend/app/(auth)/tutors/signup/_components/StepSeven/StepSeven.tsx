@@ -1,113 +1,264 @@
 "use client";
 
-import axios from "@/config/axios";
-import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
 import { useStepTutorStore } from "@/services/store/auth/tutor/stepTutor";
-
-import { Button } from "@/components/shadcn/ui/button";
-import { CardDescription, CardTitle } from "@/components/shadcn/ui/card";
-
-import { CV } from "./CV";
-import { AddCertification } from "./AddCertification";
-import { CertificationsList } from "./CertificationsList";
+import axios from "@/config/axios";
+import { useCallback, useState } from "react";
+import { useDropzone } from "react-dropzone";
+import { toast } from "sonner";
 import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/shadcn/ui/tabs";
-import { StepSevenSkeleton } from "./StepSevenSkeleton";
+  CheckCircle,
+  File,
+  ImageIcon,
+  Loader2,
+  UploadCloud,
+  XIcon,
+} from "lucide-react";
+import { Card, CardDescription, CardTitle } from "@/components/shadcn/ui/card";
+import { Progress } from "@/components/shadcn/ui/progress";
+import { Button } from "@/components/shadcn/ui/button";
+import { AxiosError } from "axios";
+import { formatSize } from "@/libs/format";
+import { Avatar } from "@nextui-org/react";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/shadcn/ui/popover";
 
-export function StepSeven() {
+type UploadStatus = "select" | "uploading" | "done" | "error";
+
+const MAX_SIZE = 5 * 1024 * 1024; // 5MB
+
+interface AvatarUploadProps {
+  onSuccess?: () => void;
+}
+
+export function StepSeven({ onSuccess }: AvatarUploadProps) {
   const nextStep = useStepTutorStore((state) => state.nextStep);
-
   const userId = useStepTutorStore((state) => state.userId);
-  const [updateFlag, setUpdateFlag] = useState(0); // Para forzar re-fetch
 
-  const {
-    isPending,
-    isError,
-    data: userData,
-  } = useQuery({
-    queryKey: ["tutor", userId, updateFlag],
-    queryFn: async () => {
-      const { data } = await axios.get(
-        `/api/tutors/user/${userId}/certifications`
-      );
-      return data;
+  const [preview, setPreview] = useState<string>("");
+  const [selectedFile, setSelectedFile] = useState<File | undefined>(undefined);
+  const [progress, setProgress] = useState(0);
+  const [uploadStatus, setUploadStatus] = useState<UploadStatus>("select");
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop: useCallback((acceptedFiles: File[]) => {
+      const file = acceptedFiles[0];
+      setSelectedFile(file);
+      setPreview(URL.createObjectURL(file));
+    }, []),
+    accept: {
+      "image/*": [".jpeg", ".png", ".webp"],
     },
-    staleTime: 1000 * 60 * 5, // 5 minutos
+    maxSize: MAX_SIZE,
+    onDropRejected: (fileRejections) => {
+      fileRejections.forEach((rejection) => {
+        if (rejection.errors.some((e) => e.code === "file-too-large")) {
+          toast.error("La imagen es demasiado grande (máximo 5MB)");
+        } else {
+          toast.error("Formato de imagen no permitido");
+        }
+      });
+    },
   });
 
-  // Función para actualizar los datos
-  const handleUpdate = () => setUpdateFlag((prev) => prev + 1);
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!selectedFile) return;
 
-  const hasCV = userData?.tutor?.cvUrl;
+    try {
+      setUploadStatus("uploading");
 
-  const defaultTab = hasCV ? "certifications" : "cv";
+      const formData = new FormData();
+      formData.append("avatar", selectedFile);
 
-  if (isPending) return <StepSevenSkeleton />;
+      await axios.post(`/api/tutors/files/signup/${userId}/avatar`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        onUploadProgress: (progressEvent) => {
+          const percent = Math.round(
+            (progressEvent.loaded * 100) / (progressEvent.total || 1)
+          );
+          setProgress(percent);
+        },
+      });
 
-  if (isError) return <div>Error cargando datos</div>;
+      setUploadStatus("done");
+      toast.success("¡Imagen de perfil creada correctamente!");
+      onSuccess?.();
+      nextStep();
+    } catch (error) {
+      setUploadStatus("error");
+      if (error instanceof AxiosError) {
+        const message =
+          error.response?.data?.message || "Error al subir la imagen";
+        toast.error(message);
+      } else {
+        toast.error("Error desconocido");
+      }
+    }
+  };
+
+  const clearFile = () => {
+    setSelectedFile(undefined);
+    setPreview("");
+    setProgress(0);
+    setUploadStatus("select");
+  };
+
+  function truncateString(input: string): string {
+    if (input.length <= 15) {
+      return input;
+    }
+
+    const firstFour = input.slice(0, 9);
+    const lastFour = input.slice(-4);
+
+    return `${firstFour}...${lastFour}`;
+  }
 
   return (
     <>
       <section className="text-center mb-6">
-        <CardTitle className="mb-3">Datos Académicos y Tutoría</CardTitle>
+        <CardTitle className="mb-3">Sube tu Imagen de Perfil</CardTitle>
         <CardDescription>
-          {hasCV ? "CV actualizado ✓" : "Por favor sube tu CV para continuar"}
+          Es fundamental que subas una imagen de perfil clara y reconocible.
         </CardDescription>
       </section>
 
-      <Tabs defaultValue={defaultTab}>
-        <TabsList className="grid w-full grid-cols-2 mb-4 gap-3 md:grid-cols-3">
-          <TabsTrigger value="cv" disabled={hasCV}>
-            Currículum {hasCV && "✓"}
-          </TabsTrigger>
-          <TabsTrigger value="add-certifications">
-            Añadir certificación
-          </TabsTrigger>
-          <TabsTrigger value="certifications">Certificaciones</TabsTrigger>
-        </TabsList>
+      <form onSubmit={onSubmit}>
+        <div className="grid gap-4">
+          <h2 className="text-sm font-medium">Imagen de perfil:</h2>
 
-        <TabsContent value="cv">
-          <CV onSuccess={handleUpdate} />
-        </TabsContent>
+          <div className="flex flex-col items-center gap-4 w-full">
+            <section className="flex justify-evenly gap-3">
+              <article className="w-full flex justify-center items-center">
+                {/* Vista previa */}
+                {preview ? (
+                  <>
+                    <Avatar
+                      isBordered
+                      className="w-40 h-40"
+                      color="default"
+                      src={preview}
+                    />
+                  </>
+                ) : (
+                  <div className="relative w-40 h-40 rounded-full overflow-hidden border-2 border-gray-200">
+                    <div className="w-full h-full bg-gray-100 flex items-center justify-center">
+                      <ImageIcon className="w-8 h-8 text-gray-400" />
+                    </div>
+                  </div>
+                )}
+              </article>
 
-        <TabsContent value="add-certifications">
-          <AddCertification onSuccess={handleUpdate} />
-        </TabsContent>
+              <article className="w-full text-xs">
+                <h2 className="text-sm font-medium mb-2">Consejo:</h2>
+                <div className="px-5">
+                  <ul className="list-disc flex flex-col gap-2">
+                    <li>Imagen clara y centrada de tu rostro.</li>
+                    <li>
+                      Evita fotos en las que solo se vea la mitad de tu cara.
+                    </li>
+                    <li>Utiliza un fondo sencillo.</li>
+                    <li>Sonríe y muestra una expresión amigable.</li>
+                  </ul>
+                </div>
+              </article>
+            </section>
 
-        <TabsContent value="certifications">
-          <CertificationsList userId={userId} />
-        </TabsContent>
-      </Tabs>
+            <section className="flex gap-3">
+              {/* Dropzone */}
+              {(uploadStatus === "select" || uploadStatus === "uploading") && (
+                <section
+                  {...getRootProps()}
+                  className="p-3 w-full text-center bg-gray-50 dark:bg-zinc-900 text-gray-600 dark:text-gray-100 font-semibold text-xs rounded h-28 sm:h-24 flex flex-col items-center justify-center cursor-pointer border-3 border-gray-500 dark:border-zinc-700 border-dashed"
+                >
+                  <UploadCloud className="w-11 mb-2" />
+                  <input {...getInputProps()} />
+                  {isDragActive ? (
+                    <p>Suelta los archivos aquí ...</p>
+                  ) : (
+                    <p>
+                      Arrastra y suelta tus archivos aquí o{" "}
+                      <span className="font-medium text-blue-600 hover:underline">
+                        explora
+                      </span>
+                    </p>
+                  )}
+                </section>
+              )}
 
-      <section className="flex w-full justify-end mt-3">
-        <Popover modal>
-          <PopoverTrigger asChild>
-            <Button disabled={!hasCV}>
-              {hasCV ? "Finalizar" : "Sube tu CV para continuar"}
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-80">
-            <div className="grid gap-4">
-              <div className="space-y-2 text-center">
-                <p>¿Estas seguro de finalizar?</p>
+              <Card className="w-full grid grid-cols-8 py-2 border-zinc-500 border-2">
+                <div className="col-span-2 flex justify-center items-center">
+                  <File />
+                </div>
+                <div className="text-xs col-span-4 flex flex-col justify-center gap-1">
+                  <p>
+                    {selectedFile
+                      ? truncateString(selectedFile.name)
+                      : "No hay ningún archivo seleccionado"}
+                  </p>
+                  <p>{selectedFile && formatSize(selectedFile.size)}</p>
+                  <Progress value={progress} className="h-2" />
+                </div>
+                {uploadStatus === "select" && selectedFile && (
+                  <>
+                    <div className="col-span-2 flex justify-center items-center">
+                      <XIcon className="cursor-pointer" onClick={clearFile} />
+                    </div>
+                  </>
+                )}
+                {uploadStatus === "uploading" && (
+                  <>
+                    <div className="col-span-1 flex justify-center items-center">
+                      {progress}
+                    </div>
+                  </>
+                )}
+                {uploadStatus === "done" && (
+                  <>
+                    <div className="col-span-1 flex justify-center items-center">
+                      <CheckCircle />
+                    </div>
+                  </>
+                )}
+              </Card>
+            </section>
+          </div>
+
+          <Popover modal>
+            <PopoverTrigger asChild>
+              <Button>Subir imagen</Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-80">
+              <div className="grid gap-4">
+                <div className="space-y-2 text-center">
+                  <p>¿Estas seguro?</p>
+                  <p className="text-sm">
+                    Luego la podrás cambiar desde tu perfil.
+                  </p>
+                </div>
+                <div className="space-y-2 text-center">
+                  <Button
+                    type="submit"
+                    disabled={!selectedFile || uploadStatus === "uploading"}
+                    className="w-full"
+                  >
+                    {uploadStatus === "uploading" ? (
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    ) : (
+                      "Subir"
+                    )}
+                  </Button>
+                </div>
               </div>
-              <div className="space-y-2 text-center">
-                <Button onClick={() => nextStep()}>Confirmar</Button>
-              </div>
-            </div>
-          </PopoverContent>
-        </Popover>
-      </section>
+            </PopoverContent>
+          </Popover>
+        </div>
+      </form>
     </>
   );
 }

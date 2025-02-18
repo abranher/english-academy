@@ -4,8 +4,6 @@ import Link from "next/link";
 
 import { Button } from "@/components/shadcn/ui/button";
 import { useStepTutorStore } from "@/services/store/auth/tutor/stepTutor";
-import { Progress } from "@/components/shadcn/ui/progress";
-import { StepOne } from "./StepOne";
 
 import {
   AlertDialog,
@@ -14,13 +12,16 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/shadcn/ui/alert-dialog";
+import { Progress } from "@/components/shadcn/ui/progress";
+import { StepInit } from "./StepInit";
+import { StepOne } from "./StepOne";
 import { StepTwo } from "./StepTwo";
 import { StepThree } from "./StepThree";
 import { StepFour } from "./StepFour";
 import { StepFive } from "./StepFive";
-import { StepInit } from "./StepInit";
 import { StepSix } from "./StepSix";
 import { StepSeven } from "./StepSeven";
+import { StepEight } from "./StepEight";
 import { StepFinal } from "./StepFinal";
 
 export default function SignUpForm() {
@@ -65,7 +66,8 @@ export default function SignUpForm() {
                 {step === 5 && <StepFive />}
                 {step === 6 && <StepSix />}
                 {step === 7 && <StepSeven />}
-                {step === 8 && <StepFinal />}
+                {step === 8 && <StepEight />}
+                {step === 9 && <StepFinal />}
               </section>
             </AlertDialogHeader>
           </AlertDialogContent>
