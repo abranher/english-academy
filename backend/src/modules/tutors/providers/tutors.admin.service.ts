@@ -46,4 +46,18 @@ export class TutorsAdminService {
       },
     });
   }
+
+  async findRejected() {
+    return this.prisma.user.findMany({
+      where: {
+        role: Roles.TUTOR,
+        tutor: {
+          status: TutorStatus.REJECTED,
+        },
+      },
+      include: {
+        tutor: true,
+      },
+    });
+  }
 }

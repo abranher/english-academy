@@ -19,4 +19,9 @@ export class TutorsAdminController {
   async findApproved() {
     return this.tutorsAdminService.findApproved();
   }
+
+  @Get('rejected')
+  async findRejected() {
+    return this.tutorsAdminService.findRejected();
+  }
 }
