@@ -20,14 +20,40 @@ const adminLinks = [
     icon: Home,
   },
   {
-    title: "Tutores",
-    href: "/admin/tutors",
+    title: "Gestión de Usuarios",
     icon: Users,
+    subItems: [
+      {
+        title: "Tutores",
+        href: "/admin/tutors",
+      },
+      {
+        title: "Estudiantes",
+        href: "/admin/students",
+      },
+      {
+        title: "Administradores",
+        href: "/admin/admins",
+      },
+    ],
   },
   {
     title: "Cursos",
-    href: "/admin/courses",
     icon: GraduationCap,
+    subItems: [
+      {
+        title: "Todos los cursos",
+        href: "/admin/courses",
+      },
+      {
+        title: "Categorías",
+        href: "/admin/courses/categories",
+      },
+      {
+        title: "Nuevo curso",
+        href: "/admin/courses/new",
+      },
+    ],
   },
   {
     title: "Bitácora",
