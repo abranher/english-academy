@@ -1,5 +1,6 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { TutorsAdminService } from '../providers/tutors.admin.service';
+import { UpdateTutorStatusDto } from '../dto/update-tutor-status.dto';
 
 @Controller('admin/tutors')
 export class TutorsAdminController {
@@ -29,5 +30,16 @@ export class TutorsAdminController {
   @Get('user/:userId')
   async findUserTutor(@Param('userId') userId: string) {
     return this.tutorsAdminService.findUserTutor(userId);
+  }
+
+  @Post('user/:userId/manage-status')
+  async manageTutorStatus(
+    @Param('userId') userId: string,
+    @Body() updateTutorStatusDto: UpdateTutorStatusDto,
+  ) {
+    return this.tutorsAdminService.manageTutorStatus(
+      userId,
+      updateTutorStatusDto,
+    );
   }
 }

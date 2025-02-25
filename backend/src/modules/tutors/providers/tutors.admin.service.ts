@@ -1,11 +1,22 @@
-import { Injectable } from '@nestjs/common';
-import { Roles, TutorStatus } from '@prisma/client';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { Prisma, Roles, TutorStatus } from '@prisma/client';
 
 import { PrismaService } from 'src/modules/prisma/providers/prisma.service';
+import { UsersService } from 'src/modules/users/providers/users.service';
+import { UpdateTutorStatusDto } from '../dto/update-tutor-status.dto';
 
 @Injectable()
 export class TutorsAdminService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly userService: UsersService,
+  ) {}
+
+  private async findUserOrThrow(id: string) {
+    const user = await this.userService.findById(id);
+    if (!user) throw new NotFoundException('Usuario no encontrado');
+    return user;
+  }
 
   async findAll() {
     return this.prisma.user.findMany({
@@ -66,5 +77,46 @@ export class TutorsAdminService {
       where: { id: userId },
       include: { tutor: { include: { certifications: true } } },
     });
+  }
+
+  async manageTutorStatus(
+    userId: string,
+    updateTutorStatusDto: UpdateTutorStatusDto,
+  ) {
+    const user = await this.findUserOrThrow(userId);
+
+    const json = [
+      {
+        id: crypto.randomUUID(),
+        reason: updateTutorStatusDto.comment,
+        createdAt: Date(),
+      },
+    ] as Prisma.JsonArray;
+
+    if (updateTutorStatusDto.status === TutorStatus.APPROVED) {
+      await this.prisma.tutor.update({
+        where: {
+          userId: user.id,
+        },
+        data: {
+          status: TutorStatus.APPROVED,
+          rejectionHistory: json,
+        },
+      });
+    } else if (updateTutorStatusDto.status === TutorStatus.REJECTED) {
+      await this.prisma.tutor.update({
+        where: {
+          userId: user.id,
+        },
+        data: {
+          status: TutorStatus.REJECTED,
+          rejectionHistory: json,
+        },
+      });
+    }
+
+    return {
+      message: 'Tutor actualizado.',
+    };
   }
 }
