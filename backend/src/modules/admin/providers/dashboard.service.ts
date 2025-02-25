@@ -1,5 +1,17 @@
 import { Injectable } from '@nestjs/common';
 
+import {
+  startOfMonth,
+  subMonths,
+  startOfYear,
+  endOfYear,
+  subYears,
+  getMonth,
+  getYear,
+  format,
+} from 'date-fns';
+import { es } from 'date-fns/locale';
+
 import { PrismaService } from 'src/modules/prisma/providers/prisma.service';
 
 @Injectable()
@@ -8,25 +20,20 @@ export class DashboardService {
 
   async infoCards() {
     const now = new Date();
-    const currentYear = now.getFullYear();
 
     // Obtener el primer día del mes actual
-    const startOfCurrentMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    const startOfCurrentMonth = startOfMonth(now);
 
     // Obtener el primer día del mes anterior
-    const startOfPreviousMonth = new Date(
-      now.getFullYear(),
-      now.getMonth() - 1,
-      1,
-    );
+    const startOfPreviousMonth = startOfMonth(subMonths(now, 1));
 
     // Configurar fechas para el año actual
-    const startOfCurrentYear = new Date(currentYear, 0, 1);
-    const endOfCurrentYear = new Date(currentYear + 1, 0, 1);
+    const startOfCurrentYear = startOfYear(now);
+    const endOfCurrentYear = endOfYear(now);
 
     // Configurar fechas para el año anterior
-    const startOfLastYear = new Date(currentYear - 1, 0, 1);
-    const endOfLastYear = new Date(currentYear, 0, 1);
+    const startOfLastYear = startOfYear(subYears(now, 1));
+    const endOfLastYear = endOfYear(subYears(now, 1));
 
     const [totalUsers, currentYearUsers, lastYearUsers, previousMonthUsers] =
       await Promise.all([
@@ -55,7 +62,7 @@ export class DashboardService {
   }
 
   async getMonthlyRegistrations() {
-    const currentYear = new Date().getFullYear();
+    const currentYear = getYear(new Date());
 
     const usersByMonth = await this.getUsersByMonth(currentYear);
 
@@ -63,9 +70,7 @@ export class DashboardService {
     const chartData = Array.from({ length: 12 }, (_, i) => {
       const monthData = usersByMonth.find((m) => m.month === i + 1);
       return {
-        month: new Date(currentYear, i).toLocaleString('default', {
-          month: 'short',
-        }),
+        month: format(new Date(currentYear, i), 'MMM', { locale: es }),
         users: monthData ? monthData.count : 0,
       };
     });
@@ -89,7 +94,7 @@ export class DashboardService {
       })
       .then((res) =>
         res.map((item) => ({
-          month: item.createdAt.getMonth() + 1,
+          month: getMonth(item.createdAt) + 1, // getMonth devuelve 0-11, sumamos 1
           count: item._count,
         })),
       );
