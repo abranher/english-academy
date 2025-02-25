@@ -1,5 +1,5 @@
 import HeaderAdmin from "@/components/admin/HeaderAdmin";
-import AsideAdmin from "@/components/admin/AsideAdmin";
+import { AsideAdmin } from "@/components/admin/AsideAdmin";
 
 export default function AdminLayout({
   children,

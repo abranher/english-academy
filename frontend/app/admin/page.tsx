@@ -49,6 +49,7 @@ import {
 } from "@/components/shadcn/ui/tabs";
 import { auth } from "@/config/auth";
 import { Roles } from "@/types/enums/Roles";
+import { Overview } from "./_components/Overview";
 
 export default async function DashboardAdminPage() {
   const session = await auth();
@@ -71,23 +72,20 @@ export default async function DashboardAdminPage() {
         <CardTitle>Tablero de Control</CardTitle>
         <CardDescription>
           Visualiza y analiza el registro de actividades de los usuarios. Obtén
-          información valiosa sobre el uso de la aplicación y las interacciones
-          más relevantes.
+          información sobre el uso de la aplicación y las interacciones más
+          relevantes.
         </CardDescription>
       </div>
 
       <div className="w-full">
         <Tabs defaultValue="overview" className="space-y-4">
           <TabsList>
-            <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="overview">Descripción general</TabsTrigger>
             <TabsTrigger value="analytics" disabled>
-              Analytics
+              Estadísticas
             </TabsTrigger>
             <TabsTrigger value="reports" disabled>
-              Reports
-            </TabsTrigger>
-            <TabsTrigger value="notifications" disabled>
-              Notifications
+              Reportes
             </TabsTrigger>
           </TabsList>
           <TabsContent value="overview" className="space-y-4">
@@ -195,12 +193,9 @@ export default async function DashboardAdminPage() {
               </Card>
             </div>
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-              <Card className="col-span-4">
-                <CardHeader>
-                  <CardTitle>Overview</CardTitle>
-                </CardHeader>
-                <CardContent className="pl-2">{/*  <Overview />*/}</CardContent>
-              </Card>
+              <section className="col-span-4">
+                <Overview />
+              </section>
               <Card className="col-span-3">
                 <CardHeader>
                   <CardTitle>Recent Sales</CardTitle>

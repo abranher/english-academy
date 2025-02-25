@@ -18,7 +18,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/shadcn/ui/card";
-import { CoursesPendingReviewList } from "./_components/CoursesPendingReviewList ";
+import { CoursesPendingReviewList } from "./_components/CoursesPendingReviewList";
 
 export default async function CoursesPage() {
   const { data } = await axios.get("/api/courses");
