@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+
 import {
   Bell,
   ClipboardList,
@@ -31,10 +32,6 @@ const adminLinks = [
         title: "Estudiantes",
         href: "/admin/students",
       },
-      {
-        title: "Administradores",
-        href: "/admin/admins",
-      },
     ],
   },
   {
@@ -48,10 +45,6 @@ const adminLinks = [
       {
         title: "Categorías",
         href: "/admin/courses/categories",
-      },
-      {
-        title: "Nuevo curso",
-        href: "/admin/courses/new",
       },
     ],
   },

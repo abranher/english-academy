@@ -2,9 +2,11 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { cn } from "@/libs/shadcn/utils";
-import { ChevronDown, ChevronRight, LucideIcon } from "lucide-react";
+
 import { useState } from "react";
+import { cn } from "@/libs/shadcn/utils";
+
+import { ChevronDown, LucideIcon } from "lucide-react";
 
 interface NavItem {
   title: string;
