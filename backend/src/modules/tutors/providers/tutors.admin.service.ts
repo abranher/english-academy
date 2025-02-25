@@ -88,30 +88,26 @@ export class TutorsAdminService {
     const json = [
       {
         id: crypto.randomUUID(),
-        reason: updateTutorStatusDto.comment,
+        comment: updateTutorStatusDto.comment,
+        previousStatus: user.tutor.status,
         createdAt: Date(),
       },
     ] as Prisma.JsonArray;
 
-    if (updateTutorStatusDto.status === TutorStatus.APPROVED) {
+    if (updateTutorStatusDto.status === TutorStatus.PENDING) {
       await this.prisma.tutor.update({
-        where: {
-          userId: user.id,
-        },
-        data: {
-          status: TutorStatus.APPROVED,
-          rejectionHistory: json,
-        },
+        where: { userId: user.id },
+        data: { status: TutorStatus.PENDING, rejectionHistory: json },
+      });
+    } else if (updateTutorStatusDto.status === TutorStatus.APPROVED) {
+      await this.prisma.tutor.update({
+        where: { userId: user.id },
+        data: { status: TutorStatus.APPROVED, rejectionHistory: json },
       });
     } else if (updateTutorStatusDto.status === TutorStatus.REJECTED) {
       await this.prisma.tutor.update({
-        where: {
-          userId: user.id,
-        },
-        data: {
-          status: TutorStatus.REJECTED,
-          rejectionHistory: json,
-        },
+        where: { userId: user.id },
+        data: { status: TutorStatus.REJECTED, rejectionHistory: json },
       });
     }
 

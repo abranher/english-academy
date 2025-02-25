@@ -1,0 +1,69 @@
+"use client";
+
+import { Badge } from "@/components/shadcn/ui/badge";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/shadcn/ui/card";
+import { differenceInYears, format } from "date-fns";
+import { BadgeCheck, CalendarDays, CircleUser, Mail } from "lucide-react";
+
+function formatBirth(birth: any): string {
+  return birth
+    ? `${format(new Date(birth), "dd/MM/yyyy")} 
+    (${differenceInYears(new Date(), new Date(birth))} años)`
+    : "Fecha de nacimiento no disponible";
+}
+
+export function AccountDetails({
+  email,
+  birth,
+  country,
+}: {
+  email: string;
+  birth: string;
+  country: any;
+}) {
+  return (
+    <>
+      <Card className="w-full">
+        <CardHeader>
+          <CardTitle className="flex gap-3 items-center">
+            Datos de la cuenta
+            <CircleUser />
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <section className="flex flex-col gap-5">
+            <article className="flex flex-col gap-3">
+              <div className="flex gap-2 items-center">
+                <Mail />
+                {email}
+                <Badge className="flex gap-1 items-center">
+                  <BadgeCheck />
+                  Verificado
+                </Badge>
+              </div>
+              <div className="flex gap-2 items-center">
+                <CalendarDays />
+                {formatBirth(birth)}
+                <Badge className="flex gap-1 items-center">
+                  <BadgeCheck />
+                  Mayor de edad
+                </Badge>
+              </div>
+
+              {country && (
+                <div className="flex items-center text-sm text-muted-foreground">
+                  🌍 {country}
+                </div>
+              )}
+            </article>
+          </section>
+        </CardContent>
+      </Card>
+    </>
+  );
+}

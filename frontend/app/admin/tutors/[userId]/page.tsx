@@ -21,17 +21,13 @@ export default function TutorDescriptionAdminPage() {
               <Link href="/admin">Dashboard</Link>
             </BreadcrumbLink>
           </BreadcrumbItem>
-
           <BreadcrumbSeparator />
-
           <BreadcrumbItem>
-            <BreadcrumbLink>
+            <BreadcrumbLink asChild>
               <Link href="/admin/tutors">Tutores</Link>
             </BreadcrumbLink>
           </BreadcrumbItem>
-
           <BreadcrumbSeparator />
-
           <BreadcrumbItem>
             <BreadcrumbPage>Tutor</BreadcrumbPage>
           </BreadcrumbItem>
