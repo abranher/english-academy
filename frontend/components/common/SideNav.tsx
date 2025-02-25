@@ -44,7 +44,7 @@ const NavLink = ({
     <div className="flex flex-col gap-1">
       <div
         className={cn(
-          "group flex items-center justify-between rounded-sm px-3 py-2 text-sm font-medium transition-colors",
+          "group flex items-center justify-between cursor-pointer rounded-sm px-3 py-2 text-sm font-medium transition-colors",
           "hover:bg-zinc-100/50 dark:hover:bg-zinc-800/50",
           isActive &&
             "bg-zinc-100 text-zinc-900 border-l-2 border-zinc-400 " +
