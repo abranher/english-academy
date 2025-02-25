@@ -6,23 +6,45 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/shadcn/ui/card";
-import { Activity, CreditCard, DollarSign, Users } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { Activity, CreditCard, Users } from "lucide-react";
+import { getInfoCards } from "../../../_services/get-info-cards";
 
-export function InsightsCards() {
+export function InfoCards() {
+  const { isPending, data } = useQuery({
+    queryKey: ["admin-info-cards"],
+    queryFn: getInfoCards,
+  });
+
+  function calculateGrowth(
+    currentMonthUsers: number,
+    previousMonthUsers: number
+  ): string {
+    if (previousMonthUsers === 0) {
+      return "No hay datos del mes anterior";
+    }
+
+    const growth =
+      ((currentMonthUsers - previousMonthUsers) / previousMonthUsers) * 100;
+    return `${growth.toFixed(1)}% respecto al mes pasado`;
+  }
+
+  if (isPending) return <div>Cargando...</div>;
+
   return (
     <>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              Ingresos totales
+              Total de Usuarios Registrados
             </CardTitle>
-            <DollarSign className="h-4 w-4 text-muted-foreground" />
+            <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">$45,231.89</div>
+            <div className="text-2xl font-bold">{data.totalUsers}</div>
             <p className="text-xs text-muted-foreground">
-              +20,1% respecto al mes pasado
+              {calculateGrowth(data.totalUsers, data.previousMonthUsers)}
             </p>
           </CardContent>
         </Card>

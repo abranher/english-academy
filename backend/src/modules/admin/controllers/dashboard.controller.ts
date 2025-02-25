@@ -6,8 +6,8 @@ import { DashboardService } from '../providers/dashboard.service';
 export class DashboardController {
   constructor(private readonly dashboardService: DashboardService) {}
 
-  @Get('overview/insights-cards')
-  insightsCards() {
-    return this.dashboardService.insightsCards();
+  @Get('overview/info-cards')
+  infoCards() {
+    return this.dashboardService.infoCards();
   }
 }

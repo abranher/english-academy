@@ -17,7 +17,8 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/shadcn/ui/chart";
-import { InsightsCards } from "./InsightsCards";
+import { InfoCards } from "./InfoCards";
+
 const chartData = [
   { month: "January", desktop: 186, mobile: 80 },
   { month: "February", desktop: 305, mobile: 200 },
@@ -41,7 +42,7 @@ const chartConfig = {
 export function Overview() {
   return (
     <>
-      <InsightsCards />
+      <InfoCards />
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
         <section className="col-span-4">
