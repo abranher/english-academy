@@ -16,10 +16,13 @@ import {
   ArrowUpRight,
   AtSign,
   BadgeCheck,
+  BookmarkCheck,
   BookUser,
   CircleUser,
+  Eye,
   GraduationCap,
   Mail,
+  School,
   SquareUser,
   User,
 } from "lucide-react";
@@ -27,6 +30,7 @@ import { Button } from "@/components/shadcn/ui/button";
 import { Avatar } from "@nextui-org/react";
 import { assetImg } from "@/libs/asset";
 import { Badge } from "@/components/shadcn/ui/badge";
+import { Certification } from "@/types/models/Certification";
 
 export function TutorProfile() {
   const { userId } = useParams();
@@ -153,14 +157,40 @@ export function TutorProfile() {
             <CardContent>
               <section className="flex flex-col gap-5">
                 <article className="flex flex-col gap-3">
-                  <p className="flex gap-3 items-center">
-                    <Mail />
-                    {userTutor.email}
-                    <Badge className="flex gap-1 items-center">
-                      <BadgeCheck />
-                      Verificado
-                    </Badge>
-                  </p>
+                  {userTutor.tutor.certifications.length === 0 ? (
+                    <>
+                      <CardDescription>
+                        No registro certificaciones
+                      </CardDescription>
+                    </>
+                  ) : (
+                    userTutor.tutor?.certifications.map(
+                      (certification: Certification) => (
+                        <section
+                          key={certification.id}
+                          className="flex items-center justify-between rounded-lg border p-4 dark:border-zinc-700"
+                        >
+                          <div className="space-y-2">
+                            <h3 className="font-medium flex gap-1 items-center">
+                              <BookmarkCheck />
+                              Nombre: {certification.name}
+                            </h3>
+                            <p className="text-sm text-muted-foreground flex gap-1 items-center">
+                              <School />
+                              Organismo emisor:{" "}
+                              {certification.issuingOrganization}
+                            </p>
+                          </div>
+
+                          <section className="flex gap-3">
+                            <Button size="sm">
+                              <Eye />
+                            </Button>
+                          </section>
+                        </section>
+                      )
+                    )
+                  )}
                 </article>
               </section>
             </CardContent>
