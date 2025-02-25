@@ -16,6 +16,7 @@ import { getApprovedTutors } from "../../_services/get-approved-tutors";
 import { Skeleton } from "@/components/shadcn/ui/skeleton";
 import { assetImg } from "@/libs/asset";
 import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
 
 export function ApprovedTutorsList() {
   const {
@@ -45,59 +46,52 @@ export function ApprovedTutorsList() {
 
       <Separator className="my-4" />
 
-      <div className="relative">
-        <ScrollArea>
-          <div className="flex space-x-4 pb-4">
-            {isPending ? (
-              Array(3)
-                .fill(0)
-                .map((_, i) => (
-                  <Skeleton
-                    key={i}
-                    className="h-[300px] w-[250px] rounded-xl"
-                  />
-                ))
-            ) : tutors && tutors.length > 0 ? ( // Check if tutors exist and have data
-              tutors.map((userTutor: any) => (
-                <Card key={userTutor.id}>
-                  <CardHeader className="flex flex-row items-center space-x-4 p-6">
-                    <section className="w-full flex flex-col items-center justify-center gap-3">
-                      <article className="w-full flex justify-center items-center">
-                        <Avatar
-                          isBordered
-                          className="w-40 h-40"
-                          color="default"
-                          src={
-                            assetImg(userTutor.avatarUrl) ||
-                            "https://i.pravatar.cc/150?u=a042581f4e29026704d"
-                          }
-                        />
-                      </article>
-                      <div className="w-full flex flex-col justify-center items-center">
-                        <CardTitle className="text-lg font-semibold">
-                          {userTutor.name || "Nombre no disponible"}
-                        </CardTitle>
-                        <CardDescription className="text-sm text-gray-500">
-                          @{userTutor.username}
-                        </CardDescription>
-                      </div>
-                    </section>
-                  </CardHeader>
-                  <CardFooter className="flex justify-end px-6">
-                    <Link href={`/admin/tutors/${userTutor.id}`}>
-                      <Button>Ver más información</Button>
-                    </Link>
-                  </CardFooter>
-                </Card>
-              ))
-            ) : (
-              <div className="text-center text-zinc-700 dark:text-zinc-200 py-4">
-                No hay tutores aprobados actualmente.
-              </div>
-            )}
+      <div className="flex w-full flex-wrap gap-3">
+        {isPending ? (
+          [1, 2, 3].map((_, i) => (
+            <Skeleton key={i} className="w-44 rounded-xl" />
+          ))
+        ) : tutors && tutors.length > 0 ? ( // Check if tutors exist and have data
+          tutors.map((userTutor: any) => (
+            <Card key={userTutor.id}>
+              <CardHeader className="flex flex-row items-center space-x-4 p-6">
+                <section className="w-full flex flex-col items-center justify-center gap-3">
+                  <article className="w-full flex justify-center items-center">
+                    <Avatar
+                      isBordered
+                      className="w-24 h-24"
+                      color="default"
+                      src={
+                        assetImg(userTutor.avatarUrl) ||
+                        "https://i.pravatar.cc/150?u=a042581f4e29026704d"
+                      }
+                    />
+                  </article>
+                  <div className="w-full flex flex-col justify-center items-center">
+                    <CardTitle className="text-lg font-semibold">
+                      {userTutor.name || "Nombre no disponible"}
+                    </CardTitle>
+                    <CardDescription className="text-sm text-gray-500">
+                      @{userTutor.username}
+                    </CardDescription>
+                  </div>
+                </section>
+              </CardHeader>
+              <CardFooter className="flex justify-end px-6">
+                <Link href={`/admin/tutors/${userTutor.id}`}>
+                  <Button className="flex gap-3">
+                    Ver más
+                    <ArrowUpRight className="opacity-90 w-5" />
+                  </Button>
+                </Link>
+              </CardFooter>
+            </Card>
+          ))
+        ) : (
+          <div className="text-center text-zinc-700 dark:text-zinc-200 py-4">
+            No hay tutores aprobados actualmente.
           </div>
-          <ScrollBar orientation="horizontal" />
-        </ScrollArea>
+        )}
       </div>
     </>
   );
