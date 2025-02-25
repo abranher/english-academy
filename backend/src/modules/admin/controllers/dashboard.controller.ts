@@ -10,4 +10,9 @@ export class DashboardController {
   infoCards() {
     return this.dashboardService.infoCards();
   }
+
+  @Get('overview/monthly-registrations')
+  async getMonthlyRegistrations() {
+    return this.dashboardService.getMonthlyRegistrations();
+  }
 }

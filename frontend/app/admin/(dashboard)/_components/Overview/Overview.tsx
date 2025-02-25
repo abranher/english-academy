@@ -18,28 +18,22 @@ import {
   ChartTooltipContent,
 } from "@/components/shadcn/ui/chart";
 import { InfoCards } from "./InfoCards";
-
-const chartData = [
-  { month: "January", desktop: 186, mobile: 80 },
-  { month: "February", desktop: 305, mobile: 200 },
-  { month: "March", desktop: 237, mobile: 120 },
-  { month: "April", desktop: 73, mobile: 190 },
-  { month: "May", desktop: 209, mobile: 130 },
-  { month: "June", desktop: 214, mobile: 140 },
-];
+import { useQuery } from "@tanstack/react-query";
+import { getMonthlyRegistrations } from "../../_services/get-monthly-registration";
 
 const chartConfig = {
-  desktop: {
-    label: "Desktop",
+  users: {
+    label: "Registros",
     color: "hsl(var(--chart-1))",
-  },
-  mobile: {
-    label: "Mobile",
-    color: "hsl(var(--chart-2))",
   },
 } satisfies ChartConfig;
 
 export function Overview() {
+  const { isPending, data } = useQuery({
+    queryKey: ["monthly-registrations"],
+    queryFn: getMonthlyRegistrations,
+  });
+
   return (
     <>
       <InfoCards />
@@ -48,40 +42,39 @@ export function Overview() {
         <section className="col-span-4">
           <Card>
             <CardHeader>
-              <CardTitle>Bar Chart - Multiple</CardTitle>
-              <CardDescription>January - June 2024</CardDescription>
+              <CardTitle>Registros Mensuales</CardTitle>
+              <CardDescription>{new Date().getFullYear()}</CardDescription>
             </CardHeader>
             <CardContent>
-              <ChartContainer config={chartConfig}>
-                <BarChart accessibilityLayer data={chartData}>
-                  <CartesianGrid vertical={false} />
-                  <XAxis
-                    dataKey="month"
-                    tickLine={false}
-                    tickMargin={10}
-                    axisLine={false}
-                    tickFormatter={(value) => value.slice(0, 3)}
-                  />
-                  <ChartTooltip
-                    cursor={false}
-                    content={<ChartTooltipContent indicator="dashed" />}
-                  />
-                  <Bar
-                    dataKey="desktop"
-                    fill="var(--color-desktop)"
-                    radius={4}
-                  />
-                  <Bar dataKey="mobile" fill="var(--color-mobile)" radius={4} />
-                </BarChart>
-              </ChartContainer>
+              {isPending ? (
+                <div>Cargando gráfico...</div>
+              ) : (
+                <ChartContainer config={chartConfig}>
+                  <BarChart accessibilityLayer data={data.chartData}>
+                    <CartesianGrid vertical={false} />
+                    <XAxis
+                      dataKey="month"
+                      tickLine={false}
+                      tickMargin={10}
+                      axisLine={false}
+                      tickFormatter={(value) => value.slice(0, 3)}
+                    />
+                    <ChartTooltip
+                      cursor={false}
+                      content={<ChartTooltipContent indicator="dashed" />}
+                    />
+                    <Bar dataKey="users" fill="var(--color-users)" radius={4} />
+                  </BarChart>
+                </ChartContainer>
+              )}
             </CardContent>
             <CardFooter className="flex-col items-start gap-2 text-sm">
               <div className="flex gap-2 font-medium leading-none">
-                Tendencia al alza del 5,2% este mes{" "}
+                Evolución de registros mensuales
                 <TrendingUp className="h-4 w-4" />
               </div>
               <div className="leading-none text-muted-foreground">
-                Mostrando el total de visitantes de los últimos 6 meses
+                Total de usuarios registrados por mes en el año actual
               </div>
             </CardFooter>
           </Card>
