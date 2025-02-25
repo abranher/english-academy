@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import { TutorsAdminService } from '../providers/tutors.admin.service';
 
 @Controller('admin/tutors')
@@ -23,5 +23,11 @@ export class TutorsAdminController {
   @Get('rejected')
   async findRejected() {
     return this.tutorsAdminService.findRejected();
+  }
+
+  // Get tutor for description in dashboard
+  @Get('user/:userId')
+  async findUserTutor(@Param('userId') userId: string) {
+    return this.tutorsAdminService.findUserTutor(userId);
   }
 }

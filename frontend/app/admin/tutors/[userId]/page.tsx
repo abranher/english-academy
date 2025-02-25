@@ -8,7 +8,8 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/shadcn/ui/breadcrumb";
-import { CardDescription, CardTitle } from "@/components/shadcn/ui/card";
+
+import { TutorProfile } from "./_components/TutorProfile";
 
 export default function TutorDescriptionAdminPage() {
   return (
@@ -34,10 +35,7 @@ export default function TutorDescriptionAdminPage() {
         </BreadcrumbList>
       </Breadcrumb>
 
-      <div>
-        <CardTitle>Tutor</CardTitle>
-        <CardDescription>Datos del Tutor</CardDescription>
-      </div>
+      <TutorProfile />
     </>
   );
 }
