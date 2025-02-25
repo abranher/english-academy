@@ -4,33 +4,42 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/shadcn/ui/card";
+
 import { useQuery } from "@tanstack/react-query";
-import Link from "next/link";
 import { useParams } from "next/navigation";
 import { getUserTutor } from "../../_services/get-all-tutors";
 import {
-  ArrowUpRight,
-  AtSign,
+  BadgeAlert,
   BadgeCheck,
   BookmarkCheck,
   BookUser,
   CircleUser,
   Eye,
+  FileText,
   GraduationCap,
+  History,
   Mail,
+  Menu,
   School,
-  SquareUser,
-  User,
 } from "lucide-react";
 import { Button } from "@/components/shadcn/ui/button";
 import { Avatar } from "@nextui-org/react";
-import { assetImg } from "@/libs/asset";
+import { assetAttachments, assetImg } from "@/libs/asset";
 import { Badge } from "@/components/shadcn/ui/badge";
 import { Certification } from "@/types/models/Certification";
+import { TutorStatus } from "@/types/enums/TutorStatus";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/shadcn/ui/dropdown-menu";
 
 export function TutorProfile() {
   const { userId } = useParams();
@@ -41,28 +50,48 @@ export function TutorProfile() {
   });
 
   console.log(userTutor);
-  if (isPending)
-    return (
-      <>
-        <div>Cargando...</div>
-      </>
-    );
+
+  if (isPending) return <div>Cargando...</div>;
 
   return (
     <>
-      <div>
-        <CardTitle>Tutor</CardTitle>
-        <CardDescription>Datos del Tutor</CardDescription>
-      </div>
+      <section className="flex justify-between">
+        <article>
+          <CardTitle>Tutor</CardTitle>
+          <CardDescription>Datos del Tutor</CardDescription>
+        </article>
+
+        <article>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost">
+                <Menu />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56">
+              <DropdownMenuLabel>Estado del tutor</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuGroup>
+                <DropdownMenuItem>Aprobar</DropdownMenuItem>
+              </DropdownMenuGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </article>
+      </section>
 
       <section className="grid grid-cols-7 gap-4">
         <Card className="col-span-2">
           <CardHeader className="flex flex-col items-center p-6">
             <section className="w-full flex justify-end">
-              <Badge className="flex gap-1 items-center">
-                <BadgeCheck />
-                Verificado
-              </Badge>
+              {userTutor.tutor.status === TutorStatus.PENDING && (
+                <Badge
+                  className="flex gap-1 items-center"
+                  variant="destructive"
+                >
+                  <BadgeAlert />
+                  Sin verificar
+                </Badge>
+              )}
             </section>
 
             <section className="w-full flex flex-col items-center justify-center gap-2">
@@ -103,9 +132,21 @@ export function TutorProfile() {
                   De venezuela
                 </CardDescription>
               </article>
+
+              <article className="py-4">
+                <a
+                  href={assetAttachments(userTutor.tutor.cvUrl)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Button className="flex items-center gap-2" size="sm">
+                    <FileText />
+                    Currículum
+                  </Button>
+                </a>
+              </article>
             </section>
           </CardContent>
-          <CardFooter className="flex justify-end px-6"></CardFooter>
         </Card>
 
         <section className="col-span-5 gap-3 flex flex-col">
@@ -121,7 +162,6 @@ export function TutorProfile() {
                 <article>{userTutor.tutor.bio}</article>
               </section>
             </CardContent>
-            <CardFooter className="flex justify-end px-6"></CardFooter>
           </Card>
 
           <Card className="w-full">
@@ -183,9 +223,72 @@ export function TutorProfile() {
                           </div>
 
                           <section className="flex gap-3">
-                            <Button size="sm">
-                              <Eye />
-                            </Button>
+                            <a
+                              href={assetAttachments(certification.url)}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex items-center gap-2"
+                            >
+                              <Button size="sm">
+                                <Eye />
+                              </Button>
+                            </a>
+                          </section>
+                        </section>
+                      )
+                    )
+                  )}
+                </article>
+              </section>
+            </CardContent>
+          </Card>
+
+          <Card className="w-full">
+            <CardHeader>
+              <CardTitle className="flex gap-3 items-center">
+                Historial de Aprobaciones y Rechazos
+                <History />
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <section className="flex flex-col gap-5">
+                <article className="flex flex-col gap-3">
+                  {userTutor.tutor.certifications.length === 0 ? (
+                    <>
+                      <CardDescription>
+                        No registro certificaciones
+                      </CardDescription>
+                    </>
+                  ) : (
+                    userTutor.tutor?.certifications.map(
+                      (certification: Certification) => (
+                        <section
+                          key={certification.id}
+                          className="flex items-center justify-between rounded-lg border p-4 dark:border-zinc-700"
+                        >
+                          <div className="space-y-2">
+                            <h3 className="font-medium flex gap-1 items-center">
+                              <BookmarkCheck />
+                              Nombre: {certification.name}
+                            </h3>
+                            <p className="text-sm text-muted-foreground flex gap-1 items-center">
+                              <School />
+                              Organismo emisor:{" "}
+                              {certification.issuingOrganization}
+                            </p>
+                          </div>
+
+                          <section className="flex gap-3">
+                            <a
+                              href={assetAttachments(certification.url)}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex items-center gap-2"
+                            >
+                              <Button size="sm">
+                                <Eye />
+                              </Button>
+                            </a>
                           </section>
                         </section>
                       )
