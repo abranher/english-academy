@@ -2,6 +2,9 @@
 CREATE TYPE "Roles" AS ENUM ('ADMIN', 'STUDENT', 'TUTOR');
 
 -- CreateEnum
+CREATE TYPE "TutorStatus" AS ENUM ('NEW', 'PENDING', 'APPROVED', 'REJECTED');
+
+-- CreateEnum
 CREATE TYPE "PurchaseOrderStatus" AS ENUM ('UNVERIFIED', 'COMPLETED', 'CANCELED');
 
 -- CreateEnum
@@ -63,8 +66,10 @@ CREATE TABLE "Student" (
 CREATE TABLE "Tutor" (
     "id" TEXT NOT NULL,
     "bio" TEXT,
-    "approvedAt" TIMESTAMP(3),
     "cvUrl" TEXT,
+    "status" "TutorStatus" NOT NULL DEFAULT 'NEW',
+    "approvedAt" TIMESTAMP(3),
+    "rejectionHistory" JSONB,
     "userId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -75,11 +80,9 @@ CREATE TABLE "Tutor" (
 -- CreateTable
 CREATE TABLE "Certification" (
     "id" TEXT NOT NULL,
-    "title" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "issuingOrganization" TEXT NOT NULL,
     "url" TEXT NOT NULL,
-    "institution" TEXT NOT NULL,
-    "issueDate" TIMESTAMP(3) NOT NULL,
-    "language" TEXT NOT NULL,
     "tutorId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -315,6 +318,19 @@ CREATE TABLE "CourseReview" (
     CONSTRAINT "CourseReview_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "Notification" (
+    "id" TEXT NOT NULL,
+    "type" TEXT NOT NULL,
+    "data" JSONB NOT NULL,
+    "readAt" TIMESTAMP(3),
+    "userId" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Notification_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "User_username_key" ON "User"("username");
 
@@ -362,6 +378,9 @@ CREATE INDEX "Purchase_courseId_idx" ON "Purchase"("courseId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Purchase_studentId_courseId_key" ON "Purchase"("studentId", "courseId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Notification_userId_key" ON "Notification"("userId");
 
 -- AddForeignKey
 ALTER TABLE "User" ADD CONSTRAINT "User_countryId_fkey" FOREIGN KEY ("countryId") REFERENCES "Country"("id") ON DELETE SET NULL ON UPDATE CASCADE;
@@ -437,3 +456,6 @@ ALTER TABLE "ActivityLog" ADD CONSTRAINT "ActivityLog_userId_fkey" FOREIGN KEY (
 
 -- AddForeignKey
 ALTER TABLE "CourseReview" ADD CONSTRAINT "CourseReview_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "Course"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Notification" ADD CONSTRAINT "Notification_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

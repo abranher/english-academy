@@ -143,26 +143,9 @@ async function main() {
     },
   });
 
-  const pedro = await prisma.user.create({
-    data: {
-      name: 'Pedro',
-      lastName: 'Perez',
-      email: 'pedro@gmail.com',
-      username: 'pedro12',
-      password: await hash('pedro123', 10),
-      role: Roles.TUTOR,
-      tutor: {
-        create: {
-          bio: 'soy un profesor',
-        },
-      },
-    },
-  });
-
   console.log(
     { abran },
     { carlos },
-    { pedro },
     { levels: levelsResult },
     { prices: pricesResult },
   );
