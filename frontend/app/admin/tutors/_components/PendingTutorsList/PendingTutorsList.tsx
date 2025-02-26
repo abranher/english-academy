@@ -17,7 +17,7 @@ import { Avatar } from "@nextui-org/react";
 import { useQuery } from "@tanstack/react-query";
 import { Skeleton } from "@/components/shadcn/ui/skeleton";
 import { assetImg } from "@/libs/asset";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, FolderOpen } from "lucide-react";
 import { getByStatusTutors } from "../../_services";
 
 export function PendingTutorsList() {
@@ -37,11 +37,10 @@ export function PendingTutorsList() {
       <div className="flex items-center justify-between">
         <div className="space-y-1">
           <h2 className="text-2xl font-semibold tracking-tight">
-            Solicitudes de Nuevos Tutores
+            Listado de Tutores pendientes
           </h2>
           <p className="text-sm text-muted-foreground">
-            En esta sección encontrarás todas las solicitudes de nuevos tutores
-            que desean unirse a nuestra plataforma.
+            En esta sección encontrarás los tutores pendientes en la plataforma.
           </p>
         </div>
       </div>
@@ -90,9 +89,12 @@ export function PendingTutorsList() {
             </Card>
           ))
         ) : (
-          <div className="text-center text-zinc-700 dark:text-zinc-200 py-4">
-            No hay nuevos tutores actualmente.
-          </div>
+          <section className="w-full text-zinc-700 dark:text-zinc-200 py-4">
+            <h2 className="flex justify-center flex-col items-center">
+              <FolderOpen className="w-24 h-24" />
+              No hay tutores pendientes actualmente.
+            </h2>
+          </section>
         )}
       </div>
     </>

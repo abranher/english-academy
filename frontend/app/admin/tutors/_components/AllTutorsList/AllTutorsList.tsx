@@ -17,7 +17,7 @@ import { assetImg } from "@/libs/asset";
 import { Avatar } from "@nextui-org/react";
 import { useQuery } from "@tanstack/react-query";
 import { getAllTutors } from "../../_services";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, FolderOpen } from "lucide-react";
 
 export function AllTutorsList() {
   const {
@@ -89,9 +89,12 @@ export function AllTutorsList() {
             </Card>
           ))
         ) : (
-          <div className="text-center text-zinc-700 dark:text-zinc-200 py-4">
-            No hay registrados actualmente.
-          </div>
+          <section className="w-full text-zinc-700 dark:text-zinc-200 py-4">
+            <h2 className="flex justify-center flex-col items-center">
+              <FolderOpen className="w-24 h-24" />
+              No hay registrados actualmente.
+            </h2>
+          </section>
         )}
       </div>
     </>

@@ -18,7 +18,7 @@ import {
 } from "@/components/shadcn/ui/card";
 import { Separator } from "@/components/shadcn/ui/separator";
 import { Skeleton } from "@/components/shadcn/ui/skeleton";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, FolderOpen } from "lucide-react";
 
 export function RejectedTutorsList() {
   const {
@@ -90,9 +90,12 @@ export function RejectedTutorsList() {
             </Card>
           ))
         ) : (
-          <div className="text-center text-zinc-700 dark:text-zinc-200 py-4">
-            No hay tutores rechazados actualmente.
-          </div>
+          <section className="w-full text-zinc-700 dark:text-zinc-200 py-4">
+            <h2 className="flex justify-center flex-col items-center">
+              <FolderOpen className="w-24 h-24" />
+              No hay tutores rechazados actualmente.
+            </h2>
+          </section>
         )}
       </div>
     </>
