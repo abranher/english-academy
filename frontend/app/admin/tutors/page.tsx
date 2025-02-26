@@ -28,10 +28,8 @@ export default function TurorsAdminPage() {
         </BreadcrumbList>
       </Breadcrumb>
 
-      <div>
-        <CardTitle>Tutores</CardTitle>
-        <CardDescription>Listados de Tutores</CardDescription>
-      </div>
+      <CardTitle>Tutores</CardTitle>
+      <CardDescription>Listados de Tutores</CardDescription>
 
       <ContentPage />
     </>

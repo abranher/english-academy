@@ -10,17 +10,17 @@ export function StatusBadge({ status }: { status: TutorStatus }) {
     [TutorStatus.PENDING]: {
       icon: <BadgeAlert />,
       label: "Sin verificar",
-      variant: "destructive",
+      variant: "destructive" as const,
     },
     [TutorStatus.REJECTED]: {
       icon: <BadgeX />,
       label: "Rechazado",
-      variant: "secondary",
+      variant: "secondary" as const,
     },
     [TutorStatus.APPROVED]: {
       icon: <BadgeCheck />,
       label: "Aprobado",
-      variant: "default",
+      variant: "default" as const,
     },
   };
 

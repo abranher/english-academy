@@ -46,78 +46,84 @@ export function TutorProfile() {
     <>
       <section>
         <CardTitle>Tutor</CardTitle>
-        <CardDescription>Datos del Tutor</CardDescription>
+        <CardDescription>Detalle de Tutor</CardDescription>
       </section>
 
-      <section className="grid grid-cols-7 grid-rows-2 gap-4">
-        <Card className="col-span-2 row-span-1">
-          <CardHeader className="flex flex-col items-center p-6">
-            <section className="w-full flex justify-end">
-              <StatusBadge status={userTutor.tutor.status} />
-            </section>
+      <section className="grid grid-cols-1 lg:grid-cols-7 gap-4">
+        <section className="col-span-2">
+          <Card className="">
+            <CardHeader className="flex flex-col items-center p-6">
+              <section className="w-full flex justify-end">
+                <StatusBadge status={userTutor.tutor.status} />
+              </section>
 
-            <section className="w-full flex flex-col items-center justify-center gap-2">
-              <article className="w-full flex items-center">
-                <Avatar
-                  isBordered
-                  className="w-20 h-20"
-                  color="default"
-                  src={
-                    assetImg(userTutor.avatarUrl) ||
-                    "https://i.pravatar.cc/150?u=a042581f4e29026704d"
-                  }
-                />
-              </article>
-            </section>
-          </CardHeader>
-          <CardContent>
-            <section className="flex flex-col gap-3">
-              <article className="flex gap-2 flex-col">
-                <CardTitle className="flex gap-2 items-center">
-                  {`${userTutor.name} ${userTutor.lastName}`}
-                </CardTitle>
+              <section className="w-full flex flex-col items-center justify-center gap-2">
+                <article className="w-full flex items-center">
+                  <Avatar
+                    isBordered
+                    className="w-20 h-20"
+                    color="default"
+                    src={
+                      assetImg(userTutor.avatarUrl) ||
+                      "https://i.pravatar.cc/150?u=a042581f4e29026704d"
+                    }
+                  />
+                </article>
+              </section>
+            </CardHeader>
+            <CardContent>
+              <section className="flex flex-col gap-3">
+                <article className="flex gap-2 flex-col">
+                  <CardTitle className="flex gap-2 items-center">
+                    {`${userTutor.name} ${userTutor.lastName}`}
+                  </CardTitle>
 
-                <CardDescription className="flex gap-2 items-center">
-                  @{userTutor.username}
-                </CardDescription>
-              </article>
+                  <CardDescription className="flex gap-2 items-center">
+                    @{userTutor.username}
+                  </CardDescription>
+                </article>
 
-              <article>
-                <CardDescription className="flex gap-2 items-center">
-                  0 Cursos
-                </CardDescription>
-              </article>
+                <article>
+                  <CardDescription className="flex gap-2 items-center">
+                    0 Cursos
+                  </CardDescription>
+                </article>
 
-              <article>
-                <CardDescription className="flex gap-2 items-center">
-                  De venezuela
-                </CardDescription>
-              </article>
+                <article>
+                  <CardDescription className="flex gap-2 items-center">
+                    De venezuela
+                  </CardDescription>
+                </article>
 
-              <article>
-                <CardDescription className="flex gap-2 items-center">
-                  <CalendarDays className="w-4" />
-                  {formatDate(userTutor.createdAt)}
-                </CardDescription>
-              </article>
+                <article>
+                  <CardDescription className="flex gap-2 items-center">
+                    <CalendarDays className="w-4" />
+                    {formatDate(userTutor.createdAt)}
+                  </CardDescription>
+                </article>
 
-              {userTutor.tutor.cvUrl && (
-                <Button asChild className="w-full" aria-label="Ver currículum">
-                  <a
-                    href={assetAttachments(userTutor.tutor.cvUrl)}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                {userTutor.tutor.cvUrl && (
+                  <Button
+                    asChild
+                    className="w-full"
+                    aria-label="Ver currículum"
                   >
-                    <FileText className="mr-2 h-4 w-4" />
-                    currículum
-                  </a>
-                </Button>
-              )}
-            </section>
-          </CardContent>
-        </Card>
+                    <a
+                      href={assetAttachments(userTutor.tutor.cvUrl)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <FileText className="mr-2 h-4 w-4" />
+                      currículum
+                    </a>
+                  </Button>
+                )}
+              </section>
+            </CardContent>
+          </Card>
+        </section>
 
-        <section className="col-span-5 row-span-2 gap-3 flex flex-col">
+        <section className="col-span-5 gap-3 flex flex-col">
           <BiographyCard bio={userTutor.tutor.bio} />
 
           <AccountDetails
