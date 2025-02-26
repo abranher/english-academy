@@ -12,6 +12,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { truncateString } from "@/libs/format";
 
 import { Button } from "@/components/shadcn/ui/button";
 import {
@@ -40,16 +41,8 @@ import {
 import { RadioGroup, RadioGroupItem } from "@/components/shadcn/ui/radio-group";
 import { Textarea } from "@/components/shadcn/ui/textarea";
 
-import {
-  BookmarkCheck,
-  CalendarDays,
-  Eye,
-  History,
-  NotebookPen,
-  School,
-} from "lucide-react";
-import { truncateString } from "@/libs/format";
-import { StatusBadge } from "../StatusBadge";
+import { CalendarDays, Eye, History, NotebookPen } from "lucide-react";
+import { StatusBadge } from "@/components/tutors/StatusBadge";
 
 const FormSchema = z.object({
   comment: z

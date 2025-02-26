@@ -11,7 +11,6 @@ import { es } from "date-fns/locale";
 import { StatusManagementHistory } from "../StatusManagementHistory";
 import { BiographyCard } from "../BiographyCard";
 import { CertificationsCard } from "../CertificationsCard";
-import { StatusBadge } from "../StatusBadge";
 import { AccountDetails } from "../AccountDetails";
 
 import { Avatar } from "@nextui-org/react";
@@ -24,6 +23,7 @@ import {
   CardTitle,
 } from "@/components/shadcn/ui/card";
 import { CalendarDays, FileText } from "lucide-react";
+import { StatusBadge } from "@/components/tutors/StatusBadge";
 
 export function formatDate(isoDateString: string): string {
   const date = new Date(isoDateString);
