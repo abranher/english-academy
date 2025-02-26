@@ -68,7 +68,7 @@ model Tutor {
   id               String      @id @default(uuid())
   bio              String?
   cvUrl            String?
-  status           TutorStatus @default(PENDING)
+  status           TutorStatus @default(NEW)
   approvedAt       DateTime?
   rejectionHistory Json?
 
@@ -440,6 +440,7 @@ enum Roles {
 }
 
 enum TutorStatus {
+  NEW
   PENDING
   APPROVED
   REJECTED
