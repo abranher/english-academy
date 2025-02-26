@@ -1,4 +1,7 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+
+import { TutorStatus } from '@prisma/client';
+
 import { TutorsAdminService } from '../providers/tutors.admin.service';
 import { UpdateTutorStatusDto } from '../dto/update-tutor-status.dto';
 
@@ -11,19 +14,9 @@ export class TutorsAdminController {
     return this.tutorsAdminService.findAll();
   }
 
-  @Get('pending')
-  async findPending() {
-    return this.tutorsAdminService.findPending();
-  }
-
-  @Get('approved')
-  async findApproved() {
-    return this.tutorsAdminService.findApproved();
-  }
-
-  @Get('rejected')
-  async findRejected() {
-    return this.tutorsAdminService.findRejected();
+  @Get('status/:status')
+  async findByStatus(@Param('status') status: TutorStatus) {
+    return this.tutorsAdminService.findByStatus(status);
   }
 
   // Get tutor for description in dashboard

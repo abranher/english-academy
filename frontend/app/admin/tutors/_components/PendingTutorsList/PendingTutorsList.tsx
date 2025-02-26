@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 
+import { TutorStatus } from "@/types/enums";
+
 import { Button } from "@/components/shadcn/ui/button";
 import {
   Card,
@@ -10,14 +12,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/shadcn/ui/card";
-import { ScrollArea, ScrollBar } from "@/components/shadcn/ui/scroll-area";
 import { Separator } from "@/components/shadcn/ui/separator";
 import { Avatar } from "@nextui-org/react";
 import { useQuery } from "@tanstack/react-query";
-import { getPendingTutors } from "../../_services/get-pending-tutors";
 import { Skeleton } from "@/components/shadcn/ui/skeleton";
 import { assetImg } from "@/libs/asset";
 import { ArrowUpRight } from "lucide-react";
+import { getByStatusTutors } from "../../_services";
 
 export function PendingTutorsList() {
   const {
@@ -25,8 +26,8 @@ export function PendingTutorsList() {
     isPending,
     error,
   } = useQuery({
-    queryKey: ["tutors-admin-pending"],
-    queryFn: getPendingTutors,
+    queryKey: ["tutors-admin-list", TutorStatus.PENDING],
+    queryFn: () => getByStatusTutors(TutorStatus.PENDING),
   });
 
   if (error) return <div>Error: {error.message}</div>;

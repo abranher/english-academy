@@ -1,5 +1,13 @@
 "use client";
 
+import Link from "next/link";
+
+import { assetImg } from "@/libs/asset";
+import { TutorStatus } from "@/types/enums";
+import { useQuery } from "@tanstack/react-query";
+import { Avatar } from "@nextui-org/react";
+import { getByStatusTutors } from "../../_services";
+
 import { Button } from "@/components/shadcn/ui/button";
 import {
   Card,
@@ -8,14 +16,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/shadcn/ui/card";
-import { ScrollArea, ScrollBar } from "@/components/shadcn/ui/scroll-area";
 import { Separator } from "@/components/shadcn/ui/separator";
-import { Avatar } from "@nextui-org/react";
-import { useQuery } from "@tanstack/react-query";
 import { Skeleton } from "@/components/shadcn/ui/skeleton";
-import { assetImg } from "@/libs/asset";
-import Link from "next/link";
-import { getRejectedTutors } from "../../_services/get-rejected-tutors";
 import { ArrowUpRight } from "lucide-react";
 
 export function RejectedTutorsList() {
@@ -24,8 +26,8 @@ export function RejectedTutorsList() {
     isPending,
     error,
   } = useQuery({
-    queryKey: ["tutors-admin-pending"],
-    queryFn: getRejectedTutors,
+    queryKey: ["tutors-admin-list", TutorStatus.REJECTED],
+    queryFn: () => getByStatusTutors(TutorStatus.REJECTED),
   });
 
   if (error) return <div>Error: {error.message}</div>;

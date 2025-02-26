@@ -2,11 +2,9 @@
 
 import Link from "next/link";
 
-import { TutorStatus } from "@/types/enums";
-import { getByStatusTutors } from "../../_services";
 import { useQuery } from "@tanstack/react-query";
-import { Avatar } from "@nextui-org/react";
 import { assetImg } from "@/libs/asset";
+import { Avatar } from "@nextui-org/react";
 
 import { Button } from "@/components/shadcn/ui/button";
 import {
@@ -19,15 +17,17 @@ import {
 import { Separator } from "@/components/shadcn/ui/separator";
 import { Skeleton } from "@/components/shadcn/ui/skeleton";
 import { ArrowUpRight } from "lucide-react";
+import { getByStatusTutors } from "../../_services/get-by-status-tutors";
+import { TutorStatus } from "@/types/enums";
 
-export function ApprovedTutorsList() {
+export function NewTutorsList() {
   const {
     data: tutors,
     isPending,
     error,
   } = useQuery({
-    queryKey: ["tutors-admin-list", TutorStatus.APPROVED],
-    queryFn: () => getByStatusTutors(TutorStatus.APPROVED),
+    queryKey: ["tutors-admin-list", TutorStatus.NEW],
+    queryFn: () => getByStatusTutors(TutorStatus.NEW),
   });
 
   if (error) return <div>Error: {error.message}</div>;
@@ -37,11 +37,11 @@ export function ApprovedTutorsList() {
       <div className="flex items-center justify-between">
         <div className="space-y-1">
           <h2 className="text-2xl font-semibold tracking-tight">
-            Listado de Tutores Aprobados
+            Solicitudes de Nuevos Tutores
           </h2>
           <p className="text-sm text-muted-foreground">
-            En esta sección encontrarás todos los tutores aprobados en la
-            plataforma.
+            En esta sección encontrarás todas las solicitudes de nuevos tutores
+            que desean unirse a nuestra plataforma.
           </p>
         </div>
       </div>
@@ -53,7 +53,7 @@ export function ApprovedTutorsList() {
           [1, 2, 3].map((_, i) => (
             <Skeleton key={i} className="w-44 rounded-xl" />
           ))
-        ) : tutors && tutors.length > 0 ? ( // Check if tutors exist and have data
+        ) : tutors && tutors.length > 0 ? (
           tutors.map((userTutor: any) => (
             <Card key={userTutor.id}>
               <CardHeader className="flex flex-row items-center space-x-4 p-6">
@@ -91,7 +91,7 @@ export function ApprovedTutorsList() {
           ))
         ) : (
           <div className="text-center text-zinc-700 dark:text-zinc-200 py-4">
-            No hay tutores aprobados actualmente.
+            No hay nuevos tutores actualmente.
           </div>
         )}
       </div>

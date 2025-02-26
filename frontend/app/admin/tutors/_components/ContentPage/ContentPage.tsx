@@ -11,6 +11,7 @@ import { AllTutorsList } from "../AllTutorsList";
 import { PendingTutorsList } from "../PendingTutorsList";
 import { ApprovedTutorsList } from "../ApprovedTutorsList";
 import { RejectedTutorsList } from "../RejectedTutorsList";
+import { NewTutorsList } from "../NewTutorsList";
 
 export function ContentPage() {
   return (
@@ -19,7 +20,8 @@ export function ContentPage() {
         <div className="space-between flex items-center">
           <TabsList>
             <TabsTrigger value="ALL">Todos</TabsTrigger>
-            <TabsTrigger value="PENDING">Nuevos</TabsTrigger>
+            <TabsTrigger value="NEW">Nuevos</TabsTrigger>
+            <TabsTrigger value="PENDING">Pendientes</TabsTrigger>
             <TabsTrigger value="APPROVED">Aprobados</TabsTrigger>
             <TabsTrigger value="REJECTED">Rechazados</TabsTrigger>
           </TabsList>
@@ -27,6 +29,10 @@ export function ContentPage() {
 
         <TabsContent value="ALL" className="border-none p-0 outline-none">
           <AllTutorsList />
+        </TabsContent>
+
+        <TabsContent value="NEW" className="border-none p-0 outline-none">
+          <NewTutorsList />
         </TabsContent>
 
         <TabsContent value="PENDING" className="border-none p-0 outline-none">

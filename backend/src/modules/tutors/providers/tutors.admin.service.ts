@@ -30,46 +30,27 @@ export class TutorsAdminService {
     });
   }
 
-  async findPending() {
-    return this.prisma.user.findMany({
-      where: {
-        role: Roles.TUTOR,
-        tutor: {
-          status: TutorStatus.PENDING,
-        },
-      },
-      include: {
-        tutor: true,
-      },
-    });
-  }
-
-  async findApproved() {
-    return this.prisma.user.findMany({
-      where: {
-        role: Roles.TUTOR,
-        tutor: {
-          status: TutorStatus.APPROVED,
-        },
-      },
-      include: {
-        tutor: true,
-      },
-    });
-  }
-
-  async findRejected() {
-    return this.prisma.user.findMany({
-      where: {
-        role: Roles.TUTOR,
-        tutor: {
-          status: TutorStatus.REJECTED,
-        },
-      },
-      include: {
-        tutor: true,
-      },
-    });
+  async findByStatus(status: TutorStatus) {
+    if (status === TutorStatus.NEW)
+      return this.prisma.user.findMany({
+        where: { role: Roles.TUTOR, tutor: { status: TutorStatus.NEW } },
+        include: { tutor: true },
+      });
+    else if (status === TutorStatus.PENDING)
+      return this.prisma.user.findMany({
+        where: { role: Roles.TUTOR, tutor: { status: TutorStatus.PENDING } },
+        include: { tutor: true },
+      });
+    else if (status === TutorStatus.APPROVED)
+      return this.prisma.user.findMany({
+        where: { role: Roles.TUTOR, tutor: { status: TutorStatus.PENDING } },
+        include: { tutor: true },
+      });
+    else if (status === TutorStatus.REJECTED)
+      return this.prisma.user.findMany({
+        where: { role: Roles.TUTOR, tutor: { status: TutorStatus.PENDING } },
+        include: { tutor: true },
+      });
   }
 
   async findUserTutor(userId: string) {
