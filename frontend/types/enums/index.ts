@@ -1,3 +1,4 @@
+export { TutorStatus } from "./TutorStatus";
 export { CoursePlatformStatus } from "./CoursePlatformStatus";
 export { CourseReviewStatus } from "./CourseReviewStatus";
 export { PurchaseOrderStatus } from "./PurchaseOrderStatus";
