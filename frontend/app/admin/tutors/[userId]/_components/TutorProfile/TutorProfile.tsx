@@ -49,9 +49,9 @@ export function TutorProfile() {
         <CardDescription>Detalle de Tutor</CardDescription>
       </section>
 
-      <section className="grid grid-cols-1 lg:grid-cols-7 gap-4">
-        <section className="col-span-2">
-          <Card className="">
+      <section className="w-full grid grid-cols-1 lg:grid-cols-7 gap-4">
+        <section className="lg:col-span-2">
+          <Card className="w-full">
             <CardHeader className="flex flex-col items-center p-6">
               <section className="w-full flex justify-end">
                 <StatusBadge status={userTutor.tutor.status} />
@@ -123,7 +123,7 @@ export function TutorProfile() {
           </Card>
         </section>
 
-        <section className="col-span-5 gap-3 flex flex-col">
+        <section className="lg:col-span-5 gap-3 flex flex-col">
           <BiographyCard bio={userTutor.tutor.bio} />
 
           <AccountDetails

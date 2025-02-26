@@ -1,6 +1,6 @@
 "use client";
 
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useState } from "react";
 
 import axios from "@/config/axios";
@@ -9,10 +9,11 @@ import { AxiosError } from "axios";
 import { formatDate } from "@/libs/date";
 import { TutorStatus } from "@/types/enums/TutorStatus";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { truncateString } from "@/libs/format";
+import { FormSchema } from "./FormSchema";
 
 import { Button } from "@/components/shadcn/ui/button";
 import {
@@ -44,32 +45,15 @@ import { Textarea } from "@/components/shadcn/ui/textarea";
 import { CalendarDays, Eye, History, NotebookPen } from "lucide-react";
 import { StatusBadge } from "@/components/tutors/StatusBadge";
 
-const FormSchema = z.object({
-  comment: z
-    .string()
-    .min(10, {
-      message: "comment must be at least 10 characters.",
-    })
-    .max(160, {
-      message: "comment must not be longer than 30 characters.",
-    }),
-  status: z.enum(
-    [TutorStatus.PENDING, TutorStatus.APPROVED, TutorStatus.REJECTED],
-    {
-      required_error: "Debe seleccionar un estado.",
-    }
-  ),
-});
-
 export function StatusManagementHistory({
   rejectionHistory,
 }: {
   rejectionHistory: any[];
 }) {
+  const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
 
   const { userId } = useParams();
-  const router = useRouter();
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -82,7 +66,7 @@ export function StatusManagementHistory({
       if (response.status === 200 || response.status === 201) {
         const data = response.data;
         toast.success(data.message);
-        router.refresh();
+        queryClient.invalidateQueries({ queryKey: ["tutor-admin-profile"] });
         setOpen(false);
       }
     },
@@ -151,16 +135,9 @@ export function StatusManagementHistory({
                     </div>
 
                     <section className="flex gap-3">
-                      <a
-                        //href={assetAttachments(history.url)}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-2"
-                      >
-                        <Button size="sm">
-                          <Eye />
-                        </Button>
-                      </a>
+                      <Button size="sm">
+                        <Eye />
+                      </Button>
                     </section>
                   </section>
                 ))
@@ -191,14 +168,14 @@ export function StatusManagementHistory({
                             <FormLabel>Comentario</FormLabel>
                             <FormControl>
                               <Textarea
-                                placeholder="Tell us a little bit about yourself"
+                                placeholder="p.ej: Bienvenido..."
                                 className="resize-none"
                                 {...field}
                               />
                             </FormControl>
                             <FormDescription>
                               Deja un comentario para informar al tutor del por
-                              qué de tu decisión
+                              qué de tu decisión.
                             </FormDescription>
                             <FormMessage />
                           </FormItem>

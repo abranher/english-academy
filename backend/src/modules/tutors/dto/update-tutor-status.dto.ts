@@ -3,8 +3,8 @@ import { TutorStatus } from '@prisma/client';
 
 export class UpdateTutorStatusDto {
   @IsString()
-  @Length(10, 160, {
-    message: 'Comment must be between 10 and 160 characters.',
+  @Length(30, 160, {
+    message: 'Comment must be between 30 and 160 characters.',
   })
   comment: string;
 

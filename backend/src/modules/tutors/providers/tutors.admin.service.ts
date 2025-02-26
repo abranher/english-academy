@@ -75,22 +75,21 @@ export class TutorsAdminService {
       },
     ] as Prisma.JsonArray;
 
-    if (updateTutorStatusDto.status === TutorStatus.PENDING) {
+    if (updateTutorStatusDto.status === TutorStatus.PENDING)
       await this.prisma.tutor.update({
         where: { userId: user.id },
         data: { status: TutorStatus.PENDING, rejectionHistory: json },
       });
-    } else if (updateTutorStatusDto.status === TutorStatus.APPROVED) {
+    else if (updateTutorStatusDto.status === TutorStatus.APPROVED)
       await this.prisma.tutor.update({
         where: { userId: user.id },
         data: { status: TutorStatus.APPROVED, rejectionHistory: json },
       });
-    } else if (updateTutorStatusDto.status === TutorStatus.REJECTED) {
+    else if (updateTutorStatusDto.status === TutorStatus.REJECTED)
       await this.prisma.tutor.update({
         where: { userId: user.id },
         data: { status: TutorStatus.REJECTED, rejectionHistory: json },
       });
-    }
 
     return {
       message: 'Tutor actualizado.',
