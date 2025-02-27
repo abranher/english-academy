@@ -1,19 +1,20 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { useQuery } from "@tanstack/react-query";
 
+import { useQuery } from "@tanstack/react-query";
+import { Avatar } from "@nextui-org/react";
 import { getUserTutor } from "../../_services/get-all-tutors";
 import { assetAttachments, assetImg } from "@/libs/asset";
-import { format } from "date-fns";
-import { es } from "date-fns/locale";
+import { User } from "@/types/models/User";
+import { formatDateShort } from "@/libs/date";
 
 import { StatusManagementHistory } from "../StatusManagementHistory";
 import { BiographyCard } from "../BiographyCard";
 import { CertificationsCard } from "../CertificationsCard";
 import { AccountDetails } from "../AccountDetails";
+import { TutorProfileSkeleton } from "./TutorProfileSkeleton";
 
-import { Avatar } from "@nextui-org/react";
 import { Button } from "@/components/shadcn/ui/button";
 import {
   Card,
@@ -24,17 +25,10 @@ import {
 } from "@/components/shadcn/ui/card";
 import { CalendarDays, FileText } from "lucide-react";
 import { StatusBadge } from "@/components/tutors/StatusBadge";
-import { TutorProfileSkeleton } from "./TutorProfileSkeleton";
-
-export function formatDate(isoDateString: string): string {
-  const date = new Date(isoDateString);
-  return format(date, "'Se unió en ' MMMM 'de' yyyy", {
-    locale: es,
-  });
-}
+import Avvvatars from "avvvatars-react";
 
 export function TutorProfile() {
-  const { isPending, data: userTutor } = useQuery({
+  const { isPending, data: userTutor } = useQuery<User>({
     queryKey: ["tutor-admin-profile"],
     queryFn: () => getUserTutor(userId as string),
   });
@@ -42,6 +36,7 @@ export function TutorProfile() {
   const { userId } = useParams();
 
   if (isPending) return <TutorProfileSkeleton />;
+  if (!userTutor) return <div>No se pudo cargar la información del tutor.</div>;
 
   return (
     <>
@@ -55,20 +50,26 @@ export function TutorProfile() {
           <Card className="w-full">
             <CardHeader className="flex flex-col items-center p-6">
               <section className="w-full flex justify-end">
-                <StatusBadge status={userTutor.tutor.status} />
+                <StatusBadge status={userTutor.tutor!.status} />
               </section>
 
               <section className="w-full flex flex-col items-center justify-center gap-2">
                 <article className="w-full flex items-center">
-                  <Avatar
-                    isBordered
-                    className="w-20 h-20"
-                    color="default"
-                    src={
-                      assetImg(userTutor.avatarUrl) ||
-                      "https://i.pravatar.cc/150?u=a042581f4e29026704d"
-                    }
-                  />
+                  {userTutor.avatarUrl ? (
+                    <Avatar
+                      isBordered
+                      className="w-24 h-24"
+                      color="default"
+                      src={assetImg(userTutor.avatarUrl)}
+                    />
+                  ) : (
+                    <Avatar
+                      isBordered
+                      className="w-24 h-24"
+                      color="default"
+                      icon={<Avvvatars size={100} value={userTutor.email} />}
+                    />
+                  )}
                 </article>
               </section>
             </CardHeader>
@@ -99,18 +100,18 @@ export function TutorProfile() {
                 <article>
                   <CardDescription className="flex gap-2 items-center">
                     <CalendarDays className="w-4" />
-                    {formatDate(userTutor.createdAt)}
+                    {formatDateShort(userTutor.createdAt)}
                   </CardDescription>
                 </article>
 
-                {userTutor.tutor.cvUrl && (
+                {userTutor.tutor!.cvUrl && (
                   <Button
                     asChild
                     className="w-full"
                     aria-label="Ver currículum"
                   >
                     <a
-                      href={assetAttachments(userTutor.tutor.cvUrl)}
+                      href={assetAttachments(userTutor.tutor!.cvUrl)}
                       target="_blank"
                       rel="noopener noreferrer"
                     >
@@ -125,18 +126,13 @@ export function TutorProfile() {
         </section>
 
         <section className="lg:col-span-5 gap-3 flex flex-col">
-          <BiographyCard bio={userTutor.tutor.bio} />
-
-          <AccountDetails
-            email={userTutor.email}
-            birth={userTutor.birth}
-            country={userTutor.country}
+          <BiographyCard bio={userTutor.tutor!.bio} />
+          <AccountDetails email={userTutor.email} birth={userTutor.birth} />
+          <CertificationsCard
+            certifications={userTutor.tutor!.certifications}
           />
-
-          <CertificationsCard certifications={userTutor.tutor.certifications} />
-
           <StatusManagementHistory
-            rejectionHistory={userTutor.tutor.rejectionHistory}
+            statusHistory={userTutor.tutor!.statusHistory}
           />
         </section>
       </section>

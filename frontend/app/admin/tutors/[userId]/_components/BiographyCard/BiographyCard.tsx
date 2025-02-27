@@ -3,12 +3,13 @@
 import {
   Card,
   CardContent,
+  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/shadcn/ui/card";
 import { BookUser } from "lucide-react";
 
-export function BiographyCard({ bio }: { bio: string }) {
+export function BiographyCard({ bio }: { bio: string | null }) {
   return (
     <>
       <Card className="w-full">
@@ -20,7 +21,11 @@ export function BiographyCard({ bio }: { bio: string }) {
         </CardHeader>
         <CardContent>
           <section className="flex flex-col gap-5">
-            <article>{bio}</article>
+            {bio ? (
+              <article>{bio}</article>
+            ) : (
+              <CardDescription>Sin biografía</CardDescription>
+            )}
           </section>
         </CardContent>
       </Card>

@@ -13,6 +13,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { truncateString } from "@/libs/format";
+import { StatusHistory } from "@/types/models/Tutor";
 import { FormSchema } from "./FormSchema";
 
 import { Button } from "@/components/shadcn/ui/button";
@@ -46,9 +47,9 @@ import { CalendarDays, Eye, History, NotebookPen } from "lucide-react";
 import { StatusBadge } from "@/components/tutors/StatusBadge";
 
 export function StatusManagementHistory({
-  rejectionHistory,
+  statusHistory,
 }: {
-  rejectionHistory: any[];
+  statusHistory: StatusHistory[] | null;
 }) {
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
@@ -112,10 +113,10 @@ export function StatusManagementHistory({
         <CardContent>
           <section className="flex flex-col gap-5">
             <article className="flex flex-col gap-3">
-              {rejectionHistory === null ? (
+              {statusHistory === null ? (
                 <CardDescription>Aun no hay registros</CardDescription>
               ) : (
-                rejectionHistory.map((history: any) => (
+                statusHistory.map((history: StatusHistory) => (
                   <section
                     key={history.id}
                     className="flex items-center justify-between rounded-lg border p-4 dark:border-zinc-700"

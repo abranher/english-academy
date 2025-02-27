@@ -1,12 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Param,
-  NotFoundException,
-  InternalServerErrorException,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Param } from '@nestjs/common';
 import { TutorsService } from '../providers/tutors.service';
 import { CreateTutorDto } from '../dto/create-tutor.dto';
 import { VerifyTokenDto } from '../dto/verify-token.dto';

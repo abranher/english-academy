@@ -20,13 +20,8 @@ export class TutorsAdminService {
 
   async findAll() {
     return this.prisma.user.findMany({
-      where: {
-        role: Roles.TUTOR,
-        tutor: { isNot: null },
-      },
-      include: {
-        tutor: true,
-      },
+      where: { role: Roles.TUTOR, tutor: { isNot: null } },
+      include: { tutor: true },
     });
   }
 
@@ -68,7 +63,7 @@ export class TutorsAdminService {
 
     const currentTutor = await this.prisma.tutor.findUniqueOrThrow({
       where: { userId: user.id },
-      select: { rejectionHistory: true, status: true },
+      select: { statusHistory: true, status: true },
     });
 
     const newEntry = {
@@ -78,14 +73,12 @@ export class TutorsAdminService {
       createdAt: new Date(),
     };
 
-    const existingRejectionHistory = Array.isArray(
-      currentTutor.rejectionHistory,
-    )
-      ? currentTutor.rejectionHistory
+    const existingStatusHistory = Array.isArray(currentTutor.statusHistory)
+      ? currentTutor.statusHistory
       : [];
 
-    const updatedRejectionHistory = [
-      ...existingRejectionHistory,
+    const updatedStatusHistory = [
+      ...existingStatusHistory,
       newEntry,
     ] as Prisma.JsonArray;
 
@@ -93,7 +86,7 @@ export class TutorsAdminService {
       where: { userId: user.id },
       data: {
         status: updateTutorStatusDto.status,
-        rejectionHistory: updatedRejectionHistory,
+        statusHistory: updatedStatusHistory,
       },
     });
 

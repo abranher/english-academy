@@ -10,7 +10,7 @@ import {
 import { differenceInYears, format } from "date-fns";
 import { BadgeCheck, CalendarDays, CircleUser, Mail } from "lucide-react";
 
-function formatBirth(birth: any): string {
+function formatBirth(birth: Date | null): string {
   return birth
     ? `${format(new Date(birth), "dd/MM/yyyy")} 
     (${differenceInYears(new Date(), new Date(birth))} años)`
@@ -20,11 +20,9 @@ function formatBirth(birth: any): string {
 export function AccountDetails({
   email,
   birth,
-  country,
 }: {
   email: string;
-  birth: string;
-  country: any;
+  birth: Date | null;
 }) {
   return (
     <>
@@ -55,11 +53,11 @@ export function AccountDetails({
                 </Badge>
               </div>
 
-              {country && (
+              {/*country && (
                 <div className="flex items-center text-sm text-muted-foreground">
                   🌍 {country}
                 </div>
-              )}
+              )*/}
             </article>
           </section>
         </CardContent>
