@@ -24,6 +24,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/shadcn/ui/form";
+import { formatSize, truncateString } from "@/libs/format";
 
 type UploadStatus = "select" | "uploading" | "done" | "error";
 
@@ -49,7 +50,7 @@ export function AddCertification({ onSuccess }: AddCertificationProps) {
     }, []),
     accept: {
       "application/pdf": [".pdf"],
-      "image/*": [".png", ".jpg", ".jpeg", ".webp"],
+      "image/*": [".png", ".jpg", ".jpeg"],
     },
     maxSize: MAX_SIZE,
     onDropRejected: (fileRejections) => {
@@ -122,12 +123,6 @@ export function AddCertification({ onSuccess }: AddCertificationProps) {
     setUploadStatus("select");
   };
 
-  const formatSize = (size: number) => {
-    return `${(size / 1024).toFixed(2)} KB o ${(size / 1024 / 1024).toFixed(
-      2
-    )} MB`;
-  };
-
   const { isSubmitting, isValid } = form.formState;
 
   return (
@@ -194,7 +189,7 @@ export function AddCertification({ onSuccess }: AddCertificationProps) {
                       </p>
                     )}
                     <p className="text-xs font-medium mt-2">
-                      Formatos permitidos: PNG, JPG, WEBP, PDF (Máx. 5MB)
+                      Formatos permitidos: PNG, JPG, JPEG, PDF (Máx. 5MB)
                     </p>
                   </section>
                 )}
@@ -206,7 +201,7 @@ export function AddCertification({ onSuccess }: AddCertificationProps) {
                   <div className="text-xs col-span-6 flex flex-col justify-center gap-1">
                     <p>
                       {selectedFile
-                        ? selectedFile.name
+                        ? truncateString(selectedFile.name, "lg")
                         : "No hay ningún archivo seleccionado"}
                     </p>
                     <p>{selectedFile && formatSize(selectedFile.size)}</p>

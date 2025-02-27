@@ -66,7 +66,7 @@ export class TutorsAdminService {
   ) {
     const user = await this.findUserOrThrow(userId);
 
-    console.log(user.tutor.rejectionHistory);
+    console.log(typeof user.tutor.rejectionHistory);
 
     const json = [
       {

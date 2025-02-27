@@ -34,7 +34,7 @@ export function CV({ onSuccess }: CVProps) {
     }, []),
     accept: {
       "application/pdf": [".pdf"],
-      "image/*": [".png", ".jpg", ".jpeg", ".webp"],
+      "image/*": [".png", ".jpg", ".jpeg"],
     },
     maxSize: MAX_SIZE,
     onDropRejected: (fileRejections) => {
@@ -144,7 +144,7 @@ export function CV({ onSuccess }: CVProps) {
             <div className="text-xs col-span-6 flex flex-col justify-center gap-1">
               <p>
                 {selectedFile
-                  ? truncateString(selectedFile.name)
+                  ? truncateString(selectedFile.name, "lg")
                   : "No hay ningún archivo seleccionado"}
               </p>
               <p>{selectedFile && formatSize(selectedFile.size)}</p>

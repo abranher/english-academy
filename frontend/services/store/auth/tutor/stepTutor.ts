@@ -26,7 +26,7 @@ export const useStepTutorStore = create<StepTutorState>()(
       prevStep: () => set((state) => ({ step: state.step - 1 })),
       setStep: (newStep: number) => set({ step: newStep }),
       setUserId: (userId: string) => set({ userId }),
-      resetSteps: () => set({ userId: "", step: 1, open: false }),
+      resetSteps: () => set({ userId: "", step: 0, open: false }),
     }),
     {
       name: "step-signup-tutor",

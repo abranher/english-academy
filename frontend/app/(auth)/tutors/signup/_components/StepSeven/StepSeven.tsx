@@ -19,11 +19,6 @@ import { Button } from "@/components/shadcn/ui/button";
 import { AxiosError } from "axios";
 import { formatSize, truncateString } from "@/libs/format";
 import { Avatar } from "@nextui-org/react";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/shadcn/ui/popover";
 
 type UploadStatus = "select" | "uploading" | "done" | "error";
 
@@ -57,7 +52,7 @@ export function StepSeven({ onSuccess }: AvatarUploadProps) {
       setPreview(URL.createObjectURL(file));
     }, []),
     accept: {
-      "image/*": [".jpeg", ".png", ".webp"],
+      "image/*": [".png", ".jpg", ".jpeg"],
     },
     maxSize: MAX_SIZE,
     onDropRejected: (fileRejections) => {
@@ -195,7 +190,7 @@ export function StepSeven({ onSuccess }: AvatarUploadProps) {
                 <div className="text-xs col-span-4 flex flex-col justify-center gap-1">
                   <p>
                     {selectedFile
-                      ? truncateString(selectedFile.name)
+                      ? truncateString(selectedFile.name, "xs")
                       : "No hay ningún archivo seleccionado"}
                   </p>
                   <p>{selectedFile && formatSize(selectedFile.size)}</p>
