@@ -66,35 +66,37 @@ export class TutorsAdminService {
   ) {
     const user = await this.findUserOrThrow(userId);
 
-    console.log(typeof user.tutor.rejectionHistory);
+    const currentTutor = await this.prisma.tutor.findUniqueOrThrow({
+      where: { userId: user.id },
+      select: { rejectionHistory: true, status: true },
+    });
 
-    const json = [
-      {
-        id: crypto.randomUUID(),
-        comment: updateTutorStatusDto.comment,
-        previousStatus: user.tutor.status,
-        createdAt: Date(),
-      },
+    const newEntry = {
+      id: crypto.randomUUID(),
+      comment: updateTutorStatusDto.comment,
+      previousStatus: currentTutor.status,
+      createdAt: new Date(),
+    };
+
+    const existingRejectionHistory = Array.isArray(
+      currentTutor.rejectionHistory,
+    )
+      ? currentTutor.rejectionHistory
+      : [];
+
+    const updatedRejectionHistory = [
+      ...existingRejectionHistory,
+      newEntry,
     ] as Prisma.JsonArray;
 
-    if (updateTutorStatusDto.status === TutorStatus.PENDING)
-      await this.prisma.tutor.update({
-        where: { userId: user.id },
-        data: { status: TutorStatus.PENDING, rejectionHistory: json },
-      });
-    else if (updateTutorStatusDto.status === TutorStatus.APPROVED)
-      await this.prisma.tutor.update({
-        where: { userId: user.id },
-        data: { status: TutorStatus.APPROVED, rejectionHistory: json },
-      });
-    else if (updateTutorStatusDto.status === TutorStatus.REJECTED)
-      await this.prisma.tutor.update({
-        where: { userId: user.id },
-        data: { status: TutorStatus.REJECTED, rejectionHistory: json },
-      });
+    await this.prisma.tutor.update({
+      where: { userId: user.id },
+      data: {
+        status: updateTutorStatusDto.status,
+        rejectionHistory: updatedRejectionHistory,
+      },
+    });
 
-    return {
-      message: 'Tutor actualizado.',
-    };
+    return { message: 'Tutor actualizado.' };
   }
 }

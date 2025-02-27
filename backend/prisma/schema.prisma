@@ -65,12 +65,12 @@ model Student {
 }
 
 model Tutor {
-  id               String      @id @default(uuid())
-  bio              String?
-  cvUrl            String?
-  status           TutorStatus @default(NEW)
-  approvedAt       DateTime?
-  rejectionHistory Json?
+  id            String      @id @default(uuid())
+  bio           String?
+  cvUrl         String?
+  status        TutorStatus @default(NEW)
+  approvedAt    DateTime?
+  statusHistory Json?
 
   userId String @unique
   user   User   @relation(fields: [userId], references: [id])
