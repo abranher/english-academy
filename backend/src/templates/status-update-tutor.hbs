@@ -37,26 +37,54 @@
                     <td style="border-collapse:collapse!important;word-break:break-word;padding:24px 32px 30px">
                       <p style="font-size:16px;padding-bottom:10px;margin:0">
                         <strong>
-                          Hola!
+                          Hola {{ fullName }},
                         </strong>
                       </p>
 
                       <p style="font-size:16px;padding-bottom:10px;margin:0">
-                        Gracias por registrarte. Para completar el proceso de verificación de tu dirección email, por
-                        favor utiliza el siguiente código:
+                        Queremos informarte que el estado de tu solicitud como tutor ha sido actualizado. A
+                        continuación, te proporcionamos los detalles:
                       </p>
                       <br>
 
                       <p style="font-size:16px;padding-bottom:10px;margin:0">
                         <strong>
-                          {{ token }}
+                          Nuevo estado: {{ status }}
                         </strong>
                       </p>
                       <br>
 
                       <p style="font-size:16px;padding-bottom:10px;margin:0">
-                        Ingresa este código en la página de verificación para confirmar tu dirección email. Si no
-                        solicitaste esta verificación, puedes ignorar este mensaje.
+                        <strong>
+                          Comentario: {{ comment }}
+                        </strong>
+                      </p>
+                      <br>
+
+                      <p style="font-size:16px;padding-bottom:10px;margin:0">
+                        Aquí te explicamos lo que significa este cambio:
+                      </p>
+                      <ul style="font-size:16px;padding-bottom:10px;margin:0">
+                        <li>
+                          <strong>PENDIENTE:</strong>
+                          Puede que necesitemos información adicional.
+                          Te recomendamos que inicies sesión para modificar tu perfil.
+                        </li>
+                        <li>
+                          <strong>APROBADO:</strong>
+                          ¡Felicidades! Has sido aprobado como tutor. Inicia sesión para comenzar a utilizar la app.
+                        </li>
+                        <li>
+                          <strong>RECHAZADO:</strong>
+                          Lamentamos informarte que tu solicitud no ha sido aprobada. Tu cuenta será eliminada en 24
+                          horas.
+                        </li>
+                      </ul>
+                      <br>
+
+                      <p style="font-size:16px;padding-bottom:10px;margin:0">
+                        Si tienes alguna pregunta o necesitas más información, no dudes en contactarnos. Estamos aquí
+                        para ayudarte.
                       </p>
                     </td>
                   </tr>

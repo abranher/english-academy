@@ -1,0 +1,1 @@
+export { TutorStatusTraduction } from './TutorStatus';

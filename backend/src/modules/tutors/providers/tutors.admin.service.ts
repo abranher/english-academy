@@ -3,12 +3,14 @@ import { Prisma, Roles, TutorStatus } from '@prisma/client';
 
 import { PrismaService } from 'src/modules/prisma/providers/prisma.service';
 import { UsersService } from 'src/modules/users/providers/users.service';
+import { NotificationsService } from 'src/modules/notifications/providers/notifications.service';
 import { UpdateTutorStatusDto } from '../dto/update-tutor-status.dto';
 
 @Injectable()
 export class TutorsAdminService {
   constructor(
     private readonly prisma: PrismaService,
+    private readonly notifications: NotificationsService,
     private readonly userService: UsersService,
   ) {}
 
@@ -89,6 +91,13 @@ export class TutorsAdminService {
         statusHistory: updatedStatusHistory,
       },
     });
+
+    const userUpdated = await this.findUserOrThrow(userId);
+
+    this.notifications.statusUpdateTutor(
+      userUpdated,
+      updateTutorStatusDto.comment,
+    );
 
     return { message: 'Tutor actualizado.' };
   }
