@@ -1,0 +1,1 @@
+export { MiniTutorCard } from "./MiniTutorCard";

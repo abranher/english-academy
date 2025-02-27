@@ -23,7 +23,7 @@ model User {
   name            String?
   lastName        String?
   username        String?       @unique
-  email           String?       @unique
+  email           String        @unique
   emailVerifiedAt DateTime?
   password        String?
   birth           DateTime?

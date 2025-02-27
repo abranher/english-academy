@@ -1,5 +1,10 @@
 "use client";
+
 import Link from "next/link";
+
+import { signOut, useSession } from "next-auth/react";
+import Avvvatars from "avvvatars-react";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -30,16 +35,12 @@ import {
   Menu,
 } from "lucide-react";
 import { ThemeSwitcher } from "@/components/common/ThemeSwitcher";
-import Avvvatars from "avvvatars-react";
-import { signOut, useSession } from "next-auth/react";
 import { Avatar } from "@/components/shadcn/ui/avatar";
 import { Badge } from "@/components/shadcn/ui/badge";
 import DropdownItemLink from "@/components/common/DropdownItemLink";
 
 export default function HeaderAdmin() {
   const { data: session, status } = useSession();
-
-  console.log(session?.user);
 
   return (
     <>

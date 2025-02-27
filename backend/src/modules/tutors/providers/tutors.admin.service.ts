@@ -43,12 +43,12 @@ export class TutorsAdminService {
       });
     else if (status === TutorStatus.APPROVED)
       return this.prisma.user.findMany({
-        where: { role: Roles.TUTOR, tutor: { status: TutorStatus.PENDING } },
+        where: { role: Roles.TUTOR, tutor: { status: TutorStatus.APPROVED } },
         include: { tutor: true },
       });
     else if (status === TutorStatus.REJECTED)
       return this.prisma.user.findMany({
-        where: { role: Roles.TUTOR, tutor: { status: TutorStatus.PENDING } },
+        where: { role: Roles.TUTOR, tutor: { status: TutorStatus.REJECTED } },
         include: { tutor: true },
       });
   }

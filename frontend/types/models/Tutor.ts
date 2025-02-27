@@ -1,10 +1,20 @@
+import { TutorStatus } from "../enums";
+
+interface RejectionHistory {
+  id: string;
+  comment: string;
+  previousStatus: TutorStatus;
+  createdAt: Date;
+}
+
 export interface Tutor {
   id: string;
-  biography: string | null;
-  approvedAt: Date | null;
-  location: string | null;
-  curriculumUrl: string | null;
   userId: string;
+  bio: string | null;
+  cvUrl: string | null;
+  status: TutorStatus;
+  approvedAt: Date | null;
+  rejectionHistory: RejectionHistory[] | null;
   createdAt: Date;
   updatedAt: Date;
 }

@@ -1,24 +1,14 @@
 "use client";
 
-import Link from "next/link";
-
-import { assetImg } from "@/libs/asset";
 import { TutorStatus } from "@/types/enums";
 import { useQuery } from "@tanstack/react-query";
-import { Avatar } from "@nextui-org/react";
 import { getByStatusTutors } from "../../_services";
+import { User } from "@/types/models/User";
 
-import { Button } from "@/components/shadcn/ui/button";
-import {
-  Card,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/shadcn/ui/card";
 import { Separator } from "@/components/shadcn/ui/separator";
 import { Skeleton } from "@/components/shadcn/ui/skeleton";
-import { ArrowUpRight, FolderOpen } from "lucide-react";
+import { FolderOpen } from "lucide-react";
+import { MiniTutorCard } from "../MiniTutorCard";
 
 export function RejectedTutorsList() {
   const {
@@ -53,41 +43,9 @@ export function RejectedTutorsList() {
           [1, 2, 3].map((_, i) => (
             <Skeleton key={i} className="w-44 rounded-xl" />
           ))
-        ) : tutors && tutors.length > 0 ? ( // Check if tutors exist and have data
-          tutors.map((userTutor: any) => (
-            <Card key={userTutor.id}>
-              <CardHeader className="flex flex-row items-center space-x-4 p-6">
-                <section className="w-full flex flex-col items-center justify-center gap-3">
-                  <article className="w-full flex justify-center items-center">
-                    <Avatar
-                      isBordered
-                      className="w-24 h-24"
-                      color="default"
-                      src={
-                        assetImg(userTutor.avatarUrl) ||
-                        "https://i.pravatar.cc/150?u=a042581f4e29026704d"
-                      }
-                    />
-                  </article>
-                  <div className="w-full flex flex-col justify-center items-center">
-                    <CardTitle className="text-lg font-semibold">
-                      {userTutor.name || "Nombre no disponible"}
-                    </CardTitle>
-                    <CardDescription className="text-sm text-gray-500">
-                      @{userTutor.username}
-                    </CardDescription>
-                  </div>
-                </section>
-              </CardHeader>
-              <CardFooter className="flex justify-end px-6">
-                <Link href={`/admin/tutors/${userTutor.id}`}>
-                  <Button className="flex gap-3">
-                    Ver más
-                    <ArrowUpRight className="opacity-90 w-5" />
-                  </Button>
-                </Link>
-              </CardFooter>
-            </Card>
+        ) : tutors && tutors.length > 0 ? (
+          tutors.map((userTutor: User) => (
+            <MiniTutorCard key={userTutor.id} user={userTutor} />
           ))
         ) : (
           <section className="w-full text-zinc-700 dark:text-zinc-200 py-4">

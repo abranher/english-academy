@@ -1,0 +1,44 @@
+{
+  "editor.fontFamily": "'JetBrains Mono', 'monospace', monospace",
+  "breadcrumbs.enabled": false,
+  "editor.minimap.enabled": false,
+  "editor.overviewRulerBorder": false,
+  "editor.hideCursorInOverviewRuler": true,
+  "editor.guides.indentation": true,
+  "editor.glyphMargin": false,
+  "[javascriptreact]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "editor.tabSize": 2,
+  "editor.guides.bracketPairs": true,
+  "symbols.hidesExplorerArrows": false,
+  "git.confirmSync": false,
+  "[typescriptreact]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[css]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[html]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascript]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "git.enableSmartCommit": true,
+  "workbench.iconTheme": "material-icon-theme",
+  "[handlebars]": {
+      "editor.defaultFormatter": "vscode.html-language-features"
+  },
+  "editor.cursorBlinking": "expand",
+  "terminal.integrated.cursorBlinking": true,
+  "[vue]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
+}
