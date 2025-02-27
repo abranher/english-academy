@@ -66,6 +66,8 @@ export class TutorsAdminService {
   ) {
     const user = await this.findUserOrThrow(userId);
 
+    console.log(user.tutor.rejectionHistory);
+
     const json = [
       {
         id: crypto.randomUUID(),
