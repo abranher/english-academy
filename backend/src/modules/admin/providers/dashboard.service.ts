@@ -66,7 +66,6 @@ export class DashboardService {
 
     const usersByMonth = await this.getUsersByMonth(currentYear);
 
-    // Datos para el gráfico
     const chartData = Array.from({ length: 12 }, (_, i) => {
       const monthData = usersByMonth.find((m) => m.month === i + 1);
       return {
@@ -75,28 +74,39 @@ export class DashboardService {
       };
     });
 
-    return {
-      chartData,
-    };
+    return { chartData };
   }
 
   private async getUsersByMonth(year: number) {
-    return this.prisma.user
-      .groupBy({
-        by: ['createdAt'],
-        where: {
-          createdAt: {
-            gte: new Date(year, 0, 1),
-            lt: new Date(year + 1, 0, 1),
-          },
-        },
-        _count: true,
-      })
-      .then((res) =>
-        res.map((item) => ({
-          month: getMonth(item.createdAt) + 1, // getMonth devuelve 0-11, sumamos 1
-          count: item._count,
-        })),
-      );
+    const users = await this.prisma.user.findMany({
+      where: {
+        createdAt: { gte: new Date(year, 0, 1), lt: new Date(year + 1, 0, 1) },
+      },
+      select: { createdAt: true },
+    });
+
+    const grouped = users.reduce((acc, user) => {
+      const month = getMonth(user.createdAt) + 1;
+      acc[month] = (acc[month] || 0) + 1;
+      return acc;
+    }, {});
+
+    // esto devuelve algo asi: [ { month: 2, count: 6n } ]
+    /*console.log(
+      await this.prisma.$queryRaw`
+    SELECT 
+      EXTRACT(MONTH FROM "createdAt") as month,
+      COUNT(*) as count
+    FROM "User"
+    WHERE "createdAt" >= ${new Date(year, 0, 1)}
+      AND "createdAt" < ${new Date(year + 1, 0, 1)}
+    GROUP BY EXTRACT(MONTH FROM "createdAt")
+  `,
+    );*/
+
+    return Object.entries(grouped).map(([month, count]) => ({
+      month: Number(month),
+      count: count as number,
+    }));
   }
 }
