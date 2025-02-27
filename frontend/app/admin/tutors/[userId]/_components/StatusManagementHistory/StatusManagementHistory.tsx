@@ -26,7 +26,9 @@ import {
 } from "@/components/shadcn/ui/card";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -43,7 +45,7 @@ import {
 import { RadioGroup, RadioGroupItem } from "@/components/shadcn/ui/radio-group";
 import { Textarea } from "@/components/shadcn/ui/textarea";
 
-import { CalendarDays, Eye, History, NotebookPen } from "lucide-react";
+import { CalendarDays, Eye, History, NotebookPen, UserPen } from "lucide-react";
 import { StatusBadge } from "@/components/tutors/StatusBadge";
 
 export function StatusManagementHistory({
@@ -106,7 +108,7 @@ export function StatusManagementHistory({
       <Card className="w-full">
         <CardHeader>
           <CardTitle className="flex gap-3 items-center">
-            Historial de Aprobaciones y Rechazos
+            Historial de Status
             <History />
           </CardTitle>
         </CardHeader>
@@ -126,19 +128,66 @@ export function StatusManagementHistory({
                         <NotebookPen className="w-4" />
                         Comentario: {truncateString(history.comment)}
                       </h3>
-                      <p className="text-sm text-muted-foreground flex gap-1 items-center">
+                      <p className="text-sm flex gap-1 items-center">
                         <CalendarDays className="w-4" />
                         Fecha: {formatDate(history.createdAt)}
                       </p>
-                      <p className="text-sm text-muted-foreground flex gap-1 items-center">
+                      <p className="text-sm flex gap-1 items-center">
                         <StatusBadge status={history.previousStatus} />
                       </p>
                     </div>
 
                     <section className="flex gap-3">
-                      <Button size="sm">
-                        <Eye />
-                      </Button>
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <Button size="sm">
+                            <Eye />
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent className="sm:max-w-md">
+                          <DialogHeader>
+                            <CardTitle>Detalle</CardTitle>
+                          </DialogHeader>
+                          <section className="flex flex-col gap-3">
+                            <article className="flex flex-col gap-1">
+                              <DialogTitle className="flex gap-1 items-center">
+                                <NotebookPen className="w-4" />
+                                Comentario:
+                              </DialogTitle>
+                              <CardDescription>
+                                {history.comment}
+                              </CardDescription>
+                            </article>
+
+                            <article className="flex gap-2">
+                              <DialogTitle className="flex gap-1 items-center">
+                                <UserPen className="w-4" />
+                                Status previo:
+                              </DialogTitle>
+                              <div className="flex">
+                                <StatusBadge status={history.previousStatus} />
+                              </div>
+                            </article>
+
+                            <article className="flex flex-col gap-1">
+                              <DialogTitle className="flex gap-1 items-center">
+                                <CalendarDays className="w-4" />
+                                Fecha:
+                              </DialogTitle>
+                              <CardDescription>
+                                {formatDate(history.createdAt)}
+                              </CardDescription>
+                            </article>
+                          </section>
+                          <DialogFooter>
+                            <DialogClose asChild>
+                              <Button type="button" variant="secondary">
+                                Cerrar
+                              </Button>
+                            </DialogClose>
+                          </DialogFooter>
+                        </DialogContent>
+                      </Dialog>
                     </section>
                   </section>
                 ))
