@@ -38,19 +38,19 @@ export function AccountDetails({
         <CardContent>
           <section className="flex flex-col gap-5">
             <article className="flex flex-col gap-3">
-              <div className="flex gap-2 items-center">
-                <Mail />
+              <div className="flex gap-1 items-center">
+                <Mail className="w-4" />
                 {email}
-                <Badge className="flex gap-1 items-center">
-                  <BadgeCheck />
+                <Badge className="flex gap-1 items-center ml-1">
+                  <BadgeCheck className="w-4" />
                   Verificado
                 </Badge>
               </div>
-              <div className="flex gap-2 items-center">
-                <CalendarDays />
+              <div className="flex gap-1 items-center">
+                <CalendarDays className="w-4" />
                 {formatBirth(birth)}
-                <Badge className="flex gap-1 items-center">
-                  <BadgeCheck />
+                <Badge className="flex gap-1 items-center ml-1">
+                  <BadgeCheck className="w-4" />
                   Mayor de edad
                 </Badge>
               </div>

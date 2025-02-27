@@ -18,6 +18,7 @@ import { Avatar } from "@nextui-org/react";
 import { useQuery } from "@tanstack/react-query";
 import { getAllTutors } from "../../_services";
 import { ArrowUpRight, FolderOpen } from "lucide-react";
+import { StatusBadge } from "@/components/tutors/StatusBadge";
 
 export function AllTutorsList() {
   const {
@@ -55,7 +56,7 @@ export function AllTutorsList() {
         ) : tutors && tutors.length > 0 ? (
           tutors.map((userTutor: any) => (
             <Card key={userTutor.id}>
-              <CardHeader className="flex flex-row items-center space-x-4 p-6">
+              <CardHeader className="flex flex-row items-center p-4">
                 <section className="w-full flex flex-col items-center justify-center gap-3">
                   <article className="w-full flex justify-center items-center">
                     <Avatar
@@ -78,10 +79,11 @@ export function AllTutorsList() {
                   </div>
                 </section>
               </CardHeader>
-              <CardFooter className="flex justify-end px-6">
+              <CardFooter className="flex flex-col gap-3 px-6">
+                <StatusBadge status={userTutor.tutor.status} />
                 <Link href={`/admin/tutors/${userTutor.id}`}>
                   <Button className="flex gap-3">
-                    Ver más
+                    Ver mas
                     <ArrowUpRight className="opacity-90 w-5" />
                   </Button>
                 </Link>

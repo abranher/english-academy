@@ -24,6 +24,7 @@ import {
 } from "@/components/shadcn/ui/card";
 import { CalendarDays, FileText } from "lucide-react";
 import { StatusBadge } from "@/components/tutors/StatusBadge";
+import { TutorProfileSkeleton } from "./TutorProfileSkeleton";
 
 export function formatDate(isoDateString: string): string {
   const date = new Date(isoDateString);
@@ -40,7 +41,7 @@ export function TutorProfile() {
 
   const { userId } = useParams();
 
-  if (isPending) return <div>Cargando...</div>;
+  if (isPending) return <TutorProfileSkeleton />;
 
   return (
     <>

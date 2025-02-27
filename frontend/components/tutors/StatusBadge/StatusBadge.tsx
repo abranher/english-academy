@@ -8,22 +8,22 @@ import { BadgeAlert, BadgeCheck, BadgeInfo, BadgeX } from "lucide-react";
 export function StatusBadge({ status }: { status: TutorStatus }) {
   const statusConfig = {
     [TutorStatus.NEW]: {
-      icon: <BadgeInfo />,
+      icon: <BadgeInfo className="w-4" />,
       label: "Nuevo",
       variant: "info" as const,
     },
     [TutorStatus.PENDING]: {
-      icon: <BadgeAlert />,
+      icon: <BadgeAlert className="w-4" />,
       label: "Pendiente",
       variant: "warning" as const,
     },
     [TutorStatus.REJECTED]: {
-      icon: <BadgeX />,
+      icon: <BadgeX className="w-4" />,
       label: "Rechazado",
       variant: "destructive" as const,
     },
     [TutorStatus.APPROVED]: {
-      icon: <BadgeCheck />,
+      icon: <BadgeCheck className="w-4" />,
       label: "Aprobado",
       variant: "default" as const,
     },
