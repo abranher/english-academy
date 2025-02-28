@@ -65,21 +65,33 @@ model Student {
 }
 
 model Tutor {
-  id            String      @id @default(uuid())
-  bio           String?
-  cvUrl         String?
-  status        TutorStatus @default(NEW)
-  approvedAt    DateTime?
-  statusHistory Json?
+  id         String      @id @default(uuid())
+  bio        String?
+  cvUrl      String?
+  status     TutorStatus @default(NEW)
+  approvedAt DateTime?
 
   userId String @unique
   user   User   @relation(fields: [userId], references: [id])
 
   certifications Certification[]
+  statusHistory  StatusHistory[]
   courses        Course[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model StatusHistory {
+  id             String      @id @default(uuid())
+  comment        String?
+  previousStatus TutorStatus
+  resubmittedAt  DateTime?
+
+  tutorId String
+  tutor   Tutor  @relation(fields: [tutorId], references: [id])
+
+  createdAt DateTime @default(now())
 }
 
 model Certification {
@@ -442,6 +454,7 @@ enum Roles {
 enum TutorStatus {
   NEW
   PENDING
+  RESUBMITTED
   APPROVED
   REJECTED
 }
