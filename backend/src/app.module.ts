@@ -27,6 +27,7 @@ import { MailModule } from './modules/mail/mail.module';
 import { NotificationsModule } from './modules/notifications/notifications.module';
 import { CertificationsModule } from './modules/certifications/certifications.module';
 import { AdminModule } from './modules/admin/admin.module';
+import { TutorStatusHistoryModule } from './modules/tutor-status-history/tutor-status-history.module';
 
 @Module({
   imports: [
@@ -59,6 +60,7 @@ import { AdminModule } from './modules/admin/admin.module';
     NotificationsModule,
     CertificationsModule,
     AdminModule,
+    TutorStatusHistoryModule,
   ],
 })
 export class AppModule {}
