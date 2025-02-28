@@ -9,8 +9,8 @@ export interface Tutor {
   cvUrl: string | null;
   status: TutorStatus;
   approvedAt: Date | null;
-  tutorStatusHistory: TutorStatusHistory[] | null;
-  certifications: Certification[] | null;
+  tutorStatusHistory: TutorStatusHistory[] | [];
+  certifications: Certification[] | [];
   createdAt: Date;
   updatedAt: Date;
 }

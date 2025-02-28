@@ -51,7 +51,7 @@ import { TutorStatusHistory } from "@/types/models/TutorStatusHistory";
 export function StatusManagementHistory({
   tutorStatusHistory,
 }: {
-  tutorStatusHistory: TutorStatusHistory[] | null;
+  tutorStatusHistory: TutorStatusHistory[] | [];
 }) {
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
@@ -115,7 +115,7 @@ export function StatusManagementHistory({
         <CardContent>
           <section className="flex flex-col gap-5">
             <article className="flex flex-col gap-3">
-              {tutorStatusHistory === null ? (
+              {tutorStatusHistory.length === 0 ? (
                 <CardDescription>Aun no hay registros</CardDescription>
               ) : (
                 tutorStatusHistory.map((history: TutorStatusHistory) => (
