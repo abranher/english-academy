@@ -13,7 +13,6 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { truncateString } from "@/libs/format";
-import { StatusHistory } from "@/types/models/Tutor";
 import { FormSchema } from "./FormSchema";
 
 import { Button } from "@/components/shadcn/ui/button";
@@ -47,11 +46,12 @@ import { Textarea } from "@/components/shadcn/ui/textarea";
 
 import { CalendarDays, Eye, History, NotebookPen, UserPen } from "lucide-react";
 import { StatusBadge } from "@/components/tutors/StatusBadge";
+import { TutorStatusHistory } from "@/types/models/TutorStatusHistory";
 
 export function StatusManagementHistory({
-  statusHistory,
+  tutorStatusHistory,
 }: {
-  statusHistory: StatusHistory[] | null;
+  tutorStatusHistory: TutorStatusHistory[] | null;
 }) {
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
@@ -64,7 +64,7 @@ export function StatusManagementHistory({
 
   const createMutation = useMutation({
     mutationFn: (user: { comment: string; status: string }) =>
-      axios.post(`/api/admin/tutors/user/${userId}/manage-status`, user),
+      axios.post(`/api/admin/tutor-status-history/user/${userId}`, user),
     onSuccess: (response) => {
       if (response.status === 200 || response.status === 201) {
         const data = response.data;
@@ -115,10 +115,10 @@ export function StatusManagementHistory({
         <CardContent>
           <section className="flex flex-col gap-5">
             <article className="flex flex-col gap-3">
-              {statusHistory === null ? (
+              {tutorStatusHistory === null ? (
                 <CardDescription>Aun no hay registros</CardDescription>
               ) : (
-                statusHistory.map((history: StatusHistory) => (
+                tutorStatusHistory.map((history: TutorStatusHistory) => (
                   <section
                     key={history.id}
                     className="flex items-center justify-between rounded-lg border p-4 dark:border-zinc-700"

@@ -1,12 +1,6 @@
 import { TutorStatus } from "../enums";
 import { Certification } from "./Certification";
-
-export interface StatusHistory {
-  id: string;
-  comment: string;
-  previousStatus: TutorStatus;
-  createdAt: Date;
-}
+import { TutorStatusHistory } from "./TutorStatusHistory";
 
 export interface Tutor {
   id: string;
@@ -15,7 +9,7 @@ export interface Tutor {
   cvUrl: string | null;
   status: TutorStatus;
   approvedAt: Date | null;
-  statusHistory: StatusHistory[] | null;
+  tutorStatusHistory: TutorStatusHistory[] | null;
   certifications: Certification[] | null;
   createdAt: Date;
   updatedAt: Date;

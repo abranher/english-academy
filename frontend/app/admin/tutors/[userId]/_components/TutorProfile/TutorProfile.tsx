@@ -132,7 +132,7 @@ export function TutorProfile() {
             certifications={userTutor.tutor!.certifications}
           />
           <StatusManagementHistory
-            statusHistory={userTutor.tutor!.statusHistory}
+            tutorStatusHistory={userTutor.tutor!.tutorStatusHistory}
           />
         </section>
       </section>

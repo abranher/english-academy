@@ -84,7 +84,7 @@ model Tutor {
 
 model TutorStatusHistory {
   id             String      @id @default(uuid())
-  comment        String?
+  comment        String
   previousStatus TutorStatus
   resubmittedAt  DateTime?
 

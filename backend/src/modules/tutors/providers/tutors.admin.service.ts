@@ -40,7 +40,9 @@ export class TutorsAdminService {
   async findUserTutor(userId: string) {
     return await this.prisma.user.findUnique({
       where: { id: userId },
-      include: { tutor: { include: { certifications: true } } },
+      include: {
+        tutor: { include: { certifications: true, tutorStatusHistory: true } },
+      },
     });
   }
 }
