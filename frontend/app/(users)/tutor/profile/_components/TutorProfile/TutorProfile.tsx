@@ -1,7 +1,5 @@
 "use client";
 
-import { useParams } from "next/navigation";
-
 import { useQuery } from "@tanstack/react-query";
 import { Avatar } from "@nextui-org/react";
 import { getUserTutor } from "../../_services/get-user-tutor";
@@ -27,22 +25,23 @@ import { CalendarDays, FileText } from "lucide-react";
 import { StatusBadge } from "@/components/tutors/StatusBadge";
 import Avvvatars from "avvvatars-react";
 
-export function TutorProfile() {
+export function TutorProfile({ userId }: { userId: string }) {
   const { isPending, data: userTutor } = useQuery<User>({
-    queryKey: ["tutor-admin-profile"],
+    queryKey: ["tutor-user-profile"],
     queryFn: () => getUserTutor(userId as string),
   });
 
-  const { userId } = useParams();
-
   if (isPending) return <TutorProfileSkeleton />;
-  if (!userTutor) return <div>No se pudo cargar la información del tutor.</div>;
+  if (!userTutor) return <div>No se pudo cargar la información.</div>;
 
   return (
     <>
       <section className="flex flex-col gap-1">
-        <CardTitle>Tutor</CardTitle>
-        <CardDescription>Detalle de Tutor</CardDescription>
+        <CardTitle>Perfil de usuario</CardTitle>
+        <CardDescription>
+          Accede a tu información personal, actualiza tus datos y gestiona tus
+          preferencias.
+        </CardDescription>
       </section>
 
       <section className="w-full grid grid-cols-1 lg:grid-cols-7 gap-4">

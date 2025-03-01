@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Roles, TutorStatus } from '@prisma/client';
 
 import { PrismaService } from 'src/modules/prisma/providers/prisma.service';
@@ -38,11 +38,15 @@ export class TutorsAdminService {
   }
 
   async findUserTutor(userId: string) {
-    return await this.prisma.user.findUnique({
+    const tutorUser = await this.prisma.user.findUnique({
       where: { id: userId },
       include: {
         tutor: { include: { certifications: true, tutorStatusHistory: true } },
       },
     });
+
+    if (!tutorUser) throw new NotFoundException('Usuario no encontrado.');
+
+    return tutorUser;
   }
 }

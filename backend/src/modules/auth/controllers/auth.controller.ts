@@ -4,16 +4,18 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  Param,
   Post,
   Request,
   UseGuards,
 } from '@nestjs/common';
-import { AuthGuard } from '../guards/auth.guard';
+
 import { CreateUserDto } from 'src/modules/users/dto/create-user.dto';
+import { UsersService } from 'src/modules/users/providers/users.service';
+import { AuthService } from '../providers/auth.service';
+import { AuthGuard } from '../guards/auth.guard';
 import { SignInDto } from '../dto/auth.dto';
 import { RefreshJwtGuard } from '../guards/refresh.guard';
-import { AuthService } from '../providers/auth.service';
-import { UsersService } from 'src/modules/users/providers/users.service';
 
 @Controller('auth')
 export class AuthController {
@@ -45,5 +47,10 @@ export class AuthController {
   @Get('profile')
   getProfile(@Request() req) {
     return req.user;
+  }
+
+  @Get('user/:userId/tutor/profile')
+  getTutorProfile(@Param('userId') userId: string) {
+    return this.authService.getTutorProfile(userId);
   }
 }

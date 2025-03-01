@@ -8,6 +8,7 @@ import Avvvatars from "avvvatars-react";
 
 import { Button } from "@/components/shadcn/ui/button";
 import {
+  CircleUser,
   CreditCard,
   LogOut,
   Mail,
@@ -62,38 +63,38 @@ export function DropdownAuth() {
                 />
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56" align="end" forceMount>
-                <div className="flex flex-col items-center p-6">
+                <section className="flex flex-col items-center p-4">
                   <Avatar
                     isBordered
                     className="h-24 w-24"
                     color="default"
                     icon={<Avvvatars size={100} value={session.user.email} />}
                   />
-                  <p className="pt-2 text-lg font-semibold">
+                  <h2 className="pt-2 text-lg font-semibold">
                     {session.user.name}
-                  </p>
-                  <p className="text-sm text-gray-600">{session.user.email}</p>
-                  <div className="mt-5">
-                    <Link
-                      href="#"
-                      className="border border-zinc-400 dark:border-zinc-800 rounded-full py-2 px-4 text-xs font-semibold text-gray-700 dark:text-zinc-50"
-                    >
-                      Administra tu cuenta
-                    </Link>
-                  </div>
-                </div>
+                  </h2>
+                  <h2 className="text-sm text-gray-600">
+                    {session.user.email}
+                  </h2>
+                </section>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
+                  <DropdownMenuItem asChild>
+                    <Link href="/tutor/profile">
+                      <CircleUser className="mr-2 h-4 w-4" />
+                      Perfil
+                    </Link>
+                  </DropdownMenuItem>
                   <DropdownMenuItem>
                     <CreditCard className="mr-2 h-4 w-4" />
                     Facturación
                   </DropdownMenuItem>
-                  <Link href="/student/settings">
-                    <DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/student/settings">
                       <Settings className="mr-2 h-4 w-4" />
                       Configuración
-                    </DropdownMenuItem>
-                  </Link>
+                    </Link>
+                  </DropdownMenuItem>
                 </DropdownMenuGroup>
 
                 <DropdownMenuSeparator />

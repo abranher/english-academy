@@ -1,18 +1,26 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
+
 import { JwtService } from '@nestjs/jwt';
-import { compare } from 'bcrypt';
-import { UsersService } from 'src/modules/users/providers/users.service';
-import { SignInDto } from '../dto/auth.dto';
 import { ConfigService } from '@nestjs/config';
+import { compare } from 'bcrypt';
+
+import { UsersService } from 'src/modules/users/providers/users.service';
+import { PrismaService } from 'src/modules/prisma/providers/prisma.service';
+import { SignInDto } from '../dto/auth.dto';
 
 const EXPIRE_TIME = 20 * 1000;
 
 @Injectable()
 export class AuthService {
   constructor(
-    private usersService: UsersService,
-    private jwtService: JwtService,
-    private configService: ConfigService,
+    private readonly usersService: UsersService,
+    private readonly jwtService: JwtService,
+    private readonly configService: ConfigService,
+    private readonly prisma: PrismaService,
   ) {}
 
   async validateUser(signInDto: SignInDto) {
@@ -68,5 +76,18 @@ export class AuthService {
       }),
       expiresIn: new Date().setTime(new Date().getTime() + EXPIRE_TIME),
     };
+  }
+
+  async getTutorProfile(userId: string) {
+    const tutorUser = await this.prisma.user.findUnique({
+      where: { id: userId },
+      include: {
+        tutor: { include: { certifications: true, tutorStatusHistory: true } },
+      },
+    });
+
+    if (!tutorUser) throw new NotFoundException('Usuario no encontrado');
+
+    return tutorUser;
   }
 }

@@ -4,20 +4,18 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
+
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+
 import { PrismaService } from 'src/modules/prisma/providers/prisma.service';
 import { CreateCertificationDto } from '../dto/create-certification.dto';
-import { TutorsService } from 'src/modules/tutors/providers/tutors.service';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
 @Injectable()
 export class CertificationsService {
-  constructor(
-    private readonly prisma: PrismaService,
-    private readonly tutorService: TutorsService,
-  ) {}
+  constructor(private readonly prisma: PrismaService) {}
 
   private async findTutorOrThrow(userId: string) {
-    const tutor = await this.tutorService.findUserById(userId);
+    const tutor = await this.prisma.tutor.findUnique({ where: { userId } });
     if (!tutor) throw new NotFoundException('Tutor no encontrado');
     return tutor;
   }

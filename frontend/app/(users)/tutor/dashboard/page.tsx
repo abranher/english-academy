@@ -14,7 +14,7 @@ import {
   BreadcrumbPage,
 } from "@/components/shadcn/ui/breadcrumb";
 
-export default function TutorHomePage() {
+export default function TutorDashboardPage() {
   return (
     <>
       <Breadcrumb>
@@ -25,7 +25,7 @@ export default function TutorHomePage() {
         </BreadcrumbList>
       </Breadcrumb>
 
-      <section>
+      <section className="flex flex-col gap-1">
         <CardTitle>Dashboard</CardTitle>
         <CardDescription>
           Visualiza analíticas y gráficas con información importante sobre tus

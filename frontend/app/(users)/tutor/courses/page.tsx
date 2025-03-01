@@ -23,7 +23,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/shadcn/ui/breadcrumb";
 
-export default async function TutorHomePage() {
+export default async function TutorCoursesPage() {
   const session = await auth();
 
   const { data: courses } = await axios.get(
@@ -46,7 +46,7 @@ export default async function TutorHomePage() {
         </BreadcrumbList>
       </Breadcrumb>
 
-      <section>
+      <section className="flex flex-col gap-1">
         <CardTitle>Tus cursos</CardTitle>
         <CardDescription>Listado de todos tus cursos.</CardDescription>
       </section>

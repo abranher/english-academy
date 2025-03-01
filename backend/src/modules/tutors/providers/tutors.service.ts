@@ -177,13 +177,11 @@ export class TutorsService {
 
   async findOne(userId: string) {
     const tutorUser = await this.prisma.user.findUnique({
-      where: {
-        id: userId,
-      },
-      include: {
-        tutor: true,
-      },
+      where: { id: userId },
+      include: { tutor: true },
     });
+
+    if (!tutorUser) throw new NotFoundException('Usuario no encontrado');
 
     return tutorUser;
   }
@@ -211,9 +209,5 @@ export class TutorsService {
         'Error al obtener datos del tutor',
       );
     }
-  }
-
-  async findUserById(userId: string) {
-    return await this.prisma.tutor.findUnique({ where: { userId } });
   }
 }
