@@ -7,7 +7,6 @@ import axios from "@/config/axios";
 import { z } from "zod";
 import { AxiosError } from "axios";
 import { formatDate } from "@/libs/date";
-import { TutorStatus } from "@/types/enums/TutorStatus";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
@@ -32,17 +31,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/shadcn/ui/dialog";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/shadcn/ui/form";
-import { RadioGroup, RadioGroupItem } from "@/components/shadcn/ui/radio-group";
-import { Textarea } from "@/components/shadcn/ui/textarea";
 
 import { CalendarDays, Eye, History, NotebookPen, UserPen } from "lucide-react";
 import { StatusBadge } from "@/components/tutors/StatusBadge";
@@ -193,108 +181,6 @@ export function StatusManagementHistory({
                 ))
               )}
             </article>
-          </section>
-
-          <section className="w-full flex justify-end gap-3 pt-3">
-            <Dialog open={open} onOpenChange={setOpen}>
-              <DialogTrigger asChild>
-                <Button variant="outline">Gestionar</Button>
-              </DialogTrigger>
-              <DialogContent className="sm:max-w-[425px]">
-                <DialogHeader>
-                  <DialogTitle>Gestionar estado de tutor</DialogTitle>
-                </DialogHeader>
-                <section>
-                  <Form {...form}>
-                    <form
-                      className="flex flex-col gap-3"
-                      onSubmit={form.handleSubmit(onSubmit)}
-                    >
-                      <FormField
-                        control={form.control}
-                        name="comment"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Comentario</FormLabel>
-                            <FormControl>
-                              <Textarea
-                                placeholder="p.ej: Bienvenido..."
-                                className="resize-none"
-                                {...field}
-                              />
-                            </FormControl>
-                            <FormDescription>
-                              Deja un comentario para informar al tutor del por
-                              qué de tu decisión.
-                            </FormDescription>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-
-                      <FormField
-                        control={form.control}
-                        name="status"
-                        render={({ field }) => (
-                          <FormItem className="space-y-3">
-                            <FormLabel>Estado a cambiar</FormLabel>
-                            <FormControl>
-                              <RadioGroup
-                                onValueChange={field.onChange}
-                                defaultValue={field.value}
-                                className="flex flex-col space-y-1"
-                              >
-                                <FormItem className="flex items-center space-x-3 space-y-0">
-                                  <FormControl>
-                                    <RadioGroupItem
-                                      value={TutorStatus.PENDING}
-                                    />
-                                  </FormControl>
-                                  <FormLabel className="font-normal">
-                                    PENDIENTE
-                                  </FormLabel>
-                                </FormItem>
-
-                                <FormItem className="flex items-center space-x-3 space-y-0">
-                                  <FormControl>
-                                    <RadioGroupItem
-                                      value={TutorStatus.APPROVED}
-                                    />
-                                  </FormControl>
-                                  <FormLabel className="font-normal">
-                                    APROBADO
-                                  </FormLabel>
-                                </FormItem>
-
-                                <FormItem className="flex items-center space-x-3 space-y-0">
-                                  <FormControl>
-                                    <RadioGroupItem
-                                      value={TutorStatus.REJECTED}
-                                    />
-                                  </FormControl>
-                                  <FormLabel className="font-normal">
-                                    RECHAZADO
-                                  </FormLabel>
-                                </FormItem>
-                              </RadioGroup>
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <section className="flex w-full justify-end mt-4">
-                        <Button
-                          disabled={!isValid || isSubmitting}
-                          type="submit"
-                        >
-                          Confirmar
-                        </Button>
-                      </section>
-                    </form>
-                  </Form>
-                </section>
-              </DialogContent>
-            </Dialog>
           </section>
         </CardContent>
       </Card>
