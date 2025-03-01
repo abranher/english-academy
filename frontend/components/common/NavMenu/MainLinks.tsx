@@ -1,15 +1,17 @@
 import NextLink from "next/link";
+import { usePathname } from "next/navigation";
 
 import { useSession } from "next-auth/react";
 import { NavbarContent, Link, NavbarItem } from "@nextui-org/react";
+import { Roles } from "@/types/enums";
 
 import { AcmeLogo } from "@/components/icons/AcmeLogo";
-import { Roles } from "@/types/enums";
 
 export function MainLinks() {
   const { data: session, status } = useSession();
+  const pathname = usePathname();
 
-  console.log(session?.user.role);
+  const isActive = (href: string) => pathname === href;
 
   return (
     <>
@@ -24,7 +26,10 @@ export function MainLinks() {
           <>
             {session.user.role === Roles.TUTOR && (
               <>
-                <NavbarItem className="ml-3" isActive>
+                <NavbarItem
+                  className="ml-3"
+                  isActive={isActive("/tutor/dashboard")}
+                >
                   <Link
                     as={NextLink}
                     color="foreground"
@@ -33,7 +38,7 @@ export function MainLinks() {
                     Dashboard
                   </Link>
                 </NavbarItem>
-                <NavbarItem>
+                <NavbarItem isActive={isActive("/tutor/courses")}>
                   <Link as={NextLink} color="foreground" href="/tutor/courses">
                     Mis Cursos
                   </Link>
