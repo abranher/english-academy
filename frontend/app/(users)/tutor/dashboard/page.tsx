@@ -1,8 +1,3 @@
-import Link from "next/link";
-
-import axios from "@/config/axios";
-import { auth } from "@/config/auth";
-
 import {
   Card,
   CardContent,
@@ -12,43 +7,30 @@ import {
 } from "@/components/shadcn/ui/card";
 import { Separator } from "@/components/shadcn/ui/separator";
 import { Activity, CreditCard, DollarSign, Users } from "lucide-react";
-import { DataTable } from "./_components/data-table";
-import { columns } from "./_components/columns";
 import {
   Breadcrumb,
   BreadcrumbItem,
-  BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
-  BreadcrumbSeparator,
 } from "@/components/shadcn/ui/breadcrumb";
 
-export default async function TutorHomePage() {
-  const session = await auth();
-
-  const { data: courses } = await axios.get(
-    `/api/courses/tutor/${session?.user.tutor?.id} `
-  );
-
+export default function TutorHomePage() {
   return (
     <>
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
-            <BreadcrumbLink asChild>
-              <Link href="/tutor/dashboard">Dashboard</Link>
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbPage>Cursos</BreadcrumbPage>
+            <BreadcrumbPage>Dashboard</BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
 
       <section>
-        <CardTitle>Tus cursos</CardTitle>
-        <CardDescription>Listado de todos tus cursos.</CardDescription>
+        <CardTitle>Dashboard</CardTitle>
+        <CardDescription>
+          Visualiza analíticas y gráficas con información importante sobre tus
+          cursos.
+        </CardDescription>
       </section>
 
       <Separator />
@@ -105,8 +87,6 @@ export default async function TutorHomePage() {
           </CardContent>
         </Card>
       </div>
-
-      <DataTable columns={columns} data={courses} />
     </>
   );
 }

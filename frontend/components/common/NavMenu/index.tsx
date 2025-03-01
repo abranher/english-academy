@@ -12,9 +12,8 @@ import {
   Link,
 } from "@nextui-org/react";
 import { ThemeSwitcher } from "../ThemeSwitcher";
-import Logo from "./Logo";
-import MainLinks from "./MainLinks";
-import DropdownAuth from "./DropdownAuth";
+import { MainLinks } from "./MainLinks";
+import { DropdownAuth } from "./DropdownAuth";
 
 export default function NavMenu() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -29,8 +28,6 @@ export default function NavMenu() {
             aria-label={isMenuOpen ? "Cerrar menu" : "Abrir menu"}
             className="sm:hidden"
           />
-
-          <Logo />
           <MainLinks />
         </NavbarContent>
 

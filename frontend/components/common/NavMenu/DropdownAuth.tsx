@@ -1,7 +1,11 @@
 "use client";
 
 import Link from "next/link";
+
 import { signOut, useSession } from "next-auth/react";
+import { Avatar, NavbarContent, NavbarItem } from "@nextui-org/react";
+import Avvvatars from "avvvatars-react";
+
 import { Button } from "@/components/shadcn/ui/button";
 import {
   CreditCard,
@@ -14,7 +18,6 @@ import {
   UserPlus,
   Users,
 } from "lucide-react";
-
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -27,11 +30,8 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/shadcn/ui/dropdown-menu";
-import Avvvatars from "avvvatars-react";
-import { NavbarContent, NavbarItem } from "@nextui-org/react";
-import { Avatar } from "@/components/shadcn/ui/avatar";
 
-export default function DropdownAuth() {
+export function DropdownAuth() {
   const { data: session, status } = useSession();
 
   return (
@@ -54,15 +54,21 @@ export default function DropdownAuth() {
           <>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Avatar className="flex items-center justify-center h-10 w-10 cursor-pointer">
-                  <Avvvatars size={40} value={session.user.email} />
-                </Avatar>
+                <Avatar
+                  isBordered
+                  className="h-8 w-8 cursor-pointer"
+                  color="default"
+                  icon={<Avvvatars size={40} value={session.user.email} />}
+                />
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56" align="end" forceMount>
                 <div className="flex flex-col items-center p-6">
-                  <Avatar className="flex items-center justify-center h-24 w-24">
-                    <Avvvatars size={80} value={session.user.email} />
-                  </Avatar>
+                  <Avatar
+                    isBordered
+                    className="h-24 w-24"
+                    color="default"
+                    icon={<Avvvatars size={100} value={session.user.email} />}
+                  />
                   <p className="pt-2 text-lg font-semibold">
                     {session.user.name}
                   </p>

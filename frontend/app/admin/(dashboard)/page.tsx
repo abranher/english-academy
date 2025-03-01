@@ -8,16 +8,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/shadcn/ui/card";
-import { Input } from "@/components/shadcn/ui/input";
-import { Label } from "@/components/shadcn/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/shadcn/ui/select";
-import { Textarea } from "@/components/shadcn/ui/textarea";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -51,14 +41,14 @@ export default async function DashboardAdminPage() {
         </BreadcrumbList>
       </Breadcrumb>
 
-      <div>
-        <CardTitle>Tablero de Control</CardTitle>
+      <section>
+        <CardTitle>Dashboard</CardTitle>
         <CardDescription>
           Visualiza y analiza el registro de actividades de los usuarios. Obtén
           información sobre el uso de la aplicación y las interacciones más
           relevantes.
         </CardDescription>
-      </div>
+      </section>
 
       <div className="w-full">
         <Tabs defaultValue="overview" className="space-y-4">
