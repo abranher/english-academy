@@ -17,6 +17,7 @@ import { CreateTutorDto } from '../dto/create-tutor.dto';
 import { BIOGRAPHY_DEFAULT } from '../constants';
 import { VerifyTokenDto } from '../dto/verify-token.dto';
 import { UsersService } from 'src/modules/users/providers/users.service';
+import { UpdateTutorDto } from '../dto/update-tutor.dto';
 
 @Injectable()
 export class TutorsService {
@@ -209,5 +210,23 @@ export class TutorsService {
         'Error al obtener datos del tutor',
       );
     }
+  }
+
+  async updateTutorProfile(userId: string, updateTutorDto: UpdateTutorDto) {
+    const user = await this.findUserOrThrow(userId);
+
+    try {
+      await this.prisma.user.update({
+        where: { id: user.id },
+        data: updateTutorDto,
+      });
+    } catch (error) {
+      console.error('Error updating user:', error);
+      throw new InternalServerErrorException(
+        'Error del servidor. Por favor intenta nuevamente.',
+      );
+    }
+
+    return { message: 'Datos actualizados.' };
   }
 }

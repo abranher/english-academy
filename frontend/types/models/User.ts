@@ -5,8 +5,8 @@ import { Tutor } from "./Tutor";
 export interface User {
   id: string;
   role: Roles;
-  name: string | null;
-  lastName: string | null;
+  name: string;
+  lastName: string;
   username: string | null;
   email: string;
   emailVerifiedAt: Date | null;

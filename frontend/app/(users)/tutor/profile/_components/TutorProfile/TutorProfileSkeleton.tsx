@@ -10,8 +10,8 @@ export function TutorProfileSkeleton() {
         <Skeleton className="w-96 p-1" />
       </section>
 
-      <section className="w-full grid grid-cols-1 lg:grid-cols-7 gap-4">
-        <section className="lg:col-span-2">
+      <section className="w-full grid grid-cols-1 lg:grid-cols-8 gap-4">
+        <section className="lg:col-span-3">
           <Skeleton className="w-full py-52" />
         </section>
 

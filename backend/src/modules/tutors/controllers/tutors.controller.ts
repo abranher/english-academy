@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Patch } from '@nestjs/common';
 import { TutorsService } from '../providers/tutors.service';
 import { CreateTutorDto } from '../dto/create-tutor.dto';
 import { VerifyTokenDto } from '../dto/verify-token.dto';
+import { UpdateTutorDto } from '../dto/update-tutor.dto';
 
 @Controller('tutors')
 export class TutorsController {
@@ -78,5 +79,17 @@ export class TutorsController {
   @Get('user/:userId/certifications')
   async findOneWithCertifications(@Param('userId') userId: string) {
     return await this.tutorsService.findOneWithCertifications(userId);
+  }
+
+  /*
+   * @Pacth()
+   */
+
+  @Patch(':userId/user/profile')
+  updateTutorProfile(
+    @Body() updateTutorDto: UpdateTutorDto,
+    @Param('userId') userId: string,
+  ) {
+    return this.tutorsService.updateTutorProfile(userId, updateTutorDto);
   }
 }

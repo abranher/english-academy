@@ -1,7 +1,7 @@
 export default function Footer() {
   return (
     <>
-      <footer className="py-6">
+      <footer>
         <div className="container mx-auto px-4 text-center">
           <div className="py-8">
             <p className="text-center text-base text-body-color dark:text-white">

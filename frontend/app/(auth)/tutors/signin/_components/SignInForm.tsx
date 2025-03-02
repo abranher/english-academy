@@ -47,7 +47,7 @@ export default function SignInForm() {
       if (response === undefined || response.error) {
         setError("Usuario no encontrado.");
       } else {
-        router.push("/tutor/courses");
+        router.push("/tutor/dashboard");
         router.refresh();
       }
     } catch (error) {
