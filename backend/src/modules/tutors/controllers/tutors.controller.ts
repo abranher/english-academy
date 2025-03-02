@@ -3,6 +3,7 @@ import { TutorsService } from '../providers/tutors.service';
 import { CreateTutorDto } from '../dto/create-tutor.dto';
 import { VerifyTokenDto } from '../dto/verify-token.dto';
 import { UpdateTutorDto } from '../dto/update-tutor.dto';
+import { UpdateTutorBioDto } from '../dto/update-tutor-bio.dto';
 
 @Controller('tutors')
 export class TutorsController {
@@ -91,5 +92,13 @@ export class TutorsController {
     @Param('userId') userId: string,
   ) {
     return this.tutorsService.updateTutorProfile(userId, updateTutorDto);
+  }
+
+  @Patch(':userId/user/bio')
+  updateTutorBio(
+    @Body() updateTutorBioDto: UpdateTutorBioDto,
+    @Param('userId') userId: string,
+  ) {
+    return this.tutorsService.updateTutorBio(userId, updateTutorBioDto);
   }
 }

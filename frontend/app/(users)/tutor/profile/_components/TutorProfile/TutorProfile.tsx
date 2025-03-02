@@ -36,7 +36,7 @@ export function TutorProfile({ userId }: { userId: string }) {
         <TutorProfileCard userTutor={userTutor} />
 
         <section className="lg:col-span-5 gap-3 flex flex-col">
-          <BiographyCard bio={userTutor.tutor!.bio} />
+          <BiographyCard userId={userTutor.id} bio={userTutor.tutor!.bio} />
           <AccountDetails email={userTutor.email} birth={userTutor.birth} />
           <CertificationsCard
             certifications={userTutor.tutor!.certifications}

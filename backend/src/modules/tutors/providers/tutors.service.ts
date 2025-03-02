@@ -18,6 +18,7 @@ import { BIOGRAPHY_DEFAULT } from '../constants';
 import { VerifyTokenDto } from '../dto/verify-token.dto';
 import { UsersService } from 'src/modules/users/providers/users.service';
 import { UpdateTutorDto } from '../dto/update-tutor.dto';
+import { UpdateTutorBioDto } from '../dto/update-tutor-bio.dto';
 
 @Injectable()
 export class TutorsService {
@@ -228,5 +229,23 @@ export class TutorsService {
     }
 
     return { message: 'Datos actualizados.' };
+  }
+
+  async updateTutorBio(userId: string, updateTutorBioDto: UpdateTutorBioDto) {
+    const user = await this.findUserOrThrow(userId);
+
+    try {
+      await this.prisma.tutor.update({
+        where: { userId: user.id },
+        data: updateTutorBioDto,
+      });
+    } catch (error) {
+      console.error('Error updating bio:', error);
+      throw new InternalServerErrorException(
+        'Error del servidor. Por favor intenta nuevamente.',
+      );
+    }
+
+    return { message: 'Biografía actualizada.' };
   }
 }
