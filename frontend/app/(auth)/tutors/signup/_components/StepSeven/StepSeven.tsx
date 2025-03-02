@@ -4,7 +4,9 @@ import { useStepTutorStore } from "@/services/store/auth/tutor/stepTutor";
 import axios from "@/config/axios";
 import { useCallback, useRef, useState } from "react";
 import { useDropzone } from "react-dropzone";
+import { Avatar } from "@heroui/react";
 import { toast } from "sonner";
+
 import {
   CheckCircle,
   File,
@@ -18,7 +20,6 @@ import { Progress } from "@/components/shadcn/ui/progress";
 import { Button } from "@/components/shadcn/ui/button";
 import { AxiosError } from "axios";
 import { formatSize, truncateString } from "@/libs/format";
-import { Avatar } from "@nextui-org/react";
 
 type UploadStatus = "select" | "uploading" | "done" | "error";
 

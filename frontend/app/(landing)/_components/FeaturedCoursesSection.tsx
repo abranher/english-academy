@@ -18,7 +18,7 @@ import { Button } from "@/components/shadcn/ui/button";
 import { ShoppingCart, XIcon } from "lucide-react";
 import { useCartStore } from "@/services/store/cart";
 import { Course } from "@/types/models/Course";
-import { Chip, Image } from "@nextui-org/react";
+import { Chip, Image } from "@heroui/react";
 import { assetImg } from "@/libs/asset";
 import { formatPrice } from "@/libs/format";
 import { Skeleton } from "@/components/shadcn/ui/skeleton";

@@ -3,7 +3,7 @@
 import Link from "next/link";
 
 import { signOut, useSession } from "next-auth/react";
-import { Avatar, NavbarContent, NavbarItem } from "@nextui-org/react";
+import { Avatar, NavbarContent, NavbarItem } from "@heroui/react";
 import Avvvatars from "avvvatars-react";
 
 import { Button } from "@/components/shadcn/ui/button";

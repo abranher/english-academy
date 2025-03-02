@@ -1,44 +1,31 @@
-import { useRouter } from "next/navigation";
-
 import axios from "@/config/axios";
 import { AxiosError } from "axios";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { StepSixSchema } from "./StepSixSchema";
 import { useMutation } from "@tanstack/react-query";
-import { z } from "zod";
 import { useStepTutorStore } from "@/services/store/auth/tutor/stepTutor";
 import { toast } from "sonner";
-import { format } from "date-fns";
-import { es } from "date-fns/locale";
+import { useState } from "react";
+import { Calendar, DateInput } from "@heroui/react";
+import { CalendarDate, getLocalTimeZone, today } from "@internationalized/date";
 
 import { Button } from "@/components/shadcn/ui/button";
 import { CardDescription, CardTitle } from "@/components/shadcn/ui/card";
-import { CalendarIcon, Loader2 } from "lucide-react";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/shadcn/ui/form";
-import { Calendar } from "@/components/shadcn/ui/calendar";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/shadcn/ui/popover";
-import { cn } from "@/libs/shadcn/utils";
+import { Loader2 } from "lucide-react";
+import { Input } from "@/components/shadcn/ui/input";
 
 export function StepSix() {
   const nextStep = useStepTutorStore((state) => state.nextStep);
   const userId = useStepTutorStore((state) => state.userId);
+  const [birth, setBirth] = useState(today(getLocalTimeZone()));
 
-  const form = useForm<z.infer<typeof StepSixSchema>>({
-    resolver: zodResolver(StepSixSchema),
-  });
+  const handleBirth = (value: CalendarDate | null) => {
+    if (value) {
+      setBirth(value);
+    } else {
+      // Manejar el caso en que el valor sea null, si es necesario
+      // Por ejemplo, podrías establecer un valor por defecto o simplemente no hacer nada
+      console.warn("El valor de la fecha es null");
+    }
+  };
 
   const createUserMutation = useMutation({
     mutationFn: (user: { birth: Date }) =>
@@ -71,14 +58,16 @@ export function StepSix() {
     },
   });
 
-  async function onSubmit(data: z.infer<typeof StepSixSchema>) {
-    console.log(data.birth);
-    createUserMutation.mutate({
-      birth: data.birth,
-    });
-  }
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
 
-  const { isSubmitting, isValid } = form.formState;
+    console.log(birth);
+    return;
+
+    //createUserMutation.mutate({
+    // birth: birth,
+    //});
+  }
 
   return (
     <>
@@ -90,71 +79,29 @@ export function StepSix() {
         </CardDescription>
       </section>
 
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 mt-4">
-          <section className="mb-32">
-            <FormField
-              control={form.control}
-              name="birth"
-              render={({ field }) => (
-                <FormItem className="flex flex-col">
-                  <FormLabel>Fecha de nacimiento</FormLabel>
-                  <Popover modal>
-                    <PopoverTrigger asChild>
-                      <FormControl>
-                        <Button
-                          variant="outline"
-                          className={cn(
-                            "w-[240px] pl-3 text-left font-normal",
-                            !field.value && "text-muted-foreground"
-                          )}
-                        >
-                          {field.value ? (
-                            format(field.value, "PPP", {
-                              locale: es,
-                            })
-                          ) : (
-                            <span>Elige una fecha</span>
-                          )}
-                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                        </Button>
-                      </FormControl>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar
-                        locale={es}
-                        mode="single"
-                        selected={field.value}
-                        onSelect={field.onChange}
-                        disabled={(date) =>
-                          date > new Date() || date < new Date("1900-01-01")
-                        }
-                        initialFocus
-                      />
-                    </PopoverContent>
-                  </Popover>
-                  <FormDescription>
-                    Su fecha de nacimiento se utiliza para calcular su edad.
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </section>
-          <div className="w-full flex justify-end">
-            {!createUserMutation.isPending ? (
-              <Button disabled={!isValid || isSubmitting} type="submit">
-                Continuar
-              </Button>
-            ) : (
-              <Button disabled>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Espere...
-              </Button>
-            )}
-          </div>
-        </form>
-      </Form>
+      <form onSubmit={onSubmit} className="space-y-4 mt-4">
+        <section className="mb-32">
+          <Calendar
+            showMonthAndYearPickers
+            maxValue={today(getLocalTimeZone())}
+            value={birth}
+            onChange={handleBirth}
+          />
+
+          <Input type="date" />
+          <DateInput variant="bordered" />
+        </section>
+        <div className="w-full flex justify-end">
+          {!createUserMutation.isPending ? (
+            <Button type="submit">Continuar</Button>
+          ) : (
+            <Button disabled>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Espere...
+            </Button>
+          )}
+        </div>
+      </form>
     </>
   );
 }

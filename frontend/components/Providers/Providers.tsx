@@ -1,7 +1,7 @@
 "use client";
 
 import { SessionProvider } from "next-auth/react";
-import { NextUIProvider } from "@nextui-org/react";
+import { HeroUIProvider } from "@heroui/react";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import queryClient from "@/config/react-query";
@@ -14,11 +14,11 @@ export function Providers({
   return (
     <QueryClientProvider client={queryClient}>
       <SessionProvider>
-        <NextUIProvider>
+        <HeroUIProvider>
           <NextThemesProvider attribute="class" defaultTheme="light">
             {children}
           </NextThemesProvider>
-        </NextUIProvider>
+        </HeroUIProvider>
       </SessionProvider>
     </QueryClientProvider>
   );

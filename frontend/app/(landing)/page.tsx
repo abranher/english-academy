@@ -1,4 +1,3 @@
-import Features from "./_components/Features/Features";
 import AboutSection from "./_components/AboutSection";
 import Hero from "./_components/Hero";
 import SectionDivider from "./_components/common/SectionDivider";
@@ -12,9 +11,6 @@ export default function LandingPage() {
       <SectionDivider />
 
       <FeaturedCoursesSection />
-      <SectionDivider />
-
-      <Features />
       <SectionDivider />
 
       <AboutSection />

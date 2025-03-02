@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Image } from "@nextui-org/react";
+import { Image } from "@heroui/react";
 import { Button } from "@/components/shadcn/ui/button";
 import BoxBase from "../../../components/common/BoxBase";
 import { assetPublicImg } from "@/libs/asset";

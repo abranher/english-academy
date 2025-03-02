@@ -10,7 +10,7 @@ import {
   NavbarMenu,
   NavbarMenuItem,
   Link,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { ThemeSwitcher } from "../ThemeSwitcher";
 import { MainLinks } from "./MainLinks";
 import { DropdownAuth } from "./DropdownAuth";
