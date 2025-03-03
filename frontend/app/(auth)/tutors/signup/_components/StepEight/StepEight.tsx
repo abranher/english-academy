@@ -66,13 +66,11 @@ export function StepEight() {
       </section>
 
       <Tabs defaultValue={defaultTab}>
-        <TabsList className="grid w-full grid-cols-2 mb-4 gap-3 md:grid-cols-3">
+        <TabsList className="grid w-full grid-cols-3 mb-4 md:grid-cols-3">
           <TabsTrigger value="cv" disabled={hasCV}>
             Currículum {hasCV && "✓"}
           </TabsTrigger>
-          <TabsTrigger value="add-certifications">
-            Añadir certificación
-          </TabsTrigger>
+          <TabsTrigger value="add-certifications">Certificación</TabsTrigger>
           <TabsTrigger value="certifications">Certificaciones</TabsTrigger>
         </TabsList>
 
