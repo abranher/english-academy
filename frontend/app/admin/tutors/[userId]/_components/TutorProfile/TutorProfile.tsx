@@ -3,11 +3,12 @@
 import { useParams } from "next/navigation";
 
 import { useQuery } from "@tanstack/react-query";
-import { Avatar } from "@nextui-org/react";
+import { Avatar } from "@heroui/react";
 import { getUserTutor } from "../../_services/get-user-tutor";
 import { assetAttachments, assetImg } from "@/libs/asset";
 import { User } from "@/types/models/User";
 import { formatDateShort } from "@/libs/date";
+import Avvvatars from "avvvatars-react";
 
 import { StatusManagementHistory } from "../StatusManagementHistory";
 import { BiographyCard } from "../BiographyCard";
@@ -25,7 +26,6 @@ import {
 } from "@/components/shadcn/ui/card";
 import { CalendarDays, FileText } from "lucide-react";
 import { StatusBadge } from "@/components/tutors/StatusBadge";
-import Avvvatars from "avvvatars-react";
 
 export function TutorProfile() {
   const { isPending, data: userTutor } = useQuery<User>({

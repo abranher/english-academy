@@ -4,7 +4,7 @@ import Link from "next/link";
 
 import { assetImg } from "@/libs/asset";
 import { User } from "@/types/models/User";
-import { Avatar } from "@nextui-org/react";
+import { Avatar } from "@heroui/react";
 
 import {
   Card,

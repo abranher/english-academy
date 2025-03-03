@@ -7,14 +7,18 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/shadcn/ui/card";
-import { differenceInYears, format } from "date-fns";
+import { differenceInYears, format, getYear, isAfter, setYear } from "date-fns";
 import { BadgeCheck, CalendarDays, CircleUser, Mail } from "lucide-react";
 
 function formatBirth(birth: Date | null): string {
-  return birth
-    ? `${format(new Date(birth), "dd/MM/yyyy")} 
-    (${differenceInYears(new Date(), new Date(birth))} años)`
-    : "Fecha de nacimiento no disponible";
+  if (!birth) return "Fecha de nacimiento no disponible";
+  let age = differenceInYears(new Date(), birth);
+  const currentYear = getYear(new Date());
+  const celebratesThisYear = setYear(birth, currentYear);
+  if (isAfter(celebratesThisYear, new Date())) {
+    age--;
+  }
+  return `${format(birth, "dd/MM/yyyy")}, (${age} años)`;
 }
 
 export function AccountDetails({

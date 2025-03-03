@@ -156,10 +156,26 @@ export class TutorsService {
   async createBirth(createTutorDto: CreateTutorDto, id: string) {
     const user = await this.findUserOrThrow(id);
 
+    let birthDate: Date | null = null;
+    if (createTutorDto.birth) {
+      const tempDate = new Date(createTutorDto.birth);
+      birthDate = new Date(
+        Date.UTC(
+          tempDate.getFullYear(),
+          tempDate.getMonth(),
+          tempDate.getDate(),
+          tempDate.getHours(),
+          tempDate.getMinutes(),
+          tempDate.getSeconds(),
+          tempDate.getMilliseconds(),
+        ),
+      );
+    }
+
     try {
       await this.prisma.user.update({
         where: { id: user.id },
-        data: { birth: createTutorDto.birth },
+        data: { birth: birthDate },
       });
     } catch (error) {
       console.error('Error updating user:', error);

@@ -1,6 +1,4 @@
-import { Type } from 'class-transformer';
 import {
-  IsDate,
   IsEmail,
   IsNotEmpty,
   IsOptional,
@@ -8,9 +6,7 @@ import {
   Matches,
   MaxLength,
   MinLength,
-  ValidateIf,
 } from 'class-validator';
-import { differenceInYears, isAfter, isBefore } from 'date-fns';
 import messages from 'src/libs/validations/messages';
 
 export class CreateUserDto {
@@ -47,16 +43,5 @@ export class CreateUserDto {
 
   @IsOptional()
   @IsNotEmpty({ message: 'La fecha de nacimiento es requerida.' })
-  @Type(() => Date)
-  @IsDate()
-  @ValidateIf((_, value) => isBefore(value, new Date()), {
-    message: 'La fecha de nacimiento no puede ser en el futuro.',
-  })
-  @ValidateIf((_, value) => isAfter(value, new Date('1900-01-01')), {
-    message: 'La fecha de nacimiento no puede ser anterior a 1900.',
-  })
-  @ValidateIf((_, value) => differenceInYears(new Date(), value) >= 18, {
-    message: 'Debes tener al menos 18 años.',
-  })
-  birth: Date;
+  birth: string;
 }

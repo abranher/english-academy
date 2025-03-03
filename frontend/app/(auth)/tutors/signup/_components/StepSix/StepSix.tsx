@@ -63,7 +63,19 @@ export function StepSix() {
 
   async function onSubmit(data: z.infer<typeof StepSixSchema>) {
     const birthDate = new Date(data.birth);
-    createUserMutation.mutate({ birth: birthDate });
+    const utcBirthDate = new Date(
+      Date.UTC(
+        birthDate.getFullYear(),
+        birthDate.getMonth(),
+        birthDate.getDate(),
+        birthDate.getHours(),
+        birthDate.getMinutes(),
+        birthDate.getSeconds(),
+        birthDate.getMilliseconds()
+      )
+    );
+
+    createUserMutation.mutate({ birth: utcBirthDate });
   }
 
   const { isSubmitting, isValid } = form.formState;
