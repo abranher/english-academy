@@ -7,6 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/shadcn/ui/card";
+import Preview from "@/components/shadcn/ui/preview";
 import { BookUser } from "lucide-react";
 
 export function BiographyCard({ bio }: { bio: string | null }) {
@@ -22,7 +23,7 @@ export function BiographyCard({ bio }: { bio: string | null }) {
         <CardContent>
           <section className="flex flex-col gap-5">
             {bio ? (
-              <article>{bio}</article>
+              <Preview value={bio} />
             ) : (
               <CardDescription>Sin biografía</CardDescription>
             )}

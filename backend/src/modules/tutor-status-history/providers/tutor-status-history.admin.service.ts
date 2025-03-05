@@ -41,6 +41,7 @@ export class TutorStatusHistoryAdminService {
       data: { status: createTutorStatusHistoryDto.status },
     });
 
+    /*
     try {
       await this.notifications.statusUpdateTutor(
         user,
@@ -50,6 +51,7 @@ export class TutorStatusHistoryAdminService {
     } catch (error) {
       console.error('Error enviando notificación:', error);
     }
+    */
 
     return { message: 'Tutor actualizado.' };
   }

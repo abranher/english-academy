@@ -1,7 +1,7 @@
 "use client";
 
 import { User } from "@/types/models/User";
-import { Avatar } from "@nextui-org/react";
+import { Avatar } from "@heroui/react";
 import { assetAttachments, assetImg } from "@/libs/asset";
 import { formatDateShort } from "@/libs/date";
 import Avvvatars from "avvvatars-react";

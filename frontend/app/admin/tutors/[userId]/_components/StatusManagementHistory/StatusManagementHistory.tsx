@@ -47,6 +47,7 @@ import { Textarea } from "@/components/shadcn/ui/textarea";
 import { CalendarDays, Eye, History, NotebookPen, UserPen } from "lucide-react";
 import { StatusBadge } from "@/components/tutors/StatusBadge";
 import { TutorStatusHistory } from "@/types/models/TutorStatusHistory";
+import { LoadingButton } from "@/components/common/LoadingButton";
 
 export function StatusManagementHistory({
   tutorStatusHistory,
@@ -283,12 +284,11 @@ export function StatusManagementHistory({
                         )}
                       />
                       <section className="flex w-full justify-end mt-4">
-                        <Button
-                          disabled={!isValid || isSubmitting}
-                          type="submit"
-                        >
-                          Confirmar
-                        </Button>
+                        <LoadingButton
+                          isLoading={createMutation.isPending}
+                          isValid={isValid}
+                          isSubmitting={isSubmitting}
+                        />
                       </section>
                     </form>
                   </Form>
