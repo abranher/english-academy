@@ -29,15 +29,16 @@ _Proyecto/Aplicación web para el aprendizaje del idioma ingles en línea_
 + Renombrar ".env.example" a ".env"
 
 ```.env
-  DB_CONNECTION=mysql
-  DB_HOST=127.0.0.1
-  DB_PORT=3306
-  DB_DATABASE=laravel
-  DB_USERNAME=root
-  DB_PASSWORD=
+  APP_NAME="Example"
+  APP_URL="http://localhost:3000" -> your host and port
+  BACKEND_URL="http://localhost:8000" -> your host and port
+  SESSION_SECRET="yoursecret"
+
+  NEXT_PUBLIC_APP_NAME="${APP_NAME}"
+  NEXT_PUBLIC_BACKEND_URL="${BACKEND_URL}"
 ```
 
-## Entorno para authjs
+* Entorno para authjs
 
 ```bash
 npx auth secret
