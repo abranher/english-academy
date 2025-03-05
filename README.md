@@ -26,7 +26,7 @@ _Proyecto/Aplicación web para el aprendizaje del idioma ingles en línea_
 
 2. Entorno de configuración:
 
-## Renombrar ".env.example" a ".env"
++ Renombrar ".env.example" a ".env"
 
 ```.env
   DB_CONNECTION=mysql
