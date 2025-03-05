@@ -29,13 +29,13 @@ _Proyecto/Aplicación web para el aprendizaje del idioma ingles en línea_
 + Renombrar ".env.example" a ".env"
 
 ```.env
-  APP_NAME="Example"
-  APP_URL="http://localhost:3000" -> your host and port
-  BACKEND_URL="http://localhost:8000" -> your host and port
-  SESSION_SECRET="yoursecret"
+APP_NAME="Example"
+APP_URL="http://localhost:3000" -> your host and port
+BACKEND_URL="http://localhost:8000" -> your host and port
+SESSION_SECRET="yoursecret"
 
-  NEXT_PUBLIC_APP_NAME="${APP_NAME}"
-  NEXT_PUBLIC_BACKEND_URL="${BACKEND_URL}"
+NEXT_PUBLIC_APP_NAME="${APP_NAME}"
+NEXT_PUBLIC_BACKEND_URL="${BACKEND_URL}"
 ```
 
 * Entorno para authjs
@@ -44,33 +44,16 @@ _Proyecto/Aplicación web para el aprendizaje del idioma ingles en línea_
 npx auth secret
 ```
 
-2. Compilar para producción:
+3. Ejecutar servidor local:
 
 ```bash
-  npm run build
-```
-
-3. Renombrar ".env.example" a ".env" y configurar conexión a la base de datos
-
-```.env
-  DB_CONNECTION=mysql
-  DB_HOST=127.0.0.1
-  DB_PORT=3306
-  DB_DATABASE=laravel
-  DB_USERNAME=root
-  DB_PASSWORD=
+npm run dev
 ```
 
 4. Ejecutar servidor local back-end:
 
 ```bash
-  npm run start:dev
-```
-
-5. Ejecutar servidor local front-end:
-
-```bash
-  npm run dev
+npm run start:dev
 ```
 
 ## Despliegue 📦
