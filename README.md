@@ -50,6 +50,49 @@ npx auth secret
 npm run dev
 ```
 
+### Instalación Nest.js 🔧
+
+1. Instalar dependencias:
+
+```bash
+npm install
+```
+
+2. Entorno de configuración:
+
++ Renombrar ".env.example" a ".env"
+
+```.env
+APP_NAME="Nestjs"
+SUPPORT_MAIL=soporte@empresa.com
+
+DATABASE_URL="postgresql://johndoe:randompassword@localhost:5432/mydb?schema=public"
+
+JWT_SECRET_KEY="yoursecret"
+JWT_REFRESH_SECRET_KEY="yourothersecret"
+
+# base 32
+OTPLIB_SECRET="SECRET" 
+```
+
++ Generar key para OTPLIB_SECRET.
+
+```bash
+openssl rand -base64 32
+```
+
+* Entorno para authjs
+
+```bash
+npx auth secret
+```
+
+3. Ejecutar servidor local:
+
+```bash
+npm run dev
+```
+
 4. Ejecutar servidor local back-end:
 
 ```bash
