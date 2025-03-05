@@ -87,7 +87,15 @@ openssl rand -base64 32
 openssl rand -base64 64
 ```
 
-3. Ejecutar servidor local back-end:
+3. Borrar carpeta /migrations en /prisma:
+
+4. Ejecutar migraciones:
+
+```bash
+npx prisma migrate dev --name init
+```
+
+5. Ejecutar servidor local back-end:
 
 ```bash
 npm run start:dev
