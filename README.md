@@ -7,7 +7,7 @@ _Proyecto/Aplicación web para el aprendizaje del idioma ingles en línea_
 1. Clonar proyecto:
 
 ```bash
-  git clone https://github.com/abranher/english-academy.git
+git clone https://github.com/abranher/english-academy.git
 ```
 
 ### Pre-requisitos 📋
@@ -21,7 +21,7 @@ _Proyecto/Aplicación web para el aprendizaje del idioma ingles en línea_
 1. Instalar dependencias:
 
 ```bash
-  npm install
+npm install
 ```
 
 2. Entorno de configuración:
