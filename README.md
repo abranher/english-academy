@@ -81,19 +81,13 @@ OTPLIB_SECRET="SECRET"
 openssl rand -base64 32
 ```
 
-* Entorno para authjs
++ Generar keys para JWT_SECRET_KEY Y JWT_REFRESH_SECRET_KEY.
 
 ```bash
-npx auth secret
+openssl rand -base64 64
 ```
 
-3. Ejecutar servidor local:
-
-```bash
-npm run dev
-```
-
-4. Ejecutar servidor local back-end:
+3. Ejecutar servidor local back-end:
 
 ```bash
 npm run start:dev
@@ -117,9 +111,3 @@ _notas adicionales sobre como hacer deploy_
 ## Licencia 📄
 
 Este proyecto está bajo la Licencia [MIT license](https://opensource.org/licenses/MIT) - mira el archivo [LICENSE](LICENSE) para más detalles.
-
-# english-academy
-
-## Generate keys
-
-### openssl rand -base64 32
