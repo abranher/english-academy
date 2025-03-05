@@ -74,7 +74,7 @@ export default function SignUpForm() {
         </AlertDialog>
       </section>
       <div className="mt-4 text-center text-md">
-        Ya tienes una cuenta?{" "}
+        ¿Ya tienes una cuenta?{" "}
         <Link href="/tutors/signin" className="underline">
           Iniciar sesión
         </Link>
