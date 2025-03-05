@@ -13,14 +13,34 @@ _Proyecto/Aplicación web para el aprendizaje del idioma ingles en línea_
 ### Pre-requisitos 📋
 
 - Node.js v^20
+- npm v^10
 - PostgreSQL v^15
 
-### Instalación 🔧
+### Instalación Next.js 🔧
 
 1. Instalar dependencias:
 
 ```bash
   npm install
+```
+
+2. Entorno de configuración:
+
+## Renombrar ".env.example" a ".env"
+
+```.env
+  DB_CONNECTION=mysql
+  DB_HOST=127.0.0.1
+  DB_PORT=3306
+  DB_DATABASE=laravel
+  DB_USERNAME=root
+  DB_PASSWORD=
+```
+
+## Entorno para authjs
+
+```bash
+npx auth secret
 ```
 
 2. Compilar para producción:
