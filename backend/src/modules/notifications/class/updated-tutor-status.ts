@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
 import { ConfigService } from '@nestjs/config';
 
-import { TutorStatus, User } from '@prisma/client';
+import { NotificationType, TutorStatus, User } from '@prisma/client';
 import { getYear } from 'date-fns';
 import { TutorStatusTraduction } from 'src/libs/enum-translations';
 
@@ -28,7 +28,7 @@ export class UpdatedTutorStatus {
   async db(user: User, comment: string, status: TutorStatus) {
     await this.prisma.notification.create({
       data: {
-        type: 'updated-tutor-status',
+        type: NotificationType.UPDATED_TUTOR_STATUS,
         data: {
           message: 'hola',
           comment,
