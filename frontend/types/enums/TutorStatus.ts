@@ -1,6 +1,7 @@
 export enum TutorStatus {
   NEW = "NEW",
   PENDING = "PENDING",
+  RESUBMITTED = "RESUBMITTED",
   APPROVED = "APPROVED",
   REJECTED = "REJECTED",
 }

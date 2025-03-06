@@ -17,6 +17,11 @@ export function StatusBadge({ status }: { status: TutorStatus }) {
       label: "Pendiente",
       variant: "warning" as const,
     },
+    [TutorStatus.RESUBMITTED]: {
+      icon: <BadgeCheck className="w-4" />,
+      label: "Reenviado",
+      variant: "success" as const,
+    },
     [TutorStatus.REJECTED]: {
       icon: <BadgeX className="w-4" />,
       label: "Rechazado",
