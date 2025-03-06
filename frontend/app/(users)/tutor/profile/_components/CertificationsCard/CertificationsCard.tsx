@@ -55,7 +55,7 @@ export function CertificationsCard({
                         className="flex items-center gap-2"
                       >
                         <Button size="sm">
-                          <Eye />
+                          <Eye className="w-4" />
                         </Button>
                       </a>
                     </section>

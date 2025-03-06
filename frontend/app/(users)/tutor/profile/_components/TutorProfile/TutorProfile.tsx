@@ -42,6 +42,7 @@ export function TutorProfile({ userId }: { userId: string }) {
             certifications={userTutor.tutor!.certifications}
           />
           <StatusManagementHistory
+            userId={userTutor.id}
             tutorStatusHistory={userTutor.tutor!.tutorStatusHistory}
           />
         </section>
