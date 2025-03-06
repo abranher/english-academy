@@ -7,17 +7,20 @@ import { truncateString } from "@/libs/format";
 import { CardDescription, CardTitle } from "@/components/shadcn/ui/card";
 import { StatusBadge } from "@/components/tutors/StatusBadge";
 import { Button } from "@/components/shadcn/ui/button";
-import { CalendarDays, CircleCheck, NotebookPen, UserPen } from "lucide-react";
+import {
+  CalendarDays,
+  CircleAlert,
+  CircleCheck,
+  NotebookPen,
+  UserPen,
+} from "lucide-react";
 import { ShowHistoryModal } from "./ShowHistoryModal";
-import { ResubmittedAction } from "./ResubmittedAction";
 import { Badge } from "@/components/shadcn/ui/badge";
 
 export function TutorStatusHistoryCard({
   history,
-  userId,
 }: {
   history: TutorStatusHistory;
-  userId: string;
 }) {
   return (
     <>
@@ -27,7 +30,10 @@ export function TutorStatusHistoryCard({
 
           <section className="flex items-center gap-3">
             {history.resubmittedAt === null ? (
-              <ResubmittedAction userId={userId} history={history} />
+              <Badge variant="secondary" className="flex gap-1 items-center">
+                <CircleAlert className="w-4" />
+                En espera
+              </Badge>
             ) : (
               <Badge className="flex gap-1 items-center">
                 <CircleCheck className="w-4" />

@@ -61,7 +61,7 @@ export function ShowHistoryModal({ history }: { history: TutorStatusHistory }) {
               <article className="flex flex-col gap-1">
                 <DialogTitle className="flex gap-1 items-center">
                   <CalendarDays className="w-4" />
-                  Reenvié perfil:
+                  Tutor reenvió perfil:
                 </DialogTitle>
                 <CardDescription>
                   {formatDate(history.resubmittedAt)}

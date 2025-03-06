@@ -6,13 +6,11 @@ import { useState } from "react";
 import axios from "@/config/axios";
 import { z } from "zod";
 import { AxiosError } from "axios";
-import { formatDate } from "@/libs/date";
 import { TutorStatus } from "@/types/enums/TutorStatus";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { truncateString } from "@/libs/format";
 import { FormSchema } from "./FormSchema";
 
 import { Button } from "@/components/shadcn/ui/button";
@@ -25,9 +23,7 @@ import {
 } from "@/components/shadcn/ui/card";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -44,10 +40,10 @@ import {
 import { RadioGroup, RadioGroupItem } from "@/components/shadcn/ui/radio-group";
 import { Textarea } from "@/components/shadcn/ui/textarea";
 
-import { CalendarDays, Eye, History, NotebookPen, UserPen } from "lucide-react";
-import { StatusBadge } from "@/components/tutors/StatusBadge";
+import { History } from "lucide-react";
 import { TutorStatusHistory } from "@/types/models/TutorStatusHistory";
 import { LoadingButton } from "@/components/common/LoadingButton";
+import { TutorStatusHistoryCard } from "./TutorStatusHistoryCard";
 
 export function StatusManagementHistory({
   tutorStatusHistory,
@@ -120,77 +116,7 @@ export function StatusManagementHistory({
                 <CardDescription>Aun no hay registros</CardDescription>
               ) : (
                 tutorStatusHistory.map((history: TutorStatusHistory) => (
-                  <section
-                    key={history.id}
-                    className="flex items-center justify-between rounded-lg border p-4 dark:border-zinc-700"
-                  >
-                    <div className="space-y-2">
-                      <h3 className="font-medium flex gap-1 items-center">
-                        <NotebookPen className="w-4" />
-                        Comentario: {truncateString(history.comment)}
-                      </h3>
-                      <p className="text-sm flex gap-1 items-center">
-                        <CalendarDays className="w-4" />
-                        Fecha: {formatDate(history.createdAt)}
-                      </p>
-                      <p className="text-sm flex gap-1 items-center">
-                        <StatusBadge status={history.previousStatus} />
-                      </p>
-                    </div>
-
-                    <section className="flex gap-3">
-                      <Dialog>
-                        <DialogTrigger asChild>
-                          <Button size="sm">
-                            <Eye />
-                          </Button>
-                        </DialogTrigger>
-                        <DialogContent className="sm:max-w-md">
-                          <DialogHeader>
-                            <CardTitle>Detalle</CardTitle>
-                          </DialogHeader>
-                          <section className="flex flex-col gap-3">
-                            <article className="flex flex-col gap-1">
-                              <DialogTitle className="flex gap-1 items-center">
-                                <NotebookPen className="w-4" />
-                                Comentario:
-                              </DialogTitle>
-                              <CardDescription>
-                                {history.comment}
-                              </CardDescription>
-                            </article>
-
-                            <article className="flex gap-2">
-                              <DialogTitle className="flex gap-1 items-center">
-                                <UserPen className="w-4" />
-                                Status previo:
-                              </DialogTitle>
-                              <div className="flex">
-                                <StatusBadge status={history.previousStatus} />
-                              </div>
-                            </article>
-
-                            <article className="flex flex-col gap-1">
-                              <DialogTitle className="flex gap-1 items-center">
-                                <CalendarDays className="w-4" />
-                                Fecha:
-                              </DialogTitle>
-                              <CardDescription>
-                                {formatDate(history.createdAt)}
-                              </CardDescription>
-                            </article>
-                          </section>
-                          <DialogFooter>
-                            <DialogClose asChild>
-                              <Button type="button" variant="secondary">
-                                Cerrar
-                              </Button>
-                            </DialogClose>
-                          </DialogFooter>
-                        </DialogContent>
-                      </Dialog>
-                    </section>
-                  </section>
+                  <TutorStatusHistoryCard key={history.id} history={history} />
                 ))
               )}
             </article>
@@ -199,7 +125,7 @@ export function StatusManagementHistory({
           <section className="w-full flex justify-end gap-3 pt-3">
             <Dialog open={open} onOpenChange={setOpen}>
               <DialogTrigger asChild>
-                <Button variant="outline">Gestionar</Button>
+                <Button>Gestionar</Button>
               </DialogTrigger>
               <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
