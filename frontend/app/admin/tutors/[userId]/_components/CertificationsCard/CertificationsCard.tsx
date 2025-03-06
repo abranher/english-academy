@@ -16,7 +16,7 @@ import { BookmarkCheck, Eye, GraduationCap, School } from "lucide-react";
 export function CertificationsCard({
   certifications,
 }: {
-  certifications: Certification[] | null;
+  certifications: Certification[] | [];
 }) {
   return (
     <>
@@ -30,7 +30,9 @@ export function CertificationsCard({
         <CardContent>
           <section className="flex flex-col gap-5">
             <article className="flex flex-col gap-3">
-              {certifications ? (
+              {certifications.length === 0 ? (
+                <CardDescription>No registro certificaciones</CardDescription>
+              ) : (
                 certifications.map((certification: Certification) => (
                   <section
                     key={certification.id}
@@ -55,14 +57,12 @@ export function CertificationsCard({
                         className="flex items-center gap-2"
                       >
                         <Button size="sm">
-                          <Eye />
+                          <Eye className="w-4" />
                         </Button>
                       </a>
                     </section>
                   </section>
                 ))
-              ) : (
-                <CardDescription>No registro certificaciones</CardDescription>
               )}
             </article>
           </section>

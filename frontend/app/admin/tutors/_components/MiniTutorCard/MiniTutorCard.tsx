@@ -54,9 +54,9 @@ export function MiniTutorCard({ user }: { user: User }) {
         <CardFooter className="flex flex-col gap-3 px-6">
           <StatusBadge status={user.tutor!.status} />
           <Link href={`/admin/tutors/${user.id}`}>
-            <Button className="flex gap-3">
-              Ver mas
-              <ArrowUpRight className="opacity-90 w-5" />
+            <Button className="flex gap-2">
+              Ver más
+              <ArrowUpRight className="opacity-90 w-4" />
             </Button>
           </Link>
         </CardFooter>
