@@ -427,8 +427,8 @@ model CourseReview {
 }
 
 model Notification {
-  id     String    @id @default(uuid())
-  type   String // Ej: "welcome", "password-reset", "new-comment"
+  id     String           @id @default(uuid())
+  type   NotificationType
   data   Json
   readAt DateTime?
 
@@ -506,4 +506,8 @@ enum ExerciseType {
 enum Language {
   ES
   EN
+}
+
+enum NotificationType {
+  UPDATED_TUTOR_STATUS
 }
