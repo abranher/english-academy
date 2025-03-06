@@ -119,7 +119,7 @@ export function BiographyCard({
         <CardContent>
           {!isEditing ? (
             <>
-              <section className="flex flex-col gap-5">
+              <section className="flex flex-col">
                 {bio ? (
                   <Preview value={bio} />
                 ) : (
@@ -159,7 +159,7 @@ export function BiographyCard({
                     <Button
                       type="submit"
                       disabled={!isValid || isSubmitting}
-                      className="flex gap-1"
+                      className="flex gap-1 items-center"
                     >
                       Actualizar
                       <Save className="w-5" />

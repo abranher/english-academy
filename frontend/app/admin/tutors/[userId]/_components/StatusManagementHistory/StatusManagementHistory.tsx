@@ -57,30 +57,34 @@ export function StatusManagementHistory({
               )}
             </article>
             <article className="flex justify-center">
-              {showAll ? (
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="rounded-full"
-                  type="button"
-                  onClick={() => {
-                    setShowAll(false);
-                  }}
-                >
-                  <ChevronsUp className="w-5 h-5" />
-                </Button>
-              ) : (
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="rounded-full"
-                  type="button"
-                  onClick={() => {
-                    setShowAll(true);
-                  }}
-                >
-                  <ChevronsDown className="w-5 h-5" />
-                </Button>
+              {tutorStatusHistory.length > 2 && (
+                <>
+                  {showAll ? (
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="rounded-full"
+                      type="button"
+                      onClick={() => {
+                        setShowAll(false);
+                      }}
+                    >
+                      <ChevronsUp className="w-5 h-5" />
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="rounded-full"
+                      type="button"
+                      onClick={() => {
+                        setShowAll(true);
+                      }}
+                    >
+                      <ChevronsDown className="w-5 h-5" />
+                    </Button>
+                  )}
+                </>
               )}
             </article>
           </section>

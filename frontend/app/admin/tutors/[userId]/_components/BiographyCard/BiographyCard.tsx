@@ -21,7 +21,7 @@ export function BiographyCard({ bio }: { bio: string | null }) {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <section className="flex flex-col gap-5">
+          <section className="flex flex-col">
             {bio ? (
               <Preview value={bio} />
             ) : (

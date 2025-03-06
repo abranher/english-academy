@@ -4,11 +4,13 @@ import { NotificationsService } from 'src/modules/notifications/providers/notifi
 import { PrismaService } from 'src/modules/prisma/providers/prisma.service';
 import { UsersService } from 'src/modules/users/providers/users.service';
 import { CreateTutorStatusHistoryDto } from '../dto/create-tutor-status-history.dto';
+import { UpdatedTutorStatus } from 'src/modules/notifications/class/updated-tutor-status';
 
 @Injectable()
 export class TutorStatusHistoryAdminService {
   constructor(
     private readonly prisma: PrismaService,
+    private readonly updatedTutorStatus: UpdatedTutorStatus,
     private readonly notifications: NotificationsService,
     private readonly userService: UsersService,
   ) {}
@@ -41,17 +43,11 @@ export class TutorStatusHistoryAdminService {
       data: { status: createTutorStatusHistoryDto.status },
     });
 
-    /*
-    try {
-      await this.notifications.statusUpdateTutor(
-        user,
-        tutorStatusHistory.comment,
-        tutorUpdated.status,
-      );
-    } catch (error) {
-      console.error('Error enviando notificación:', error);
-    }
-    */
+    await this.updatedTutorStatus.send(
+      user,
+      tutorStatusHistory.comment,
+      tutorUpdated.status,
+    );
 
     return { message: 'Tutor actualizado.' };
   }

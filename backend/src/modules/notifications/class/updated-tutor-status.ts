@@ -4,19 +4,42 @@ import { ConfigService } from '@nestjs/config';
 
 import { TutorStatus, User } from '@prisma/client';
 import { getYear } from 'date-fns';
-
-import { PrismaService } from 'src/modules/prisma/providers/prisma.service';
 import { TutorStatusTraduction } from 'src/libs/enum-translations';
 
+import { PrismaService } from 'src/modules/prisma/providers/prisma.service';
+
 @Injectable()
-export class NotificationsService {
+export class UpdatedTutorStatus {
   constructor(
     private readonly mailerService: MailerService,
     private readonly prisma: PrismaService,
     private readonly config: ConfigService,
   ) {}
 
-  async statusUpdateTutor(user: User, comment: string, status: TutorStatus) {
+  async send(user: User, comment: string, status: TutorStatus) {
+    try {
+      await this.db(user, comment, status);
+      await this.mail(user, comment, status);
+    } catch (error) {
+      console.error('Error creando o enviando notificación:', error);
+    }
+  }
+
+  async db(user: User, comment: string, status: TutorStatus) {
+    await this.prisma.notification.create({
+      data: {
+        type: 'updated-tutor-status',
+        data: {
+          message: 'hola',
+          comment,
+          status,
+        },
+        userId: user.id,
+      },
+    });
+  }
+
+  async mail(user: User, comment: string, status: TutorStatus) {
     await this.mailerService.sendMail({
       to: user.email,
       subject: 'Actualización de Status del Tutor',

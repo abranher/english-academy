@@ -1,5 +1,8 @@
 "use client";
 
+import { useState } from "react";
+import { TutorStatusHistory } from "@/types/models/TutorStatusHistory";
+
 import {
   Card,
   CardContent,
@@ -7,10 +10,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/shadcn/ui/card";
-
-import { History } from "lucide-react";
-import { TutorStatusHistory } from "@/types/models/TutorStatusHistory";
-
+import { ChevronsDown, ChevronsUp, History } from "lucide-react";
+import { Button } from "@/components/shadcn/ui/button";
 import { TutorStatusHistoryCard } from "./TutorStatusHistoryCard";
 
 export function StatusManagementHistory({
@@ -20,6 +21,8 @@ export function StatusManagementHistory({
   tutorStatusHistory: TutorStatusHistory[] | [];
   userId: string;
 }) {
+  const [showAll, setShowAll] = useState(false);
+
   return (
     <>
       <Card className="w-full">
@@ -42,6 +45,37 @@ export function StatusManagementHistory({
                     userId={userId}
                   />
                 ))
+              )}
+            </article>
+            <article className="flex justify-center">
+              {tutorStatusHistory.length > 2 && (
+                <>
+                  {showAll ? (
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="rounded-full"
+                      type="button"
+                      onClick={() => {
+                        setShowAll(false);
+                      }}
+                    >
+                      <ChevronsUp className="w-5 h-5" />
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="rounded-full"
+                      type="button"
+                      onClick={() => {
+                        setShowAll(true);
+                      }}
+                    >
+                      <ChevronsDown className="w-5 h-5" />
+                    </Button>
+                  )}
+                </>
               )}
             </article>
           </section>
