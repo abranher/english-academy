@@ -1,6 +1,5 @@
 # TODOS:
 
-- No permitir que el admin cambie el status de un tutor, donde el ultimo history aun no este terminado -> 10 min
 - Crear notificaciones a nivel de bd
 - Crear middleware para saber si esta aprobado y solo mostrar el perfil sino no esta
 - Luego mostrar cards de planes mensuales o anuales

@@ -10,15 +10,18 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/shadcn/ui/card";
-import { History } from "lucide-react";
+import { ChevronsDown, ChevronsUp, History } from "lucide-react";
 import { TutorStatusHistoryCard } from "./TutorStatusHistoryCard";
 import { ChangeStatusModal } from "./ChangeStatusModal";
+import { useState } from "react";
 
 export function StatusManagementHistory({
   tutorStatusHistory,
 }: {
   tutorStatusHistory: TutorStatusHistory[] | [];
 }) {
+  const [showAll, setShowAll] = useState(false);
+
   return (
     <>
       <Card className="w-full">
@@ -34,9 +37,50 @@ export function StatusManagementHistory({
               {tutorStatusHistory.length === 0 ? (
                 <CardDescription>Aun no hay registros</CardDescription>
               ) : (
-                tutorStatusHistory.map((history: TutorStatusHistory) => (
-                  <TutorStatusHistoryCard key={history.id} history={history} />
-                ))
+                <>
+                  {showAll
+                    ? tutorStatusHistory.map((history: TutorStatusHistory) => (
+                        <TutorStatusHistoryCard
+                          key={history.id}
+                          history={history}
+                        />
+                      ))
+                    : tutorStatusHistory
+                        .slice(0, 2)
+                        .map((history: TutorStatusHistory) => (
+                          <TutorStatusHistoryCard
+                            key={history.id}
+                            history={history}
+                          />
+                        ))}
+                </>
+              )}
+            </article>
+            <article className="flex justify-center">
+              {showAll ? (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="rounded-full"
+                  type="button"
+                  onClick={() => {
+                    setShowAll(false);
+                  }}
+                >
+                  <ChevronsUp className="w-5 h-5" />
+                </Button>
+              ) : (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="rounded-full"
+                  type="button"
+                  onClick={() => {
+                    setShowAll(true);
+                  }}
+                >
+                  <ChevronsDown className="w-5 h-5" />
+                </Button>
               )}
             </article>
           </section>
