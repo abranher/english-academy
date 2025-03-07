@@ -5,15 +5,13 @@ import { useState } from "react";
 import {
   Navbar,
   NavbarContent,
-  NavbarItem,
   NavbarMenuToggle,
   NavbarMenu,
   NavbarMenuItem,
   Link,
 } from "@heroui/react";
-import { ThemeSwitcher } from "../ThemeSwitcher";
 import { MainLinks } from "./MainLinks";
-import { DropdownAuth } from "./DropdownAuth";
+import { MainButtons } from "./MainButtons";
 
 export default function NavMenu() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -31,10 +29,8 @@ export default function NavMenu() {
           <MainLinks />
         </NavbarContent>
 
-        <DropdownAuth />
-        <NavbarItem>
-          <ThemeSwitcher />
-        </NavbarItem>
+        <MainButtons />
+
         <NavbarMenu>
           {menuItems.map((item, index) => (
             <NavbarMenuItem key={`${item}-${index}`}>

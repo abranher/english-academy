@@ -31,9 +31,10 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/shadcn/ui/dropdown-menu";
-import { NotificationsDropdown } from "./NotificationsDropdown";
+import { NotificationsDropdown } from "../NotificationsDropdown";
+import { ThemeSwitcher } from "../../ThemeSwitcher";
 
-export function DropdownAuth() {
+export function MainButtons() {
   const { data: session, status } = useSession();
 
   return (
@@ -54,6 +55,10 @@ export function DropdownAuth() {
 
         <NavbarItem>
           <NotificationsDropdown />
+        </NavbarItem>
+
+        <NavbarItem>
+          <ThemeSwitcher />
         </NavbarItem>
 
         {status === "authenticated" ? (
