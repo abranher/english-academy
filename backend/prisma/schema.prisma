@@ -432,7 +432,7 @@ model Notification {
   data   Json
   readAt DateTime?
 
-  userId String @unique
+  userId String
   user   User   @relation(fields: [userId], references: [id])
 
   createdAt DateTime @default(now())

@@ -31,6 +31,7 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/shadcn/ui/dropdown-menu";
+import { NotificationsDropdown } from "./NotificationsDropdown";
 
 export function DropdownAuth() {
   const { data: session, status } = useSession();
@@ -51,93 +52,99 @@ export function DropdownAuth() {
           </Link>
         </NavbarItem>
 
+        <NavbarItem>
+          <NotificationsDropdown />
+        </NavbarItem>
+
         {status === "authenticated" ? (
           <>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Avatar
-                  isBordered
-                  className="h-8 w-8 cursor-pointer"
-                  color="default"
-                  icon={<Avvvatars size={40} value={session.user.email} />}
-                />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56" align="end" forceMount>
-                <section className="flex flex-col items-center p-4">
+            <NavbarItem>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
                   <Avatar
                     isBordered
-                    className="h-24 w-24"
+                    className="h-8 w-8 cursor-pointer"
                     color="default"
-                    icon={<Avvvatars size={100} value={session.user.email} />}
+                    icon={<Avvvatars size={40} value={session.user.email} />}
                   />
-                  <h2 className="pt-2 text-lg font-semibold">
-                    {session.user.name}
-                  </h2>
-                  <h2 className="text-sm text-gray-600">
-                    {session.user.email}
-                  </h2>
-                </section>
-                <DropdownMenuSeparator />
-                <DropdownMenuGroup>
-                  <DropdownMenuItem asChild>
-                    <Link href="/tutor/profile">
-                      <CircleUser className="mr-2 h-4 w-4" />
-                      Perfil
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <CreditCard className="mr-2 h-4 w-4" />
-                    Facturación
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link href="/student/settings">
-                      <Settings className="mr-2 h-4 w-4" />
-                      Configuración
-                    </Link>
-                  </DropdownMenuItem>
-                </DropdownMenuGroup>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56" align="end" forceMount>
+                  <section className="flex flex-col items-center p-4">
+                    <Avatar
+                      isBordered
+                      className="h-24 w-24"
+                      color="default"
+                      icon={<Avvvatars size={100} value={session.user.email} />}
+                    />
+                    <h2 className="pt-2 text-lg font-semibold">
+                      {session.user.name}
+                    </h2>
+                    <h2 className="text-sm text-gray-600">
+                      {session.user.email}
+                    </h2>
+                  </section>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuGroup>
+                    <DropdownMenuItem asChild>
+                      <Link href="/tutor/profile">
+                        <CircleUser className="mr-2 h-4 w-4" />
+                        Perfil
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <CreditCard className="mr-2 h-4 w-4" />
+                      Facturación
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link href="/student/settings">
+                        <Settings className="mr-2 h-4 w-4" />
+                        Configuración
+                      </Link>
+                    </DropdownMenuItem>
+                  </DropdownMenuGroup>
 
-                <DropdownMenuSeparator />
-                <DropdownMenuGroup>
-                  <DropdownMenuItem>
-                    <Users className="mr-2 h-4 w-4" />
-                    <span>Team</span>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuGroup>
+                    <DropdownMenuItem>
+                      <Users className="mr-2 h-4 w-4" />
+                      <span>Team</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuSub>
+                      <DropdownMenuSubTrigger>
+                        <UserPlus className="mr-2 h-4 w-4" />
+                        <span>Invite users</span>
+                      </DropdownMenuSubTrigger>
+                      <DropdownMenuPortal>
+                        <DropdownMenuSubContent>
+                          <DropdownMenuItem>
+                            <Mail className="mr-2 h-4 w-4" />
+                            <span>Email</span>
+                          </DropdownMenuItem>
+                          <DropdownMenuItem>
+                            <MessageSquare className="mr-2 h-4 w-4" />
+                            <span>Message</span>
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem>
+                            <PlusCircle className="mr-2 h-4 w-4" />
+                            <span>More...</span>
+                          </DropdownMenuItem>
+                        </DropdownMenuSubContent>
+                      </DropdownMenuPortal>
+                    </DropdownMenuSub>
+                  </DropdownMenuGroup>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    onClick={() => {
+                      signOut({ callbackUrl: "/" });
+                    }}
+                  >
+                    <LogOut className="mr-2 h-4 w-4" />
+                    Cerrar sesión
                   </DropdownMenuItem>
-                  <DropdownMenuSub>
-                    <DropdownMenuSubTrigger>
-                      <UserPlus className="mr-2 h-4 w-4" />
-                      <span>Invite users</span>
-                    </DropdownMenuSubTrigger>
-                    <DropdownMenuPortal>
-                      <DropdownMenuSubContent>
-                        <DropdownMenuItem>
-                          <Mail className="mr-2 h-4 w-4" />
-                          <span>Email</span>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                          <MessageSquare className="mr-2 h-4 w-4" />
-                          <span>Message</span>
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem>
-                          <PlusCircle className="mr-2 h-4 w-4" />
-                          <span>More...</span>
-                        </DropdownMenuItem>
-                      </DropdownMenuSubContent>
-                    </DropdownMenuPortal>
-                  </DropdownMenuSub>
-                </DropdownMenuGroup>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem
-                  onClick={() => {
-                    signOut({ callbackUrl: "/" });
-                  }}
-                >
-                  <LogOut className="mr-2 h-4 w-4" />
-                  Cerrar sesión
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </NavbarItem>
           </>
         ) : (
           <>

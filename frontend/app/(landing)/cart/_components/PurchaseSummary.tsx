@@ -1,12 +1,17 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
+
 import axios from "@/config/axios";
+import { useState } from "react";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useSession } from "next-auth/react";
+import { formatPrice } from "@/libs/format";
+import { useCartStore } from "@/services/store/cart";
+import { toast } from "sonner";
 
 import { Card } from "@/components/shadcn/ui/card";
 import {
@@ -37,12 +42,8 @@ import {
 } from "@/components/shadcn/ui/form";
 import { RadioGroup, RadioGroupItem } from "@/components/shadcn/ui/radio-group";
 import { Label } from "@/components/shadcn/ui/label";
-import { toast } from "sonner";
 import { Input } from "@/components/shadcn/ui/input";
-import { formatPrice } from "@/libs/format";
 import { Button } from "@/components/shadcn/ui/button";
-import { useCartStore } from "@/services/store/cart";
-import { useSession } from "next-auth/react";
 
 const formSchema = z.object({
   payment_reference: z
@@ -50,7 +51,7 @@ const formSchema = z.object({
     .regex(/^\d{6}$/, { message: "Debe ser un número de 6 dígitos." }),
 });
 
-export default function PurchaseSummary() {
+export function PurchaseSummary() {
   const [open, setOpen] = useState(false);
   const [lessonType, setLessonType] = useState("CLASS");
 

@@ -18,14 +18,14 @@ export class UpdatedTutorStatus {
 
   async send(user: User, comment: string, status: TutorStatus) {
     try {
-      await this.db(user, comment, status);
-      await this.mail(user, comment, status);
+      await this.toDB(user, comment, status);
+      // await this.toMail(user, comment, status);
     } catch (error) {
       console.error('Error creando o enviando notificación:', error);
     }
   }
 
-  async db(user: User, comment: string, status: TutorStatus) {
+  async toDB(user: User, comment: string, status: TutorStatus) {
     await this.prisma.notification.create({
       data: {
         type: NotificationType.UPDATED_TUTOR_STATUS,
@@ -39,7 +39,7 @@ export class UpdatedTutorStatus {
     });
   }
 
-  async mail(user: User, comment: string, status: TutorStatus) {
+  async toMail(user: User, comment: string, status: TutorStatus) {
     await this.mailerService.sendMail({
       to: user.email,
       subject: 'Actualización de Status del Tutor',

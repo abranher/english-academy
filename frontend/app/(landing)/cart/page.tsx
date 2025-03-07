@@ -2,13 +2,14 @@
 
 import Link from "next/link";
 
-import { Button } from "@/components/shadcn/ui/button";
 import { assetImg } from "@/libs/asset";
 import { formatPrice } from "@/libs/format";
 import { useCartStore } from "@/services/store/cart";
-import { Chip, Image } from "@nextui-org/react";
+import { Chip, Image } from "@heroui/react";
+
+import { Button } from "@/components/shadcn/ui/button";
 import { ArrowUpLeft, ShoppingCart, Trash } from "lucide-react";
-import PurchaseSummary from "./_components/PurchaseSummary";
+import { PurchaseSummary } from "./_components/PurchaseSummary";
 
 export default function ShoppingCartPage() {
   const cart = useCartStore((state) => state.cart);
@@ -23,16 +24,13 @@ export default function ShoppingCartPage() {
 
         {cart.length === 0 ? (
           <>
-            <section className="dark:text-zinc-300 text-xl font-semibold flex flex-col items-center w-full my-36 gap-4">
+            <section className="text-xl font-semibold flex flex-col items-center w-full my-36 gap-4 dark:text-zinc-300">
               <ShoppingCart className="w-28 h-28" />
               <p>Tu carro esta vacio</p>
               <Link href="/">
-                <Button
-                  size="lg"
-                  className="flex gap-3 items-center justify-center"
-                >
-                  <ArrowUpLeft className="w-8 h-8" />
-                  <span>Seguir explorando</span>
+                <Button className="flex gap-3 items-center">
+                  <ArrowUpLeft className="w-5 h-5" />
+                  Seguir explorando
                 </Button>
               </Link>
             </section>
