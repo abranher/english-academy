@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 
+import { useSession } from "next-auth/react";
+
 import { Button } from "@/components/shadcn/ui/button";
 import {
   DropdownMenu,
@@ -14,6 +16,8 @@ import {
 import { Bell, CircleUser, CreditCard, Eye, Settings } from "lucide-react";
 
 export function NotificationsDropdown() {
+  const { data: session, status } = useSession();
+
   return (
     <>
       <DropdownMenu>

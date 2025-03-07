@@ -40,29 +40,29 @@ export function MainButtons() {
   return (
     <>
       <NavbarContent as="div" justify="end">
-        <NavbarItem>
-          <Link href="/cart">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="rounded-full"
-              type="button"
-            >
-              <ShoppingCart className="w-5 h-5" />
-            </Button>
-          </Link>
-        </NavbarItem>
-
-        <NavbarItem>
-          <NotificationsDropdown />
-        </NavbarItem>
-
-        <NavbarItem>
-          <ThemeSwitcher />
-        </NavbarItem>
-
         {status === "authenticated" ? (
           <>
+            <NavbarItem>
+              <Link href="/cart">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="rounded-full"
+                  type="button"
+                >
+                  <ShoppingCart className="w-5 h-5" />
+                </Button>
+              </Link>
+            </NavbarItem>
+
+            <NavbarItem>
+              <NotificationsDropdown />
+            </NavbarItem>
+
+            <NavbarItem>
+              <ThemeSwitcher />
+            </NavbarItem>
+
             <NavbarItem>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -153,6 +153,23 @@ export function MainButtons() {
           </>
         ) : (
           <>
+            <NavbarItem>
+              <Link href="/cart">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="rounded-full"
+                  type="button"
+                >
+                  <ShoppingCart className="w-5 h-5" />
+                </Button>
+              </Link>
+            </NavbarItem>
+
+            <NavbarItem>
+              <ThemeSwitcher />
+            </NavbarItem>
+
             <NavbarItem className="hidden md:flex">
               <Link href="/students/signin">
                 <Button color="default" type="button" variant="ghost">
