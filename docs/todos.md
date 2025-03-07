@@ -6,6 +6,8 @@
 - Creamos un vista para mostrar todas las notificaciones -> 30 min
 
 
+- que deberia llevar la notification de updated tutor
+
 - Crear notificaciones a nivel de bd
 - Crear middleware para saber si esta aprobado y solo mostrar el perfil sino no esta
 - Luego mostrar cards de planes mensuales o anuales
@@ -19,3 +21,9 @@
 
 - La fecha de nacimiento del perfil, se guarda de una manera en la bd y luego se muestra como de otra
 - rejected_at (fecha/hora del rechazo para eliminar en 24h)
+
+
+# Analisis: 
+
+- Yo necesito crear un panel de notificaciones, 
+- 

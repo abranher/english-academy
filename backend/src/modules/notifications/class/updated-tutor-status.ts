@@ -18,21 +18,21 @@ export class UpdatedTutorStatus {
 
   async send(user: User, comment: string, status: TutorStatus) {
     try {
-      await this.toDB(user, comment, status);
+      await this.toDB(user, status);
       // await this.toMail(user, comment, status);
     } catch (error) {
       console.error('Error creando o enviando notificación:', error);
     }
   }
 
-  async toDB(user: User, comment: string, status: TutorStatus) {
+  async toDB(user: User, status: TutorStatus) {
     await this.prisma.notification.create({
       data: {
         type: NotificationType.UPDATED_TUTOR_STATUS,
         data: {
-          message: 'hola',
-          comment,
-          status,
+          heading: 'Nueva actualización del status de tu perfil.',
+          message: `Tu perfil ahora tiene status: ${TutorStatusTraduction(status)}.`,
+          path: '/tutor/profile',
         },
         userId: user.id,
       },

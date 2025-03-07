@@ -10,4 +10,9 @@ export class NotificationsController {
   getUserNotifications(@Param('userId') userId: string) {
     return this.notificationsService.getUserNotifications(userId);
   }
+
+  @Get(':id')
+  markAsRead(@Param('id') id: string) {
+    return this.notificationsService.markAsRead(id);
+  }
 }

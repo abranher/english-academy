@@ -1,4 +1,4 @@
-import { format } from "date-fns";
+import { format, formatDistance } from "date-fns";
 import { es } from "date-fns/locale";
 
 export function formatDate(isoDateString: Date): string {
@@ -18,6 +18,14 @@ export function formatDateNormal(isoDateString: Date): string {
 export function formatDateShort(isoDateString: Date): string {
   const date = new Date(isoDateString);
   return format(date, "'Se unió en ' MMMM 'de' yyyy", {
+    locale: es,
+  });
+}
+
+export function formatDateForHumans(date: Date): string {
+  const now = new Date();
+  return formatDistance(date, now, {
+    addSuffix: true,
     locale: es,
   });
 }

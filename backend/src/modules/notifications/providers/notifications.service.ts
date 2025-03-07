@@ -18,4 +18,18 @@ export class NotificationsService {
       );
     }
   }
+
+  async markAsRead(id: string) {
+    try {
+      return await this.prisma.notification.update({
+        where: { id },
+        data: { readAt: new Date() },
+      });
+    } catch (error) {
+      throw new InternalServerErrorException(
+        'Error marcando como leída la notificacion: ',
+        error,
+      );
+    }
+  }
 }
