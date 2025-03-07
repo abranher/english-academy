@@ -122,7 +122,7 @@ async function main() {
       lastName: 'Hernández',
       email: 'abran@gmail.com',
       username: 'abranher',
-      password: await hash('abran123', 10),
+      password: await hash('Abran123.', 10),
       role: Roles.ADMIN,
     },
   });

@@ -2,7 +2,7 @@
 CREATE TYPE "Roles" AS ENUM ('ADMIN', 'STUDENT', 'TUTOR');
 
 -- CreateEnum
-CREATE TYPE "TutorStatus" AS ENUM ('NEW', 'PENDING', 'APPROVED', 'REJECTED');
+CREATE TYPE "TutorStatus" AS ENUM ('NEW', 'PENDING', 'RESUBMITTED', 'APPROVED', 'REJECTED');
 
 -- CreateEnum
 CREATE TYPE "PurchaseOrderStatus" AS ENUM ('UNVERIFIED', 'COMPLETED', 'CANCELED');
@@ -27,6 +27,9 @@ CREATE TYPE "ExerciseType" AS ENUM ('MULTIPLE_CHOICE', 'FILL_IN_THE_BLANK');
 
 -- CreateEnum
 CREATE TYPE "Language" AS ENUM ('ES', 'EN');
+
+-- CreateEnum
+CREATE TYPE "NotificationType" AS ENUM ('UPDATED_TUTOR_STATUS');
 
 -- CreateTable
 CREATE TABLE "User" (
@@ -69,12 +72,23 @@ CREATE TABLE "Tutor" (
     "cvUrl" TEXT,
     "status" "TutorStatus" NOT NULL DEFAULT 'NEW',
     "approvedAt" TIMESTAMP(3),
-    "statusHistory" JSONB,
     "userId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "Tutor_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "TutorStatusHistory" (
+    "id" TEXT NOT NULL,
+    "comment" TEXT NOT NULL,
+    "previousStatus" "TutorStatus" NOT NULL,
+    "resubmittedAt" TIMESTAMP(3),
+    "tutorId" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "TutorStatusHistory_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -321,7 +335,7 @@ CREATE TABLE "CourseReview" (
 -- CreateTable
 CREATE TABLE "Notification" (
     "id" TEXT NOT NULL,
-    "type" TEXT NOT NULL,
+    "type" "NotificationType" NOT NULL,
     "data" JSONB NOT NULL,
     "readAt" TIMESTAMP(3),
     "userId" TEXT NOT NULL,
@@ -393,6 +407,9 @@ ALTER TABLE "Student" ADD CONSTRAINT "Student_levelId_fkey" FOREIGN KEY ("levelI
 
 -- AddForeignKey
 ALTER TABLE "Tutor" ADD CONSTRAINT "Tutor_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "TutorStatusHistory" ADD CONSTRAINT "TutorStatusHistory_tutorId_fkey" FOREIGN KEY ("tutorId") REFERENCES "Tutor"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Certification" ADD CONSTRAINT "Certification_tutorId_fkey" FOREIGN KEY ("tutorId") REFERENCES "Tutor"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
