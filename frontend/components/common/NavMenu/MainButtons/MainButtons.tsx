@@ -31,8 +31,8 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/shadcn/ui/dropdown-menu";
-import { NotificationsDropdown } from "../NotificationsDropdown";
-import { ThemeSwitcher } from "../../ThemeSwitcher";
+import { NotificationsDropdown } from "./NotificationsDropdown";
+import { ThemeSwitcher } from "./ThemeSwitcher";
 
 export function MainButtons() {
   const { data: session, status } = useSession();

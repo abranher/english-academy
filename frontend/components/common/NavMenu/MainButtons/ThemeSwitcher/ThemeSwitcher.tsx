@@ -3,8 +3,7 @@
 import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
 import { Button } from "@/components/shadcn/ui/button";
-import { SunIcon } from "../icons/SunIcon";
-import { MoonIcon } from "../icons/MoonIcon";
+import { Moon, Sun } from "lucide-react";
 
 export function ThemeSwitcher() {
   const [mounted, setMounted] = useState(false);
@@ -29,7 +28,7 @@ export function ThemeSwitcher() {
               setTheme("dark");
             }}
           >
-            <MoonIcon className="w-5 h-5" />
+            <Moon className="w-5 h-5" />
           </Button>
         </>
       ) : (
@@ -43,7 +42,7 @@ export function ThemeSwitcher() {
               setTheme("light");
             }}
           >
-            <SunIcon className="w-5 h-5" />
+            <Sun className="w-5 h-5" />
           </Button>
         </>
       )}

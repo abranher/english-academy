@@ -34,7 +34,7 @@ import {
   LogOut,
   Menu,
 } from "lucide-react";
-import { ThemeSwitcher } from "@/components/common/ThemeSwitcher";
+import { ThemeSwitcher } from "@/components/common/NavMenu/MainButtons/ThemeSwitcher/ThemeSwitcher";
 import { Avatar } from "@/components/shadcn/ui/avatar";
 import { Badge } from "@/components/shadcn/ui/badge";
 import DropdownItemLink from "@/components/common/DropdownItemLink";
