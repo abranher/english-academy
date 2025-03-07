@@ -6,6 +6,7 @@ import {
   Req,
   UploadedFile,
   BadRequestException,
+  Patch,
 } from '@nestjs/common';
 import { TutorsFilesService } from '../providers/tutors.files.service';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -68,5 +69,29 @@ export class TutorsFilesController {
     }
 
     return this.tutorsFilesService.uploadAvatar(userId, file.filename);
+  }
+
+  @Patch('signup/:userId/avatar')
+  @UseInterceptors(
+    FileInterceptor('avatar', {
+      fileFilter: imageFileFilter,
+      storage: diskStorage({
+        destination: './storage/images',
+        filename: createFileName,
+      }),
+    }),
+  )
+  async updateAvatar(
+    @Req() req,
+    @UploadedFile() file: Express.Multer.File,
+    @Param('userId') userId: string,
+  ) {
+    if (!file || req.fileValidationError) {
+      throw new BadRequestException(
+        'Archivo proporcionado no válido, [archivos de imagen no permitido]',
+      );
+    }
+
+    return this.tutorsFilesService.updateAvatar(userId, file.filename);
   }
 }

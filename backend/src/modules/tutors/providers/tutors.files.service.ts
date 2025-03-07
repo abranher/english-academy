@@ -17,13 +17,13 @@ export class TutorsFilesService {
     private readonly config: ConfigService,
   ) {}
 
-  // IMPORTANT
+  // delete files
   private async deleteFile(filename: string) {
     const fs = await import('fs/promises');
     const path = await import('path');
 
     try {
-      await fs.unlink(path.join('./uploads/avatars', filename));
+      await fs.unlink(path.join(process.cwd(), 'storage/images', filename));
     } catch (err) {
       console.error(`Error eliminando archivo ${filename}:`, err);
     }
@@ -69,5 +69,27 @@ export class TutorsFilesService {
     }
 
     return { message: 'Falta poco.' };
+  }
+
+  async updateAvatar(userId: string, avatarUrl: string) {
+    const user = await this.findUserOrThrow(userId);
+
+    if (user.avatarUrl) {
+      await this.deleteFile(user.avatarUrl);
+    }
+
+    try {
+      await this.prisma.user.update({
+        where: { id: user.id },
+        data: { avatarUrl },
+      });
+    } catch (error) {
+      console.error('Error updating avatar of tutor:', error);
+      throw new InternalServerErrorException(
+        'Error del servidor. Por favor intenta nuevamente.',
+      );
+    }
+
+    return { message: 'Imagen de perfil actualizada exitosamente.' };
   }
 }

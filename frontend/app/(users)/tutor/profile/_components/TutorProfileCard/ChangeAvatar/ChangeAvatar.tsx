@@ -8,6 +8,7 @@ import { User } from "@/types/models/User";
 import { Avatar } from "@heroui/react";
 import { useDropzone } from "react-dropzone";
 import { toast } from "sonner";
+import { useQueryClient } from "@tanstack/react-query";
 
 import { Progress } from "@/components/shadcn/ui/progress";
 import {
@@ -30,9 +31,10 @@ export function ChangeAvatar({
   onCancel,
 }: {
   userTutor: User;
-  onCancel?: () => void;
+  onCancel: () => void;
 }) {
   const formRef = useRef<HTMLFormElement>(null);
+  const queryClient = useQueryClient();
 
   const [preview, setPreview] = useState<string>("");
   const [selectedFile, setSelectedFile] = useState<File | undefined>(undefined);
@@ -76,7 +78,7 @@ export function ChangeAvatar({
       const formData = new FormData();
       formData.append("avatar", selectedFile);
 
-      await axios.post(
+      await axios.patch(
         `/api/tutors/files/signup/${userTutor.id}/avatar`,
         formData,
         {
@@ -93,7 +95,8 @@ export function ChangeAvatar({
       );
 
       setUploadStatus("done");
-      toast.success("¡Imagen de perfil creada correctamente!");
+      toast.success("¡Imagen de perfil actualizada exitosamente!");
+      queryClient.invalidateQueries({ queryKey: ["tutor-user-profile"] });
     } catch (error) {
       setUploadStatus("error");
       if (error instanceof AxiosError) {
@@ -116,8 +119,8 @@ export function ChangeAvatar({
   return (
     <>
       <form ref={formRef} onSubmit={onSubmit}>
-        <div className="grid gap-4">
-          <div className="flex flex-col items-center gap-4 w-full">
+        <div className="grid gap-4 py-4">
+          <div className="flex flex-col items-center gap-2 w-full">
             <section className="flex justify-evenly gap-3">
               <article className="w-full flex justify-center items-center">
                 {/* Vista previa */}
@@ -154,7 +157,7 @@ export function ChangeAvatar({
               </article>
             </section>
 
-            <section className="flex gap-3">
+            <section className="flex flex-col gap-3 my-4 w-full">
               {/* Dropzone */}
               {(uploadStatus === "select" || uploadStatus === "uploading") && (
                 <section
@@ -176,14 +179,14 @@ export function ChangeAvatar({
                 </section>
               )}
 
-              <Card className="w-full grid grid-cols-8 py-2 border-zinc-500 border-2">
-                <div className="col-span-2 flex justify-center items-center">
+              <Card className="w-full grid grid-cols-6 py-2 border-zinc-500 border-2">
+                <div className="col-span-1 flex justify-center items-center">
                   <File />
                 </div>
                 <div className="text-xs col-span-4 flex flex-col justify-center gap-1">
                   <p>
                     {selectedFile
-                      ? truncateString(selectedFile.name, "xs")
+                      ? truncateString(selectedFile.name, "sm")
                       : "No hay ningún archivo seleccionado"}
                   </p>
                   <p>{selectedFile && formatSize(selectedFile.size)}</p>
@@ -191,7 +194,7 @@ export function ChangeAvatar({
                 </div>
                 {uploadStatus === "select" && selectedFile && (
                   <>
-                    <div className="col-span-2 flex justify-center items-center">
+                    <div className="col-span-1 flex justify-center items-center">
                       <XIcon className="cursor-pointer" onClick={clearFile} />
                     </div>
                   </>
@@ -214,21 +217,32 @@ export function ChangeAvatar({
             </section>
           </div>
 
-          <div className="flex justify-end gap-2 items-center">
-            <Button variant="outline" onClick={onCancel}>
-              Cancelar
-            </Button>
-            <Button
-              onClick={handleSubmitPopover}
-              disabled={!selectedFile || uploadStatus === "uploading"}
-            >
-              {uploadStatus === "uploading" ? (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              ) : (
-                "Subir"
-              )}
-            </Button>
-          </div>
+          <section className="flex justify-end gap-2 items-center">
+            {uploadStatus === "done" ? (
+              <>
+                <Button onClick={onCancel}>Salir</Button>
+              </>
+            ) : (
+              <>
+                <Button variant="outline" onClick={onCancel}>
+                  Cancelar
+                </Button>
+                <Button
+                  onClick={handleSubmitPopover}
+                  disabled={!selectedFile || uploadStatus === "uploading"}
+                >
+                  {uploadStatus === "uploading" ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Actualizando...
+                    </>
+                  ) : (
+                    "Actualizar"
+                  )}
+                </Button>
+              </>
+            )}
+          </section>
         </div>
       </form>
     </>
