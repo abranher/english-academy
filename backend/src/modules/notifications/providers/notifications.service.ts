@@ -10,6 +10,7 @@ export class NotificationsService {
     try {
       return await this.prisma.notification.findMany({
         where: { userId },
+        orderBy: { createdAt: 'desc' },
       });
     } catch (error) {
       throw new InternalServerErrorException(
