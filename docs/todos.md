@@ -1,5 +1,11 @@
 # TODOS:
 
+
+- Creamos un componente por cada tipo de notificacion -> 30 min
+- Dirigimos accion de ser necesario para la notificacion -> 30 min
+- Creamos un vista para mostrar todas las notificaciones -> 30 min
+
+
 - Crear notificaciones a nivel de bd
 - Crear middleware para saber si esta aprobado y solo mostrar el perfil sino no esta
 - Luego mostrar cards de planes mensuales o anuales

@@ -56,7 +56,7 @@ export function MainButtons() {
             </NavbarItem>
 
             <NavbarItem>
-              <NotificationsDropdown />
+              <NotificationsDropdown userId={session.user.id} />
             </NavbarItem>
 
             <NavbarItem>

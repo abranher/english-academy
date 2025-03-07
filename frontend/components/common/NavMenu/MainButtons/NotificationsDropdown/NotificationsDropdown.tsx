@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 
-import { useSession } from "next-auth/react";
+import { getUserNotifications } from "@/services/network/notifications/get-user-notifications";
+import { useQuery } from "@tanstack/react-query";
 
 import { Button } from "@/components/shadcn/ui/button";
 import {
@@ -13,10 +14,21 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/shadcn/ui/dropdown-menu";
-import { Bell, CircleUser, CreditCard, Eye, Settings } from "lucide-react";
+import { Skeleton } from "@/components/shadcn/ui/skeleton";
+import { Bell, CircleUser, Eye } from "lucide-react";
+import { DropdownMenuError } from "./DropdownMenuError";
 
-export function NotificationsDropdown() {
-  const { data: session, status } = useSession();
+export function NotificationsDropdown({ userId }: { userId: string }) {
+  const {
+    isPending,
+    data: notifications,
+    isError,
+  } = useQuery<Notification[]>({
+    queryKey: ["get-user-notifications"],
+    queryFn: () => getUserNotifications(userId),
+  });
+
+  if (isError) return <DropdownMenuError />;
 
   return (
     <>
@@ -37,27 +49,32 @@ export function NotificationsDropdown() {
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
 
-          <DropdownMenuItem asChild>
-            <Link href="/tutor/profile">
-              <CircleUser className="mr-2 h-4 w-4" />
-              Perfil
-            </Link>
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
-
-          <DropdownMenuItem>
-            <CreditCard className="mr-2 h-4 w-4" />
-            Facturación
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
-
-          <DropdownMenuItem asChild>
-            <Link href="/student/settings">
-              <Settings className="mr-2 h-4 w-4" />
-              Configuración
-            </Link>
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
+          {isPending ? (
+            <>
+              {[1, 2, 3].map((item) => (
+                <>
+                  <DropdownMenuItem key={item} asChild>
+                    <Skeleton className="h-16" />
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                </>
+              ))}
+            </>
+          ) : (
+            <>
+              {notifications.map((notification) => (
+                <>
+                  <DropdownMenuItem asChild>
+                    <Link href="/tutor/profile">
+                      <CircleUser className="mr-2 h-4 w-4" />
+                      Perfil
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                </>
+              ))}
+            </>
+          )}
 
           <DropdownMenuItem asChild>
             <Link
