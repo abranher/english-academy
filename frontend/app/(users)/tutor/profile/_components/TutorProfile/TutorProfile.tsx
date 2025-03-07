@@ -3,15 +3,17 @@
 import { useQuery } from "@tanstack/react-query";
 import { getUserTutor } from "../../_services/get-user-tutor";
 import { User } from "@/types/models/User";
+import { TutorStatus } from "@/types/enums";
 
 import { StatusManagementHistory } from "../StatusManagementHistory";
 import { BiographyCard } from "../BiographyCard";
 import { CertificationsCard } from "../CertificationsCard";
 import { AccountDetails } from "../AccountDetails";
 import { TutorProfileSkeleton } from "./TutorProfileSkeleton";
+import { TutorProfileCard } from "../TutorProfileCard";
 
 import { CardTitle, CardDescription } from "@/components/shadcn/ui/card";
-import { TutorProfileCard } from "../TutorProfileCard";
+import { AlertBanner } from "@/components/common/AlertBanner";
 
 export function TutorProfile({ userId }: { userId: string }) {
   const { isPending, data: userTutor } = useQuery<User>({
@@ -31,6 +33,14 @@ export function TutorProfile({ userId }: { userId: string }) {
           preferencias.
         </CardDescription>
       </section>
+
+      {(userTutor.tutor?.status !== TutorStatus.APPROVED ||
+        !userTutor.tutor.approvedAt) && (
+        <AlertBanner
+          label={"Tu cuenta está en revisión."}
+          description={"Solo puedes editar tu perfil hasta ser aprobado."}
+        />
+      )}
 
       <section className="w-full grid grid-cols-1 lg:grid-cols-8 gap-4">
         <TutorProfileCard userTutor={userTutor} />

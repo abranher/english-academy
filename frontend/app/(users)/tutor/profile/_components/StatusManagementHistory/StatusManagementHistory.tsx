@@ -14,6 +14,9 @@ import { ChevronsDown, ChevronsUp, History } from "lucide-react";
 import { Button } from "@/components/shadcn/ui/button";
 import { TutorStatusHistoryCard } from "./TutorStatusHistoryCard";
 
+const MIN = 0;
+const MAX = 2;
+
 export function StatusManagementHistory({
   tutorStatusHistory,
   userId,
@@ -38,13 +41,25 @@ export function StatusManagementHistory({
               {tutorStatusHistory.length === 0 ? (
                 <CardDescription>Aun no hay registros</CardDescription>
               ) : (
-                tutorStatusHistory.map((history: TutorStatusHistory) => (
-                  <TutorStatusHistoryCard
-                    key={history.id}
-                    history={history}
-                    userId={userId}
-                  />
-                ))
+                <>
+                  {showAll
+                    ? tutorStatusHistory.map((history: TutorStatusHistory) => (
+                        <TutorStatusHistoryCard
+                          key={history.id}
+                          history={history}
+                          userId={userId}
+                        />
+                      ))
+                    : tutorStatusHistory
+                        .slice(MIN, MAX)
+                        .map((history: TutorStatusHistory) => (
+                          <TutorStatusHistoryCard
+                            key={history.id}
+                            history={history}
+                            userId={userId}
+                          />
+                        ))}
+                </>
               )}
             </article>
             <article className="flex justify-center">
