@@ -95,7 +95,13 @@ openssl rand -base64 64
 npx prisma migrate dev --name init
 ```
 
-5. Ejecutar servidor local back-end:
+5. Crear enlace símbolico al storage
+
+```bash
+npm run storage:link
+```
+
+6. Ejecutar servidor local back-end:
 
 ```bash
 npm run start:dev

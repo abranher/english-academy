@@ -217,6 +217,17 @@ model Course {
   updatedAt DateTime @updatedAt
 }
 
+model CourseReview {
+  id       String               @id @default(uuid())
+  feedback String?
+  decision CourseReviewDecision
+
+  courseId String
+  course   Course @relation(fields: [courseId], references: [id])
+
+  createdAt DateTime @default(now())
+}
+
 model Attachment {
   id   String @id @default(uuid())
   name String
@@ -415,17 +426,6 @@ model ActivityLog {
   updatedAt DateTime @updatedAt
 }
 
-model CourseReview {
-  id       String               @id @default(uuid())
-  feedback String?
-  decision CourseReviewDecision
-
-  courseId String
-  course   Course @relation(fields: [courseId], references: [id])
-
-  createdAt DateTime @default(now())
-}
-
 model Notification {
   id     String           @id @default(uuid())
   type   NotificationType
@@ -440,9 +440,7 @@ model Notification {
 }
 
 // *
-// *
 // * Enums
-// *
 // *
 
 enum Roles {

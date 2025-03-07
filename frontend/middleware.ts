@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@/config/auth";
 import { ADMIN, PUBLIC_ROUTES, ROOT, STUDENT, TUTOR } from "@/libs/routes";
 import { Roles } from "@/types/enums/Roles";
+import { TutorStatus } from "./types/enums";
 
 export default auth((req) => {
   const { nextUrl } = req;
@@ -24,6 +25,18 @@ export default auth((req) => {
     // if (!isEmailVerified) {
     //  return NextResponse.redirect(new URL("/verify-email", req.nextUrl)); // Redirect to a verification page
     // }
+
+    // Check tutor is approved
+    if (role === Roles.TUTOR) {
+      if (
+        req.auth?.user.tutor?.status !== TutorStatus.APPROVED ||
+        !req.auth?.user.tutor.approvedAt
+      ) {
+        if (nextUrl.pathname !== "/tutor/profile") {
+          return NextResponse.redirect(new URL("/tutor/profile", req.nextUrl));
+        }
+      }
+    }
 
     // Specific checks for students:
     if (
