@@ -1,8 +1,6 @@
 import Link from "next/link";
 import axios from "@/config/axios";
 
-import { DataTable } from "./_components/data-table";
-import { columns } from "./_components/columns";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -18,11 +16,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/shadcn/ui/card";
-import { CoursesPendingReviewList } from "./_components/CoursesPendingReviewList";
+import { Separator } from "@/components/shadcn/ui/separator";
+import { CreditCard, DollarSign, Users } from "lucide-react";
+import { CoursesList } from "./_components/CoursesList";
 
 export default async function CoursesPage() {
-  const { data } = await axios.get("/api/courses");
-
   return (
     <>
       <Breadcrumb>
@@ -39,25 +37,57 @@ export default async function CoursesPage() {
         </BreadcrumbList>
       </Breadcrumb>
 
-      <div>
+      <section>
         <CardTitle>Cursos</CardTitle>
         <CardDescription>Listado de cursos</CardDescription>
-      </div>
+      </section>
 
-      <div className="w-full">
+      <Separator />
+
+      <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
         <Card>
-          <CardHeader>
-            <CardTitle>Listado de cursos: PENDIENTE DE REVISIÓN</CardTitle>
-            <CardDescription>
-              Lista de cursos pendientes de revisión. Aquí puedes ver los cursos
-              que necesitan ser revisados y aprobados antes de su publicación.
-            </CardDescription>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">
+              Ingresos totales
+            </CardTitle>
+            <DollarSign className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <CoursesPendingReviewList />
+            <div className="text-2xl font-bold">$45,231.89</div>
+            <p className="text-xs text-muted-foreground">
+              +20,1% respecto al mes pasado
+            </p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Suscripciones</CardTitle>
+            <Users className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">+2350</div>
+            <p className="text-xs text-muted-foreground">
+              +180,1% respecto al mes pasado
+            </p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Ventas</CardTitle>
+            <CreditCard className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">+12,234</div>
+            <p className="text-xs text-muted-foreground">
+              +19% respecto al mes pasado
+            </p>
           </CardContent>
         </Card>
       </div>
+
+      <Separator />
+
+      <CoursesList />
     </>
   );
 }

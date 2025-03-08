@@ -1,0 +1,1 @@
+export { CoursesListSkeleton } from "./CoursesListSkeleton";

@@ -10,7 +10,6 @@
 
 que necesitamos:
 
-- necesitamos que el tutor pueda enviar el curso a revision
 - necesitamos que el admin le llegue una notification donde le diga lo que sucedio
 - necesitamos que al admin se le de una lista de los cursos
 - lista dividida en review status
