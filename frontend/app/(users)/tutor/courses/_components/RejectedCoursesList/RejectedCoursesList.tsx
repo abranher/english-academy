@@ -11,14 +11,14 @@ import { MiniCourseCard } from "../MiniCourseCard";
 import { Separator } from "@/components/shadcn/ui/separator";
 import { FolderOpen } from "lucide-react";
 
-export function ApprovedCoursesList({ userId }: { userId: string }) {
+export function RejectedCoursesList({ userId }: { userId: string }) {
   const {
     isPending,
     data: courses,
     isError,
   } = useQuery<Course[] | []>({
-    queryKey: ["get_tutor_courses_list", CourseReviewStatus.APPROVED],
-    queryFn: () => getByReviewStatus(userId, CourseReviewStatus.APPROVED),
+    queryKey: ["get_tutor_courses_list", CourseReviewStatus.REJECTED],
+    queryFn: () => getByReviewStatus(userId, CourseReviewStatus.REJECTED),
   });
 
   if (isPending) return <CoursesListSkeleton />;
@@ -29,10 +29,10 @@ export function ApprovedCoursesList({ userId }: { userId: string }) {
       <section className="flex items-center justify-between">
         <article className="space-y-1">
           <h2 className="text-2xl font-semibold tracking-tight">
-            Listado de cursos Aprobados
+            Listado de cursos Rechazados
           </h2>
           <p className="text-sm text-muted-foreground">
-            En esta sección encontrarás tu cursos que han sido Aprobados.
+            En esta sección encontrarás tu cursos que han sido Rechazados.
           </p>
         </article>
       </section>
@@ -44,7 +44,7 @@ export function ApprovedCoursesList({ userId }: { userId: string }) {
           <div className="text-lg w-full">
             <p className="flex justify-center flex-col items-center">
               <FolderOpen className="w-20 h-20" />
-              No tienes cursos Aprobados.
+              No tienes cursos Rechazados.
             </p>
           </div>
         ) : (

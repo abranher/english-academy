@@ -9,6 +9,7 @@ import { DraftCoursesList } from "../DraftCoursesList";
 import { PendingReviewCoursesList } from "../PendingReviewCoursesList";
 import { NeedsRevisionCoursesList } from "../NeedsRevisionCoursesList";
 import { ApprovedCoursesList } from "../ApprovedCoursesList";
+import { RejectedCoursesList } from "../RejectedCoursesList";
 
 import { Button } from "@/components/shadcn/ui/button";
 import { PlusCircle } from "lucide-react";
@@ -89,6 +90,13 @@ export function CoursesList({ userId }: { userId: string }) {
           className="border-none p-0 outline-none"
         >
           <ApprovedCoursesList userId={userId} />
+        </TabsContent>
+
+        <TabsContent
+          value={CourseReviewStatus.REJECTED}
+          className="border-none p-0 outline-none"
+        >
+          <RejectedCoursesList userId={userId} />
         </TabsContent>
       </Tabs>
     </>
