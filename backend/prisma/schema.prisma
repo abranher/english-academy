@@ -192,7 +192,6 @@ model Course {
   trailer        String?              @db.Text
   reviewStatus   CourseReviewStatus   @default(DRAFT)
   platformStatus CoursePlatformStatus @default(DRAFT)
-  isPublished    Boolean              @default(false)
 
   tutorId String
   tutor   Tutor  @relation(fields: [tutorId], references: [id])
