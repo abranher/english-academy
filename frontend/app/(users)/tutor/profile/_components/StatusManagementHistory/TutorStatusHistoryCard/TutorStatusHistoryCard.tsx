@@ -11,6 +11,7 @@ import { CalendarDays, CircleCheck, NotebookPen, UserPen } from "lucide-react";
 import { ShowHistoryModal } from "./ShowHistoryModal";
 import { ResubmittedAction } from "./ResubmittedAction";
 import { Badge } from "@/components/shadcn/ui/badge";
+import { TutorStatusDecision } from "@/types/enums";
 
 export function TutorStatusHistoryCard({
   history,
@@ -26,13 +27,26 @@ export function TutorStatusHistoryCard({
           <CardTitle>Detalle</CardTitle>
 
           <section className="flex items-center gap-3">
-            {history.resubmittedAt === null ? (
-              <ResubmittedAction userId={userId} history={history} />
-            ) : (
+            {history.decision === TutorStatusDecision.APPROVED && (
               <Badge className="flex gap-1 items-center">
                 <CircleCheck className="w-4" />
-                Realizado
+                Aprobado
               </Badge>
+            )}
+            {history.decision === TutorStatusDecision.NEEDS_CHANGES && (
+              <>
+                {history.resubmittedAt === null ? (
+                  <ResubmittedAction userId={userId} history={history} />
+                ) : (
+                  <Badge
+                    variant="secondary"
+                    className="flex gap-1 items-center"
+                  >
+                    <CircleCheck className="w-4" />
+                    Realizado
+                  </Badge>
+                )}
+              </>
             )}
 
             <ShowHistoryModal history={history} />

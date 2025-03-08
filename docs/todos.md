@@ -15,7 +15,6 @@ Admin:
 - Crear seccion para ver el review
 - Añadir un campo para poner feedback al curso y colocar un boton que diga "Finalizar revision"
 - Colocar la decicion con el radio group
--
 
 - Crear el quiz
 - Mostrar clase
