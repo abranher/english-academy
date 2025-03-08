@@ -1,5 +1,8 @@
 import Link from "next/link";
 
+import { CourseReviewsList } from "./_components/CourseReviewsList";
+
+import { Separator } from "@/components/shadcn/ui/separator";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -8,10 +11,9 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/shadcn/ui/breadcrumb";
-import { CourseReviewsList } from "./_components/CourseReviewsList/CourseReviewsList";
 import { CardDescription, CardTitle } from "@/components/shadcn/ui/card";
 
-export default function CourseReviewPage() {
+export default function CourseReviewsAdminPage() {
   return (
     <>
       <Breadcrumb>
@@ -34,14 +36,16 @@ export default function CourseReviewPage() {
         </BreadcrumbList>
       </Breadcrumb>
 
-      <div>
-        <CardTitle>Cursos</CardTitle>
-        <CardDescription>Listado de cursos</CardDescription>
-      </div>
+      <section className="flex flex-col gap-1">
+        <CardTitle>Historial de revisiones</CardTitle>
+        <CardDescription>
+          Listado del historial de revisiones de este curso
+        </CardDescription>
+      </section>
 
-      <div className="w-full">
-        <CourseReviewsList />
-      </div>
+      <Separator />
+
+      <CourseReviewsList />
     </>
   );
 }

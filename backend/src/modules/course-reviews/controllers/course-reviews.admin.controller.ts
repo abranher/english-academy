@@ -1,7 +1,7 @@
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch } from '@nestjs/common';
 
 import { CourseReviewsAdminService } from '../providers/course-reviews.admin.service';
-import { CreateCourseReviewDto } from '../dto/create-course-review.dto';
+import { UpdateCourseReviewDto } from '../dto/update-course-review.dto';
 
 @Controller('admin/course-reviews')
 export class CourseReviewsAdminController {
@@ -9,13 +9,21 @@ export class CourseReviewsAdminController {
     private readonly courseReviewsAdminService: CourseReviewsAdminService,
   ) {}
 
-  @Post()
-  create(@Body() createCourseReviewDto: CreateCourseReviewDto) {
-    return this.courseReviewsAdminService.create(createCourseReviewDto);
+  @Get('course/:courseId')
+  findAll(@Param('courseId') courseId: string) {
+    return this.courseReviewsAdminService.findAll(courseId);
   }
 
-  @Get('course/:courseId/admin')
-  findAllForAdmin(@Param('courseId') courseId: string) {
-    return this.courseReviewsAdminService.findAllForAdmin(courseId);
+  @Patch(':courseReviewId/user/:userId')
+  update(
+    @Param('courseReviewId') courseReviewId: string,
+    @Param('userId') userId: string,
+    @Body() updateCourseReviewDto: UpdateCourseReviewDto,
+  ) {
+    return this.courseReviewsAdminService.update(
+      courseReviewId,
+      userId,
+      updateCourseReviewDto,
+    );
   }
 }

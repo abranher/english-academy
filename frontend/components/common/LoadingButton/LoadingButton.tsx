@@ -12,7 +12,7 @@ export function LoadingButton({
   isLoading: boolean;
   isValid: boolean;
   isSubmitting: boolean;
-  label: string;
+  label?: string;
 }) {
   return (
     <>

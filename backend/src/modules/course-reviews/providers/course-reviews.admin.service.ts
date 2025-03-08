@@ -1,39 +1,102 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateCourseReviewDto } from '../dto/create-course-review.dto';
+
+import { CourseReviewDecision, CourseReviewStatus } from '@prisma/client';
+
 import { PrismaService } from 'src/modules/prisma/providers/prisma.service';
+import { UpdatedCourseReview } from 'src/modules/notifications/class/updated-course-review';
+import { UpdateCourseReviewDto } from '../dto/update-course-review.dto';
 
 @Injectable()
 export class CourseReviewsAdminService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly updatedCourseReview: UpdatedCourseReview,
+  ) {}
 
-  create(createCourseReviewDto: CreateCourseReviewDto) {
-    return 'This action adds a new courseReview';
+  private async findCourseById(courseId: string) {
+    const course = await this.prisma.course.findUnique({
+      where: { id: courseId },
+    });
+
+    if (!course) throw new NotFoundException('Curso no encontrado.');
+
+    return course;
   }
 
-  async findAllForAdmin(courseId: string) {
-    const ownCourse = await this.prisma.course.findUnique({
-      where: {
-        id: courseId,
-      },
+  async findAll(courseId: string) {
+    const course = await this.findCourseById(courseId);
+
+    return await this.prisma.courseReview.findMany({
+      where: { courseId: course.id },
+    });
+  }
+
+  async update(
+    courseReviewId: string,
+    userId: string,
+    updateCourseReviewDto: UpdateCourseReviewDto,
+  ) {
+    const courseReview = await this.prisma.courseReview.findUnique({
+      where: { id: courseReviewId },
     });
 
-    if (!ownCourse) throw new NotFoundException('Curso no encontrado.');
+    if (!courseReview)
+      throw new NotFoundException('Revisión del curso no encontrado.');
 
-    const courseReviews = await this.prisma.courseReview.findMany({
-      where: {
-        courseId: ownCourse.id,
-      },
-      include: {
-        course: true,
-      },
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
     });
 
-    return courseReviews.map((courseReview) => {
-      const { ...rest } = courseReview;
-      return {
-        ...rest,
-        reviewStatus: courseReview.course.reviewStatus,
-      };
-    });
+    if (!user) throw new NotFoundException('Usuario no encontrado.');
+
+    if (updateCourseReviewDto.decision === CourseReviewDecision.NEEDS_CHANGES) {
+      const courseReviewUpdated = await this.prisma.courseReview.update({
+        where: { id: courseReview.id },
+        data: {
+          feedback: updateCourseReviewDto.feedback,
+          decision: CourseReviewDecision.NEEDS_CHANGES,
+          reviewedAt: new Date(),
+        },
+      });
+
+      const courseUpdated = await this.prisma.course.update({
+        where: { id: courseReviewUpdated.courseId },
+        data: { reviewStatus: CourseReviewStatus.NEEDS_REVISION },
+      });
+
+      await this.updatedCourseReview.send(
+        user,
+        updateCourseReviewDto.feedback,
+        updateCourseReviewDto.decision,
+        courseUpdated,
+      );
+
+      return { message: 'Revisión del curso actualizado.' };
+    } else if (
+      updateCourseReviewDto.decision === CourseReviewDecision.APPROVED
+    ) {
+      const courseReviewUpdated = await this.prisma.courseReview.update({
+        where: { id: courseReview.id },
+        data: {
+          feedback: updateCourseReviewDto.feedback,
+          decision: CourseReviewDecision.APPROVED,
+          reviewedAt: new Date(),
+        },
+      });
+
+      const courseUpdated = await this.prisma.course.update({
+        where: { id: courseReviewUpdated.courseId },
+        data: { reviewStatus: CourseReviewStatus.APPROVED },
+      });
+
+      await this.updatedCourseReview.send(
+        user,
+        updateCourseReviewDto.feedback,
+        updateCourseReviewDto.decision,
+        courseUpdated,
+      );
+
+      return { message: 'Revisión del curso actualizado.' };
+    }
   }
 }
