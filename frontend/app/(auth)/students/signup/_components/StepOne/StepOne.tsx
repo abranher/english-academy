@@ -1,13 +1,14 @@
 import axios from "@/config/axios";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { StepOneSchema } from "./StepOneSchema";
-import { useMutation } from "@tanstack/react-query";
+import { useStepTutorStore } from "@/services/store/auth/tutor/stepTutor";
+
 import { z } from "zod";
-import { useStepStudentStore } from "@/services/store/auth/student/stepStudent";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { StepOneSchema } from "./StepOneSchema";
 
 import { Input } from "@/components/shadcn/ui/input";
-import { toast } from "sonner";
 import { Button } from "@/components/shadcn/ui/button";
 import { CardDescription, CardTitle } from "@/components/shadcn/ui/card";
 import { Loader2 } from "lucide-react";
@@ -19,10 +20,11 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/shadcn/ui/form";
+import { AxiosError } from "axios";
 
 export function StepOne() {
-  const nextStep = useStepStudentStore((state) => state.nextStep);
-  const setUserId = useStepStudentStore((state) => state.setUserId);
+  const nextStep = useStepTutorStore((state) => state.nextStep);
+  const setUserId = useStepTutorStore((state) => state.setUserId);
 
   const form = useForm<z.infer<typeof StepOneSchema>>({
     resolver: zodResolver(StepOneSchema),
@@ -30,18 +32,33 @@ export function StepOne() {
 
   const createUserMutation = useMutation({
     mutationFn: (user: { email: string }) =>
-      axios.post("/api/students/signup/email", user),
+      axios.post("/api/tutors/signup/email", user),
     onSuccess: (response) => {
-      if (response.status === 201) {
-        toast.success(response.data.message);
-        setUserId(response.data.userId);
+      if (response.status === 200 || response.status === 201) {
+        const data = response.data;
+        toast.success(data.message);
+        setUserId(data.userId);
         nextStep();
       }
     },
     onError: (error) => {
-      console.log(error);
-      if (error.response.status === 409) {
-        toast.error(error.response.data.message);
+      if (error instanceof AxiosError) {
+        const status = error.response?.status;
+        const message = error.response?.data?.message || "Error desconocido";
+
+        const errorMessages: { [key: number]: string } = {
+          400: "Datos no válidos",
+          404: "Usuario no encontrado",
+          409: "El email ya está en uso.",
+          500: "Error del servidor",
+          "-1": "Error inesperado",
+        };
+
+        if (status) toast.error(errorMessages[status] || message);
+        else toast.error(errorMessages["-1"] || message);
+      } else {
+        toast.error("Error de conexión o error inesperado");
+        console.error("Error que no es de Axios:", error);
       }
     },
   });

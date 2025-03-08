@@ -1,16 +1,17 @@
 import axios from "@/config/axios";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { StepFiveSchema } from "./StepFiveSchema";
+import { AxiosError } from "axios";
 import { useMutation } from "@tanstack/react-query";
-import { z } from "zod";
 import { useStepTutorStore } from "@/services/store/auth/tutor/stepTutor";
-
-import { Input } from "@/components/shadcn/ui/input";
 import { toast } from "sonner";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { StepSixSchema } from "./StepSixSchema";
+import { z } from "zod";
+
 import { Button } from "@/components/shadcn/ui/button";
 import { CardDescription, CardTitle } from "@/components/shadcn/ui/card";
 import { Loader2 } from "lucide-react";
+import { Input } from "@/components/shadcn/ui/input";
 import {
   Form,
   FormControl,
@@ -19,19 +20,18 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/shadcn/ui/form";
-import { AxiosError } from "axios";
 
-export function StepFive() {
+export function StepSix() {
   const nextStep = useStepTutorStore((state) => state.nextStep);
   const userId = useStepTutorStore((state) => state.userId);
 
-  const form = useForm<z.infer<typeof StepFiveSchema>>({
-    resolver: zodResolver(StepFiveSchema),
+  const form = useForm<z.infer<typeof StepSixSchema>>({
+    resolver: zodResolver(StepSixSchema),
   });
 
   const createUserMutation = useMutation({
-    mutationFn: (user: { username: string }) =>
-      axios.post(`/api/tutors/signup/${userId}/username`, user),
+    mutationFn: (user: { birth: Date }) =>
+      axios.post(`/api/tutors/signup/${userId}/birth`, user),
     onSuccess: (response) => {
       if (response.status === 200 || response.status === 201) {
         const data = response.data;
@@ -41,13 +41,13 @@ export function StepFive() {
     },
     onError: (error) => {
       if (error instanceof AxiosError) {
+        console.log(error);
         const status = error.response?.status;
         const message = error.response?.data?.message || "Error desconocido";
 
         const errorMessages: { [key: number]: string } = {
           400: "Datos no válidos",
           404: "Usuario no encontrado",
-          409: "El nombre de usuario ya está en uso.",
           500: "Error del servidor",
           "-1": "Error inesperado",
         };
@@ -61,10 +61,21 @@ export function StepFive() {
     },
   });
 
-  async function onSubmit(data: z.infer<typeof StepFiveSchema>) {
-    createUserMutation.mutate({
-      username: data.username,
-    });
+  async function onSubmit(data: z.infer<typeof StepSixSchema>) {
+    const birthDate = new Date(data.birth);
+    const utcBirthDate = new Date(
+      Date.UTC(
+        birthDate.getFullYear(),
+        birthDate.getMonth(),
+        birthDate.getDate(),
+        birthDate.getHours(),
+        birthDate.getMinutes(),
+        birthDate.getSeconds(),
+        birthDate.getMilliseconds()
+      )
+    );
+
+    createUserMutation.mutate({ birth: utcBirthDate });
   }
 
   const { isSubmitting, isValid } = form.formState;
@@ -72,9 +83,10 @@ export function StepFive() {
   return (
     <>
       <section className="text-center mb-6">
-        <CardTitle className="mb-3">Crea tu Nombre de Usuario</CardTitle>
+        <CardTitle className="mb-3">Tu Fecha de Nacimiento y País</CardTitle>
         <CardDescription>
-          Elige un nombre de usuario único que te represente en la plataforma.
+          Indica tu fecha de nacimiento y el país en el que resides para ajustar
+          la experiencia a tus necesidades.
         </CardDescription>
       </section>
 
@@ -83,14 +95,16 @@ export function StepFive() {
           <section className="mb-32">
             <FormField
               control={form.control}
-              name="username"
+              name="birth"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Nombre de Usuario</FormLabel>
+                  <FormLabel>Fecha de nacimiento</FormLabel>
                   <FormControl>
                     <Input
+                      type="date"
                       disabled={isSubmitting}
-                      placeholder="Ej: jonhdoe12"
+                      max={new Date().toISOString().split("T")[0]}
+                      min="1900-01-01"
                       {...field}
                     />
                   </FormControl>

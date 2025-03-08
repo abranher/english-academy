@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { StepFourSchema } from "./StepFourSchema";
 import { useMutation } from "@tanstack/react-query";
 import { z } from "zod";
-import { useStepStudentStore } from "@/services/store/auth/student/stepStudent";
+import { useStepTutorStore } from "@/services/store/auth/tutor/stepTutor";
 
 import { Input } from "@/components/shadcn/ui/input";
 import { toast } from "sonner";
@@ -19,35 +19,51 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/shadcn/ui/form";
+import { AxiosError } from "axios";
 
 export function StepFour() {
-  const nextStep = useStepStudentStore((state) => state.nextStep);
-  const userId = useStepStudentStore((state) => state.userId);
+  const nextStep = useStepTutorStore((state) => state.nextStep);
+  const userId = useStepTutorStore((state) => state.userId);
 
   const form = useForm<z.infer<typeof StepFourSchema>>({
     resolver: zodResolver(StepFourSchema),
   });
 
   const createUserMutation = useMutation({
-    mutationFn: (user: { username: string }) =>
-      axios.post(`/api/students/signup/${userId}/username`, user),
+    mutationFn: (user: { name: string; lastName: string }) =>
+      axios.post(`/api/tutors/signup/${userId}/names`, user),
     onSuccess: (response) => {
-      if (response.status === 201) {
-        toast.success(response.data.message);
+      if (response.status === 200 || response.status === 201) {
+        const data = response.data;
+        toast.success(data.message);
         nextStep();
       }
     },
     onError: (error) => {
-      console.log(error);
-      if (error.response.status === 409) {
-        toast.error(error.response.data.message);
+      if (error instanceof AxiosError) {
+        const status = error.response?.status;
+        const message = error.response?.data?.message || "Error desconocido";
+
+        const errorMessages: { [key: number]: string } = {
+          400: "Datos no válidos",
+          404: "Usuario no encontrado",
+          500: "Error del servidor",
+          "-1": "Error inesperado",
+        };
+
+        if (status) toast.error(errorMessages[status] || message);
+        else toast.error(errorMessages["-1"] || message);
+      } else {
+        toast.error("Error de conexión o error inesperado");
+        console.error("Error que no es de Axios:", error);
       }
     },
   });
 
   async function onSubmit(data: z.infer<typeof StepFourSchema>) {
     createUserMutation.mutate({
-      username: data.username,
+      name: data.name,
+      lastName: data.lastName,
     });
   }
 
@@ -56,9 +72,10 @@ export function StepFour() {
   return (
     <>
       <section className="text-center mb-6">
-        <CardTitle className="mb-3">Crea tu Nombre de Usuario</CardTitle>
+        <CardTitle className="mb-3">Completa tus Datos Personales</CardTitle>
         <CardDescription>
-          Elige un nombre de usuario único que te represente en la plataforma.
+          Escribe tu nombre y apellido para personalizar tu perfil y facilitar
+          la identificación.
         </CardDescription>
       </section>
 
@@ -67,14 +84,34 @@ export function StepFour() {
           <section className="mb-32">
             <FormField
               control={form.control}
-              name="username"
+              name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Nombre de Usuario</FormLabel>
+                  <FormLabel>Nombre</FormLabel>
                   <FormControl>
                     <Input
                       disabled={isSubmitting}
-                      placeholder="Ej: jonhdoe12"
+                      placeholder="Ej: Jonh"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <br />
+
+            <FormField
+              control={form.control}
+              name="lastName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Apellido</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={isSubmitting}
+                      placeholder="Ej: Doe"
                       {...field}
                     />
                   </FormControl>
