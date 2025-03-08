@@ -63,9 +63,7 @@ export function MiniCourseCard({ course }: { course: Course }) {
                   Revisar
                 </DropdownMenuItem>
               </Link>
-              <Link
-                href={`/admin/courses/reviews/${course.id}?courseTitle=${course.title}&tutor=`}
-              >
+              <Link href={`/tutor/courses/reviews/${course.id}`}>
                 <DropdownMenuItem>
                   <Clock className="h-4 w-4 mr-2" />
                   Historial de revisiones

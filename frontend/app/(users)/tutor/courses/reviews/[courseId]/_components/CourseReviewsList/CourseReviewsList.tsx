@@ -1,10 +1,9 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
-import { DataTable } from "../data-table";
-import { getCourseReviews } from "../../_services/get-course-reviews";
 import { useParams } from "next/navigation";
-import { columns } from "../columns";
+
+import { useQuery } from "@tanstack/react-query";
+import { getCourseReviews } from "../../_services/get-course-reviews";
 import { CourseReviewsSkeleton } from "./CourseReviewsSkeleton";
 
 export function CourseReviewsList() {
@@ -12,24 +11,15 @@ export function CourseReviewsList() {
 
   const {
     isPending,
-    error,
-    data: courseReviews,
+    data: courseReviewStatus,
+    isError,
   } = useQuery({
-    queryKey: ["course-reviews-list", courseId], // Incluye courseId en la queryKey
+    queryKey: ["course_reviews_list", courseId],
     queryFn: () => getCourseReviews(courseId as string),
   });
 
-  return (
-    <>
-      {isPending ? (
-        <>
-          <CourseReviewsSkeleton />
-        </>
-      ) : (
-        <>
-          <DataTable columns={columns} data={courseReviews} />
-        </>
-      )}
-    </>
-  );
+  if (isPending) return <CourseReviewsSkeleton />;
+  if (isError) return <>Ha ocurrido un error al cargar el historial.</>;
+
+  return <>Hola</>;
 }

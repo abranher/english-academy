@@ -1,21 +1,51 @@
-import { Separator } from "@/components/shadcn/ui/separator";
-import { CourseReviewsList } from "./_components/CourseReviewsList/CourseReviewsList";
+import Link from "next/link";
 
-export default function CourseReviewPage() {
+import { CourseReviewsList } from "./_components/CourseReviewsList";
+
+import { Separator } from "@/components/shadcn/ui/separator";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/shadcn/ui/breadcrumb";
+import { CardDescription, CardTitle } from "@/components/shadcn/ui/card";
+
+export default function CourseReviewsPage() {
   return (
     <>
-      <div className="space-y-6">
-        <div>
-          <h3 className="text-lg font-medium">Tus cursos</h3>
-          <p className="text-sm text-muted-foreground">
-            Listado de todos tus cursos.
-          </p>
-        </div>
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink asChild>
+              <Link href="/tutor/dashboard">Dashboard</Link>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbLink asChild>
+              <Link href="/tutor/courses">Cursos</Link>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>Historial de revisiones</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
 
-        <Separator />
+      <section className="flex flex-col gap-1">
+        <CardTitle>Historial de revisiones</CardTitle>
+        <CardDescription>
+          Listado del historial de revisiones de este curso
+        </CardDescription>
+      </section>
 
-        <CourseReviewsList />
-      </div>
+      <Separator />
+
+      <CourseReviewsList />
     </>
   );
 }
