@@ -78,7 +78,7 @@ export function CoursesList({ userId }: { userId: string }) {
         </section>
 
         <TabsContent value="ALL" className="border-none p-0 outline-none">
-          <AllCoursesList />
+          <AllCoursesList userId={userId} />
         </TabsContent>
 
         <TabsContent

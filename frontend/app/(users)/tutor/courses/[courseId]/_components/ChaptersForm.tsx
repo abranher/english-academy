@@ -30,7 +30,7 @@ import { Course } from "@/types/models/Course";
 import { FolderOpen, Plus } from "lucide-react";
 import { toast } from "sonner";
 import ChaptersList from "./ChaptersList";
-import { Spinner } from "@nextui-org/react";
+import { Spinner } from "@heroui/react";
 import {
   Dialog,
   DialogContent,

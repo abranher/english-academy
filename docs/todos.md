@@ -6,6 +6,19 @@
 
 - Verificar los cursos
 
+- listar los cursos en el lado del tutor: -> 30 min
+
+que necesitamos:
+
+- necesitamos que el tutor pueda enviar el curso a revision
+- necesitamos que el admin le llegue una notification donde le diga lo que sucedio
+- necesitamos que al admin se le de una lista de los cursos
+- lista dividida en review status
+- necesitamos que el admin pueda ver el curso
+- necesitamos que el tutor pueda dar un feedback a eso envio
+- necesitamos ademas que se le de un select donde se le muestre la decision que tomo
+- necesitamos que al tutor le llegue esa notification del status de su envio del curso
+
 Tutor:
 
 - Crear seccion para mostrar el historial de reviews

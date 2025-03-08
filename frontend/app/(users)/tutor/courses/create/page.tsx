@@ -1,111 +1,59 @@
-"use client";
-
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import axios from "@/config/axios";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { z } from "zod";
+import { redirect } from "next/navigation";
 
-import { Input } from "@/components/shadcn/ui/input";
-import { Button } from "@/components/shadcn/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/shadcn/ui/card";
-import { Label } from "@/components/shadcn/ui/label";
-import messages from "@/libs/validations/schemas/messages";
+import { auth } from "@/config/auth";
+
+import { CreateCourse } from "./_components/CreateCourse";
+
+import { CardDescription, CardTitle } from "@/components/shadcn/ui/card";
 import { Separator } from "@/components/shadcn/ui/separator";
-import { useSession } from "next-auth/react";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/shadcn/ui/breadcrumb";
 
-const formSchema = z.object({
-  title: z.string(messages.requiredError).min(4, messages.min(4)),
-});
+export default async function CreateCoursePage() {
+  const session = await auth();
 
-export default function CreateCoursePage() {
-  const { data: session } = useSession();
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-  });
-
-  const router = useRouter();
-
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    try {
-      const response = await axios.post(
-        `/api/courses/tutor/${session?.user.tutor?.id} `,
-        values,
-        {
-          headers: {
-            "X-User-Header": `${session?.user.id}`,
-          },
-        }
-      );
-
-      router.push(`/tutor/courses/${response.data.id}`);
-      toast.success("Curso creado!");
-    } catch (error) {
-      console.log(error);
-      toast.error("something ocurred!");
-    }
-  };
+  if (!session) redirect("/tutor/dashboard");
 
   return (
     <>
-      <div className="space-y-6">
-        <div>
-          <h3 className="text-2xl font-medium">Ponle nombre a tu curso</h3>
-          <p className="text-sm text-muted-foreground">
-            ¿Cómo te gustaría llamar a tu curso? No te preocupes, podrás cambiar
-            esto más tarde.
-          </p>
-        </div>
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink asChild>
+              <Link href="/tutor/dashboard">Dashboard</Link>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbLink asChild>
+              <Link href="/tutor/courses">Cursos</Link>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>Crear</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
 
-        <Separator />
+      <section className="flex flex-col gap-2">
+        <CardTitle>Ponle nombre a tu curso</CardTitle>
+        <CardDescription>
+          ¿Cómo te gustaría llamar a tu curso? No te preocupes, podrás cambiar
+          esto más tarde.
+        </CardDescription>
+      </section>
 
-        <div className="w-full flex items-center justify-center h-full p-6">
-          <Card className="w-full max-w-5xl">
-            <CardHeader>
-              <CardTitle>Nuevo Curso</CardTitle>
-              <CardDescription>Crea un nuevo curso.</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={handleSubmit(onSubmit)} className="grid gap-6">
-                <div className="grid gap-3">
-                  <Label htmlFor="name">Título del curso</Label>
-                  <Input
-                    id="name"
-                    type="text"
-                    {...register("title")}
-                    className="w-full"
-                  />
-                  {errors.title && (
-                    <span className="text-red-500">{errors.title.message}</span>
-                  )}
-                </div>
+      <Separator />
 
-                <div className="flex items-center gap-x-2">
-                  <Link href="/tutor/courses">
-                    <Button variant="ghost" type="button">
-                      Cancelar
-                    </Button>
-                  </Link>
-                  <Button type="submit">Continuar</Button>
-                </div>
-              </form>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
+      <CreateCourse userId={session.user.id} tutorId={session.user.tutor!.id} />
     </>
   );
 }

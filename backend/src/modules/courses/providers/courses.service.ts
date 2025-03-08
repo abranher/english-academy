@@ -30,7 +30,7 @@ export class CoursesService {
       activityLogMessages['course_create'],
     );
 
-    return course;
+    return { message: 'Curso creado!', course };
   }
 
   async createAttachment(id: string, url: string) {

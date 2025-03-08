@@ -2,7 +2,7 @@
 
 import { Badge } from "@/components/shadcn/ui/badge";
 import { assetImg } from "@/libs/asset";
-import { Image } from "@nextui-org/react";
+import { Image } from "@heroui/react";
 import { ImageIcon } from "lucide-react";
 
 export default function TitleSection({ course }: { course: any }) {

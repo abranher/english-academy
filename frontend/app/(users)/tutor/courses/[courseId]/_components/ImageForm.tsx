@@ -8,7 +8,7 @@ import { useDropzone } from "react-dropzone";
 
 import { Button } from "@/components/shadcn/ui/button";
 import { Card, CardContent } from "@/components/shadcn/ui/card";
-import { Image } from "@nextui-org/react";
+import { Image } from "@heroui/react";
 import { toast } from "sonner";
 import {
   CheckCircle,

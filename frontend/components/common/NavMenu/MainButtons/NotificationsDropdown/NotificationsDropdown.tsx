@@ -69,12 +69,12 @@ export function NotificationsDropdown({ userId }: { userId: string }) {
           {isPending ? (
             <>
               {[1, 2, 3].map((item) => (
-                <>
-                  <DropdownMenuItem key={item} asChild>
+                <span key={item}>
+                  <DropdownMenuItem asChild>
                     <Skeleton className="h-16" />
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
-                </>
+                </span>
               ))}
             </>
           ) : (

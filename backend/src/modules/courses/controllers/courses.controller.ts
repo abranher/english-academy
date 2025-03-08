@@ -29,7 +29,7 @@ export class CoursesController {
 
   @Post('tutor/:tutorId')
   create(
-    @Headers('X-User-Header') userHeader: string,
+    @Headers('X-User-Id-Audit-Log') userHeader: string,
     @Param('tutorId') tutorId: string,
     @Body() createCourseDto: CreateCourseDto,
   ) {

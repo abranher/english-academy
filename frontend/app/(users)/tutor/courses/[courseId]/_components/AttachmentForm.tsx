@@ -16,7 +16,7 @@ import { useCallback, useState } from "react";
 import { toast } from "sonner";
 import { Course } from "@/types/models/Course";
 import { Attachment } from "@/types/models/Attachment";
-import { Image } from "@nextui-org/react";
+import { Image } from "@heroui/react";
 
 interface AttachmentFormProps {
   initialData: Course & { attachments: Attachment[] };

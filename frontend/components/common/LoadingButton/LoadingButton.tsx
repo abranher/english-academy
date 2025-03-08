@@ -7,16 +7,18 @@ export function LoadingButton({
   isLoading,
   isValid,
   isSubmitting,
+  label = "Confirmar",
 }: {
   isLoading: boolean;
   isValid: boolean;
   isSubmitting: boolean;
+  label: string;
 }) {
   return (
     <>
       {!isLoading ? (
         <Button disabled={!isValid || isSubmitting} type="submit">
-          Confirmar
+          {label}
         </Button>
       ) : (
         <Button disabled>
