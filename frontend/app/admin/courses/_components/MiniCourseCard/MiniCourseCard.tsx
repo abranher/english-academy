@@ -23,7 +23,7 @@ export function MiniCourseCard({ course }: { course: Course }) {
     <>
       <Card className="flex flex-wrap items-start gap-5 p-3 relative">
         {course.image ? (
-          <article className="aspect-video rounded-lg w-48">
+          <article className="aspect-video rounded-lg w-60">
             <Image
               src={assetImg(course.image)}
               alt={course.title}
@@ -31,12 +31,12 @@ export function MiniCourseCard({ course }: { course: Course }) {
             />
           </article>
         ) : (
-          <article className="grid w-48 aspect-video place-items-center rounded-lg bg-zinc-100 dark:bg-zinc-800">
+          <article className="grid w-60 aspect-video place-items-center rounded-lg bg-zinc-100 dark:bg-zinc-800">
             <ImageIcon className="text-gray-500" />
           </article>
         )}
 
-        <section className="flex gap-3 items-start py-2">
+        <section className="flex items-start py-2">
           <article className="flex flex-col gap-2">
             <CardTitle>{truncateString(course.title, "md")}</CardTitle>
             <CardDescription>
@@ -44,6 +44,13 @@ export function MiniCourseCard({ course }: { course: Course }) {
             </CardDescription>
             <article className="flex">
               <ReviewStatusBadge status={course.reviewStatus} />
+            </article>
+            <article className="flex">
+              <Link href={`/admin/tutors/${course.tutor?.user?.id}`}>
+                <Button variant="link" size="sm" className="p-0 h-3">
+                  @{course.tutor?.user?.username}
+                </Button>
+              </Link>
             </article>
           </article>
         </section>
