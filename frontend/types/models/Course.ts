@@ -13,7 +13,6 @@ export interface Course {
   trailer: string | null;
   reviewStatus: CourseReviewStatus;
   platformStatus: CoursePlatformStatus;
-  isPublished: boolean;
 
   price: Price | null;
   category: Category | null;

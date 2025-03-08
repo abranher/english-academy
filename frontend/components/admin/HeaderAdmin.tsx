@@ -35,9 +35,10 @@ import {
   Menu,
 } from "lucide-react";
 import { ThemeSwitcher } from "@/components/common/NavMenu/MainButtons/ThemeSwitcher/ThemeSwitcher";
-import { Avatar } from "@/components/shadcn/ui/avatar";
 import { Badge } from "@/components/shadcn/ui/badge";
 import DropdownItemLink from "@/components/common/DropdownItemLink";
+import { Avatar } from "@heroui/react";
+import { assetImg } from "@/libs/asset";
 
 export default function HeaderAdmin() {
   const { data: session, status } = useSession();
@@ -121,9 +122,21 @@ export default function HeaderAdmin() {
         {status === "authenticated" && (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Avatar className="flex items-center justify-center h-10 w-10 cursor-pointer">
-                <Avvvatars size={40} value={session.user.email} />
-              </Avatar>
+              {session.user.avatarUrl ? (
+                <Avatar
+                  isBordered
+                  className="h-8 w-8 cursor-pointer"
+                  color="default"
+                  src={assetImg(session.user.avatarUrl)}
+                />
+              ) : (
+                <Avatar
+                  isBordered
+                  className="h-8 w-8 cursor-pointer"
+                  color="default"
+                  icon={<Avvvatars size={40} value={session.user.email} />}
+                />
+              )}
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56" align="end" forceMount>
               <DropdownMenuLabel className="font-normal">

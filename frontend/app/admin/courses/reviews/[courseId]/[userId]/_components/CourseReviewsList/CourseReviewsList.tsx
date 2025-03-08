@@ -39,14 +39,14 @@ export function CourseReviewsList() {
             </article>
           </>
         ) : (
-          <>
+          <article className="flex flex-col gap-4">
             {courseReviews.map((courseReview: CourseReview) => (
               <CourseReviewCard
                 key={courseReview.id}
                 courseReview={courseReview}
               />
             ))}
-          </>
+          </article>
         )}
       </section>
     </>

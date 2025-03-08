@@ -33,6 +33,7 @@ import {
 } from "@/components/shadcn/ui/dropdown-menu";
 import { NotificationsDropdown } from "./NotificationsDropdown";
 import { ThemeSwitcher } from "./ThemeSwitcher";
+import { assetImg } from "@/libs/asset";
 
 export function MainButtons() {
   const { data: session, status } = useSession();
@@ -66,21 +67,41 @@ export function MainButtons() {
             <NavbarItem>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Avatar
-                    isBordered
-                    className="h-8 w-8 cursor-pointer"
-                    color="default"
-                    icon={<Avvvatars size={40} value={session.user.email} />}
-                  />
+                  {session.user.avatarUrl ? (
+                    <Avatar
+                      isBordered
+                      className="h-8 w-8 cursor-pointer"
+                      color="default"
+                      src={assetImg(session.user.avatarUrl)}
+                    />
+                  ) : (
+                    <Avatar
+                      isBordered
+                      className="h-8 w-8 cursor-pointer"
+                      color="default"
+                      icon={<Avvvatars size={40} value={session.user.email} />}
+                    />
+                  )}
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-56" align="end" forceMount>
                   <section className="flex flex-col items-center p-4">
-                    <Avatar
-                      isBordered
-                      className="h-24 w-24"
-                      color="default"
-                      icon={<Avvvatars size={100} value={session.user.email} />}
-                    />
+                    {session.user.avatarUrl ? (
+                      <Avatar
+                        isBordered
+                        className="w-24 h-24 cursor-pointer"
+                        color="default"
+                        src={assetImg(session.user.avatarUrl)}
+                      />
+                    ) : (
+                      <Avatar
+                        isBordered
+                        className="w-24 h-24 cursor-pointer"
+                        color="default"
+                        icon={
+                          <Avvvatars size={100} value={session.user.email} />
+                        }
+                      />
+                    )}
                     <h2 className="pt-2 text-lg font-semibold">
                       {session.user.name}
                     </h2>

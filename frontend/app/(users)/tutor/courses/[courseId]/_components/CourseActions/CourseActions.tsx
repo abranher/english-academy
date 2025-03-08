@@ -11,7 +11,10 @@ export function CourseActions({ course }: { course: Course }) {
   return (
     <div className="hidden items-center gap-3 md:ml-auto md:flex">
       <ReviewStatusBadge status={course.reviewStatus} />
-      {course.reviewStatus === CourseReviewStatus.DRAFT && <SendToRevision />}
+      {(course.reviewStatus === CourseReviewStatus.DRAFT ||
+        course.reviewStatus === CourseReviewStatus.NEEDS_REVISION) && (
+        <SendToRevision />
+      )}
       <CourseArchive />
     </div>
   );

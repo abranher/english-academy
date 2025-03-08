@@ -25,6 +25,7 @@ import {
 import { Separator } from "@/components/shadcn/ui/separator";
 import { AlertBanner } from "@/components/common/AlertBanner";
 import { CourseActions } from "./_components/CourseActions";
+import { CourseReviewStatus } from "@/types/enums";
 
 export default async function CourseIdPage({
   params,
@@ -81,7 +82,7 @@ export default async function CourseIdPage({
 
       <Separator />
 
-      {!course.isPublished && (
+      {course.reviewStatus !== CourseReviewStatus.APPROVED && (
         <AlertBanner
           label={
             "Este curso aun no está aprobado, por lo que no será visible para el estudiante."
