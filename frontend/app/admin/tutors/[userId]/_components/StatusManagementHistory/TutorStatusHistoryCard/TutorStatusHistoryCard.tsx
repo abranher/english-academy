@@ -3,7 +3,7 @@
 import { TutorStatusHistory } from "@/types/models/TutorStatusHistory";
 import { formatDateNormal } from "@/libs/date";
 import { truncateString } from "@/libs/format";
-import { User } from "@/types/models/User";
+import { TutorStatusDecision } from "@/types/enums";
 
 import { CardDescription, CardTitle } from "@/components/shadcn/ui/card";
 import { StatusBadge } from "@/components/tutors/StatusBadge";
@@ -19,10 +19,8 @@ import { Badge } from "@/components/shadcn/ui/badge";
 
 export function TutorStatusHistoryCard({
   history,
-  userTutor,
 }: {
   history: TutorStatusHistory;
-  userTutor: User;
 }) {
   return (
     <>
@@ -31,17 +29,29 @@ export function TutorStatusHistoryCard({
           <CardTitle>Detalle</CardTitle>
 
           <section className="flex items-center gap-3">
-            {history.resubmittedAt === null && (
-              <Badge variant="secondary" className="flex gap-1 items-center">
-                <CircleAlert className="w-4" />
-                En espera
-              </Badge>
-            )}
-            {history.resubmittedAt !== null && (
+            {history.decision === TutorStatusDecision.APPROVED && (
               <Badge className="flex gap-1 items-center">
                 <CircleCheck className="w-4" />
-                Realizado
+                Aprobado
               </Badge>
+            )}
+            {history.decision === TutorStatusDecision.NEEDS_CHANGES && (
+              <>
+                {history.resubmittedAt === null ? (
+                  <Badge variant="warning" className="flex gap-1 items-center">
+                    <CircleAlert className="w-4" />
+                    En espera
+                  </Badge>
+                ) : (
+                  <Badge
+                    variant="secondary"
+                    className="flex gap-1 items-center"
+                  >
+                    <CircleCheck className="w-4" />
+                    Realizado
+                  </Badge>
+                )}
+              </>
             )}
 
             <ShowHistoryModal history={history} />

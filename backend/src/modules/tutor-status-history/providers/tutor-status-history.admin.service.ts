@@ -59,7 +59,6 @@ export class TutorStatusHistoryAdminService {
           comment: createTutorStatusHistoryDto.comment,
           previousStatus: currentTutor.status,
           decision: TutorStatusDecision.APPROVED,
-          resubmittedAt: new Date(),
           tutorId: currentTutor.id,
         },
       });

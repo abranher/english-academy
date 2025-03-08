@@ -47,7 +47,6 @@ export function StatusManagementHistory({
                         <TutorStatusHistoryCard
                           key={history.id}
                           history={history}
-                          userTutor={userTutor}
                         />
                       ))
                     : tutorStatusHistory
@@ -56,7 +55,6 @@ export function StatusManagementHistory({
                           <TutorStatusHistoryCard
                             key={history.id}
                             history={history}
-                            userTutor={userTutor}
                           />
                         ))}
                 </>

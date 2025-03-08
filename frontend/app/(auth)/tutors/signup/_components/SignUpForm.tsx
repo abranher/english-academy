@@ -60,14 +60,14 @@ export default function SignUpForm() {
               <section>
                 {step === 0 && <StepInit />}
                 {step === 1 && <StepOne />}
-                {step === 2 && <StepTwo />}
-                {step === 3 && <StepThree />}
-                {step === 4 && <StepFour />}
-                {step === 5 && <StepFive />}
-                {step === 6 && <StepSix />}
-                {step === 7 && <StepSeven />}
-                {step === 8 && <StepEight />}
-                {step === 9 && <StepFinal />}
+                {/*step === 2 && <StepTwo />*/}
+                {step === 2 && <StepThree />}
+                {step === 3 && <StepFour />}
+                {step === 4 && <StepFive />}
+                {step === 5 && <StepSix />}
+                {step === 6 && <StepSeven />}
+                {step === 7 && <StepEight />}
+                {step === 8 && <StepFinal />}
               </section>
             </AlertDialogHeader>
           </AlertDialogContent>

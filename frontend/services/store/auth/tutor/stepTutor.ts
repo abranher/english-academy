@@ -14,13 +14,16 @@ interface StepTutorState {
   resetSteps: () => void;
 }
 
+const STEP = 0;
+const TOTAL_STEPS = 8;
+
 export const useStepTutorStore = create<StepTutorState>()(
   persist(
     (set, get) => ({
       open: false,
       userId: "",
-      step: 0,
-      totalSteps: 9,
+      step: STEP,
+      totalSteps: TOTAL_STEPS,
       setOpen: (value: boolean) => set({ open: value }),
       nextStep: () => set((state) => ({ step: state.step + 1 })),
       prevStep: () => set((state) => ({ step: state.step - 1 })),
