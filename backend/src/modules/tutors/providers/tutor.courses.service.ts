@@ -3,7 +3,7 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
-import { Roles, TutorStatus } from '@prisma/client';
+import { CourseReviewStatus, Roles } from '@prisma/client';
 
 import { PrismaService } from 'src/modules/prisma/providers/prisma.service';
 
@@ -30,35 +30,52 @@ export class TutorCoursesService {
     }
   }
 
-  async findByStatus(status: TutorStatus) {
-    if (status === TutorStatus.NEW)
-      return this.prisma.user.findMany({
-        where: { role: Roles.TUTOR, tutor: { status: TutorStatus.NEW } },
-        include: { tutor: true },
+  async findByStatus(userId: string, status: CourseReviewStatus) {
+    try {
+      const user = await this.findUserTutor(userId);
+
+      const tutor = await this.prisma.tutor.findUnique({
+        where: { userId: user.id },
       });
-    else if (status === TutorStatus.PENDING)
-      return this.prisma.user.findMany({
-        where: { role: Roles.TUTOR, tutor: { status: TutorStatus.PENDING } },
-        include: { tutor: true },
-      });
-    else if (status === TutorStatus.RESUBMITTED)
-      return this.prisma.user.findMany({
-        where: {
-          role: Roles.TUTOR,
-          tutor: { status: TutorStatus.RESUBMITTED },
-        },
-        include: { tutor: true },
-      });
-    else if (status === TutorStatus.APPROVED)
-      return this.prisma.user.findMany({
-        where: { role: Roles.TUTOR, tutor: { status: TutorStatus.APPROVED } },
-        include: { tutor: true },
-      });
-    else if (status === TutorStatus.REJECTED)
-      return this.prisma.user.findMany({
-        where: { role: Roles.TUTOR, tutor: { status: TutorStatus.REJECTED } },
-        include: { tutor: true },
-      });
+
+      if (status === CourseReviewStatus.DRAFT)
+        return await this.prisma.course.findMany({
+          where: { tutorId: tutor.id, reviewStatus: CourseReviewStatus.DRAFT },
+        });
+      else if (status === CourseReviewStatus.PENDING_REVIEW)
+        return await this.prisma.course.findMany({
+          where: {
+            tutorId: tutor.id,
+            reviewStatus: CourseReviewStatus.PENDING_REVIEW,
+          },
+        });
+      else if (status === CourseReviewStatus.NEEDS_REVISION)
+        return await this.prisma.course.findMany({
+          where: {
+            tutorId: tutor.id,
+            reviewStatus: CourseReviewStatus.NEEDS_REVISION,
+          },
+        });
+      else if (status === CourseReviewStatus.APPROVED)
+        return await this.prisma.course.findMany({
+          where: {
+            tutorId: tutor.id,
+            reviewStatus: CourseReviewStatus.APPROVED,
+          },
+        });
+      else if (status === CourseReviewStatus.REJECTED)
+        return await this.prisma.course.findMany({
+          where: {
+            tutorId: tutor.id,
+            reviewStatus: CourseReviewStatus.REJECTED,
+          },
+        });
+    } catch (error) {
+      throw new InternalServerErrorException(
+        'Error al obtener los cursos:',
+        error,
+      );
+    }
   }
 
   async findUserTutor(userId: string) {

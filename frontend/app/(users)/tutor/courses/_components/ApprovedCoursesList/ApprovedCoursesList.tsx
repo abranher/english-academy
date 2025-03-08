@@ -11,14 +11,14 @@ import { MiniCourseCard } from "../MiniCourseCard";
 import { Separator } from "@/components/shadcn/ui/separator";
 import { FolderOpen } from "lucide-react";
 
-export function DraftCoursesList({ userId }: { userId: string }) {
+export function ApprovedCoursesList({ userId }: { userId: string }) {
   const {
     isPending,
     data: courses,
     isError,
   } = useQuery<Course[] | []>({
-    queryKey: ["get_tutor_courses_list", CourseReviewStatus.DRAFT],
-    queryFn: () => getByReviewStatus(userId, CourseReviewStatus.DRAFT),
+    queryKey: ["get_tutor_courses_list", CourseReviewStatus.APPROVED],
+    queryFn: () => getByReviewStatus(userId, CourseReviewStatus.APPROVED),
   });
 
   if (isPending) return <CoursesListSkeleton />;
@@ -29,10 +29,10 @@ export function DraftCoursesList({ userId }: { userId: string }) {
       <section className="flex items-center justify-between">
         <article className="space-y-1">
           <h2 className="text-2xl font-semibold tracking-tight">
-            Listado de cursos en Borrador
+            Listado de cursos Aprobados
           </h2>
           <p className="text-sm text-muted-foreground">
-            En esta sección encontrarás todos tu cursos en Borrador.
+            En esta sección encontrarás todos tu cursos Aprobados.
           </p>
         </article>
       </section>
@@ -44,7 +44,7 @@ export function DraftCoursesList({ userId }: { userId: string }) {
           <div className="text-lg w-full">
             <p className="flex justify-center flex-col items-center">
               <FolderOpen className="w-20 h-20" />
-              No tienes cursos en borrador.
+              No tienes cursos Aprobados.
             </p>
           </div>
         ) : (

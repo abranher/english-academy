@@ -15,7 +15,7 @@ export function CoursesListSkeleton() {
 
       <section className="flex flex-col gap-3">
         {[1, 2].map((item) => (
-          <Skeleton key={item} className="w-full py-14" />
+          <Skeleton key={item} className="w-full py-16" />
         ))}
       </section>
     </>

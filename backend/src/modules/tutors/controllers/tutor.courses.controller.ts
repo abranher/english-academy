@@ -1,6 +1,6 @@
 import { Controller, Get, Param } from '@nestjs/common';
 
-import { TutorStatus } from '@prisma/client';
+import { CourseReviewStatus } from '@prisma/client';
 
 import { TutorCoursesService } from '../providers/tutor.courses.service';
 
@@ -13,9 +13,12 @@ export class TutorCoursesController {
     return this.tutorCoursesService.findAll(userId);
   }
 
-  @Get('status/:status')
-  async findByStatus(@Param('status') status: TutorStatus) {
-    return this.tutorCoursesService.findByStatus(status);
+  @Get('user/:userId/status/:status')
+  async findByStatus(
+    @Param('userId') userId: string,
+    @Param('status') status: CourseReviewStatus,
+  ) {
+    return this.tutorCoursesService.findByStatus(userId, status);
   }
 
   // Get tutor for description in dashboard

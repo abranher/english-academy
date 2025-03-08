@@ -2,6 +2,14 @@
 
 import Link from "next/link";
 
+import { CourseReviewStatus } from "@/types/enums";
+
+import { AllCoursesList } from "../AllCoursesList";
+import { DraftCoursesList } from "../DraftCoursesList";
+import { PendingReviewCoursesList } from "../PendingReviewCoursesList";
+import { NeedsRevisionCoursesList } from "../NeedsRevisionCoursesList";
+import { ApprovedCoursesList } from "../ApprovedCoursesList";
+
 import { Button } from "@/components/shadcn/ui/button";
 import { PlusCircle } from "lucide-react";
 import {
@@ -10,35 +18,9 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/shadcn/ui/tabs";
-import { CourseReviewStatus } from "@/types/enums";
-import { AllCoursesList } from "../AllCoursesList";
-import { DraftCoursesList } from "../DraftCoursesList";
 import { ScrollArea, ScrollBar } from "@/components/shadcn/ui/scroll-area";
 
 export function CoursesList({ userId }: { userId: string }) {
-  /*switch () {
-    case CoursePlatformStatus.DRAFT:
-      statusText = "Borrador";
-      badgeColor = "bg-slate-500";
-      break;
-    case CoursePlatformStatus.PUBLISHED:
-      statusText = "Publicado";
-      badgeColor = "bg-sky-700";
-      break;
-    case CoursePlatformStatus.ARCHIVED:
-      statusText = "Archivado";
-      badgeColor = "bg-gray-500";
-      break;
-    case CoursePlatformStatus.DELETED:
-      statusText = "Eliminado";
-      badgeColor = "bg-red-500";
-      break;
-    default: // Handle unexpected cases
-      statusText = "Desconocido";
-      badgeColor = "bg-yellow-500";
-  }
-  */
-
   return (
     <>
       <Tabs defaultValue="ALL" className="h-full space-y-6">
@@ -57,13 +39,13 @@ export function CoursesList({ userId }: { userId: string }) {
               <TabsList>
                 <TabsTrigger value="ALL">Todos</TabsTrigger>
                 <TabsTrigger value={CourseReviewStatus.DRAFT}>
-                  En Borrador
+                  Borrador
                 </TabsTrigger>
                 <TabsTrigger value={CourseReviewStatus.PENDING_REVIEW}>
-                  Pendientes
+                  Pendientes de revisión
                 </TabsTrigger>
                 <TabsTrigger value={CourseReviewStatus.NEEDS_REVISION}>
-                  Reenviados
+                  Necesitan revisión
                 </TabsTrigger>
                 <TabsTrigger value={CourseReviewStatus.APPROVED}>
                   Aprobados
@@ -85,7 +67,28 @@ export function CoursesList({ userId }: { userId: string }) {
           value={CourseReviewStatus.DRAFT}
           className="border-none p-0 outline-none"
         >
-          <DraftCoursesList />
+          <DraftCoursesList userId={userId} />
+        </TabsContent>
+
+        <TabsContent
+          value={CourseReviewStatus.PENDING_REVIEW}
+          className="border-none p-0 outline-none"
+        >
+          <PendingReviewCoursesList userId={userId} />
+        </TabsContent>
+
+        <TabsContent
+          value={CourseReviewStatus.NEEDS_REVISION}
+          className="border-none p-0 outline-none"
+        >
+          <NeedsRevisionCoursesList userId={userId} />
+        </TabsContent>
+
+        <TabsContent
+          value={CourseReviewStatus.APPROVED}
+          className="border-none p-0 outline-none"
+        >
+          <ApprovedCoursesList userId={userId} />
         </TabsContent>
       </Tabs>
     </>

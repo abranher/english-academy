@@ -43,7 +43,7 @@ export function AllCoursesList({ userId }: { userId: string }) {
           <div className="text-lg w-full">
             <p className="flex justify-center flex-col items-center">
               <FolderOpen className="w-20 h-20" />
-              Todavía no has creado cursos
+              Todavía no has creado cursos.
             </p>
           </div>
         ) : (
