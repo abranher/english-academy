@@ -2,10 +2,13 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { getAllCourses } from "../../_services/get-all-courses";
+import { Course } from "@/types/models/Course";
+
+import { MiniCourseCard } from "../MiniCourseCard";
+import { CoursesListSkeleton } from "../CoursesListSkeleton";
 
 import { Separator } from "@/components/shadcn/ui/separator";
-import { Course } from "@/types/models/Course";
-import { Card } from "@/components/shadcn/ui/card";
+import { FolderOpen } from "lucide-react";
 
 export function AllCoursesList({ userId }: { userId: string }) {
   const {
@@ -17,9 +20,7 @@ export function AllCoursesList({ userId }: { userId: string }) {
     queryFn: () => getAllCourses(userId),
   });
 
-  console.log(courses);
-
-  if (isPending) return <>Cargando...</>;
+  if (isPending) return <CoursesListSkeleton />;
   if (isError) return <>Ha ocurrido un error cargando los cursos</>;
 
   return (
@@ -37,8 +38,21 @@ export function AllCoursesList({ userId }: { userId: string }) {
 
       <Separator className="my-4" />
 
-      <section>
-        <Card></Card>
+      <section className="flex flex-col gap-3">
+        {courses.length === 0 ? (
+          <div className="text-lg w-full">
+            <p className="flex justify-center flex-col items-center">
+              <FolderOpen className="w-20 h-20" />
+              Todavía no has creado cursos
+            </p>
+          </div>
+        ) : (
+          <>
+            {courses.map((course: Course) => (
+              <MiniCourseCard key={course.id} course={course} />
+            ))}
+          </>
+        )}
       </section>
     </>
   );

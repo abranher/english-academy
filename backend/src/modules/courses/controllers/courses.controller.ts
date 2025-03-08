@@ -15,6 +15,7 @@ import { CoursesService } from '../providers/courses.service';
 import { CreateCourseDto } from '../dto/create-course.dto';
 import { UpdateCourseDto } from '../dto/update-course.dto';
 import { PrismaService } from 'src/modules/prisma/providers/prisma.service';
+import { CoursePlatformStatus } from '@prisma/client';
 
 @Controller('courses')
 export class CoursesController {
@@ -106,17 +107,6 @@ export class CoursesController {
     return this.coursesService.update(id, updateCourseDto);
   }
 
-  /*@Patch(':id/publish')
-  publishCourse(@Param('id') id: string) {
-    return this.coursesService.publishCourse(id);
-  }
-
-  @Patch(':id/unpublish')
-  unpublishCourse(@Param('id') id: string) {
-    return this.coursesService.unpublishCourse(id);
-  }
-    */
-
   @Put()
   updateProgress(
     @Param('id') id: string,
@@ -187,7 +177,7 @@ export class CoursesController {
     try {
       const courses = await this.prisma.course.findMany({
         where: {
-          isPublished: true,
+          platformStatus: CoursePlatformStatus.PUBLISHED,
           title: {
             contains: title,
           },

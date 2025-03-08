@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateChapterDto } from '../dto/create-chapter.dto';
 import { UpdateChapterDto } from '../dto/update-chapter.dto';
 import { PrismaService } from 'src/modules/prisma/providers/prisma.service';
-import { Attachment, Chapter } from '@prisma/client';
+import { Attachment, Chapter, CoursePlatformStatus } from '@prisma/client';
 
 @Injectable()
 export class ChaptersService {
@@ -101,7 +101,7 @@ export class ChaptersService {
 
     const course = await this.prisma.course.findUnique({
       where: {
-        isPublished: true,
+        //isPublished: true,
         id: courseId,
       },
       select: {
@@ -243,7 +243,7 @@ export class ChaptersService {
           id: courseId,
         },
         data: {
-          isPublished: false,
+          platformStatus: CoursePlatformStatus.DRAFT,
         },
       });
     }

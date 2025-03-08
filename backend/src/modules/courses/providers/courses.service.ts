@@ -161,78 +161,19 @@ export class CoursesService {
   }
 
   async update(id: string, updateCourseDto: UpdateCourseDto) {
-    const course = await this.prisma.course.update({
-      where: {
-        id,
-      },
-      data: updateCourseDto,
-    });
+    try {
+      const course = await this.prisma.course.update({
+        where: {
+          id,
+        },
+        data: updateCourseDto,
+      });
 
-    return course;
-  }
-
-  /* async publishCourse(id: string) {
-    const course = await this.prisma.course.findUnique({
-      where: {
-        id,
-      },
-      include: {
-        chapters: true,
-      },
-    });
-
-    if (!course) throw new NotFoundException('Curso no encontrado.');
-
-    const hasPublishedChapter = course.chapters.some(
-      (chapter) => chapter.isPublished,
-    );
-
-    if (
-      !course.title ||
-      !course.description ||
-      !course.image ||
-      !course.levelId ||
-      !hasPublishedChapter
-    ) {
-      return new BadRequestException('Faltan campos obligatorios.');
+      return course;
+    } catch (error) {
+      console.log(error);
     }
-
-    const publishedCourse = this.prisma.course.update({
-      where: {
-        id,
-      },
-      data: {
-        isPublished: true,
-      },
-    });
-
-    return publishedCourse;
   }
-
-  
-
-  async unpublishCourse(id: string) {
-    const course = await this.prisma.course.findUnique({
-      where: {
-        id,
-      },
-    });
-
-    if (!course) throw new NotFoundException('Curso no encontrado.');
-
-    const unpublishedCourse = this.prisma.course.update({
-      where: {
-        id,
-      },
-      data: {
-        isPublished: false,
-      },
-    });
-
-    return unpublishedCourse;
-  }
-
-  */
 
   async updateProgress(id: string, chapterId: string, data: any) {
     const studentProgress = await this.prisma.studentProgress.upsert({

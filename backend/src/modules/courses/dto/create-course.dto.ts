@@ -5,27 +5,27 @@ export class CreateCourseDto {
   @IsString()
   title: string;
 
-  @IsString()
   @IsOptional()
+  @IsString()
   subtitle: string;
 
-  @IsString()
   @IsOptional()
+  @IsString()
   description: string;
 
-  @IsString()
   @IsOptional()
+  @IsString()
   priceId: string;
 
-  @IsString()
   @IsOptional()
+  @IsString()
   levelId: string;
 
-  @IsString()
   @IsOptional()
+  @IsString()
   categoryId: string;
 
-  @IsString()
   @IsOptional()
+  @IsString()
   subcategoryId: string;
 }

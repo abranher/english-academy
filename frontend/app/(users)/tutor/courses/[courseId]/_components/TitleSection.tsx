@@ -3,12 +3,14 @@
 import { ReviewStatusBadge } from "@/components/courses/ReviewStatusBadge";
 import { CardDescription, CardTitle } from "@/components/shadcn/ui/card";
 import { assetImg } from "@/libs/asset";
+import { truncateString } from "@/libs/format";
+import { Course } from "@/types/models/Course";
 import { Image } from "@heroui/react";
 import { ImageIcon } from "lucide-react";
 
-export default function TitleSection({ course }: { course: any }) {
+export default function TitleSection({ course }: { course: Course }) {
   return (
-    <section className="flex flex-wrap items-start gap-8">
+    <section className="flex flex-wrap items-start gap-5">
       {course.image ? (
         <article className="aspect-video rounded-lg w-40">
           <Image
@@ -23,10 +25,12 @@ export default function TitleSection({ course }: { course: any }) {
         </article>
       )}
 
-      <section className="flex gap-5 items-start py-2">
+      <section className="flex gap-3 items-start py-2">
         <article className="flex flex-col gap-2">
-          <CardTitle>{course.title}</CardTitle>
-          <CardDescription>{course.subtitle}</CardDescription>
+          <CardTitle>{truncateString(course.title, "lg")}</CardTitle>
+          <CardDescription>
+            {truncateString(course.subtitle ?? "", "lg")}
+          </CardDescription>
         </article>
         <ReviewStatusBadge status={course.reviewStatus} />
       </section>
