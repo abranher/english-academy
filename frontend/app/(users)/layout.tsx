@@ -1,5 +1,5 @@
-import Footer from "@/components/common/Footer";
 import NavMenu from "@/components/common/NavMenu";
+import Footer from "@/components/common/Footer";
 
 export default function UsersLayout({
   children,
