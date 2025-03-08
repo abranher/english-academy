@@ -1,7 +1,9 @@
 "use client";
 
-import { TutorStatusHistory } from "@/types/models/TutorStatusHistory";
 import { formatDate } from "@/libs/date";
+import { CourseReview } from "@/types/models/CourseReview";
+
+import { ReviewDecisionBadge } from "@/components/courses/ReviewDecisionBadge";
 
 import {
   Dialog,
@@ -13,10 +15,8 @@ import {
   DialogTrigger,
 } from "@/components/shadcn/ui/dialog";
 import { Button } from "@/components/shadcn/ui/button";
-import { CalendarDays, Eye, NotebookPen, UserPen } from "lucide-react";
 import { CardDescription, CardTitle } from "@/components/shadcn/ui/card";
-import { StatusBadge } from "@/components/tutors/StatusBadge";
-import { CourseReview } from "@/types/models/CourseReview";
+import { CalendarDays, Eye, NotebookPen, UserPen } from "lucide-react";
 
 export function ShowCourseReviewModal({
   courseReview,
@@ -41,35 +41,39 @@ export function ShowCourseReviewModal({
                 <NotebookPen className="w-4" />
                 Comentario:
               </DialogTitle>
-              <CardDescription>{courseReview.feedback}</CardDescription>
+              <CardDescription>
+                {courseReview.feedback ?? "Sin revisar"}
+              </CardDescription>
             </article>
 
             <article className="flex gap-2">
               <DialogTitle className="flex gap-1 items-center">
                 <UserPen className="w-4" />
-                Status previo:
+                Decisión:
               </DialogTitle>
               <div className="flex">
-                <StatusBadge status={courseReview.decision} />
+                <ReviewDecisionBadge status={courseReview.decision ?? ""} />
               </div>
             </article>
 
             <article className="flex flex-col gap-1">
               <DialogTitle className="flex gap-1 items-center">
                 <CalendarDays className="w-4" />
-                Cambio de status:
+                Envié a revisión:
               </DialogTitle>
-              <CardDescription>{formatDate(history.createdAt)}</CardDescription>
+              <CardDescription>
+                {formatDate(courseReview.createdAt)}
+              </CardDescription>
             </article>
 
-            {history.resubmittedAt && (
+            {courseReview.reviewedAt && (
               <article className="flex flex-col gap-1">
                 <DialogTitle className="flex gap-1 items-center">
                   <CalendarDays className="w-4" />
-                  Reenvié perfil:
+                  Revisado:
                 </DialogTitle>
                 <CardDescription>
-                  {formatDate(history.resubmittedAt)}
+                  {formatDate(courseReview.reviewedAt)}
                 </CardDescription>
               </article>
             )}

@@ -17,6 +17,7 @@ que necesitamos:
 - necesitamos que el admin pueda ver el curso
 - necesitamos que el tutor pueda dar un feedback a eso envio
 - necesitamos ademas que se le de un select donde se le muestre la decision que tomo
+- necesitamos que se marque la fecha el cual el tutor hizo la revision
 - necesitamos que al tutor le llegue esa notification del status de su envio del curso
 
 Tutor:

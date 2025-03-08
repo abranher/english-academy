@@ -40,12 +40,12 @@ export function AllCoursesList({ userId }: { userId: string }) {
 
       <section className="flex flex-col gap-3">
         {courses.length === 0 ? (
-          <div className="text-lg w-full">
+          <article className="text-lg w-full">
             <p className="flex justify-center flex-col items-center">
               <FolderOpen className="w-20 h-20" />
               Todavía no has creado cursos.
             </p>
-          </div>
+          </article>
         ) : (
           <>
             {courses.map((course: Course) => (

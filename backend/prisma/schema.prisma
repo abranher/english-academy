@@ -218,9 +218,10 @@ model Course {
 }
 
 model CourseReview {
-  id       String                @id @default(uuid())
-  feedback String?
-  decision CourseReviewDecision?
+  id         String                @id @default(uuid())
+  feedback   String?
+  decision   CourseReviewDecision?
+  reviewedAt DateTime?
 
   courseId String
   course   Course @relation(fields: [courseId], references: [id])
