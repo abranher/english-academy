@@ -10,15 +10,19 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/shadcn/ui/card";
-import { ChevronsDown, ChevronsUp, History } from "lucide-react";
+import { ChevronsDown, ChevronsUp, CircleCheck, History } from "lucide-react";
 import { TutorStatusHistoryCard } from "./TutorStatusHistoryCard";
 import { ChangeStatusModal } from "./ChangeStatusModal";
 import { useState } from "react";
+import { User } from "@/types/models/User";
+import { TutorStatus } from "@/types/enums";
 
 export function StatusManagementHistory({
   tutorStatusHistory,
+  userTutor,
 }: {
   tutorStatusHistory: TutorStatusHistory[] | [];
+  userTutor: User;
 }) {
   const [showAll, setShowAll] = useState(false);
 
@@ -43,6 +47,7 @@ export function StatusManagementHistory({
                         <TutorStatusHistoryCard
                           key={history.id}
                           history={history}
+                          userTutor={userTutor}
                         />
                       ))
                     : tutorStatusHistory
@@ -51,6 +56,7 @@ export function StatusManagementHistory({
                           <TutorStatusHistoryCard
                             key={history.id}
                             history={history}
+                            userTutor={userTutor}
                           />
                         ))}
                 </>
@@ -90,11 +96,21 @@ export function StatusManagementHistory({
           </section>
 
           <section className="w-full flex justify-end gap-3 pt-3">
-            {tutorStatusHistory.length === 0 ||
-            tutorStatusHistory[tutorStatusHistory.length - 1].resubmittedAt ? (
-              <ChangeStatusModal />
+            {userTutor.tutor?.status === TutorStatus.APPROVED ? (
+              <Button disabled className="flex gap-1">
+                <CircleCheck className="w-4" />
+                Aprobado
+              </Button>
             ) : (
-              <Button disabled>En espera</Button>
+              <>
+                {tutorStatusHistory.length === 0 ||
+                tutorStatusHistory[tutorStatusHistory.length - 1]
+                  .resubmittedAt ? (
+                  <ChangeStatusModal />
+                ) : (
+                  <Button disabled>En espera</Button>
+                )}
+              </>
             )}
           </section>
         </CardContent>

@@ -5,6 +5,9 @@ CREATE TYPE "Roles" AS ENUM ('ADMIN', 'STUDENT', 'TUTOR');
 CREATE TYPE "TutorStatus" AS ENUM ('NEW', 'PENDING', 'RESUBMITTED', 'APPROVED', 'REJECTED');
 
 -- CreateEnum
+CREATE TYPE "TutorStatusDecision" AS ENUM ('APPROVED', 'NEEDS_CHANGES', 'REJECTED');
+
+-- CreateEnum
 CREATE TYPE "PurchaseOrderStatus" AS ENUM ('UNVERIFIED', 'COMPLETED', 'CANCELED');
 
 -- CreateEnum
@@ -20,7 +23,7 @@ CREATE TYPE "CourseReviewStatus" AS ENUM ('DRAFT', 'PENDING_REVIEW', 'APPROVED',
 CREATE TYPE "CoursePlatformStatus" AS ENUM ('DRAFT', 'PUBLISHED', 'ARCHIVED', 'DELETED');
 
 -- CreateEnum
-CREATE TYPE "CourseReviewDecision" AS ENUM ('APPROVED', 'REJECTED', 'NEEDS_CHANGES');
+CREATE TYPE "CourseReviewDecision" AS ENUM ('APPROVED', 'NEEDS_CHANGES', 'REJECTED');
 
 -- CreateEnum
 CREATE TYPE "ExerciseType" AS ENUM ('MULTIPLE_CHOICE', 'FILL_IN_THE_BLANK');
@@ -84,6 +87,7 @@ CREATE TABLE "TutorStatusHistory" (
     "id" TEXT NOT NULL,
     "comment" TEXT NOT NULL,
     "previousStatus" "TutorStatus" NOT NULL,
+    "decision" "TutorStatusDecision" NOT NULL,
     "resubmittedAt" TIMESTAMP(3),
     "tutorId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -180,6 +184,17 @@ CREATE TABLE "Course" (
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "Course_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "CourseReview" (
+    "id" TEXT NOT NULL,
+    "feedback" TEXT,
+    "decision" "CourseReviewDecision" NOT NULL,
+    "courseId" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "CourseReview_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -322,17 +337,6 @@ CREATE TABLE "ActivityLog" (
 );
 
 -- CreateTable
-CREATE TABLE "CourseReview" (
-    "id" TEXT NOT NULL,
-    "feedback" TEXT,
-    "decision" "CourseReviewDecision" NOT NULL,
-    "courseId" TEXT NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-
-    CONSTRAINT "CourseReview_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
 CREATE TABLE "Notification" (
     "id" TEXT NOT NULL,
     "type" "NotificationType" NOT NULL,
@@ -393,9 +397,6 @@ CREATE INDEX "Purchase_courseId_idx" ON "Purchase"("courseId");
 -- CreateIndex
 CREATE UNIQUE INDEX "Purchase_studentId_courseId_key" ON "Purchase"("studentId", "courseId");
 
--- CreateIndex
-CREATE UNIQUE INDEX "Notification_userId_key" ON "Notification"("userId");
-
 -- AddForeignKey
 ALTER TABLE "User" ADD CONSTRAINT "User_countryId_fkey" FOREIGN KEY ("countryId") REFERENCES "Country"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
@@ -431,6 +432,9 @@ ALTER TABLE "Course" ADD CONSTRAINT "Course_categoryId_fkey" FOREIGN KEY ("categ
 
 -- AddForeignKey
 ALTER TABLE "Course" ADD CONSTRAINT "Course_subcategoryId_fkey" FOREIGN KEY ("subcategoryId") REFERENCES "SubCategory"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "CourseReview" ADD CONSTRAINT "CourseReview_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "Course"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Attachment" ADD CONSTRAINT "Attachment_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "Course"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -470,9 +474,6 @@ ALTER TABLE "Purchase" ADD CONSTRAINT "Purchase_courseId_fkey" FOREIGN KEY ("cou
 
 -- AddForeignKey
 ALTER TABLE "ActivityLog" ADD CONSTRAINT "ActivityLog_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "CourseReview" ADD CONSTRAINT "CourseReview_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "Course"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Notification" ADD CONSTRAINT "Notification_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

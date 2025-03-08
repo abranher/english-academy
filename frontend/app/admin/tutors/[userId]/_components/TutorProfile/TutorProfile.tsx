@@ -44,6 +44,7 @@ export function TutorProfile() {
           />
           <StatusManagementHistory
             tutorStatusHistory={userTutor.tutor!.tutorStatusHistory}
+            userTutor={userTutor}
           />
         </section>
       </section>

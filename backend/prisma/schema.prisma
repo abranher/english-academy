@@ -83,9 +83,10 @@ model Tutor {
 }
 
 model TutorStatusHistory {
-  id             String      @id @default(uuid())
+  id             String              @id @default(uuid())
   comment        String
   previousStatus TutorStatus
+  decision       TutorStatusDecision
   resubmittedAt  DateTime?
 
   tutorId String
@@ -457,6 +458,12 @@ enum TutorStatus {
   REJECTED
 }
 
+enum TutorStatusDecision {
+  APPROVED
+  NEEDS_CHANGES
+  REJECTED
+}
+
 enum PurchaseOrderStatus {
   UNVERIFIED
   COMPLETED
@@ -492,8 +499,8 @@ enum CoursePlatformStatus {
 
 enum CourseReviewDecision {
   APPROVED // El curso fue aprobado
-  REJECTED // El curso fue rechazado
   NEEDS_CHANGES // El curso necesita cambios
+  REJECTED // El curso fue rechazado
 }
 
 enum ExerciseType {
