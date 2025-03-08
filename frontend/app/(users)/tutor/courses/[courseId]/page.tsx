@@ -5,7 +5,6 @@ import axios from "@/config/axios";
 
 import Content from "./_components/Content";
 import TitleSection from "./_components/TitleSection";
-import Actions from "./_components/Actions";
 
 import { Button } from "@/components/shadcn/ui/button";
 import { ChevronLeft } from "lucide-react";
@@ -25,6 +24,7 @@ import {
 } from "@/components/shadcn/ui/breadcrumb";
 import { Separator } from "@/components/shadcn/ui/separator";
 import { AlertBanner } from "@/components/common/AlertBanner";
+import { CourseActions } from "./_components/CourseActions";
 
 export default async function CourseIdPage({
   params,
@@ -109,13 +109,7 @@ export default async function CourseIdPage({
           </TooltipProvider>
         </p>
 
-        <div className="hidden items-center gap-2 md:ml-auto md:flex">
-          <Actions
-            disabled={!isComplete}
-            courseId={params.courseId}
-            isPublished={course.isPublished}
-          />
-        </div>
+        <CourseActions course={course} />
       </section>
 
       <Separator className="mb-3" />
