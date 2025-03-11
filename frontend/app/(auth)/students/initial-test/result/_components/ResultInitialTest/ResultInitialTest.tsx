@@ -12,26 +12,41 @@ import { Session } from "next-auth";
 
 import { useInitialTestData } from "@/components/hooks/useInitialTestData";
 
-import { buttonVariants } from "@/components/shadcn/ui/button";
+import { Button, buttonVariants } from "@/components/shadcn/ui/button";
 import { Card, CardDescription, CardTitle } from "@/components/shadcn/ui/card";
 import { Award, Check, FileQuestion, PercentCircle } from "lucide-react";
+import { useEffect } from "react";
+import { Level } from "@/types/models/Level";
 
 export function ResultInitialTest({ session }: { session: Session }) {
   const {
     isPending,
     data: levels,
     isError,
-  } = useQuery({
+  } = useQuery<Level[]>({
     queryKey: ["get_levels_for_initial_test"],
     queryFn: getLevels,
   });
 
-  const { exercises, correct, progress, level, levelDescription } =
-    useInitialTestData();
+  const {
+    exercises,
+    correct,
+    progress,
+    level: assignedLevel,
+    levelDescription,
+  } = useInitialTestData();
+
+  let filteredLevel: Level | undefined;
+
+  useEffect(() => {
+    if (levels) {
+      filteredLevel = levels.find((level) => level.levelCode === assignedLevel);
+    }
+  }, [levels, assignedLevel]);
 
   const mutation = useMutation({
     mutationFn: (user: { levelId: string }) =>
-      axios.post(`/api/students/assign-level/user/:userId`, user),
+      axios.post(`/api/students/assign-level/user/${session.user.id}`, user),
     onSuccess: (response) => {
       if (response.status === 200 || response.status === 201) {
         const data = response.data;
@@ -105,6 +120,16 @@ export function ResultInitialTest({ session }: { session: Session }) {
             >
               Siguiente
             </Link>
+
+            <Button
+              onClick={() => {
+                mutation.mutate({
+                  levelId: filteredLevel,
+                });
+              }}
+            >
+              Guardar
+            </Button>
           </div>
         </div>
       </Card>
