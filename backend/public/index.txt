@@ -1,1 +1,337 @@
-hola
+[
+  {
+    "id": 1,
+    "level": "A1",
+    "question": "Choose the correct morning greeting:",
+    "answers": ["Good night", "Good afternoon", "Good morning", "Hello"],
+    "correctAnswer": 2,
+    "points": 5
+  },
+  {
+    "id": 2,
+    "level": "A1",
+    "question": "Complete the sentence: I ___ a student.",
+    "answers": ["is", "are", "am", "be"],
+    "correctAnswer": 2,
+    "points": 5
+  },
+  {
+    "id": 3,
+    "level": "A2",
+    "question": "Which is the correct plural of 'child'?",
+    "answers": ["childs", "children", "childes", "childen"],
+    "correctAnswer": 1,
+    "points": 5
+  },
+  {
+    "id": 4,
+    "level": "A2",
+    "question": "Select the correct sentence:",
+    "answers": [
+      "She go to school",
+      "She goes to school",
+      "She going to school",
+      "She is go to school"
+    ],
+    "correctAnswer": 1,
+    "points": 5
+  },
+  {
+    "id": 5,
+    "level": "B1",
+    "question": "What's the past tense of 'begin'?",
+    "answers": ["beginned", "began", "begun", "begin"],
+    "correctAnswer": 1,
+    "points": 5
+  },
+  {
+    "id": 6,
+    "level": "B1",
+    "question": "Choose the correct tag question: You're coming, ___?",
+    "answers": ["aren't you", "isn't you", "don't you", "won't you"],
+    "correctAnswer": 0,
+    "points": 5
+  },
+  {
+    "id": 7,
+    "level": "B2",
+    "question": "Which phrasal verb means 'to cancel'?",
+    "answers": ["call off", "call in", "call out", "call up"],
+    "correctAnswer": 0,
+    "points": 5
+  },
+  {
+    "id": 8,
+    "level": "B2",
+    "question": "Identify the mixed conditional:",
+    "answers": [
+      "If I had money, I'd buy it",
+      "If I had studied, I would have passed",
+      "If I were rich, I would travel",
+      "If you heat water, it boils"
+    ],
+    "correctAnswer": 1,
+    "points": 5
+  },
+  {
+    "id": 9,
+    "level": "C1",
+    "question": "What does 'ephemeral' mean?",
+    "answers": [
+      "Lasting a short time",
+      "Extremely large",
+      "Highly valuable",
+      "Ancient"
+    ],
+    "correctAnswer": 0,
+    "points": 5
+  },
+  {
+    "id": 10,
+    "level": "C1",
+    "question": "Which sentence uses inversion correctly?",
+    "answers": [
+      "Never I have seen such beauty",
+      "Seldom does he arrive on time",
+      "Rarely they visit us",
+      "Hardly ever she complains"
+    ],
+    "correctAnswer": 1,
+    "points": 5
+  },
+  {
+    "id": 11,
+    "level": "C2",
+    "question": "What's the meaning of 'prosopopoeia'?",
+    "answers": [
+      "Giving human qualities to objects",
+      "A rhetorical self-correction",
+      "A paradoxical juxtaposition",
+      "Exaggerated statements"
+    ],
+    "correctAnswer": 0,
+    "points": 5
+  },
+  {
+    "id": 12,
+    "level": "C2",
+    "question": "Identify the correct use of 'plethora':",
+    "answers": [
+      "A plethora of options confused him",
+      "She plethora the room with light",
+      "His speech was plethora meaningful",
+      "They decided to plethora the event"
+    ],
+    "correctAnswer": 0,
+    "points": 5
+  },
+  {
+    "id": 13,
+    "level": "A1",
+    "question": "What color is the sun?",
+    "answers": ["Blue", "Green", "Yellow", "Black"],
+    "correctAnswer": 2,
+    "points": 5
+  },
+  {
+    "id": 14,
+    "level": "A1",
+    "question": "Complete: This is ___ book.",
+    "answers": ["a", "an", "the", "some"],
+    "correctAnswer": 0,
+    "points": 5
+  },
+  {
+    "id": 15,
+    "level": "A2",
+    "question": "Which is correct?",
+    "answers": [
+      "I have 25 years old",
+      "I'm 25 years old",
+      "I has 25 years old",
+      "I'm 25 years"
+    ],
+    "correctAnswer": 1,
+    "points": 5
+  },
+  {
+    "id": 16,
+    "level": "A2",
+    "question": "Choose the correct comparative:",
+    "answers": ["Bigger", "Biggest", "More big", "Biger"],
+    "correctAnswer": 0,
+    "points": 5
+  },
+  {
+    "id": 17,
+    "level": "B1",
+    "question": "What's the opposite of 'generous'?",
+    "answers": ["Kind", "Stingy", "Polite", "Honest"],
+    "correctAnswer": 1,
+    "points": 5
+  },
+  {
+    "id": 18,
+    "level": "B1",
+    "question": "Which is a compound adjective?",
+    "answers": [
+      "Beautiful flowers",
+      "Well-known author",
+      "Quickly running",
+      "Very happy"
+    ],
+    "correctAnswer": 1,
+    "points": 5
+  },
+  {
+    "id": 19,
+    "level": "B2",
+    "question": "Select the correct idiom:",
+    "answers": [
+      "Break a leg",
+      "Open a knee",
+      "Cut a hand",
+      "Bend an arm"
+    ],
+    "correctAnswer": 0,
+    "points": 5
+  },
+  {
+    "id": 20,
+    "level": "B2",
+    "question": "Which sentence is in passive voice?",
+    "answers": [
+      "The cat chased the mouse",
+      "The letter was written by her",
+      "They are eating dinner",
+      "We will go tomorrow"
+    ],
+    "correctAnswer": 1,
+    "points": 5
+  },
+  {
+    "id": 21,
+    "level": "C1",
+    "question": "What does 'circumlocution' mean?",
+    "answers": [
+      "Indirect way of speaking",
+      "Mathematical calculation",
+      "Medical procedure",
+      "Geometric shape"
+    ],
+    "correctAnswer": 0,
+    "points": 5
+  },
+  {
+    "id": 22,
+    "level": "C1",
+    "question": "Identify the synecdoche:",
+    "answers": [
+      "All hands on deck",
+      "She's a rising star",
+      "The world is a stage",
+      "Time is money"
+    ],
+    "correctAnswer": 0,
+    "points": 5
+  },
+  {
+    "id": 23,
+    "level": "C2",
+    "question": "Which is an example of litotes?",
+    "answers": [
+      "It's not the best weather today",
+      "The waves crashed thunderously",
+      "Her smile was like sunshine",
+      "I'm dying of hunger"
+    ],
+    "correctAnswer": 0,
+    "points": 5
+  },
+  {
+    "id": 24,
+    "level": "C2",
+    "question": "What's the meaning of 'zeitgeist'?",
+    "answers": [
+      "Spirit of the age",
+      "Time measurement",
+      "Ghost story",
+      "Financial term"
+    ],
+    "correctAnswer": 0,
+    "points": 5
+  },
+  {
+    "id": 25,
+    "level": "A1",
+    "question": "Choose the correct number: 12",
+    "answers": ["Twelve", "Twenty", "Two", "Eleven"],
+    "correctAnswer": 0,
+    "points": 5
+  },
+  {
+    "id": 26,
+    "level": "A2",
+    "question": "Which is correct?",
+    "answers": [
+      "I usually get up at 7 AM",
+      "I usually gets up at 7 AM",
+      "I usually getting up at 7 AM",
+      "I usually get up on 7 AM"
+    ],
+    "correctAnswer": 0,
+    "points": 5
+  },
+  {
+    "id": 27,
+    "level": "B1",
+    "question": "What's the present perfect form?",
+    "answers": [
+      "I have eaten",
+      "I ate",
+      "I was eating",
+      "I will eat"
+    ],
+    "correctAnswer": 0,
+    "points": 5
+  },
+  {
+    "id": 28,
+    "level": "B2",
+    "question": "Choose the correct phrasal verb:",
+    "answers": [
+      "Look after",
+      "Look at",
+      "Look into",
+      "All of the above"
+    ],
+    "correctAnswer": 3,
+    "points": 5
+  },
+  {
+    "id": 29,
+    "level": "C1",
+    "question": "What's the meaning of 'quintessential'?",
+    "answers": [
+      "Representing the perfect example",
+      "Relating to five elements",
+      "Questionable quality",
+      "Quick-moving"
+    ],
+    "correctAnswer": 0,
+    "points": 5
+  },
+  {
+    "id": 30,
+    "level": "C2",
+    "question": "Identify the correct use of 'sesquipedalian':",
+    "answers": [
+      "His sesquipedalian speech confused many",
+      "The sesquipedalian child ran quickly",
+      "She cooked a sesquipedalian meal",
+      "We saw sesquipedalian mountains"
+    ],
+    "correctAnswer": 0,
+    "points": 5
+  }
+]
