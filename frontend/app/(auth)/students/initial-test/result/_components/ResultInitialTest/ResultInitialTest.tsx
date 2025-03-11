@@ -14,8 +14,11 @@ import { Button } from "@/components/shadcn/ui/button";
 import { Card, CardDescription, CardTitle } from "@/components/shadcn/ui/card";
 import { Award, Check, FileQuestion, PercentCircle } from "lucide-react";
 import { signOut } from "next-auth/react";
+import { useInitialTestStore } from "@/services/store/initial-test";
 
 export function ResultInitialTest({ session }: { session: Session }) {
+  const reset = useInitialTestStore((state) => state.reset);
+
   const {
     isPending: isLevelsLoading,
     data: levels,
@@ -44,6 +47,7 @@ export function ResultInitialTest({ session }: { session: Session }) {
       if (response.status === 200 || response.status === 201) {
         const data = response.data;
         toast.success(data.message);
+        reset();
         signOut();
       }
     },

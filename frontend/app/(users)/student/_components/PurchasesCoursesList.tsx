@@ -1,13 +1,14 @@
 "use client";
 
+import Link from "next/link";
+
 import { Button } from "@/components/shadcn/ui/button";
 import { Card } from "@/components/shadcn/ui/card";
 import { Skeleton } from "@/components/shadcn/ui/skeleton";
 import axios from "@/config/axios";
 import { assetImg } from "@/libs/asset";
-import { Chip, Image } from "@nextui-org/react";
+import { Chip, Image } from "@heroui/react";
 import { useQuery } from "@tanstack/react-query";
-import Link from "next/link";
 
 export default function PurchasesCoursesList({
   studentId,

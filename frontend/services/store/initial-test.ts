@@ -70,7 +70,7 @@ export const useInitialTestStore = create<State>()(
       },
     }),
     {
-      name: "questions",
+      name: "initial_test",
     }
   )
 );
