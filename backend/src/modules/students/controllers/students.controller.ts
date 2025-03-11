@@ -12,6 +12,14 @@ export class StudentsController {
     return this.studentsService.createEmail(createStudentDto);
   }
 
+  @Post('assign-level/user/:userId')
+  assignLevel(
+    @Param('userId') userId: string,
+    @Body() createStudentDto: CreateStudentDto,
+  ) {
+    return this.studentsService.assignLevel(userId, createStudentDto);
+  }
+
   @Post('signup/:userId/password')
   createPassword(
     @Body() createStudentDto: CreateStudentDto,

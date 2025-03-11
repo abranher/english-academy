@@ -26,6 +26,16 @@ export class StudentsService {
     return user;
   }
 
+  assignLevel(userId: string, createStudentDto: CreateStudentDto) {
+    try {
+    } catch (error) {
+      console.error('Error updating user:', error);
+      throw new InternalServerErrorException(
+        'Error del servidor. Por favor intenta nuevamente.',
+      );
+    }
+  }
+
   async createEmail(createStudentDto: CreateStudentDto) {
     const userFound = await this.userService.findByEmail(
       createStudentDto.email,
