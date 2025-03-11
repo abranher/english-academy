@@ -6,7 +6,6 @@ import Test from "./_components/Test";
 
 export default function InitialTestStartPage() {
   const exercises = useInitialTestStore((state) => state.exercises);
-  console.log(exercises);
 
   return (
     <>
@@ -24,7 +23,7 @@ export default function InitialTestStartPage() {
                 <div className="text-5xl">
                   <h2>¿Listo para comenzar?</h2>
                 </div>
-                <div className="flex justify-end">
+                <div className="flex justify-center pt-5">
                   <Start />
                 </div>
               </>
