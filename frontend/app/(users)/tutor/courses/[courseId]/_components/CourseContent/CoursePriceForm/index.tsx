@@ -1,0 +1,1 @@
+export { CoursePriceForm } from "./CoursePriceForm";

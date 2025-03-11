@@ -2,12 +2,14 @@
 
 import { useRouter } from "next/navigation";
 import axios from "@/config/axios";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { getPrices } from "../../../_services/get-prices";
 
 import { Button } from "@/components/shadcn/ui/button";
+import { toast } from "sonner";
 import { CardContent } from "@/components/shadcn/ui/card";
 import {
   Form,
@@ -21,43 +23,43 @@ import {
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/shadcn/ui/select";
-import messages from "@/libs/validations/schemas/messages";
-import { toast } from "sonner";
-import { getLevels } from "../_services/get-levels";
-import { Level } from "@/types/models/Level";
 import { Skeleton } from "@/components/shadcn/ui/skeleton";
-
-interface LevelFormProps {
-  initialData: {
-    levelId: string;
-  };
-  courseId: string;
-}
+import messages from "@/libs/validations/schemas/messages";
+import { Course } from "@/types/models/Course";
+import { Price } from "@/types/models/Price";
 
 const formSchema = z.object({
-  levelId: z.string(messages.requiredError).min(1, messages.min(1)),
+  priceId: z.string(messages.requiredError).min(1, messages.min(1)),
 });
 
-export default function LevelForm({ initialData, courseId }: LevelFormProps) {
+export function CoursePriceForm({
+  course,
+  courseId,
+}: {
+  course: Course;
+  courseId: string;
+}) {
+  const router = useRouter();
+
   const {
     isPending,
     error,
-    data: levels,
+    data: prices,
   } = useQuery({
-    queryKey: ["levels"],
-    queryFn: getLevels,
+    queryKey: ["prices"],
+    queryFn: getPrices,
   });
-
-  const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      levelId: initialData?.levelId || "",
+      priceId: course?.priceId || "",
     },
   });
 
@@ -66,7 +68,7 @@ export default function LevelForm({ initialData, courseId }: LevelFormProps) {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       await axios.patch(`/api/courses/${courseId}`, values);
-      toast.success("Nivel del curso actualizado!");
+      toast.success("Precio del curso actualizado!");
       router.refresh();
     } catch (error) {
       toast.error("Something wrong");
@@ -75,11 +77,16 @@ export default function LevelForm({ initialData, courseId }: LevelFormProps) {
 
   return (
     <>
-      <CardContent>
+      <h2 className="text-lg font-semibold px-3">
+        Tu conocimiento tiene valor. ¡Demuéstralo fijando un precio justo por tu
+        curso!
+      </h2>
+
+      <CardContent className="w-full">
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-4 mt-4"
+            className="space-y-4 mt-4 w-full"
           >
             {isPending ? (
               <>
@@ -91,32 +98,37 @@ export default function LevelForm({ initialData, courseId }: LevelFormProps) {
               <>
                 <FormField
                   control={form.control}
-                  name="levelId"
+                  name="priceId"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Nivel del curso</FormLabel>
+                      <FormLabel>Precio del curso</FormLabel>
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}
                       >
                         <FormControl>
                           <SelectTrigger>
-                            <SelectValue placeholder="Selecciona el nivel apropiado para tu curso" />
+                            <SelectValue placeholder="Elige un precio para tu curso" />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          {levels &&
-                            levels.map((level: Level) => (
-                              <SelectItem key={level.id} value={level.id}>
-                                {level.levelCode + " - " + level.title}
-                              </SelectItem>
-                            ))}
+                          <SelectGroup>
+                            {prices && (
+                              <>
+                                <SelectLabel>Precios</SelectLabel>
+                                {prices.map((price: Price) => (
+                                  <SelectItem key={price.id} value={price.id}>
+                                    {price.amount}
+                                  </SelectItem>
+                                ))}
+                              </>
+                            )}
+                          </SelectGroup>
                         </SelectContent>
                       </Select>
                       <FormDescription>
-                        Elige el nivel adecuado para garantizar que tus
-                        estudiantes puedan seguir el ritmo del curso y alcanzar
-                        sus objetivos.
+                        Selecciona un precio que consideres adecuado para tu
+                        curso.
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
@@ -133,6 +145,12 @@ export default function LevelForm({ initialData, courseId }: LevelFormProps) {
           </form>
         </Form>
       </CardContent>
+
+      <h2 className="text-lg font-semibold px-3">Importancia del precio:</h2>
+      <p className="px-3">
+        Fijar un precio demuestra un compromiso profesional con tu trabajo y te
+        posiciona como un experto en la materia.
+      </p>
     </>
   );
 }

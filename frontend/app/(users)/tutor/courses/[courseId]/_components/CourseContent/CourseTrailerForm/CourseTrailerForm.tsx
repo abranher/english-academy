@@ -5,9 +5,10 @@ import { useRouter } from "next/navigation";
 
 import { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
+import ReactPlayer from "react-player";
 
 import { Button } from "@/components/shadcn/ui/button";
-import { Card, CardContent } from "@/components/shadcn/ui/card";
+import { CardContent } from "@/components/shadcn/ui/card";
 import { Image } from "@heroui/react";
 import { toast } from "sonner";
 import {
@@ -15,9 +16,9 @@ import {
   ImageIcon,
   Loader2,
   UploadCloud,
+  Video,
   XIcon,
 } from "lucide-react";
-import { assetImg } from "@/libs/asset";
 import {
   Dialog,
   DialogContent,
@@ -26,21 +27,15 @@ import {
   DialogTrigger,
 } from "@/components/shadcn/ui/dialog";
 import { Progress } from "@/components/shadcn/ui/progress";
+import { assetVideo } from "@/libs/asset";
 import { Skeleton } from "@/components/shadcn/ui/skeleton";
 import { truncateString } from "@/libs/format";
 
-interface ImageFormProps {
-  initialData: {
-    image: string;
-  };
-  courseId: string;
-}
-
-export default function ImageForm({ course }: any) {
+export function CourseTrailerForm({ course }: any) {
   const [selectedFile, setSelectedFile] = useState<File | undefined>(undefined);
   const [progress, setProgress] = useState(0);
   const [uploadStatus, setUploadStatus] = useState("select");
-  const [imageReady, setImageReady] = useState(false);
+  const [playerReady, setPlayerReady] = useState(false);
 
   // drop zone
   const onDrop = useCallback((acceptedFiles: any) => {
@@ -60,9 +55,9 @@ export default function ImageForm({ course }: any) {
       setUploadStatus("uploading");
 
       const formData = new FormData();
-      formData.set("image", selectedFile);
+      formData.set("trailer", selectedFile);
 
-      await axios.post(`/api/courses/${course.id}/image`, formData, {
+      await axios.post(`/api/courses/${course.id}/trailer`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -76,7 +71,7 @@ export default function ImageForm({ course }: any) {
       });
 
       setUploadStatus("done");
-      toast.success("Imagen actualizada!");
+      toast.success("Trailer actualizada!");
       setSelectedFile(undefined);
       router.refresh();
     } catch (error) {
@@ -99,7 +94,7 @@ export default function ImageForm({ course }: any) {
   };
 
   useEffect(() => {
-    setImageReady(true);
+    setPlayerReady(true);
   }, []);
 
   return (
@@ -107,14 +102,15 @@ export default function ImageForm({ course }: any) {
       <CardContent>
         <section className="grid grid-cols-1 md:grid-cols-2">
           {/** File upload */}
-          {course.image ? (
+          {course.trailer ? (
             <>
-              {imageReady ? (
+              {playerReady ? (
                 <div className="aspect-video rounded-lg">
-                  <Image
-                    src={assetImg(course.image)}
-                    alt={course.title}
-                    className="rounded-md"
+                  <ReactPlayer
+                    controls
+                    width={"100%"}
+                    height={"100%"}
+                    url={assetVideo(course.trailer)}
                   />
                 </div>
               ) : (
@@ -127,21 +123,23 @@ export default function ImageForm({ course }: any) {
             </>
           ) : (
             <div className="grid aspect-video place-items-center rounded-lg bg-zinc-200 dark:bg-zinc-800">
-              <ImageIcon className="h-9 w-9 text-gray-600 aspect-video" />
+              <Video className="h-9 w-9 text-gray-600 aspect-video" />
             </div>
           )}
 
           {/** Description */}
           <article className="px-5 py-2 flex flex-col gap-3">
-            <h2 className="font-semibold">Imagen del curso</h2>
+            <h2 className="font-semibold">Trailer del curso</h2>
             <div className="text-small flex flex-col gap-3">
               <p>
-                Es lo primero que ven los estudiantes. Una imagen atractiva
-                genera curiosidad y ganas de conocer más sobre el curso.
+                El video trailer es la primera impresión que tendrán los
+                estudiantes sobre tu curso. Debe ser visualmente atractivo y
+                captar su atención desde el primer segundo.
               </p>
               <p>
-                Recomendamos un tamaño de 1024x576 píxeles para una mejor
-                visualización
+                Recomendamos una duración de entre 30 segundos y 1 minuto y una
+                resolución de 1080p (1920x1080 píxeles) para una óptima
+                visualización en diferentes dispositivos.
               </p>
             </div>
 
@@ -149,29 +147,30 @@ export default function ImageForm({ course }: any) {
               <DialogTrigger asChild>
                 <Button className="flex gap-3">
                   <UploadCloud />
-                  Subir imagen
+                  Subir trailer
                 </Button>
               </DialogTrigger>
               <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                  <DialogTitle>Subir imagen</DialogTitle>
+                  <DialogTitle>Subir trailer</DialogTitle>
                 </DialogHeader>
                 <form onSubmit={onSubmit}>
                   <div className="grid gap-4 py-4">
                     {selectedFile ? (
                       <>
-                        {selectedFile.type.startsWith("image/") && (
-                          <Image
-                            src={URL.createObjectURL(selectedFile)}
-                            alt="Preview"
-                            className="rounded-md border-3 border-gray-500"
+                        {selectedFile.type.startsWith("video/") && (
+                          <ReactPlayer
+                            controls
+                            width={"100%"}
+                            height={"100%"}
+                            url={URL.createObjectURL(selectedFile)}
                           />
                         )}
                       </>
                     ) : (
                       <>
                         <div className="grid aspect-video place-items-center rounded-lg bg-zinc-200 dark:bg-zinc-800">
-                          <ImageIcon className="h-9 w-9 text-gray-600" />
+                          <Video className="h-9 w-9 text-gray-600" />
                         </div>
                       </>
                     )}
@@ -195,13 +194,13 @@ export default function ImageForm({ course }: any) {
                           </p>
                         )}
                         <p className="text-xs font-medium mt-2">
-                          Se permiten PNG, JPG, JPEG, WEBP (Máx. 5MB).
+                          Formatos permitidos: MP4.
                         </p>
                       </section>
                     )}
 
                     <>
-                      <Card className="grid grid-cols-8 py-2">
+                      <section className="grid grid-cols-8 py-3 rounded-lg text-gray-700 dark:text-gray-100 bg-zinc-200 dark:bg-zinc-900">
                         <div className="col-span-1 flex justify-center items-center">
                           <ImageIcon />
                         </div>
@@ -238,7 +237,7 @@ export default function ImageForm({ course }: any) {
                             </div>
                           </>
                         )}
-                      </Card>
+                      </section>
                       <Button
                         type="submit"
                         disabled={

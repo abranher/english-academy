@@ -1,5 +1,6 @@
 import { CoursePlatformStatus, CourseReviewStatus } from "../enums";
 import { Category } from "./Category";
+import { Chapter } from "./Chapter";
 import { Price } from "./Price";
 import { SubCategory } from "./SubCategory";
 import { Tutor } from "./Tutor";
@@ -18,6 +19,7 @@ export interface Course {
   category: Category | null;
   subcategory: SubCategory | null;
   tutor: Tutor | null;
+  chapters: Chapter[] | [];
 
   priceId: string | null;
   levelId: string | null;

@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateCourseDto } from '../dto/create-course.dto';
 import { UpdateCourseDto } from '../dto/update-course.dto';
 import { PrismaService } from 'src/modules/prisma/providers/prisma.service';
@@ -130,34 +134,41 @@ export class CoursesService {
   }
 
   async findOne(id: string) {
-    return await this.prisma.course.findUnique({
-      where: {
-        id,
-      },
-      include: {
-        category: true,
-        subcategory: true,
-        price: true,
-        chapters: {
-          orderBy: {
-            position: 'asc',
-          },
-          include: {
-            lessons: {
-              include: {
-                class: true,
-                quiz: true,
+    try {
+      return await this.prisma.course.findUnique({
+        where: {
+          id,
+        },
+        include: {
+          category: true,
+          subcategory: true,
+          price: true,
+          chapters: {
+            orderBy: {
+              position: 'asc',
+            },
+            include: {
+              lessons: {
+                include: {
+                  class: true,
+                  quiz: true,
+                },
               },
             },
           },
-        },
-        attachments: {
-          orderBy: {
-            createdAt: 'desc',
+          attachments: {
+            orderBy: {
+              createdAt: 'desc',
+            },
           },
         },
-      },
-    });
+      });
+    } catch (error) {
+      console.error('Error obteniendo el curso:', error);
+      throw new InternalServerErrorException(
+        'Error del servidor. Por favor intenta nuevamente.',
+      );
+    }
   }
 
   async update(id: string, updateCourseDto: UpdateCourseDto) {

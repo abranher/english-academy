@@ -20,7 +20,7 @@ import {
 } from "@/components/shadcn/ui/select";
 import { toast } from "sonner";
 import { Skeleton } from "@/components/shadcn/ui/skeleton";
-import { getCategories } from "../_services/get-categories";
+import { getCategories } from "../../../_services/get-categories";
 import { Category } from "@/types/models/Category";
 import { Course } from "@/types/models/Course";
 import messages from "@/libs/validations/schemas/messages";
@@ -38,7 +38,7 @@ const formSchema = z.object({
   categoryId: z.string(messages.requiredError).min(1, messages.min(1)),
 });
 
-export default function CategoryForm({
+export function CourseCategoryForm({
   course,
   courseId,
 }: {

@@ -3,12 +3,11 @@
 import { useRouter } from "next/navigation";
 import axios from "@/config/axios";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 
 import { Button } from "@/components/shadcn/ui/button";
 import { CardContent } from "@/components/shadcn/ui/card";
-import Editor from "@/components/shadcn/ui/editor";
 import {
   Form,
   FormControl,
@@ -18,31 +17,28 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/shadcn/ui/form";
+import { Input } from "@/components/shadcn/ui/input";
 import messages from "@/libs/validations/schemas/messages";
 import { toast } from "sonner";
 
-interface DescriptionFormProps {
-  initialData: {
-    description: string;
-  };
-  courseId: string;
-}
-
 const formSchema = z.object({
-  description: z.string(messages.requiredError).min(4, messages.min(4)),
+  title: z.string(messages.requiredError).min(4, messages.min(4)),
 });
 
-export default function DescriptionForm({
+export function CourseTitleForm({
   initialData,
   courseId,
-}: DescriptionFormProps) {
+}: {
+  initialData: {
+    title: string;
+  };
+  courseId: string;
+}) {
   const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      description: initialData?.description || "",
-    },
+    defaultValues: initialData,
   });
 
   const { isSubmitting, isValid } = form.formState;
@@ -50,7 +46,7 @@ export default function DescriptionForm({
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       await axios.patch(`/api/courses/${courseId}`, values);
-      toast.success("Descripción del curso actualizada!");
+      toast.success("Título del curso actualizado!");
       router.refresh();
     } catch (error) {
       toast.error("Something wrong");
@@ -67,18 +63,20 @@ export default function DescriptionForm({
           >
             <FormField
               control={form.control}
-              name="description"
+              name="title"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Descripción del curso</FormLabel>
-
+                  <FormLabel>Título del curso</FormLabel>
                   <FormControl>
-                    <Editor {...field} />
+                    <Input
+                      disabled={isSubmitting}
+                      placeholder="p.ej. 'Conversación en Inglés Fluido'"
+                      {...field}
+                    />
                   </FormControl>
-
                   <FormDescription>
-                    Define la descripción que represente el contenido de tu
-                    curso.
+                    Define el título que mejor represente el contenido y el
+                    nivel de tu curso.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>

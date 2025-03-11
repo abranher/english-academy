@@ -1,15 +1,14 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 import axios from "@/config/axios";
 import { useQuery } from "@tanstack/react-query";
-import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import messages from "@/libs/validations/schemas/messages";
-import { getSubCategories } from "../_services/get-subcategories";
+import { z } from "zod";
 
+import { Button } from "@/components/shadcn/ui/button";
+import { CardContent } from "@/components/shadcn/ui/card";
 import {
   Form,
   FormControl,
@@ -19,57 +18,47 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/shadcn/ui/form";
-import { Button } from "@/components/shadcn/ui/button";
-import { CardContent } from "@/components/shadcn/ui/card";
 import {
   Select,
   SelectContent,
-  SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/shadcn/ui/select";
+import messages from "@/libs/validations/schemas/messages";
 import { toast } from "sonner";
+import { getLevels } from "../../../_services/get-levels";
+import { Level } from "@/types/models/Level";
 import { Skeleton } from "@/components/shadcn/ui/skeleton";
-import { SubCategory } from "@/types/models/SubCategory";
-import { Course } from "@/types/models/Course";
 
 const formSchema = z.object({
-  subcategoryId: z.string(messages.requiredError).min(1, messages.min(1)),
+  levelId: z.string(messages.requiredError).min(1, messages.min(1)),
 });
 
-export default function SubCategoryForm({
-  course,
+export function CourseLevelForm({
+  initialData,
   courseId,
 }: {
-  course: Course;
+  initialData: {
+    levelId: string;
+  };
   courseId: string;
 }) {
-  const [subcategories, setSubcategories] = useState([]);
-  const router = useRouter();
-
-  const { categoryId } = course;
-
-  const { isPending, error, data } = useQuery({
-    queryKey: ["subcategories"],
-    queryFn: getSubCategories,
+  const {
+    isPending,
+    error,
+    data: levels,
+  } = useQuery({
+    queryKey: ["levels"],
+    queryFn: getLevels,
   });
 
-  useEffect(() => {
-    if (!data) return;
-
-    const filtered = data.filter(
-      (subcategory: SubCategory) => subcategory.categoryId == categoryId
-    );
-
-    setSubcategories(filtered);
-  }, [categoryId, data]);
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      subcategoryId: course?.subcategoryId || "",
+      levelId: initialData?.levelId || "",
     },
   });
 
@@ -78,7 +67,7 @@ export default function SubCategoryForm({
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       await axios.patch(`/api/courses/${courseId}`, values);
-      toast.success("Subcategoría del curso actualizada!");
+      toast.success("Nivel del curso actualizado!");
       router.refresh();
     } catch (error) {
       toast.error("Something wrong");
@@ -87,11 +76,11 @@ export default function SubCategoryForm({
 
   return (
     <>
-      <CardContent className="w-full">
+      <CardContent>
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-4 mt-4 w-full"
+            className="space-y-4 mt-4"
           >
             {isPending ? (
               <>
@@ -103,42 +92,32 @@ export default function SubCategoryForm({
               <>
                 <FormField
                   control={form.control}
-                  name="subcategoryId"
+                  name="levelId"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Subcategoría del curso</FormLabel>
+                      <FormLabel>Nivel del curso</FormLabel>
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}
                       >
                         <FormControl>
                           <SelectTrigger>
-                            <SelectValue placeholder="Elige una subcategoría para tu curso" />
+                            <SelectValue placeholder="Selecciona el nivel apropiado para tu curso" />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          <SelectGroup>
-                            {subcategories && (
-                              <>
-                                <SelectLabel>Subcategorías</SelectLabel>
-                                {subcategories.map(
-                                  (subcategory: SubCategory) => (
-                                    <SelectItem
-                                      key={subcategory.id}
-                                      value={subcategory.id}
-                                    >
-                                      {subcategory.title}
-                                    </SelectItem>
-                                  )
-                                )}
-                              </>
-                            )}
-                          </SelectGroup>
+                          {levels &&
+                            levels.map((level: Level) => (
+                              <SelectItem key={level.id} value={level.id}>
+                                {level.levelCode + " - " + level.title}
+                              </SelectItem>
+                            ))}
                         </SelectContent>
                       </Select>
                       <FormDescription>
-                        La subcategoría te permite especificar aún más el tema
-                        de tu curso.
+                        Elige el nivel adecuado para garantizar que tus
+                        estudiantes puedan seguir el ritmo del curso y alcanzar
+                        sus objetivos.
                       </FormDescription>
                       <FormMessage />
                     </FormItem>

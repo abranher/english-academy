@@ -29,7 +29,7 @@ import { Chapter } from "@/types/models/Chapter";
 import { Course } from "@/types/models/Course";
 import { FolderOpen, Plus } from "lucide-react";
 import { toast } from "sonner";
-import ChaptersList from "./ChaptersList";
+import ChaptersList from "../../ChaptersList";
 import { Spinner } from "@heroui/react";
 import {
   Dialog,
@@ -50,7 +50,7 @@ const formSchema = z.object({
   title: z.string(messages.requiredError).min(4, messages.min(4)),
 });
 
-export default function ChaptersForm({
+export function CourseChaptersForm({
   initialData,
   courseId,
 }: ChaptersFormProps) {

@@ -21,21 +21,19 @@ import { Input } from "@/components/shadcn/ui/input";
 import messages from "@/libs/validations/schemas/messages";
 import { toast } from "sonner";
 
-interface SubTitleFormProps {
-  initialData: {
-    subtitle: string;
-  };
-  courseId: string;
-}
-
 const formSchema = z.object({
   subtitle: z.string(messages.requiredError).min(4, messages.min(4)),
 });
 
-export default function SubTitleForm({
+export function CourseSubTitleForm({
   initialData,
   courseId,
-}: SubTitleFormProps) {
+}: {
+  initialData: {
+    subtitle: string;
+  };
+  courseId: string;
+}) {
   const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({

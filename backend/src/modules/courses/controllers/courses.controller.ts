@@ -25,9 +25,16 @@ export class CoursesController {
   ) {}
 
   /**
+   * Get Course
+   */
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.coursesService.findOne(id);
+  }
+
+  /**
    * Create routes
    */
-
   @Post('tutor/:tutorId')
   create(
     @Headers('X-User-Id-Audit-Log') userHeader: string,
@@ -54,11 +61,6 @@ export class CoursesController {
   @Get()
   findAll() {
     return this.coursesService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.coursesService.findOne(id);
   }
 
   @Get(':id/chapters')

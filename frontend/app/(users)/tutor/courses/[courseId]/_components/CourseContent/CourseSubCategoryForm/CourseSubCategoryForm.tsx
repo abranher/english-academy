@@ -1,16 +1,15 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import axios from "@/config/axios";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery } from "@tanstack/react-query";
-import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { getPrices } from "../_services/get-prices";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import messages from "@/libs/validations/schemas/messages";
+import { getSubCategories } from "../../../_services/get-subcategories";
 
-import { Button } from "@/components/shadcn/ui/button";
-import { toast } from "sonner";
-import { CardContent } from "@/components/shadcn/ui/card";
 import {
   Form,
   FormControl,
@@ -20,6 +19,8 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/shadcn/ui/form";
+import { Button } from "@/components/shadcn/ui/button";
+import { CardContent } from "@/components/shadcn/ui/card";
 import {
   Select,
   SelectContent,
@@ -29,37 +30,46 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/shadcn/ui/select";
+import { toast } from "sonner";
 import { Skeleton } from "@/components/shadcn/ui/skeleton";
-import messages from "@/libs/validations/schemas/messages";
+import { SubCategory } from "@/types/models/SubCategory";
 import { Course } from "@/types/models/Course";
-import { Price } from "@/types/models/Price";
 
 const formSchema = z.object({
-  priceId: z.string(messages.requiredError).min(1, messages.min(1)),
+  subcategoryId: z.string(messages.requiredError).min(1, messages.min(1)),
 });
 
-export default function PriceForm({
+export function CourseSubCategoryForm({
   course,
   courseId,
 }: {
   course: Course;
   courseId: string;
 }) {
+  const [subcategories, setSubcategories] = useState([]);
   const router = useRouter();
 
-  const {
-    isPending,
-    error,
-    data: prices,
-  } = useQuery({
-    queryKey: ["prices"],
-    queryFn: getPrices,
+  const { categoryId } = course;
+
+  const { isPending, error, data } = useQuery({
+    queryKey: ["subcategories"],
+    queryFn: getSubCategories,
   });
+
+  useEffect(() => {
+    if (!data) return;
+
+    const filtered = data.filter(
+      (subcategory: SubCategory) => subcategory.categoryId == categoryId
+    );
+
+    setSubcategories(filtered);
+  }, [categoryId, data]);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      priceId: course?.priceId || "",
+      subcategoryId: course?.subcategoryId || "",
     },
   });
 
@@ -68,7 +78,7 @@ export default function PriceForm({
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       await axios.patch(`/api/courses/${courseId}`, values);
-      toast.success("Precio del curso actualizado!");
+      toast.success("Subcategoría del curso actualizada!");
       router.refresh();
     } catch (error) {
       toast.error("Something wrong");
@@ -77,11 +87,6 @@ export default function PriceForm({
 
   return (
     <>
-      <h2 className="text-lg font-semibold px-3">
-        Tu conocimiento tiene valor. ¡Demuéstralo fijando un precio justo por tu
-        curso!
-      </h2>
-
       <CardContent className="w-full">
         <Form {...form}>
           <form
@@ -98,37 +103,42 @@ export default function PriceForm({
               <>
                 <FormField
                   control={form.control}
-                  name="priceId"
+                  name="subcategoryId"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Precio del curso</FormLabel>
+                      <FormLabel>Subcategoría del curso</FormLabel>
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}
                       >
                         <FormControl>
                           <SelectTrigger>
-                            <SelectValue placeholder="Elige un precio para tu curso" />
+                            <SelectValue placeholder="Elige una subcategoría para tu curso" />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
                           <SelectGroup>
-                            {prices && (
+                            {subcategories && (
                               <>
-                                <SelectLabel>Precios</SelectLabel>
-                                {prices.map((price: Price) => (
-                                  <SelectItem key={price.id} value={price.id}>
-                                    {price.amount}
-                                  </SelectItem>
-                                ))}
+                                <SelectLabel>Subcategorías</SelectLabel>
+                                {subcategories.map(
+                                  (subcategory: SubCategory) => (
+                                    <SelectItem
+                                      key={subcategory.id}
+                                      value={subcategory.id}
+                                    >
+                                      {subcategory.title}
+                                    </SelectItem>
+                                  )
+                                )}
                               </>
                             )}
                           </SelectGroup>
                         </SelectContent>
                       </Select>
                       <FormDescription>
-                        Selecciona un precio que consideres adecuado para tu
-                        curso.
+                        La subcategoría te permite especificar aún más el tema
+                        de tu curso.
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
@@ -145,12 +155,6 @@ export default function PriceForm({
           </form>
         </Form>
       </CardContent>
-
-      <h2 className="text-lg font-semibold px-3">Importancia del precio:</h2>
-      <p className="px-3">
-        Fijar un precio demuestra un compromiso profesional con tu trabajo y te
-        posiciona como un experto en la materia.
-      </p>
     </>
   );
 }

@@ -1,0 +1,1 @@
+export { CourseTrailerForm } from "./CourseTrailerForm";
