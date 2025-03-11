@@ -4,7 +4,28 @@ import { useStepTutorStore } from "@/services/store/auth/tutor/stepTutor";
 export function StepInit() {
   const nextStep = useStepTutorStore((state) => state.nextStep);
   const setOpen = useStepTutorStore((state) => state.setOpen);
+¡Claro, Abraham! Aquí tienes un texto adaptado para el estudiante:
 
+---
+
+<section className="text-xs flex flex-col gap-2">
+        <article>
+          ¡Estamos encantados de que estés interesado en aprender con nosotros! Al registrarte, te pediremos algunos datos personales que nos ayudarán a conocerte mejor y a ofrecerte la mejor experiencia posible como estudiante.
+        </article>
+        <article>
+          Para asegurarnos de que recibas la formación más adecuada, realizaremos una pequeña prueba inicial de nivel de inglés. Esta prueba nos permitirá evaluar tus habilidades actuales y recomendarte los cursos que mejor se adapten a tu nivel. 
+        </article>
+        <article>
+          No te preocupes, la prueba es sencilla y está diseñada para que puedas demostrar lo que sabes sin estrés. Una vez que la completes, nuestro equipo revisará tus respuestas para ofrecerte un plan de estudios personalizado.
+        </article>
+        <article>
+          Estamos emocionados por acompañarte en tu viaje de aprendizaje y ayudarte a alcanzar tus metas en el dominio del inglés.
+        </article>
+</section>
+
+---
+
+Espero que esto sea justo lo que necesitabas. Si quieres hacer algún ajuste o agregar algo más, ¡dímelo!
   return (
     <>
       <section className="text-xs flex flex-col gap-2">
