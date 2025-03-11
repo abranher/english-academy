@@ -1,7 +1,7 @@
 "use client";
 
-import { useStepTutorStore } from "@/services/store/auth/tutor/stepTutor";
 import axios from "@/config/axios";
+import { useStepStudentStore } from "@/services/store/auth/student/stepStudent";
 import { useCallback, useRef, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { Avatar } from "@heroui/react";
@@ -30,8 +30,8 @@ interface AvatarUploadProps {
 }
 
 export function StepSeven({ onSuccess }: AvatarUploadProps) {
-  const nextStep = useStepTutorStore((state) => state.nextStep);
-  const userId = useStepTutorStore((state) => state.userId);
+  const nextStep = useStepStudentStore((state) => state.nextStep);
+  const userId = useStepStudentStore((state) => state.userId);
 
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -77,17 +77,21 @@ export function StepSeven({ onSuccess }: AvatarUploadProps) {
       const formData = new FormData();
       formData.append("avatar", selectedFile);
 
-      await axios.post(`/api/tutors/files/signup/${userId}/avatar`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-        onUploadProgress: (progressEvent) => {
-          const percent = Math.round(
-            (progressEvent.loaded * 100) / (progressEvent.total || 1)
-          );
-          setProgress(percent);
-        },
-      });
+      await axios.post(
+        `/api/students/files/signup/${userId}/avatar`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          onUploadProgress: (progressEvent) => {
+            const percent = Math.round(
+              (progressEvent.loaded * 100) / (progressEvent.total || 1)
+            );
+            setProgress(percent);
+          },
+        }
+      );
 
       setUploadStatus("done");
       toast.success("¡Imagen de perfil creada correctamente!");

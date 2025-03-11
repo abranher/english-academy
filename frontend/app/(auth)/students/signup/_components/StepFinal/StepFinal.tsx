@@ -4,10 +4,10 @@ import Link from "next/link";
 
 import { Button } from "@/components/shadcn/ui/button";
 import { CardTitle } from "@/components/shadcn/ui/card";
-import { useStepTutorStore } from "@/services/store/auth/tutor/stepTutor";
+import { useStepStudentStore } from "@/services/store/auth/student/stepStudent";
 
 export function StepFinal() {
-  const resetSteps = useStepTutorStore((state) => state.resetSteps);
+  const resetSteps = useStepStudentStore((state) => state.resetSteps);
 
   return (
     <>
@@ -16,15 +16,11 @@ export function StepFinal() {
           <CardTitle>¡Registro Completo!</CardTitle>
         </article>
         <article>
-          Gracias por registrarte como tutor. Hemos guardado tus datos con éxito
-          y ahora están en manos de nuestro equipo de administradores. Ellos
-          revisarán tu información cuidadosamente para asegurarse de que cumples
-          con los requisitos necesarios.
+          Gracias por registrarte como estudiante. Hemos guardado tus datos con
+          éxito.
         </article>
         <article>
-          Recibirás una notificación por correo electrónico informándote si tu
-          registro ha sido aprobado o no. Te agradecemos tu interés en unirte a
-          nuestra comunidad y contribuir a la enseñanza del inglés.
+          Te agradecemos tu interés en unirte a nuestra comunidad.
         </article>
         <article>¡Estamos emocionados de tenerte con nosotros!</article>
 

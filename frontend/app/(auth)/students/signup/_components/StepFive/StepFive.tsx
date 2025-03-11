@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { StepFiveSchema } from "./StepFiveSchema";
 import { useMutation } from "@tanstack/react-query";
 import { z } from "zod";
-import { useStepTutorStore } from "@/services/store/auth/tutor/stepTutor";
+import { useStepStudentStore } from "@/services/store/auth/student/stepStudent";
 
 import { Input } from "@/components/shadcn/ui/input";
 import { toast } from "sonner";
@@ -20,18 +20,19 @@ import {
   FormMessage,
 } from "@/components/shadcn/ui/form";
 import { AxiosError } from "axios";
+import { LoadingButton } from "@/components/common/LoadingButton";
 
 export function StepFive() {
-  const nextStep = useStepTutorStore((state) => state.nextStep);
-  const userId = useStepTutorStore((state) => state.userId);
+  const nextStep = useStepStudentStore((state) => state.nextStep);
+  const userId = useStepStudentStore((state) => state.userId);
 
   const form = useForm<z.infer<typeof StepFiveSchema>>({
     resolver: zodResolver(StepFiveSchema),
   });
 
-  const createUserMutation = useMutation({
+  const mutation = useMutation({
     mutationFn: (user: { username: string }) =>
-      axios.post(`/api/tutors/signup/${userId}/username`, user),
+      axios.post(`/api/students/signup/${userId}/username`, user),
     onSuccess: (response) => {
       if (response.status === 200 || response.status === 201) {
         const data = response.data;
@@ -62,7 +63,7 @@ export function StepFive() {
   });
 
   async function onSubmit(data: z.infer<typeof StepFiveSchema>) {
-    createUserMutation.mutate({
+    mutation.mutate({
       username: data.username,
     });
   }
@@ -100,16 +101,12 @@ export function StepFive() {
             />
           </section>
           <div className="w-full flex justify-end">
-            {!createUserMutation.isPending ? (
-              <Button disabled={!isValid || isSubmitting} type="submit">
-                Continuar
-              </Button>
-            ) : (
-              <Button disabled>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Espere...
-              </Button>
-            )}
+            <LoadingButton
+              isLoading={mutation.isPending}
+              isValid={isValid}
+              isSubmitting={isSubmitting}
+              label="Continuar"
+            />
           </div>
         </form>
       </Form>

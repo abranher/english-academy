@@ -87,10 +87,7 @@ export class TutorsService {
   }
 
   async createPassword(createTutorDto: CreateTutorDto, id: string) {
-    const user = await this.findUserOrThrow(id);
-
-    if (user.password)
-      throw new ConflictException('La contraseña ya fue establecida');
+    await this.findUserOrThrow(id);
 
     const hashedPassword = await hash(createTutorDto.password, 10);
 

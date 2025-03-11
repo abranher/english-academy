@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import axios from "@/config/axios";
-import { useStepTutorStore } from "@/services/store/auth/tutor/stepTutor";
+import { useStepStudentStore } from "@/services/store/auth/student/stepStudent";
 
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -30,13 +30,14 @@ import {
 } from "@/components/shadcn/ui/input-otp";
 import { AxiosError } from "axios";
 import { Progress } from "@/components/shadcn/ui/progress";
+import { LoadingButton } from "@/components/common/LoadingButton";
 
 export function StepTwo() {
   const initialSeconds = 120;
-  const nextStep = useStepTutorStore((state) => state.nextStep);
-  const userId = useStepTutorStore((state) => state.userId);
+  const nextStep = useStepStudentStore((state) => state.nextStep);
+  const userId = useStepStudentStore((state) => state.userId);
 
-  const [time, setTime] = useState(120); // Tiempo inicial en segundos
+  const [time, setTime] = useState(120);
   const [progress, setProgress] = useState(100);
 
   useEffect(() => {
@@ -76,7 +77,7 @@ export function StepTwo() {
     },
   });
 
-  const createUserMutation = useMutation({
+  const mutation = useMutation({
     mutationFn: (user: { token: string }) =>
       axios.post(`/api/tutors/signup/${userId}/verify-email`, user),
     onSuccess: (response) => {
@@ -134,7 +135,7 @@ export function StepTwo() {
   });
 
   async function onSubmit(data: z.infer<typeof StepTwoSchema>) {
-    createUserMutation.mutate({
+    mutation.mutate({
       token: data.token,
     });
   }
@@ -206,16 +207,12 @@ export function StepTwo() {
           <br />
 
           <div className="w-full flex justify-end">
-            {!createUserMutation.isPending ? (
-              <Button disabled={!isValid || isSubmitting} type="submit">
-                Continuar
-              </Button>
-            ) : (
-              <Button disabled>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Espere...
-              </Button>
-            )}
+            <LoadingButton
+              isLoading={mutation.isPending}
+              isValid={isValid}
+              isSubmitting={isSubmitting}
+              label="Continuar"
+            />
           </div>
         </form>
       </Form>

@@ -3,7 +3,7 @@
 import Link from "next/link";
 
 import { Button } from "@/components/shadcn/ui/button";
-import { useStepTutorStore } from "@/services/store/auth/tutor/stepTutor";
+import { useStepStudentStore } from "@/services/store/auth/student/stepStudent";
 
 import {
   AlertDialog,
@@ -24,10 +24,10 @@ import { StepSeven } from "./StepSeven";
 import { StepFinal } from "./StepFinal";
 
 export default function SignUpForm() {
-  const step = useStepTutorStore((state) => state.step);
-  const open = useStepTutorStore((state) => state.open);
-  const setOpen = useStepTutorStore((state) => state.setOpen);
-  const totalSteps = useStepTutorStore((state) => state.totalSteps);
+  const step = useStepStudentStore((state) => state.step);
+  const open = useStepStudentStore((state) => state.open);
+  const setOpen = useStepStudentStore((state) => state.setOpen);
+  const totalSteps = useStepStudentStore((state) => state.totalSteps);
 
   const progressValue = (step / totalSteps) * 100;
 
@@ -45,7 +45,7 @@ export default function SignUpForm() {
               {step === 0 ? (
                 <AlertDialogTitle>
                   <article className="mb-3 text-center font-medium">
-                    ¡Bienvenido a nuestra comunidad de tutores!
+                    ¡Bienvenido a nuestra comunidad de estudiantes!
                   </article>
                 </AlertDialogTitle>
               ) : (
@@ -73,7 +73,7 @@ export default function SignUpForm() {
       </section>
       <div className="mt-4 text-center text-md">
         ¿Ya tienes una cuenta?{" "}
-        <Link href="/tutors/signin" className="underline">
+        <Link href="/students/signin" className="underline">
           Iniciar sesión
         </Link>
       </div>

@@ -1,7 +1,7 @@
 import axios from "@/config/axios";
 import { AxiosError } from "axios";
 import { useMutation } from "@tanstack/react-query";
-import { useStepTutorStore } from "@/services/store/auth/tutor/stepTutor";
+import { useStepStudentStore } from "@/services/store/auth/student/stepStudent";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -20,18 +20,19 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/shadcn/ui/form";
+import { LoadingButton } from "@/components/common/LoadingButton";
 
 export function StepSix() {
-  const nextStep = useStepTutorStore((state) => state.nextStep);
-  const userId = useStepTutorStore((state) => state.userId);
+  const nextStep = useStepStudentStore((state) => state.nextStep);
+  const userId = useStepStudentStore((state) => state.userId);
 
   const form = useForm<z.infer<typeof StepSixSchema>>({
     resolver: zodResolver(StepSixSchema),
   });
 
-  const createUserMutation = useMutation({
+  const mutation = useMutation({
     mutationFn: (user: { birth: Date }) =>
-      axios.post(`/api/tutors/signup/${userId}/birth`, user),
+      axios.post(`/api/students/signup/${userId}/birth`, user),
     onSuccess: (response) => {
       if (response.status === 200 || response.status === 201) {
         const data = response.data;
@@ -75,7 +76,7 @@ export function StepSix() {
       )
     );
 
-    createUserMutation.mutate({ birth: utcBirthDate });
+    mutation.mutate({ birth: utcBirthDate });
   }
 
   const { isSubmitting, isValid } = form.formState;
@@ -114,16 +115,12 @@ export function StepSix() {
             />
           </section>
           <div className="w-full flex justify-end">
-            {!createUserMutation.isPending ? (
-              <Button disabled={!isValid || isSubmitting} type="submit">
-                Continuar
-              </Button>
-            ) : (
-              <Button disabled>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Espere...
-              </Button>
-            )}
+            <LoadingButton
+              isLoading={mutation.isPending}
+              isValid={isValid}
+              isSubmitting={isSubmitting}
+              label="Continuar"
+            />
           </div>
         </form>
       </Form>

@@ -33,6 +33,7 @@ export function StepInit() {
           ¡Estamos ansiosos por tenerte a bordo y contribuir juntos a la
           enseñanza del inglés!
         </article>
+
         <article className="w-full flex justify-between mt-5">
           <Button
             variant="outline"

@@ -1,15 +1,35 @@
-import { ConflictException, Injectable } from '@nestjs/common';
-import { CreateStudentDto } from '../dto/create-student.dto';
-import { UpdateStudentDto } from '../dto/update-student.dto';
-import { PrismaService } from 'src/modules/prisma/providers/prisma.service';
+import {
+  ConflictException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
+
 import { hash } from 'bcrypt';
+import { Roles } from '@prisma/client';
+
+import { PrismaService } from 'src/modules/prisma/providers/prisma.service';
+import { UsersService } from 'src/modules/users/providers/users.service';
+import { CreateStudentDto } from '../dto/create-student.dto';
+import { BIOGRAPHY_DEFAULT } from '../constants';
 
 @Injectable()
 export class StudentsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly userService: UsersService,
+  ) {}
+
+  private async findUserOrThrow(id: string) {
+    const user = await this.userService.findById(id);
+    if (!user) throw new NotFoundException('Usuario no encontrado');
+    return user;
+  }
 
   async createEmail(createStudentDto: CreateStudentDto) {
-    const userFound = await this.findByEmail(createStudentDto.email);
+    const userFound = await this.userService.findByEmail(
+      createStudentDto.email,
+    );
 
     if (userFound)
       throw new ConflictException(
@@ -18,13 +38,9 @@ export class StudentsService {
 
     const newUser = await this.prisma.user.create({
       data: {
+        role: Roles.STUDENT,
         email: createStudentDto.email,
-      },
-    });
-
-    await this.prisma.student.create({
-      data: {
-        userId: newUser.id,
+        student: { create: { bio: BIOGRAPHY_DEFAULT } },
       },
     });
 
@@ -35,50 +51,65 @@ export class StudentsService {
   }
 
   async createPassword(createStudentDto: CreateStudentDto, id: string) {
-    await this.prisma.user.update({
-      where: {
-        id,
-      },
-      data: {
-        password: await hash(createStudentDto.password, 10),
-      },
-    });
+    await this.findUserOrThrow(id);
 
-    return {
-      message: 'Contraseña creada!!.',
-    };
+    const hashedPassword = await hash(createStudentDto.password, 10);
+
+    try {
+      await this.prisma.user.update({
+        where: { id },
+        data: { password: hashedPassword },
+      });
+    } catch (error) {
+      console.error('Error updating user:', error);
+      throw new InternalServerErrorException(
+        'Error del servidor. Por favor intenta nuevamente.',
+      );
+    }
+
+    return { message: 'Contraseña creada exitosamente.' };
   }
 
   async createNames(createStudentDto: CreateStudentDto, id: string) {
-    await this.prisma.user.update({
-      where: {
-        id,
-      },
-      data: {
-        name: createStudentDto.name,
-        lastName: createStudentDto.lastName,
-      },
-    });
+    await this.findUserOrThrow(id);
 
-    return {
-      message: 'Ya casi terminamos, solo un poco más.',
-    };
+    try {
+      await this.prisma.user.update({
+        where: { id },
+        data: {
+          name: createStudentDto.name,
+          lastName: createStudentDto.lastName,
+        },
+      });
+    } catch (error) {
+      console.error('Error updating user:', error);
+      throw new InternalServerErrorException(
+        'Error del servidor. Por favor intenta nuevamente.',
+      );
+    }
+
+    return { message: 'Ya casi terminamos, solo un poco más.' };
   }
 
   async createUsername(createStudentDto: CreateStudentDto, id: string) {
-    const usernameFound = await this.findByUsername(createStudentDto.username);
+    const userFound = await this.userService.findByUsername(
+      createStudentDto.username,
+    );
 
-    if (usernameFound)
+    if (userFound)
       throw new ConflictException('El nombre de usuario ya está en uso.');
 
-    await this.prisma.user.update({
-      where: {
-        id,
-      },
-      data: {
-        username: createStudentDto.username,
-      },
-    });
+    try {
+      await this.prisma.user.update({
+        where: { id },
+        data: { username: createStudentDto.username },
+      });
+    } catch (error) {
+      console.error('Error updating user:', error);
+      throw new InternalServerErrorException(
+        'Error del servidor. Por favor intenta nuevamente.',
+      );
+    }
 
     return {
       message:
@@ -87,57 +118,36 @@ export class StudentsService {
   }
 
   async createBirth(createStudentDto: CreateStudentDto, id: string) {
-    await this.prisma.user.update({
-      where: {
-        id,
-      },
-      data: {
-        birth: createStudentDto.birth,
-      },
-    });
+    const user = await this.findUserOrThrow(id);
 
-    return {
-      message: '¡Genial! Inicia sesión en tu nueva cuenta!',
-    };
-  }
+    let birthDate: Date | null = null;
+    if (createStudentDto.birth) {
+      const tempDate = new Date(createStudentDto.birth);
+      birthDate = new Date(
+        Date.UTC(
+          tempDate.getFullYear(),
+          tempDate.getMonth(),
+          tempDate.getDate(),
+          tempDate.getHours(),
+          tempDate.getMinutes(),
+          tempDate.getSeconds(),
+          tempDate.getMilliseconds(),
+        ),
+      );
+    }
 
-  findAll() {
-    return `This action returns all students`;
-  }
+    try {
+      await this.prisma.user.update({
+        where: { id: user.id },
+        data: { birth: birthDate },
+      });
+    } catch (error) {
+      console.error('Error updating user:', error);
+      throw new InternalServerErrorException(
+        'Error del servidor. Por favor intenta nuevamente.',
+      );
+    }
 
-  findOne(id: number) {
-    return `This action returns a #${id} student`;
-  }
-
-  update(id: number, updateStudentDto: UpdateStudentDto) {
-    return `This action updates a #${id} student`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} student`;
-  }
-
-  async findByEmail(email: string) {
-    return await this.prisma.user.findUnique({
-      where: {
-        email,
-      },
-    });
-  }
-
-  async findByUsername(username: string) {
-    return await this.prisma.user.findUnique({
-      where: {
-        username,
-      },
-    });
-  }
-
-  async findById(id: string) {
-    return await this.prisma.user.findUnique({
-      where: {
-        id,
-      },
-    });
+    return { message: '¡Genial! solo un poco más!' };
   }
 }

@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { StepFourSchema } from "./StepFourSchema";
 import { useMutation } from "@tanstack/react-query";
 import { z } from "zod";
-import { useStepTutorStore } from "@/services/store/auth/tutor/stepTutor";
+import { useStepStudentStore } from "@/services/store/auth/student/stepStudent";
 
 import { Input } from "@/components/shadcn/ui/input";
 import { toast } from "sonner";
@@ -20,18 +20,19 @@ import {
   FormMessage,
 } from "@/components/shadcn/ui/form";
 import { AxiosError } from "axios";
+import { LoadingButton } from "@/components/common/LoadingButton";
 
 export function StepFour() {
-  const nextStep = useStepTutorStore((state) => state.nextStep);
-  const userId = useStepTutorStore((state) => state.userId);
+  const nextStep = useStepStudentStore((state) => state.nextStep);
+  const userId = useStepStudentStore((state) => state.userId);
 
   const form = useForm<z.infer<typeof StepFourSchema>>({
     resolver: zodResolver(StepFourSchema),
   });
 
-  const createUserMutation = useMutation({
+  const mutation = useMutation({
     mutationFn: (user: { name: string; lastName: string }) =>
-      axios.post(`/api/tutors/signup/${userId}/names`, user),
+      axios.post(`/api/students/signup/${userId}/names`, user),
     onSuccess: (response) => {
       if (response.status === 200 || response.status === 201) {
         const data = response.data;
@@ -61,7 +62,7 @@ export function StepFour() {
   });
 
   async function onSubmit(data: z.infer<typeof StepFourSchema>) {
-    createUserMutation.mutate({
+    mutation.mutate({
       name: data.name,
       lastName: data.lastName,
     });
@@ -121,16 +122,12 @@ export function StepFour() {
             />
           </section>
           <div className="w-full flex justify-end">
-            {!createUserMutation.isPending ? (
-              <Button disabled={!isValid || isSubmitting} type="submit">
-                Continuar
-              </Button>
-            ) : (
-              <Button disabled>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Espere...
-              </Button>
-            )}
+            <LoadingButton
+              isLoading={mutation.isPending}
+              isValid={isValid}
+              isSubmitting={isSubmitting}
+              label="Continuar"
+            />
           </div>
         </form>
       </Form>

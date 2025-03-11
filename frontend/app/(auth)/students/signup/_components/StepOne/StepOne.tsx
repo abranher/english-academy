@@ -1,17 +1,16 @@
 import axios from "@/config/axios";
-import { useStepTutorStore } from "@/services/store/auth/tutor/stepTutor";
-
+import { useStepStudentStore } from "@/services/store/auth/student/stepStudent";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { StepOneSchema } from "./StepOneSchema";
+import { LoadingButton } from "@/components/common/LoadingButton";
+import { AxiosError } from "axios";
 
 import { Input } from "@/components/shadcn/ui/input";
-import { Button } from "@/components/shadcn/ui/button";
 import { CardDescription, CardTitle } from "@/components/shadcn/ui/card";
-import { Loader2 } from "lucide-react";
 import {
   Form,
   FormControl,
@@ -20,19 +19,18 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/shadcn/ui/form";
-import { AxiosError } from "axios";
 
 export function StepOne() {
-  const nextStep = useStepTutorStore((state) => state.nextStep);
-  const setUserId = useStepTutorStore((state) => state.setUserId);
+  const nextStep = useStepStudentStore((state) => state.nextStep);
+  const setUserId = useStepStudentStore((state) => state.setUserId);
 
   const form = useForm<z.infer<typeof StepOneSchema>>({
     resolver: zodResolver(StepOneSchema),
   });
 
-  const createUserMutation = useMutation({
+  const mutation = useMutation({
     mutationFn: (user: { email: string }) =>
-      axios.post("/api/tutors/signup/email", user),
+      axios.post("/api/students/signup/email", user),
     onSuccess: (response) => {
       if (response.status === 200 || response.status === 201) {
         const data = response.data;
@@ -64,7 +62,7 @@ export function StepOne() {
   });
 
   async function onSubmit(data: z.infer<typeof StepOneSchema>) {
-    createUserMutation.mutate({
+    mutation.mutate({
       email: data.email,
     });
   }
@@ -103,16 +101,12 @@ export function StepOne() {
             />
           </section>
           <div className="w-full flex justify-end">
-            {!createUserMutation.isPending ? (
-              <Button disabled={!isValid || isSubmitting} type="submit">
-                Continuar
-              </Button>
-            ) : (
-              <Button disabled>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Espere...
-              </Button>
-            )}
+            <LoadingButton
+              isLoading={mutation.isPending}
+              isValid={isValid}
+              isSubmitting={isSubmitting}
+              label="Continuar"
+            />
           </div>
         </form>
       </Form>
