@@ -26,8 +26,16 @@ export class StudentsService {
     return user;
   }
 
-  assignLevel(userId: string, createStudentDto: CreateStudentDto) {
+  async assignLevel(userId: string, createStudentDto: CreateStudentDto) {
+    await this.findUserOrThrow(userId);
+
     try {
+      await this.prisma.student.update({
+        where: { userId },
+        data: { levelId: createStudentDto.levelId, initialTestAt: new Date() },
+      });
+
+      return { message: 'Nivel asignado!' };
     } catch (error) {
       console.error('Error updating user:', error);
       throw new InternalServerErrorException(

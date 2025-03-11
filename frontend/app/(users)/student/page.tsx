@@ -2,7 +2,7 @@
 
 import { Separator } from "@/components/shadcn/ui/separator";
 import { Card, CardTitle } from "@/components/shadcn/ui/card";
-import { Avatar } from "@nextui-org/react";
+import { Avatar } from "@heroui/react";
 import BadgeLevel from "./_components/BadgeLevel";
 import FlagIcon from "@/components/common/FlagIcon";
 import { Button } from "@/components/shadcn/ui/button";

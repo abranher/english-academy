@@ -38,16 +38,14 @@ export default auth((req) => {
       }
     }
 
-    // Specific checks for students:
     if (
       role === Roles.STUDENT &&
       !initialTestTaken &&
       !nextUrl.pathname.startsWith("/students/initial-test")
     ) {
-      // Exclude the initial test route itself
       return NextResponse.redirect(
         new URL("/students/initial-test", req.nextUrl)
-      ); // Redirect to the initial test page
+      );
     }
 
     //Now you can safely check the routes
