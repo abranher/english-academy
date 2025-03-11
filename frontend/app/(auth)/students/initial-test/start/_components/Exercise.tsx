@@ -39,7 +39,6 @@ export default function Exercise({ info }: { info: Question }) {
       <div>
         <div className="p-6 flex flex-col gap-6">
           <CardTitle>{info.question}</CardTitle>
-          <div className="text-xl font-semibold">{info.text}</div>
         </div>
         <div className="w-full">
           <CardContent className="flex flex-col justify-center items-center gap-6 py-4">
