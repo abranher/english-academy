@@ -11,6 +11,10 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { FormSchema } from "./FormSchema";
+import { CourseReview } from "@/types/models";
+import { CourseReviewDecision } from "@/types/enums";
+
+import { LoadingButton } from "@/components/common/LoadingButton";
 
 import {
   Dialog,
@@ -31,9 +35,6 @@ import {
 import { Button } from "@/components/shadcn/ui/button";
 import { Textarea } from "@/components/shadcn/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/shadcn/ui/radio-group";
-import { LoadingButton } from "@/components/common/LoadingButton";
-import { CourseReview } from "@/types/models/CourseReview";
-import { CourseReviewDecision } from "@/types/enums";
 import { Label } from "@/components/shadcn/ui/label";
 import { BadgeAlert, BadgeCheck, BadgeInfo } from "lucide-react";
 
@@ -122,6 +123,7 @@ export function ChangeCourseReviewModal({
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Comentario</FormLabel>
+
                       <FormControl>
                         <Textarea
                           placeholder="p.ej: Modifica el título..."
@@ -129,6 +131,7 @@ export function ChangeCourseReviewModal({
                           {...field}
                         />
                       </FormControl>
+
                       <FormDescription>
                         Deja un comentario para informar al tutor del por qué de
                         tu decisión.
