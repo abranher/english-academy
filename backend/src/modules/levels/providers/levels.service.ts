@@ -10,6 +10,7 @@ export class LevelsService {
     try {
       return await this.prisma.level.findMany();
     } catch (error) {
+      console.log('Ocurrio un error cargando los niveles', error);
       throw new InternalServerErrorException('Error al obtener los niveles');
     }
   }

@@ -94,13 +94,10 @@ export function CourseContent() {
                 <CourseSubTitleForm subtitle={course.subtitle} />
                 <Separator />
 
-                <CourseDescriptionForm
-                  initialData={course}
-                  courseId={course.id}
-                />
+                <CourseDescriptionForm description={course.description} />
                 <Separator />
 
-                <CourseLevelForm initialData={course} courseId={course.id} />
+                <CourseLevelForm levelId={course.levelId} />
                 <Separator />
 
                 <section className="flex flex-col md:flex-row gap-5 w-full">
