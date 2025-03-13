@@ -3,9 +3,9 @@
 import { useParams } from "next/navigation";
 
 import axios from "@/config/axios";
-import messages from "@/libs/validations/schemas/messages";
 import { z } from "zod";
 import { toast } from "sonner";
+import { FormSchema } from "./FormSchema";
 import { AxiosError } from "axios";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -24,10 +24,6 @@ import {
   FormMessage,
 } from "@/components/shadcn/ui/form";
 import { Input } from "@/components/shadcn/ui/input";
-
-const FormSchema = z.object({
-  title: z.string(messages.requiredError).min(4, messages.min(4)),
-});
 
 export function CourseTitleForm({ title }: { title: string }) {
   const queryClient = useQueryClient();
@@ -88,6 +84,7 @@ export function CourseTitleForm({ title }: { title: string }) {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Título del curso</FormLabel>
+
                   <FormControl>
                     <Input
                       disabled={isSubmitting}
@@ -95,6 +92,7 @@ export function CourseTitleForm({ title }: { title: string }) {
                       {...field}
                     />
                   </FormControl>
+
                   <FormDescription>
                     Define el título que mejor represente el contenido y el
                     nivel de tu curso.

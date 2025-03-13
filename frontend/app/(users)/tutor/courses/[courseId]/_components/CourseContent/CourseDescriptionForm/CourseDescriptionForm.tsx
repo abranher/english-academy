@@ -3,10 +3,10 @@
 import { useParams } from "next/navigation";
 
 import axios from "@/config/axios";
-import messages from "@/libs/validations/schemas/messages";
 import { z } from "zod";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
+import { FormSchema } from "./FormSchema";
 import { AxiosError } from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -24,10 +24,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/shadcn/ui/form";
-
-const FormSchema = z.object({
-  description: z.string(messages.requiredError).min(4, messages.min(4)),
-});
 
 export function CourseDescriptionForm({
   description,

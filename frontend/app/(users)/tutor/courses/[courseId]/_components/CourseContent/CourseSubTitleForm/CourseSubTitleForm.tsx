@@ -3,10 +3,10 @@
 import { useParams } from "next/navigation";
 
 import axios from "@/config/axios";
-import messages from "@/libs/validations/schemas/messages";
 import { z } from "zod";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
+import { FormSchema } from "./FormSchema";
 import { AxiosError } from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -24,10 +24,6 @@ import {
   FormMessage,
 } from "@/components/shadcn/ui/form";
 import { Input } from "@/components/shadcn/ui/input";
-
-const FormSchema = z.object({
-  subtitle: z.string(messages.requiredError).min(4, messages.min(4)),
-});
 
 export function CourseSubTitleForm({ subtitle }: { subtitle: string | null }) {
   const queryClient = useQueryClient();
@@ -90,6 +86,7 @@ export function CourseSubTitleForm({ subtitle }: { subtitle: string | null }) {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Subtítulo del curso</FormLabel>
+
                   <FormControl>
                     <Input
                       disabled={isSubmitting}
@@ -97,6 +94,7 @@ export function CourseSubTitleForm({ subtitle }: { subtitle: string | null }) {
                       {...field}
                     />
                   </FormControl>
+
                   <FormDescription>
                     Define el subtítulo de forma que complemente el título
                     principal y brinde más contexto sobre el contenido.

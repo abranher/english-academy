@@ -3,10 +3,10 @@
 import { useParams } from "next/navigation";
 
 import axios from "@/config/axios";
-import messages from "@/libs/validations/schemas/messages";
 import { z } from "zod";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
+import { FormSchema } from "./FormSchema";
 import { AxiosError } from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { getSubCategories } from "../../../_services/get-subcategories";
@@ -36,10 +36,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/shadcn/ui/select";
-
-const FormSchema = z.object({
-  subcategoryId: z.string(messages.requiredError).min(1, messages.min(1)),
-});
 
 export function CourseSubCategoryForm({
   subcategoryId,
@@ -71,7 +67,7 @@ export function CourseSubCategoryForm({
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      subcategoryId: subcategoryId || "",
+      subcategoryId: subcategoryId ?? "",
     },
   });
 
@@ -128,6 +124,7 @@ export function CourseSubCategoryForm({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Subcategoría del curso</FormLabel>
+
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
@@ -151,6 +148,7 @@ export function CourseSubCategoryForm({
                       </SelectGroup>
                     </SelectContent>
                   </Select>
+
                   <FormDescription>
                     La subcategoría te permite especificar aún más el tema de tu
                     curso.

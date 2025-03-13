@@ -3,11 +3,11 @@
 import { useParams } from "next/navigation";
 
 import axios from "@/config/axios";
-import messages from "@/libs/validations/schemas/messages";
 import { z } from "zod";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { Category } from "@/types/models";
+import { FormSchema } from "./FormSchema";
 import { AxiosError } from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { getCategories } from "../../../_services/get-categories";
@@ -36,10 +36,6 @@ import {
   FormMessage,
 } from "@/components/shadcn/ui/form";
 
-const FormSchema = z.object({
-  categoryId: z.string(messages.requiredError).min(1, messages.min(1)),
-});
-
 export function CourseCategoryForm({
   categoryId,
 }: {
@@ -60,7 +56,7 @@ export function CourseCategoryForm({
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      categoryId: categoryId || "",
+      categoryId: categoryId ?? "",
     },
   });
 
@@ -117,6 +113,7 @@ export function CourseCategoryForm({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Categoría del curso</FormLabel>
+
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
@@ -137,6 +134,7 @@ export function CourseCategoryForm({
                       </SelectGroup>
                     </SelectContent>
                   </Select>
+
                   <FormDescription>
                     Selecciona la categoría que mejor se ajuste al tema general
                     de tu curso.

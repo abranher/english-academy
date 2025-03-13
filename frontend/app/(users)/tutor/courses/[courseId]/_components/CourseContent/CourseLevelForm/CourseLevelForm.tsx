@@ -3,11 +3,11 @@
 import { useParams } from "next/navigation";
 
 import axios from "@/config/axios";
-import messages from "@/libs/validations/schemas/messages";
 import { getLevels } from "../../../_services/get-levels";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { AxiosError } from "axios";
+import { FormSchema } from "./FormSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Level } from "@/types/models";
@@ -34,10 +34,6 @@ import {
   SelectValue,
 } from "@/components/shadcn/ui/select";
 
-const FormSchema = z.object({
-  levelId: z.string(messages.requiredError).min(1, messages.min(1)),
-});
-
 export function CourseLevelForm({ levelId }: { levelId: string | null }) {
   const queryClient = useQueryClient();
   const { courseId } = useParams();
@@ -54,7 +50,7 @@ export function CourseLevelForm({ levelId }: { levelId: string | null }) {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      levelId: levelId || "",
+      levelId: levelId ?? "",
     },
   });
 
@@ -111,6 +107,7 @@ export function CourseLevelForm({ levelId }: { levelId: string | null }) {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Nivel del curso</FormLabel>
+
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
@@ -128,6 +125,7 @@ export function CourseLevelForm({ levelId }: { levelId: string | null }) {
                       ))}
                     </SelectContent>
                   </Select>
+
                   <FormDescription>
                     Elige el nivel adecuado para garantizar que tus estudiantes
                     puedan seguir el ritmo del curso y alcanzar sus objetivos.
