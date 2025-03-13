@@ -109,7 +109,7 @@ export function CourseContent() {
                 </section>
                 <Separator />
 
-                <CourseImageForm course={course} />
+                <CourseImageForm image={course.image} />
                 <Separator />
 
                 <CourseTrailerForm course={course} />

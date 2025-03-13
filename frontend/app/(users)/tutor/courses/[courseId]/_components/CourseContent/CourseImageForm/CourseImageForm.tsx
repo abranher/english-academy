@@ -1,7 +1,7 @@
 "use client";
 
 import axios from "@/config/axios";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 import { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
@@ -27,13 +27,15 @@ import {
 } from "@/components/shadcn/ui/dialog";
 import { Progress } from "@/components/shadcn/ui/progress";
 import { Skeleton } from "@/components/shadcn/ui/skeleton";
-import { truncateString } from "@/libs/format";
+import { formatSize, truncateString } from "@/libs/format";
 
-export function CourseImageForm({ course }: any) {
+export function CourseImageForm({ image }: { image: string | null }) {
   const [selectedFile, setSelectedFile] = useState<File | undefined>(undefined);
   const [progress, setProgress] = useState(0);
   const [uploadStatus, setUploadStatus] = useState("select");
   const [imageReady, setImageReady] = useState(false);
+
+  const { courseId } = useParams();
 
   // drop zone
   const onDrop = useCallback((acceptedFiles: any) => {
@@ -55,7 +57,7 @@ export function CourseImageForm({ course }: any) {
       const formData = new FormData();
       formData.set("image", selectedFile);
 
-      await axios.post(`/api/courses/${course.id}/image`, formData, {
+      await axios.post(`/api/courses/${courseId}/image`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -85,12 +87,6 @@ export function CourseImageForm({ course }: any) {
     setUploadStatus("select");
   };
 
-  const formatSize = (size: number) => {
-    return `${(size / 1024).toFixed(2)} KB o ${(size / 1024 / 1024).toFixed(
-      2
-    )} MB`;
-  };
-
   useEffect(() => {
     setImageReady(true);
   }, []);
@@ -100,13 +96,13 @@ export function CourseImageForm({ course }: any) {
       <CardContent>
         <section className="grid grid-cols-1 md:grid-cols-2">
           {/** File upload */}
-          {course.image ? (
+          {image ? (
             <>
               {imageReady ? (
                 <div className="aspect-video rounded-lg">
                   <Image
-                    src={assetImg(course.image)}
-                    alt={course.title}
+                    src={assetImg(image)}
+                    alt="Imagen del curso"
                     className="rounded-md"
                   />
                 </div>
