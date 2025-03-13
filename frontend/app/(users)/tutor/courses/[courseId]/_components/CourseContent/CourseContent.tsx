@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useParams } from "next/navigation";
 
 import { cn } from "@/libs/shadcn/utils";
@@ -8,7 +7,6 @@ import { Course } from "@/types/models/Course";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getCourse } from "../../_services/get-course";
-import { CourseReviewStatus } from "@/types/enums";
 
 import { CourseTitleForm } from "./CourseTitleForm";
 import { CourseSubTitleForm } from "./CourseSubTitleForm";
@@ -20,29 +18,13 @@ import { CourseImageForm } from "./CourseImageForm";
 import { CourseTrailerForm } from "./CourseTrailerForm";
 import { CoursePriceForm } from "./CoursePriceForm";
 import { CourseChaptersForm } from "./CourseChaptersForm";
-import TitleSection from "../TitleSection";
-import AttachmentForm from "../AttachmentForm";
-import Title from "@/components/common/Title";
-import { AlertBanner } from "@/components/common/AlertBanner";
-import { CourseActions } from "../CourseActions";
+import { Title } from "@/components/common/Title";
+import { CourseContentSkeleton } from "./CourseContentSkeleton";
 
 import { Card } from "@/components/shadcn/ui/card";
 import { Separator } from "@/components/shadcn/ui/separator";
-import {
-  BookOpen,
-  CalendarCog,
-  ChevronLeft,
-  DollarSign,
-  Globe,
-  Map,
-} from "lucide-react";
-import { Button } from "@/components/shadcn/ui/button";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/shadcn/ui/tooltip";
+import { BookOpen, CalendarCog, DollarSign, Globe, Map } from "lucide-react";
+import { HeaderSection } from "./HeaderSection";
 
 // Define un tipo para las posibles claves de sectionTitles
 type SectionTitleKey = "mainContent" | "price" | "studyPlan";
@@ -76,65 +58,15 @@ export function CourseContent() {
     setContent(value);
   };
 
-  console.log(course);
-
-  if (isPending) return <>Cargando...</>;
+  if (isPending) return <CourseContentSkeleton />;
   if (isError) return <>Ha ocurrido un error al cargar el curso</>;
-
-  const requieredFields = [
-    course.title,
-    course.description,
-    course.image,
-    course.priceId,
-    course.levelId,
-    course.chapters.some((chapter) => chapter.isPublished),
-  ];
-
-  const totalFields = requieredFields.length;
-  const completedFields = requieredFields.filter(Boolean).length;
-
-  const completionText = `${completedFields} de ${totalFields}`;
-
-  const isComplete = requieredFields.every(Boolean);
 
   return (
     <>
-      <TitleSection course={course} />
-
-      <Separator />
-
-      {course.reviewStatus !== CourseReviewStatus.APPROVED && (
-        <AlertBanner
-          label={
-            "Este curso aun no está aprobado, por lo que no será visible para el estudiante."
-          }
-        />
-      )}
-      <section className="flex items-center gap-4">
-        <Link href={"/tutor/courses"}>
-          <Button variant="outline" size="icon" className="h-7 w-7">
-            <ChevronLeft className="h-4 w-4" />
-            <span className="sr-only">atrás</span>
-          </Button>
-        </Link>
-        <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
-          Configuración del curso
-        </h1>
-        <p className="flex-1 shrink-0 whitespace-nowrap tracking-tight">
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger>{completionText}</TooltipTrigger>
-              <TooltipContent>
-                <p>Completa todos los campos.</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        </p>
-
-        <CourseActions course={course} />
-      </section>
+      <HeaderSection course={course} />
 
       <Separator className="mb-3" />
+
       <section className="w-full flex">
         <div className="lg:grid lg:grid-cols-4 w-full space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
           <Card className="lg:col-span-3 flex w-full flex-col gap-4 p-5">
@@ -156,7 +88,7 @@ export function CourseContent() {
 
             {content === "mainContent" && (
               <>
-                <CourseTitleForm initialData={course} courseId={course.id} />
+                <CourseTitleForm title={course.title} courseId={course.id} />
                 <Separator />
 
                 <CourseSubTitleForm initialData={course} courseId={course.id} />
@@ -185,16 +117,11 @@ export function CourseContent() {
             )}
 
             {content === "price" && (
-              <>
-                <CoursePriceForm course={course} courseId={course.id} />
-              </>
+              <CoursePriceForm course={course} courseId={course.id} />
             )}
 
             {content === "studyPlan" && (
-              <>
-                <CourseChaptersForm initialData={course} courseId={course.id} />
-                <AttachmentForm initialData={course} courseId={course.id} />
-              </>
+              <CourseChaptersForm initialData={course} courseId={course.id} />
             )}
           </Card>
 

@@ -1,10 +1,13 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
+
 import axios from "@/config/axios";
+import messages from "@/libs/validations/schemas/messages";
+import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import { toast } from "sonner";
 
 import { Button } from "@/components/shadcn/ui/button";
 import { CardContent } from "@/components/shadcn/ui/card";
@@ -18,27 +21,18 @@ import {
   FormMessage,
 } from "@/components/shadcn/ui/form";
 import { Input } from "@/components/shadcn/ui/input";
-import messages from "@/libs/validations/schemas/messages";
-import { toast } from "sonner";
 
 const formSchema = z.object({
   title: z.string(messages.requiredError).min(4, messages.min(4)),
 });
 
-export function CourseTitleForm({
-  initialData,
-  courseId,
-}: {
-  initialData: {
-    title: string;
-  };
-  courseId: string;
-}) {
+export function CourseTitleForm({ title }: { title: string }) {
+  const { courseId } = useParams();
   const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: initialData,
+    defaultValues: { title },
   });
 
   const { isSubmitting, isValid } = form.formState;

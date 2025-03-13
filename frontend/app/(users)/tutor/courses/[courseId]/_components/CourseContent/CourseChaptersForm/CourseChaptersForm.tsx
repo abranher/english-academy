@@ -1,11 +1,19 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
+
 import axios from "@/config/axios";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import messages from "@/libs/validations/schemas/messages";
 import { useState } from "react";
+import { z } from "zod";
+import { cn } from "@/libs/shadcn/utils";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Spinner } from "@heroui/react";
+import { Chapter, Course } from "@/types/models";
+import { toast } from "sonner";
+
+import { CourseChaptersList } from "./CourseChaptersList";
 
 import { Button } from "@/components/shadcn/ui/button";
 import {
@@ -23,14 +31,6 @@ import {
   FormMessage,
 } from "@/components/shadcn/ui/form";
 import { Input } from "@/components/shadcn/ui/input";
-import { cn } from "@/libs/shadcn/utils";
-import messages from "@/libs/validations/schemas/messages";
-import { Chapter } from "@/types/models/Chapter";
-import { Course } from "@/types/models/Course";
-import { FolderOpen, Plus } from "lucide-react";
-import { toast } from "sonner";
-import ChaptersList from "../../ChaptersList";
-import { Spinner } from "@heroui/react";
 import {
   Dialog,
   DialogContent,
@@ -40,6 +40,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/shadcn/ui/dialog";
+import { FolderOpen, Plus } from "lucide-react";
 
 interface ChaptersFormProps {
   initialData: Course & { chapters: Chapter[] };
@@ -134,7 +135,7 @@ export function CourseChaptersForm({
               </p>
             </div>
           )}
-          <ChaptersList
+          <CourseChaptersList
             onEdit={onEdit}
             onReorder={onReorder}
             items={initialData.chapters || []}

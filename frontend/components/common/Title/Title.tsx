@@ -10,7 +10,7 @@ const titleSizes = {
   // ... other sizes as needed
 };
 
-export default function Title({
+export function Title({
   children,
   size = "md",
 }: Readonly<{
@@ -19,7 +19,9 @@ export default function Title({
 }>) {
   return (
     <>
-      <h2 className={`font-bold ${titleSizes[size]} py-3 flex gap-2`}>{children}</h2>
+      <h2 className={`font-bold ${titleSizes[size]} py-3 flex gap-2`}>
+        {children}
+      </h2>
     </>
   );
 }

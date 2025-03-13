@@ -1,0 +1,1 @@
+export { MiniCoursePreviewCard } from "./MiniCoursePreviewCard";

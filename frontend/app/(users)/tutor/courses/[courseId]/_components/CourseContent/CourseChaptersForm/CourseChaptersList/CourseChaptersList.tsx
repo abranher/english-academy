@@ -18,7 +18,7 @@ interface ChaptersListProps {
   onEdit: (id: string) => void;
 }
 
-export default function ChaptersList({
+export function CourseChaptersList({
   items,
   onEdit,
   onReorder,
