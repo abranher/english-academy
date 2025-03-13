@@ -11,7 +11,6 @@ que necesitamos:
 - necesitamos que el admin le llegue una notification donde le diga lo que sucedio
 - el admin ya ve el curso pero seria bueno agregarle algun boton que le permita
   volver a su pagina de admin
-- necesitamos que al tutor le llegue esa notification del status de su envio del curso
 
 - Crear el quiz
 - Mostrar clase
