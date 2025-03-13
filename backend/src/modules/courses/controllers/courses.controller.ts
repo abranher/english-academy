@@ -25,15 +25,7 @@ export class CoursesController {
   ) {}
 
   /**
-   * Get Course
-   */
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.coursesService.findOne(id);
-  }
-
-  /**
-   * Create routes
+   * Create Course
    */
   @Post('tutor/:tutorId')
   create(
@@ -42,6 +34,22 @@ export class CoursesController {
     @Body() createCourseDto: CreateCourseDto,
   ) {
     return this.coursesService.create(tutorId, createCourseDto, userHeader);
+  }
+
+  /**
+   * Get Course
+   */
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.coursesService.findOne(id);
+  }
+
+  /**
+   * Update every field
+   */
+  @Patch(':id')
+  update(@Param('id') id: string, @Body() updateCourseDto: UpdateCourseDto) {
+    return this.coursesService.update(id, updateCourseDto);
   }
 
   /**
@@ -101,12 +109,6 @@ export class CoursesController {
     if (!course) throw new NotFoundException('Curso no encontrado.');
 
     return course;
-  }
-
-  // Updated every fields
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCourseDto: UpdateCourseDto) {
-    return this.coursesService.update(id, updateCourseDto);
   }
 
   @Put()

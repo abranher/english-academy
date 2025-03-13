@@ -17,16 +17,22 @@ export class CoursesService {
     private readonly activityLogsService: ActivityLogsService,
   ) {}
 
+  private async findCourseOrThrow(id: string) {
+    const course = await this.prisma.course.findUnique({ where: { id } });
+    if (!course) throw new NotFoundException('Curso no encontrado.');
+    return course;
+  }
+
+  /**
+   * Create Course
+   */
   async create(
     tutorId: string,
     createCourseDto: CreateCourseDto,
     userHeader: string,
   ) {
     const course = await this.prisma.course.create({
-      data: {
-        title: createCourseDto.title,
-        tutorId,
-      },
+      data: { title: createCourseDto.title, tutorId },
     });
 
     this.activityLogsService.create(
@@ -35,6 +41,68 @@ export class CoursesService {
     );
 
     return { message: 'Curso creado!', course };
+  }
+
+  /**
+   * Get Course
+   */
+  async findOne(id: string) {
+    await this.findCourseOrThrow(id);
+
+    try {
+      return await this.prisma.course.findUnique({
+        where: {
+          id,
+        },
+        include: {
+          category: true,
+          subcategory: true,
+          price: true,
+          chapters: {
+            orderBy: {
+              position: 'asc',
+            },
+            include: {
+              lessons: {
+                include: {
+                  class: true,
+                  quiz: true,
+                },
+              },
+            },
+          },
+          attachments: {
+            orderBy: {
+              createdAt: 'desc',
+            },
+          },
+        },
+      });
+    } catch (error) {
+      console.error('Error obteniendo el curso:', error);
+      throw new InternalServerErrorException(
+        'Error del servidor. Por favor intenta nuevamente.',
+      );
+    }
+  }
+
+  /**
+   * Update every field
+   */
+  async update(id: string, updateCourseDto: UpdateCourseDto) {
+    await this.findCourseOrThrow(id);
+
+    try {
+      return await this.prisma.course.update({
+        where: { id },
+        data: updateCourseDto,
+      });
+    } catch (error) {
+      console.error('Error actualizando el curso:', error);
+      throw new InternalServerErrorException(
+        'Error del servidor. Por favor intenta nuevamente.',
+      );
+    }
   }
 
   async uploadImage(id: string, image: string) {
@@ -111,59 +179,6 @@ export class CoursesService {
     }));
 
     return coursesData;
-  }
-
-  async findOne(id: string) {
-    try {
-      return await this.prisma.course.findUnique({
-        where: {
-          id,
-        },
-        include: {
-          category: true,
-          subcategory: true,
-          price: true,
-          chapters: {
-            orderBy: {
-              position: 'asc',
-            },
-            include: {
-              lessons: {
-                include: {
-                  class: true,
-                  quiz: true,
-                },
-              },
-            },
-          },
-          attachments: {
-            orderBy: {
-              createdAt: 'desc',
-            },
-          },
-        },
-      });
-    } catch (error) {
-      console.error('Error obteniendo el curso:', error);
-      throw new InternalServerErrorException(
-        'Error del servidor. Por favor intenta nuevamente.',
-      );
-    }
-  }
-
-  async update(id: string, updateCourseDto: UpdateCourseDto) {
-    try {
-      const course = await this.prisma.course.update({
-        where: {
-          id,
-        },
-        data: updateCourseDto,
-      });
-
-      return course;
-    } catch (error) {
-      console.log(error);
-    }
   }
 
   async updateProgress(id: string, chapterId: string, data: any) {

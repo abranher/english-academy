@@ -1,15 +1,18 @@
 "use client";
 
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 
 import axios from "@/config/axios";
 import messages from "@/libs/validations/schemas/messages";
 import { z } from "zod";
+import { toast } from "sonner";
+import { AxiosError } from "axios";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { toast } from "sonner";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import { Button } from "@/components/shadcn/ui/button";
+import { LoadingButton } from "@/components/common/LoadingButton";
+
 import { CardContent } from "@/components/shadcn/ui/card";
 import {
   Form,
@@ -22,30 +25,54 @@ import {
 } from "@/components/shadcn/ui/form";
 import { Input } from "@/components/shadcn/ui/input";
 
-const formSchema = z.object({
+const FormSchema = z.object({
   title: z.string(messages.requiredError).min(4, messages.min(4)),
 });
 
 export function CourseTitleForm({ title }: { title: string }) {
+  const queryClient = useQueryClient();
   const { courseId } = useParams();
-  const router = useRouter();
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof FormSchema>>({
+    resolver: zodResolver(FormSchema),
     defaultValues: { title },
   });
 
-  const { isSubmitting, isValid } = form.formState;
+  const mutation = useMutation({
+    mutationFn: (course: { title: string }) =>
+      axios.patch(`/api/courses/${courseId}`, course),
+    onSuccess: (response) => {
+      if (response.status === 200 || response.status === 201) {
+        toast.success("Título actualizado!");
+        queryClient.invalidateQueries({ queryKey: ["get_course", courseId] });
+      }
+    },
+    onError: (error) => {
+      if (error instanceof AxiosError) {
+        const status = error.response?.status;
+        const message = error.response?.data?.message || "Error desconocido";
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    try {
-      await axios.patch(`/api/courses/${courseId}`, values);
-      toast.success("Título del curso actualizado!");
-      router.refresh();
-    } catch (error) {
-      toast.error("Something wrong");
-    }
-  };
+        const errorMessages: { [key: number]: string } = {
+          400: "Datos no válidos",
+          404: "Curso no encontrado",
+          500: "Error del servidor",
+          "-1": "Error inesperado",
+        };
+
+        if (status) toast.error(errorMessages[status] || message);
+        else toast.error(errorMessages["-1"] || message);
+      } else {
+        toast.error("Error de conexión o error inesperado");
+        console.error("Error que no es de Axios:", error);
+      }
+    },
+  });
+
+  async function onSubmit(data: z.infer<typeof FormSchema>) {
+    mutation.mutate({ title: data.title });
+  }
+
+  const { isSubmitting, isValid } = form.formState;
 
   return (
     <>
@@ -77,9 +104,12 @@ export function CourseTitleForm({ title }: { title: string }) {
               )}
             />
             <div className="flex items-center gap-x-2">
-              <Button disabled={!isValid || isSubmitting} type="submit">
-                Guardar
-              </Button>
+              <LoadingButton
+                isLoading={mutation.isPending}
+                isValid={isValid}
+                isSubmitting={isSubmitting}
+                label="Guardar"
+              />
             </div>
           </form>
         </Form>

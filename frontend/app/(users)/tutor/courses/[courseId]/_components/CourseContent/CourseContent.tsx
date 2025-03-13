@@ -48,7 +48,7 @@ export function CourseContent() {
     data: course,
     isError,
   } = useQuery<Course>({
-    queryKey: ["course", courseId],
+    queryKey: ["get_course", courseId],
     queryFn: () => getCourse(courseId as string),
   });
 
@@ -88,10 +88,10 @@ export function CourseContent() {
 
             {content === "mainContent" && (
               <>
-                <CourseTitleForm title={course.title} courseId={course.id} />
+                <CourseTitleForm title={course.title} />
                 <Separator />
 
-                <CourseSubTitleForm initialData={course} courseId={course.id} />
+                <CourseSubTitleForm subtitle={course.subtitle} />
                 <Separator />
 
                 <CourseDescriptionForm
