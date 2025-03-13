@@ -1,4 +1,5 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
+
 import { PrismaService } from 'src/modules/prisma/providers/prisma.service';
 
 @Injectable()
@@ -29,44 +30,5 @@ export class CoursesFilesService {
     });
 
     return course;
-  }
-
-  async createAttachment(id: string, url: string) {
-    const courseOwner = await this.prisma.course.findUnique({
-      where: {
-        id,
-      },
-    });
-
-    if (!courseOwner) throw new NotFoundException('Curso no encontrado.');
-
-    const attachment = await this.prisma.attachment.create({
-      data: {
-        url,
-        name: url.split('/').pop(),
-        courseId: id,
-      },
-    });
-
-    return attachment;
-  }
-
-  async removeAttachment(id: string, attachmentId: string) {
-    const courseOwner = await this.prisma.course.findUnique({
-      where: {
-        id,
-      },
-    });
-
-    if (!courseOwner) throw new NotFoundException('Curso no encontrado.');
-
-    const attachment = await this.prisma.attachment.delete({
-      where: {
-        id: attachmentId,
-        courseId: id,
-      },
-    });
-
-    return attachment;
   }
 }

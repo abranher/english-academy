@@ -13,7 +13,6 @@ import { diskStorage } from 'multer';
 import { CoursesFilesService } from '../providers/courses.files.service';
 import { PrismaService } from 'src/modules/prisma/providers/prisma.service';
 import {
-  attachmentFilter,
   createFileName,
   imageFileFilter,
   videoFileFilter,
@@ -74,29 +73,5 @@ export class CoursesFilesController {
     }
 
     return this.coursesFilesService.uploadTrailer(id, file.filename);
-  }
-
-  @Post(':id/attachments')
-  @UseInterceptors(
-    FileInterceptor('url', {
-      fileFilter: attachmentFilter,
-      storage: diskStorage({
-        destination: './storage/attachments',
-        filename: createFileName,
-      }),
-    }),
-  )
-  createAttachment(
-    @Req() req,
-    @UploadedFile() file: Express.Multer.File,
-    @Param('id') id: string,
-  ) {
-    if (!file || req.fileValidationError) {
-      throw new BadRequestException(
-        'Archivo proporcionado no válido, [archivos de imagen permitidos]',
-      );
-    }
-
-    return this.coursesFilesService.createAttachment(id, file.filename);
   }
 }

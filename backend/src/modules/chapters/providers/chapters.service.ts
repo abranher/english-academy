@@ -1,8 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+
+import { CoursePlatformStatus } from '@prisma/client';
+
+import { PrismaService } from 'src/modules/prisma/providers/prisma.service';
 import { CreateChapterDto } from '../dto/create-chapter.dto';
 import { UpdateChapterDto } from '../dto/update-chapter.dto';
-import { PrismaService } from 'src/modules/prisma/providers/prisma.service';
-import { Attachment, Chapter, CoursePlatformStatus } from '@prisma/client';
 
 @Injectable()
 export class ChaptersService {
@@ -87,79 +89,6 @@ export class ChaptersService {
     });
 
     return chapter;
-  }
-
-  async findOneWithAll(chapterId: string, studentId: string, courseId: string) {
-    const purchase = await this.prisma.purchase.findUnique({
-      where: {
-        studentId_courseId: {
-          studentId,
-          courseId,
-        },
-      },
-    });
-
-    const course = await this.prisma.course.findUnique({
-      where: {
-        //isPublished: true,
-        id: courseId,
-      },
-      select: {
-        price: true,
-      },
-    });
-
-    const chapter = await this.prisma.chapter.findUnique({
-      where: {
-        id: chapterId,
-      },
-    });
-
-    if (!chapter || !course)
-      throw new NotFoundException('Curso o capítulo no encontrado.');
-
-    let attachments: Attachment[] = [];
-    let nextChapter: Chapter | null = null;
-
-    if (purchase) {
-      attachments = await this.prisma.attachment.findMany({
-        where: {
-          courseId,
-        },
-      });
-    }
-
-    if (chapter.isFree || purchase) {
-      nextChapter = await this.prisma.chapter.findFirst({
-        where: {
-          courseId,
-          position: {
-            gt: chapter?.position,
-          },
-        },
-        orderBy: {
-          position: 'asc',
-        },
-      });
-    }
-
-    const studentProgress = await this.prisma.studentProgress.findUnique({
-      where: {
-        studentId_chapterId: {
-          studentId,
-          chapterId,
-        },
-      },
-    });
-
-    return {
-      chapter,
-      course,
-      attachments,
-      nextChapter,
-      studentProgress,
-      purchase,
-    };
   }
 
   async update(

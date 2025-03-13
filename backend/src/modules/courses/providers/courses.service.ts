@@ -37,26 +37,6 @@ export class CoursesService {
     return { message: 'Curso creado!', course };
   }
 
-  async createAttachment(id: string, url: string) {
-    const courseOwner = await this.prisma.course.findUnique({
-      where: {
-        id,
-      },
-    });
-
-    if (!courseOwner) throw new NotFoundException('Curso no encontrado.');
-
-    const attachment = await this.prisma.attachment.create({
-      data: {
-        url,
-        name: url.split('/').pop(),
-        courseId: id,
-      },
-    });
-
-    return attachment;
-  }
-
   async uploadImage(id: string, image: string) {
     const course = await this.prisma.course.update({
       where: {
@@ -234,24 +214,5 @@ export class CoursesService {
     });
 
     return deletedCourse;
-  }
-
-  async removeAttachment(id: string, attachmentId: string) {
-    const courseOwner = await this.prisma.course.findUnique({
-      where: {
-        id,
-      },
-    });
-
-    if (!courseOwner) throw new NotFoundException('Curso no encontrado.');
-
-    const attachment = await this.prisma.attachment.delete({
-      where: {
-        id: attachmentId,
-        courseId: id,
-      },
-    });
-
-    return attachment;
   }
 }

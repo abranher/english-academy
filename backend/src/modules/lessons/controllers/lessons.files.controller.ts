@@ -10,11 +10,7 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { PrismaService } from 'src/modules/prisma/providers/prisma.service';
 import { diskStorage } from 'multer';
-import {
-  attachmentFilter,
-  createFileName,
-  videoFileFilter,
-} from 'src/libs/storage';
+import { createFileName, videoFileFilter } from 'src/libs/storage';
 import { LessonsFilesService } from '../providers/lessons.files.service';
 
 @Controller('lessons')
@@ -47,29 +43,5 @@ export class LessonsFilesController {
     }
 
     return this.lessonsFilesService.uploadVideo(id, file.filename);
-  }
-
-  @Post(':id/attachments')
-  @UseInterceptors(
-    FileInterceptor('url', {
-      fileFilter: attachmentFilter,
-      storage: diskStorage({
-        destination: './storage/attachments',
-        filename: createFileName,
-      }),
-    }),
-  )
-  createAttachment(
-    @Req() req,
-    @UploadedFile() file: Express.Multer.File,
-    @Param('id') id: string,
-  ) {
-    if (!file || req.fileValidationError) {
-      throw new BadRequestException(
-        'Archivo proporcionado no válido, [archivos de imagen permitidos]',
-      );
-    }
-
-    return this.lessonsFilesService.createAttachment(id, file.filename);
   }
 }

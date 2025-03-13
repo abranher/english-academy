@@ -8,8 +8,11 @@ import Avvvatars from "avvvatars-react";
 
 import { Button } from "@/components/shadcn/ui/button";
 import {
+  Award,
   CircleUser,
   CreditCard,
+  Files,
+  Home,
   LogOut,
   Mail,
   MessageSquare,
@@ -111,6 +114,27 @@ export function MainButtons() {
                   </section>
                   <DropdownMenuSeparator />
                   <DropdownMenuGroup>
+                    <DropdownMenuItem asChild>
+                      <Link href="/tutor/dashboard">
+                        <Home className="mr-2 h-4 w-4" />
+                        Dashboard
+                      </Link>
+                    </DropdownMenuItem>
+
+                    <DropdownMenuItem asChild>
+                      <Link href="/tutor/courses">
+                        <Award className="mr-2 h-4 w-4" />
+                        Cursos
+                      </Link>
+                    </DropdownMenuItem>
+
+                    <DropdownMenuItem asChild>
+                      <Link href="/tutor/attachments">
+                        <Files className="mr-2 h-4 w-4" />
+                        Recursos
+                      </Link>
+                    </DropdownMenuItem>
+
                     <DropdownMenuItem asChild>
                       <Link href="/tutor/profile">
                         <CircleUser className="mr-2 h-4 w-4" />

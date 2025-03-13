@@ -123,14 +123,6 @@ export class CoursesController {
     return this.coursesService.remove(id);
   }
 
-  @Delete(':id/attachments/:attachmentId')
-  removeAttachment(
-    @Param('id') id: string,
-    @Param('attachmentId') attachmentId: string,
-  ) {
-    return this.coursesService.removeAttachment(id, attachmentId);
-  }
-
   /** Routes for Student progress */
   @Get(':studentId/progress/:courseId')
   async getProgress(

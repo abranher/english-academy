@@ -76,6 +76,7 @@ model Tutor {
 
   certifications     Certification[]
   tutorStatusHistory TutorStatusHistory[]
+  attachments        Attachment[]
   courses            Course[]
 
   createdAt DateTime @default(now())
@@ -217,6 +218,22 @@ model Course {
   updatedAt DateTime @updatedAt
 }
 
+model Attachment {
+  id    String @id @default(uuid())
+  title String
+  url   String @db.Text
+
+  tutorId String
+  tutor   Tutor  @relation(fields: [tutorId], references: [id])
+
+  courses Course[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([tutorId])
+}
+
 model CourseReview {
   id         String                @id @default(uuid())
   feedback   String?
@@ -228,20 +245,6 @@ model CourseReview {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-}
-
-model Attachment {
-  id   String @id @default(uuid())
-  name String
-  url  String @db.Text
-
-  courseId String
-  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([courseId])
 }
 
 // *
