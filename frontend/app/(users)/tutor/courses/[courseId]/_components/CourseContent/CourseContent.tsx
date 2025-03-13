@@ -101,7 +101,7 @@ export function CourseContent() {
                 <Separator />
 
                 <section className="flex flex-col md:flex-row gap-5 w-full">
-                  <CourseCategoryForm course={course} courseId={course.id} />
+                  <CourseCategoryForm categoryId={course.categoryId} />
                   <CourseSubCategoryForm course={course} courseId={course.id} />
                 </section>
                 <Separator />

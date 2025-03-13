@@ -1,27 +1,17 @@
-import { Injectable } from '@nestjs/common';
-import { CreateCategoryDto } from '../dto/create-category.dto';
-import { UpdateCategoryDto } from '../dto/update-category.dto';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
+
 import { PrismaService } from 'src/modules/prisma/providers/prisma.service';
 
 @Injectable()
 export class CategoriesService {
   constructor(private readonly prisma: PrismaService) {}
 
-  create(createCategoryDto: CreateCategoryDto) {
-    return 'This action adds a new category';
-  }
-
-  findAll() {
-    const categories = this.prisma.category.findMany();
-
-    return categories;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} category`;
-  }
-
-  update(id: number, updateCategoryDto: UpdateCategoryDto) {
-    return `This action updates a #${id} category`;
+  async findAll() {
+    try {
+      return await this.prisma.category.findMany();
+    } catch (error) {
+      console.log('Ocurrio un error cargando las categorías', error);
+      throw new InternalServerErrorException('Error al obtener las categorías');
+    }
   }
 }

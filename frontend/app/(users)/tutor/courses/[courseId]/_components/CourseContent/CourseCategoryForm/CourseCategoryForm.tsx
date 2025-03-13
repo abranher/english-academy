@@ -1,13 +1,21 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import axios from "@/config/axios";
-import { useQuery } from "@tanstack/react-query";
-import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useParams } from "next/navigation";
 
-import { Button } from "@/components/shadcn/ui/button";
+import axios from "@/config/axios";
+import messages from "@/libs/validations/schemas/messages";
+import { z } from "zod";
+import { toast } from "sonner";
+import { useForm } from "react-hook-form";
+import { Category } from "@/types/models";
+import { AxiosError } from "axios";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { getCategories } from "../../../_services/get-categories";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+
+import { CourseCategorySkeleton } from "./CourseCategorySkeleton";
+import { LoadingButton } from "@/components/common/LoadingButton";
+
 import { CardContent } from "@/components/shadcn/ui/card";
 import {
   Select,
@@ -18,12 +26,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/shadcn/ui/select";
-import { toast } from "sonner";
-import { Skeleton } from "@/components/shadcn/ui/skeleton";
-import { getCategories } from "../../../_services/get-categories";
-import { Category } from "@/types/models/Category";
-import { Course } from "@/types/models/Course";
-import messages from "@/libs/validations/schemas/messages";
 import {
   Form,
   FormControl,
@@ -34,46 +36,72 @@ import {
   FormMessage,
 } from "@/components/shadcn/ui/form";
 
-const formSchema = z.object({
+const FormSchema = z.object({
   categoryId: z.string(messages.requiredError).min(1, messages.min(1)),
 });
 
 export function CourseCategoryForm({
-  course,
-  courseId,
+  categoryId,
 }: {
-  course: Course;
-  courseId: string;
+  categoryId: string | null;
 }) {
-  const router = useRouter();
+  const queryClient = useQueryClient();
+  const { courseId } = useParams();
 
   const {
     isPending,
-    error,
     data: categories,
-  } = useQuery({
-    queryKey: ["categories"],
+    isError,
+  } = useQuery<Category[]>({
+    queryKey: ["get_categories"],
     queryFn: getCategories,
   });
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof FormSchema>>({
+    resolver: zodResolver(FormSchema),
     defaultValues: {
-      categoryId: course?.categoryId || "",
+      categoryId: categoryId || "",
     },
   });
 
+  const mutation = useMutation({
+    mutationFn: (course: { categoryId: string }) =>
+      axios.patch(`/api/courses/${courseId}`, course),
+    onSuccess: (response) => {
+      if (response.status === 200 || response.status === 201) {
+        toast.success("Categoría actualizada!");
+        queryClient.invalidateQueries({ queryKey: ["get_course", courseId] });
+      }
+    },
+    onError: (error) => {
+      if (error instanceof AxiosError) {
+        const status = error.response?.status;
+        const message = error.response?.data?.message || "Error desconocido";
+
+        const errorMessages: { [key: number]: string } = {
+          400: "Datos no válidos",
+          404: "Curso no encontrado",
+          500: "Error del servidor",
+          "-1": "Error inesperado",
+        };
+
+        if (status) toast.error(errorMessages[status] || message);
+        else toast.error(errorMessages["-1"] || message);
+      } else {
+        toast.error("Error de conexión o error inesperado");
+        console.error("Error que no es de Axios:", error);
+      }
+    },
+  });
+
+  async function onSubmit(data: z.infer<typeof FormSchema>) {
+    mutation.mutate({ categoryId: data.categoryId });
+  }
+
   const { isSubmitting, isValid } = form.formState;
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    try {
-      await axios.patch(`/api/courses/${courseId}`, values);
-      toast.success("Categoría del curso actualizada!");
-      router.refresh();
-    } catch (error) {
-      toast.error("Something wrong");
-    }
-  };
+  if (isPending) return <CourseCategorySkeleton />;
+  if (isError) return <>Ha ocurrido un error cargando las categorías</>;
 
   return (
     <>
@@ -83,63 +111,49 @@ export function CourseCategoryForm({
             onSubmit={form.handleSubmit(onSubmit)}
             className="space-y-4 mt-4 w-full"
           >
-            {isPending ? (
-              <>
-                <Skeleton className="py-5" />
-                <Skeleton className="py-2" />
-                <Skeleton className="h-10 w-20 py-2" />
-              </>
-            ) : (
-              <>
-                <FormField
-                  control={form.control}
-                  name="categoryId"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Categoría del curso</FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Elige una categoría para tu curso" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectGroup>
-                            {categories && (
-                              <>
-                                <SelectLabel>Categorías</SelectLabel>
-                                {categories.map((category: Category) => (
-                                  <SelectItem
-                                    key={category.id}
-                                    value={category.id}
-                                  >
-                                    {category.title}
-                                  </SelectItem>
-                                ))}
-                              </>
-                            )}
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
-                      <FormDescription>
-                        Selecciona la categoría que mejor se ajuste al tema
-                        general de tu curso.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+            <FormField
+              control={form.control}
+              name="categoryId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Categoría del curso</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Elige una categoría para tu curso" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectLabel>Categorías</SelectLabel>
+                        {categories.map((category: Category) => (
+                          <SelectItem key={category.id} value={category.id}>
+                            {category.title}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                  <FormDescription>
+                    Selecciona la categoría que mejor se ajuste al tema general
+                    de tu curso.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-                <div className="flex items-center gap-x-2">
-                  <Button disabled={!isValid || isSubmitting} type="submit">
-                    Guardar
-                  </Button>
-                </div>
-              </>
-            )}
+            <div className="flex items-center gap-x-2">
+              <LoadingButton
+                isLoading={mutation.isPending}
+                isValid={isValid}
+                isSubmitting={isSubmitting}
+                label="Guardar"
+              />
+            </div>
           </form>
         </Form>
       </CardContent>
