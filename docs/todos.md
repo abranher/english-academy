@@ -38,3 +38,52 @@ Admin:
 - Creamos un vista para mostrar todas las notificaciones -> 30 min
 - La fecha de nacimiento del perfil, se guarda de una manera en la bd y luego se muestra como de otra
 - rejected_at (fecha/hora del rechazo para eliminar en 24h)
+
+
+
+model Attachment {
+  id          String   @id @default(uuid())
+  name        String
+  url         String   @db.Text
+  tutorId     String
+  tutor       Tutor    @relation(fields: [tutorId], references: [id])
+  courses     Course[] @relation(references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([tutorId])
+}
+
+model Course {
+  id             String               @id @default(uuid())
+  title          String               @db.Text
+  subtitle       String?              @db.Text
+  description    String?              @db.Text
+  image          String?              @db.Text
+  trailer        String?              @db.Text
+  reviewStatus   CourseReviewStatus   @default(DRAFT)
+  platformStatus CoursePlatformStatus @default(DRAFT)
+
+  tutorId String
+  tutor   Tutor  @relation(fields: [tutorId], references: [id])
+
+  priceId String?
+  price   Price?  @relation(fields: [priceId], references: [id])
+
+  levelId String?
+  level   Level?  @relation(fields: [levelId], references: [id])
+
+  categoryId String?
+  category   Category? @relation(fields: [categoryId], references: [id])
+
+  subcategoryId String?
+  subcategory   SubCategory? @relation(fields: [subcategoryId], references: [id])
+
+  attachments Attachment[] @relation(references: [id])
+  chapters    Chapter[]
+  purchases   Purchase[]
+  reviews     CourseReview[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
