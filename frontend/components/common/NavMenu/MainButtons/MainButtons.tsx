@@ -105,12 +105,16 @@ export function MainButtons() {
                         }
                       />
                     )}
-                    <h2 className="pt-2 text-lg font-semibold">
-                      {session.user.name}
-                    </h2>
-                    <h2 className="text-sm text-gray-600">
-                      {session.user.email}
-                    </h2>
+                    <section className="py-2 flex flex-col items-center">
+                      <h2 className="text-lg font-semibold">
+                        {session.user.name}
+                      </h2>
+                      <Button variant="link" asChild className="h-0">
+                        <Link href="/tutor/profile">
+                          @{session.user.username}
+                        </Link>
+                      </Button>
+                    </section>
                   </section>
                   <DropdownMenuSeparator />
                   <DropdownMenuGroup>
@@ -135,30 +139,29 @@ export function MainButtons() {
                       </Link>
                     </DropdownMenuItem>
 
+                    <DropdownMenuItem>
+                      <CreditCard className="mr-2 h-4 w-4" />
+                      Facturación
+                    </DropdownMenuItem>
+                  </DropdownMenuGroup>
+
+                  <DropdownMenuSeparator />
+
+                  <DropdownMenuGroup>
                     <DropdownMenuItem asChild>
                       <Link href="/tutor/profile">
                         <CircleUser className="mr-2 h-4 w-4" />
                         Perfil
                       </Link>
                     </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      <CreditCard className="mr-2 h-4 w-4" />
-                      Facturación
-                    </DropdownMenuItem>
+
                     <DropdownMenuItem asChild>
                       <Link href="/student/settings">
                         <Settings className="mr-2 h-4 w-4" />
                         Configuración
                       </Link>
                     </DropdownMenuItem>
-                  </DropdownMenuGroup>
 
-                  <DropdownMenuSeparator />
-                  <DropdownMenuGroup>
-                    <DropdownMenuItem>
-                      <Users className="mr-2 h-4 w-4" />
-                      <span>Team</span>
-                    </DropdownMenuItem>
                     <DropdownMenuSub>
                       <DropdownMenuSubTrigger>
                         <UserPlus className="mr-2 h-4 w-4" />
