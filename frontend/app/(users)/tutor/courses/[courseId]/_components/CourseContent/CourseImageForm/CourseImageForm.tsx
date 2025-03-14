@@ -1,15 +1,19 @@
 "use client";
 
-import axios from "@/config/axios";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 
-import { useCallback, useEffect, useState } from "react";
+import axios from "@/config/axios";
+import { toast } from "sonner";
+import { Image } from "@heroui/react";
+import { assetImg } from "@/libs/asset";
+import { AxiosError } from "axios";
 import { useDropzone } from "react-dropzone";
+import { useQueryClient } from "@tanstack/react-query";
+import { formatSize, truncateString } from "@/libs/format";
+import { useCallback, useEffect, useState } from "react";
 
 import { Button } from "@/components/shadcn/ui/button";
 import { Card, CardContent } from "@/components/shadcn/ui/card";
-import { Image } from "@heroui/react";
-import { toast } from "sonner";
 import {
   CheckCircle,
   ImageIcon,
@@ -17,7 +21,6 @@ import {
   UploadCloud,
   XIcon,
 } from "lucide-react";
-import { assetImg } from "@/libs/asset";
 import {
   Dialog,
   DialogContent,
@@ -27,29 +30,43 @@ import {
 } from "@/components/shadcn/ui/dialog";
 import { Progress } from "@/components/shadcn/ui/progress";
 import { Skeleton } from "@/components/shadcn/ui/skeleton";
-import { formatSize, truncateString } from "@/libs/format";
+
+type UploadStatus = "select" | "uploading" | "done" | "error";
+
+const MAX_SIZE = 5 * 1024 * 1024; // 5MB
 
 export function CourseImageForm({ image }: { image: string | null }) {
+  const [preview, setPreview] = useState<string>("");
   const [selectedFile, setSelectedFile] = useState<File | undefined>(undefined);
   const [progress, setProgress] = useState(0);
-  const [uploadStatus, setUploadStatus] = useState("select");
+  const [uploadStatus, setUploadStatus] = useState<UploadStatus>("select");
   const [imageReady, setImageReady] = useState(false);
 
+  const queryClient = useQueryClient();
   const { courseId } = useParams();
 
-  // drop zone
-  const onDrop = useCallback((acceptedFiles: any) => {
-    setSelectedFile(acceptedFiles[0]);
-  }, []);
-
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
-
-  const router = useRouter();
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop: useCallback((acceptedFiles: File[]) => {
+      const file = acceptedFiles[0];
+      setSelectedFile(file);
+      setPreview(URL.createObjectURL(file));
+    }, []),
+    accept: { "image/*": [".png", ".jpg", ".jpeg"] },
+    maxSize: MAX_SIZE,
+    onDropRejected: (fileRejections) => {
+      fileRejections.forEach((rejection) => {
+        if (rejection.errors.some((e) => e.code === "file-too-large")) {
+          toast.error("La imagen es demasiado grande (máximo 5MB)");
+        } else {
+          toast.error("Formato de imagen no permitido");
+        }
+      });
+    },
+  });
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    if (typeof selectedFile === "undefined") return;
+    if (!selectedFile) return;
 
     try {
       setUploadStatus("uploading");
@@ -57,32 +74,38 @@ export function CourseImageForm({ image }: { image: string | null }) {
       const formData = new FormData();
       formData.set("image", selectedFile);
 
-      await axios.post(`/api/courses/${courseId}/image`, formData, {
+      await axios.post(`/api/courses/files/${courseId}/image`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
         onUploadProgress: (progressEvent) => {
-          const percentCompleted = Math.round(
+          const percent = Math.round(
             (progressEvent.loaded * 100) / (progressEvent.total || 1)
           );
-
-          setProgress(percentCompleted);
+          setProgress(percent);
         },
       });
 
       setUploadStatus("done");
       toast.success("Imagen actualizada!");
       setSelectedFile(undefined);
-      router.refresh();
+      queryClient.invalidateQueries({ queryKey: ["get_course", courseId] });
     } catch (error) {
+      setUploadStatus("error");
       setProgress(0);
-      setUploadStatus("select");
-      toast.error("Something wrong");
+      if (error instanceof AxiosError) {
+        const message =
+          error.response?.data?.message || "Error al subir la imagen";
+        toast.error(message);
+      } else {
+        toast.error("Error desconocido");
+      }
     }
   };
 
-  const clearFileInput = () => {
+  const clearFile = () => {
     setSelectedFile(undefined);
+    setPreview("");
     setProgress(0);
     setUploadStatus("select");
   };
@@ -134,7 +157,7 @@ export function CourseImageForm({ image }: { image: string | null }) {
               </p>
             </div>
 
-            <Dialog onOpenChange={clearFileInput}>
+            <Dialog onOpenChange={clearFile}>
               <DialogTrigger asChild>
                 <Button className="flex gap-3">
                   <UploadCloud />
@@ -147,29 +170,24 @@ export function CourseImageForm({ image }: { image: string | null }) {
                 </DialogHeader>
                 <form onSubmit={onSubmit}>
                   <div className="grid gap-4 py-4">
-                    {selectedFile ? (
-                      <>
-                        {selectedFile.type.startsWith("image/") && (
-                          <Image
-                            src={URL.createObjectURL(selectedFile)}
-                            alt="Preview"
-                            className="rounded-md border-3 border-gray-500"
-                          />
-                        )}
-                      </>
+                    {preview ? (
+                      <Image
+                        src={preview}
+                        alt="Preview"
+                        className="rounded-md border-3 border-gray-500"
+                      />
                     ) : (
-                      <>
-                        <div className="grid aspect-video place-items-center rounded-lg bg-zinc-200 dark:bg-zinc-800">
-                          <ImageIcon className="h-9 w-9 text-gray-600" />
-                        </div>
-                      </>
+                      <div className="grid aspect-video place-items-center rounded-lg bg-zinc-200 dark:bg-zinc-800">
+                        <ImageIcon className="h-9 w-9 text-gray-600" />
+                      </div>
                     )}
-                    {/** upload input */}
+
+                    {/* Dropzone */}
                     {(uploadStatus === "select" ||
                       uploadStatus === "uploading") && (
                       <section
                         {...getRootProps()}
-                        className="p-5 text-center bg-gray-50 dark:bg-zinc-900 text-gray-600 dark:text-gray-100 font-semibold text-xs rounded h-28 sm:h-24 flex flex-col items-center justify-center cursor-pointer border-3 border-gray-500 dark:border-zinc-700 border-dashed"
+                        className="p-3 w-full text-center bg-gray-50 dark:bg-zinc-900 text-gray-600 dark:text-gray-100 font-semibold text-xs rounded h-28 sm:h-24 flex flex-col items-center justify-center cursor-pointer border-3 border-gray-500 dark:border-zinc-700 border-dashed"
                       >
                         <UploadCloud className="w-11 mb-2" />
                         <input {...getInputProps()} className="hidden" />
@@ -184,66 +202,74 @@ export function CourseImageForm({ image }: { image: string | null }) {
                           </p>
                         )}
                         <p className="text-xs font-medium mt-2">
-                          Se permiten PNG, JPG, JPEG, WEBP (Máx. 5MB).
+                          Se permiten PNG, JPG, JPEG (Máx. 5MB).
                         </p>
                       </section>
                     )}
 
-                    <>
-                      <Card className="grid grid-cols-8 py-2">
+                    <Card className="grid grid-cols-8 py-2">
+                      <div className="col-span-1 flex justify-center items-center">
+                        <ImageIcon />
+                      </div>
+                      <div className="text-xs col-span-6 flex flex-col justify-center gap-1">
+                        <p>
+                          {selectedFile
+                            ? truncateString(selectedFile.name, "md")
+                            : "No hay ningún archivo seleccionado"}
+                        </p>
+                        <p>{selectedFile && formatSize(selectedFile.size)}</p>
+                        <Progress value={progress} className="h-2" />
+                      </div>
+                      {uploadStatus === "select" && selectedFile && (
                         <div className="col-span-1 flex justify-center items-center">
-                          <ImageIcon />
+                          <XIcon
+                            className="cursor-pointer"
+                            onClick={clearFile}
+                          />
                         </div>
-                        <div className="text-xs col-span-6 flex flex-col justify-center gap-1">
-                          <p>
-                            {selectedFile
-                              ? truncateString(selectedFile.name)
-                              : "No hay ningún archivo seleccionado"}
-                          </p>
-                          <p>{selectedFile && formatSize(selectedFile.size)}</p>
-                          <Progress value={progress} className="h-2" />
+                      )}
+                      {uploadStatus === "uploading" && (
+                        <div className="col-span-1 flex justify-center items-center">
+                          {progress}
                         </div>
-                        {uploadStatus === "select" && selectedFile && (
+                      )}
+                      {uploadStatus === "done" && (
+                        <div className="col-span-1 flex justify-center items-center">
+                          <CheckCircle />
+                        </div>
+                      )}
+                    </Card>
+
+                    <div className="space-y-2 text-center">
+                      <Button
+                        type="submit"
+                        disabled={
+                          !selectedFile ||
+                          uploadStatus === "uploading" ||
+                          uploadStatus === "done"
+                        }
+                        className="w-full flex gap-2 items-center"
+                      >
+                        {uploadStatus === "select" && (
                           <>
-                            <div className="col-span-1 flex justify-center items-center">
-                              <XIcon
-                                className="cursor-pointer"
-                                onClick={clearFileInput}
-                              />
-                            </div>
+                            <UploadCloud className="h-5 w-5" />
+                            Subir
                           </>
                         )}
                         {uploadStatus === "uploading" && (
                           <>
-                            <div className="col-span-1 flex justify-center items-center">
-                              {progress}
-                            </div>
+                            <Loader2 className="h-5 w-5 animate-spin" />
+                            Subiendo...
                           </>
                         )}
                         {uploadStatus === "done" && (
                           <>
-                            <div className="col-span-1 flex justify-center items-center">
-                              <CheckCircle />
-                            </div>
+                            <CheckCircle className="h-5 w-5" />
+                            Listo
                           </>
                         )}
-                      </Card>
-                      <Button
-                        type="submit"
-                        disabled={
-                          uploadStatus === "uploading" ||
-                          uploadStatus === "done"
-                        }
-                      >
-                        {uploadStatus === "select" && <UploadCloud />}
-
-                        {uploadStatus === "uploading" && (
-                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        )}
-
-                        {uploadStatus === "done" && <CheckCircle />}
                       </Button>
-                    </>
+                    </div>
                   </div>
                 </form>
               </DialogContent>

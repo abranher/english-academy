@@ -1,7 +1,7 @@
 "use client";
 
-import { useStepTutorStore } from "@/services/store/auth/tutor/stepTutor";
 import axios from "@/config/axios";
+import { useStepTutorStore } from "@/services/store/auth/tutor/stepTutor";
 import { useCallback, useRef, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { Avatar } from "@heroui/react";
@@ -25,11 +25,7 @@ type UploadStatus = "select" | "uploading" | "done" | "error";
 
 const MAX_SIZE = 5 * 1024 * 1024; // 5MB
 
-interface AvatarUploadProps {
-  onSuccess?: () => void;
-}
-
-export function StepSeven({ onSuccess }: AvatarUploadProps) {
+export function StepSeven({ onSuccess }: { onSuccess?: () => void }) {
   const nextStep = useStepTutorStore((state) => state.nextStep);
   const userId = useStepTutorStore((state) => state.userId);
 
@@ -42,7 +38,7 @@ export function StepSeven({ onSuccess }: AvatarUploadProps) {
 
   const handleSubmitPopover = () => {
     if (formRef.current) {
-      formRef.current.dispatchEvent(new Event("submit", { cancelable: true })); // or formRef.current.submit();
+      formRef.current.dispatchEvent(new Event("submit", { cancelable: true }));
     }
   };
 

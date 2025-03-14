@@ -8,22 +8,19 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
 
-import { CoursesFilesService } from '../providers/courses.files.service';
-import { PrismaService } from 'src/modules/prisma/providers/prisma.service';
+import { diskStorage } from 'multer';
 import {
   createFileName,
   imageFileFilter,
   videoFileFilter,
 } from 'src/libs/storage';
 
-@Controller('courses')
+import { CoursesFilesService } from '../providers/courses.files.service';
+
+@Controller('courses/files')
 export class CoursesFilesController {
-  constructor(
-    private readonly coursesFilesService: CoursesFilesService,
-    private prisma: PrismaService,
-  ) {}
+  constructor(private readonly coursesFilesService: CoursesFilesService) {}
 
   // Upload image
   @Post(':id/image')
