@@ -1,16 +1,19 @@
 "use client";
 
-import axios from "@/config/axios";
 import { useParams } from "next/navigation";
 
-import { useCallback, useEffect, useState } from "react";
-import { useDropzone } from "react-dropzone";
+import axios from "@/config/axios";
 import ReactPlayer from "react-player";
+import { toast } from "sonner";
+import { AxiosError } from "axios";
+import { assetVideo } from "@/libs/asset";
+import { useDropzone } from "react-dropzone";
+import { formatSize, truncateString } from "@/libs/format";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useCallback, useEffect, useState } from "react";
 
 import { Button } from "@/components/shadcn/ui/button";
 import { Card, CardContent } from "@/components/shadcn/ui/card";
-import { toast } from "sonner";
-import { CheckCircle, Loader2, UploadCloud, Video, XIcon } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -19,11 +22,8 @@ import {
   DialogTrigger,
 } from "@/components/shadcn/ui/dialog";
 import { Progress } from "@/components/shadcn/ui/progress";
-import { assetVideo } from "@/libs/asset";
 import { Skeleton } from "@/components/shadcn/ui/skeleton";
-import { formatSize, truncateString } from "@/libs/format";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { AxiosError } from "axios";
+import { CheckCircle, Loader2, UploadCloud, Video, XIcon } from "lucide-react";
 
 type UploadStatus = "select" | "uploading" | "done" | "error";
 

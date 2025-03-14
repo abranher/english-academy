@@ -112,7 +112,7 @@ export function CourseContent() {
                 <CourseImageForm image={course.image} />
                 <Separator />
 
-                <CourseTrailerForm course={course} />
+                <CourseTrailerForm trailer={course.trailer} />
               </>
             )}
 

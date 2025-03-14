@@ -1,5 +1,7 @@
-// delete files
-private async deleteFile(filename: string, fileType: 'images' | 'videos' | 'attachments' = 'images') {
+export async function deleteFile(
+  filename: string,
+  fileType: 'images' | 'videos' | 'attachments' = 'images',
+) {
   const fs = await import('fs/promises');
   const path = await import('path');
 
@@ -7,7 +9,6 @@ private async deleteFile(filename: string, fileType: 'images' | 'videos' | 'atta
 
   try {
     await fs.unlink(path.join(basePath, filename));
-    console.log(`Archivo ${filename} eliminado correctamente de ${basePath}`); // Mensaje de éxito
   } catch (err) {
     console.error(`Error eliminando archivo ${filename} de ${basePath}:`, err);
   }

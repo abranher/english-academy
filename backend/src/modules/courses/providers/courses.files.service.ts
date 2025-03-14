@@ -4,6 +4,8 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 
+import { deleteFile } from 'src/libs/storage';
+
 import { PrismaService } from 'src/modules/prisma/providers/prisma.service';
 
 @Injectable()
@@ -16,23 +18,11 @@ export class CoursesFilesService {
     return course;
   }
 
-  // delete files
-  private async deleteFile(filename: string) {
-    const fs = await import('fs/promises');
-    const path = await import('path');
-
-    try {
-      await fs.unlink(path.join(process.cwd(), 'storage/images', filename));
-    } catch (err) {
-      console.error(`Error eliminando archivo ${filename}:`, err);
-    }
-  }
-
   async uploadImage(id: string, image: string) {
     const course = await this.findCourseOrThrow(id);
 
     if (course.image) {
-      await this.deleteFile(course.image);
+      await deleteFile(course.image);
     }
 
     try {
@@ -40,21 +30,21 @@ export class CoursesFilesService {
         where: { id },
         data: { image },
       });
+
+      return { message: 'Imagen actualizada exitosamente!' };
     } catch (error) {
       console.error('Error updating image of course:', error);
       throw new InternalServerErrorException(
         'Error del servidor. Por favor intenta nuevamente.',
       );
     }
-
-    return { message: 'Imagen actualizada exitosamente!' };
   }
 
   async uploadTrailer(id: string, trailer: string) {
     const course = await this.findCourseOrThrow(id);
 
     if (course.trailer) {
-      await this.deleteFile(course.image);
+      await deleteFile(course.trailer, 'videos');
     }
 
     try {
@@ -62,13 +52,13 @@ export class CoursesFilesService {
         where: { id },
         data: { trailer },
       });
+
+      return { message: 'Trailer actualizado exitosamente!' };
     } catch (error) {
       console.error('Error updating trailer of course:', error);
       throw new InternalServerErrorException(
         'Error del servidor. Por favor intenta nuevamente.',
       );
     }
-
-    return { message: 'Trailer actualizado exitosamente!' };
   }
 }
