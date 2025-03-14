@@ -20,5 +20,5 @@ export function assetPublicImg(file: string | null): string {
 export function assetVideo(file: string | null): string {
   if (file === null) return "";
 
-  return NEXT_PUBLIC_BACKEND_URL + "/videos/" + file;
+  return NEXT_PUBLIC_BACKEND_URL + "/storage/videos/" + file;
 }

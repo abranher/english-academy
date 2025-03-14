@@ -27,7 +27,7 @@ import { CheckCircle, Loader2, UploadCloud, Video, XIcon } from "lucide-react";
 
 type UploadStatus = "select" | "uploading" | "done" | "error";
 
-const MAX_SIZE = 5 * 1024 * 1024; // 5MB
+const MAX_SIZE = 50 * 1024 * 1024; // 50MB
 
 export function CourseTrailerForm({ trailer }: { trailer: string | null }) {
   const [preview, setPreview] = useState<string>("");
@@ -197,7 +197,7 @@ export function CourseTrailerForm({ trailer }: { trailer: string | null }) {
                           </p>
                         )}
                         <p className="text-xs font-medium mt-2">
-                          Formatos permitidos: MP4 (Máx. 5MB).
+                          Formatos permitidos: MP4 (Máx. 50MB).
                         </p>
                       </section>
                     )}
