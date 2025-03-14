@@ -3,17 +3,17 @@
 import { useRouter } from "next/navigation";
 
 import axios from "@/config/axios";
-import messages from "@/libs/validations/schemas/messages";
-import { useState } from "react";
 import { z } from "zod";
 import { cn } from "@/libs/shadcn/utils";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Spinner } from "@heroui/react";
-import { Chapter, Course } from "@/types/models";
 import { toast } from "sonner";
+import { Spinner } from "@heroui/react";
+import { useForm } from "react-hook-form";
+import { useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Chapter, Course } from "@/types/models";
 
 import { CourseChaptersList } from "./CourseChaptersList";
+import { FormSchema } from "./FormSchema";
 
 import { Button } from "@/components/shadcn/ui/button";
 import {
@@ -34,7 +34,6 @@ import { Input } from "@/components/shadcn/ui/input";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -42,26 +41,20 @@ import {
 } from "@/components/shadcn/ui/dialog";
 import { FolderOpen, Plus } from "lucide-react";
 
-interface ChaptersFormProps {
-  initialData: Course & { chapters: Chapter[] };
-  courseId: string;
-}
-
-const formSchema = z.object({
-  title: z.string(messages.requiredError).min(4, messages.min(4)),
-});
-
 export function CourseChaptersForm({
   initialData,
   courseId,
-}: ChaptersFormProps) {
+}: {
+  initialData: Course & { chapters: Chapter[] };
+  courseId: string;
+}) {
   const [isUpdating, setIsUpdating] = useState(false);
   const [open, setOpen] = useState(false);
 
   const router = useRouter();
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof FormSchema>>({
+    resolver: zodResolver(FormSchema),
     defaultValues: {
       title: "",
     },
@@ -69,7 +62,7 @@ export function CourseChaptersForm({
 
   const { isSubmitting, isValid } = form.formState;
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: z.infer<typeof FormSchema>) => {
     try {
       await axios.post(`/api/chapters/${courseId}`, values);
       toast.success("Capítulo creado!");
@@ -85,7 +78,7 @@ export function CourseChaptersForm({
     try {
       setIsUpdating(true);
 
-      const response = await axios.put(`/api/chapters/${courseId}/reorder`, {
+      await axios.put(`/api/chapters/${courseId}/reorder`, {
         list: updateData,
       });
 
@@ -121,7 +114,7 @@ export function CourseChaptersForm({
           aprendizaje.
         </CardDescription>
 
-        <div
+        <section
           className={cn(
             "text-sm my-6 w-full",
             !initialData.chapters.length && "text-slate-500 italic"
@@ -140,26 +133,24 @@ export function CourseChaptersForm({
             onReorder={onReorder}
             items={initialData.chapters || []}
           />
-        </div>
+        </section>
 
-        <p className="text-xs text-muted-foreground my-4">
+        <CardDescription>
           Arrastre y suelte para reordenar los capítulos
-        </p>
+        </CardDescription>
 
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
             <section className="w-full flex justify-end">
-              <Button>
-                <Plus />
+              <Button className="flex gap-1">
+                <Plus className="w-4 h-4" />
+                Añadir
               </Button>
             </section>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
               <DialogTitle>Crear capítulo</DialogTitle>
-              <DialogDescription>
-                Haz clic en Crear cuando hayas terminado.
-              </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
               <Form {...form}>
@@ -181,10 +172,11 @@ export function CourseChaptersForm({
                             {...field}
                           />
                         </FormControl>
+
                         <FormDescription>
                           Define el título de tu capítulo de manera clara y
-                          concisa, asegurando que transmita de forma efectiva
-                          los objetivos de aprendizaje.
+                          concisa, asegurando que transmita los objetivos del
+                          mismo.
                         </FormDescription>
                         <FormMessage />
                       </FormItem>
