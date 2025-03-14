@@ -108,7 +108,7 @@ export function CourseSubCategoryForm({
   const { isSubmitting, isValid } = form.formState;
 
   if (isPending) return <CourseSubCategorySkeleton />;
-  if (isError) return <>Ha ocurrido un error cargando los niveles</>;
+  if (isError) return <>Ha ocurrido un error cargando las subcategorías</>;
 
   return (
     <>

@@ -117,7 +117,7 @@ export function CourseContent() {
             )}
 
             {content === "price" && (
-              <CoursePriceForm course={course} courseId={course.id} />
+              <CoursePriceForm priceId={course.priceId} />
             )}
 
             {content === "studyPlan" && (
