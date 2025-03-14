@@ -4,25 +4,11 @@ export class CreateChapterDto {
   @IsString()
   title: string;
 
-  @IsString()
   @IsOptional()
+  @IsString()
   description?: string;
 
-  @IsString()
   @IsOptional()
-  videoUrl?: string;
-
   @IsInt()
-  @IsOptional()
   position?: number;
-
-  @IsOptional()
-  isPublished: boolean;
-
-  @IsOptional()
-  isFree: boolean;
-
-  @IsString()
-  @IsOptional()
-  courseId?: string;
 }

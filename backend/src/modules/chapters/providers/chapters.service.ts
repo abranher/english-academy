@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 
 import { PrismaService } from 'src/modules/prisma/providers/prisma.service';
 import { CreateChapterDto } from '../dto/create-chapter.dto';
@@ -8,35 +12,37 @@ import { UpdateChapterDto } from '../dto/update-chapter.dto';
 export class ChaptersService {
   constructor(private readonly prisma: PrismaService) {}
 
+  private async findCourseOrThrow(id: string) {
+    const course = await this.prisma.course.findUnique({ where: { id } });
+    if (!course) throw new NotFoundException('Curso no encontrado.');
+    return course;
+  }
+
   async create(courseId: string, createChapterDto: CreateChapterDto) {
-    const courseOwner = await this.prisma.course.findUnique({
-      where: {
-        id: courseId,
-      },
-    });
+    try {
+      await this.findCourseOrThrow(courseId);
+      const lastChapter = await this.prisma.chapter.findFirst({
+        where: { courseId },
+        orderBy: { position: 'desc' },
+      });
 
-    if (!courseOwner) throw new NotFoundException('Curso no encontrado.');
+      const newPosition = lastChapter ? lastChapter.position + 1 : 1;
 
-    const lastChapter = await this.prisma.chapter.findFirst({
-      where: {
-        courseId,
-      },
-      orderBy: {
-        position: 'desc',
-      },
-    });
+      await this.prisma.chapter.create({
+        data: {
+          title: createChapterDto.title,
+          courseId,
+          position: newPosition,
+        },
+      });
 
-    const newPosition = lastChapter ? lastChapter.position + 1 : 1;
-
-    const chapter = await this.prisma.chapter.create({
-      data: {
-        title: createChapterDto.title,
-        courseId,
-        position: newPosition,
-      },
-    });
-
-    return chapter;
+      return { message: 'Capítulo creado exitosamente!' };
+    } catch (error) {
+      console.error('Error al crear el capítulo:', error);
+      throw new InternalServerErrorException(
+        'Error del servidor. Por favor intenta nuevamente.',
+      );
+    }
   }
 
   async reorderChapters(courseId: string, updateChapterDto: UpdateChapterDto) {

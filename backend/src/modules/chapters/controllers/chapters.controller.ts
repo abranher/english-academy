@@ -1,4 +1,5 @@
 import { Controller, Get, Post, Body, Patch, Param, Put } from '@nestjs/common';
+
 import { ChaptersService } from '../providers/chapters.service';
 import { CreateChapterDto } from '../dto/create-chapter.dto';
 import { UpdateChapterDto } from '../dto/update-chapter.dto';
@@ -7,7 +8,10 @@ import { UpdateChapterDto } from '../dto/update-chapter.dto';
 export class ChaptersController {
   constructor(private readonly chaptersService: ChaptersService) {}
 
-  @Post(':courseId')
+  /*
+   * Create Chapter
+   */
+  @Post('course/:courseId')
   create(
     @Param('courseId') courseId: string,
     @Body() createChapterDto: CreateChapterDto,

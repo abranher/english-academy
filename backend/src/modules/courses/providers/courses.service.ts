@@ -32,16 +32,23 @@ export class CoursesService {
     createCourseDto: CreateCourseDto,
     userHeader: string,
   ) {
-    const course = await this.prisma.course.create({
-      data: { title: createCourseDto.title, tutorId },
-    });
+    try {
+      const course = await this.prisma.course.create({
+        data: { title: createCourseDto.title, tutorId },
+      });
 
-    this.activityLogsService.create(
-      userHeader,
-      activityLogMessages['course_create'],
-    );
+      this.activityLogsService.create(
+        userHeader,
+        activityLogMessages['course_create'],
+      );
 
-    return { message: 'Curso creado!', course };
+      return { message: 'Curso creado!', course };
+    } catch (error) {
+      console.error('Error creando el curso:', error);
+      throw new InternalServerErrorException(
+        'Error del servidor. Por favor intenta nuevamente.',
+      );
+    }
   }
 
   /**
