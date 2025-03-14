@@ -29,7 +29,7 @@ import messages from "@/libs/validations/schemas/messages";
 import { Chapter } from "@/types/models/Chapter";
 import { FolderOpen, Plus } from "lucide-react";
 import { toast } from "sonner";
-import { Spinner } from "@nextui-org/react";
+import { Spinner } from "@heroui/react";
 import {
   Dialog,
   DialogContent,

@@ -1,14 +1,15 @@
 "use client";
 
+import { useParams } from "next/navigation";
+
 import { useState } from "react";
 
 import { Card } from "@/components/shadcn/ui/card";
 import { Separator } from "@/components/shadcn/ui/separator";
 import { cn } from "@/libs/shadcn/utils";
-import Title from "@/components/common/Title";
+import { Title } from "@/components/common/Title";
 import ChapterTitleForm from "./ChapterTitleForm";
 import ChapterDescriptionForm from "./ChapterDescriptionForm";
-import { useParams } from "next/navigation";
 import { BookOpen, ClipboardPen, Globe } from "lucide-react";
 import LessonsForm from "./LessonsForm";
 

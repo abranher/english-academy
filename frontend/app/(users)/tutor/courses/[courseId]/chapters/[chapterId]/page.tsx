@@ -1,5 +1,6 @@
-import { redirect } from "next/navigation";
 import Link from "next/link";
+import { redirect } from "next/navigation";
+
 import axios from "@/config/axios";
 
 import { Button } from "@/components/shadcn/ui/button";
@@ -11,7 +12,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/shadcn/ui/tooltip";
-import AlertBanner from "@/components/courses/tutor/AlertBanner";
 import { Separator } from "@/components/shadcn/ui/separator";
 import Content from "./_components/Content";
 import TitleSection from "./_components/TitleSection";
@@ -52,9 +52,6 @@ export default async function ChapterIdPage({
 
         <Separator />
 
-        {!chapter.isPublished && (
-          <AlertBanner label="Este capítulo no está publicado. No será visible en el curso." />
-        )}
         <div className="flex items-center gap-4">
           <Link href={`/tutor/courses/${params.courseId}`}>
             <Button variant="outline" size="icon" className="h-7 w-7">
