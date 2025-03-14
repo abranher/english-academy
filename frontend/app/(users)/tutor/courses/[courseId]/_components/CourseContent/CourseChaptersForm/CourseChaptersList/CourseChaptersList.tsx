@@ -8,21 +8,17 @@ import {
   Droppable,
   DropResult,
 } from "@hello-pangea/dnd";
-import { cn } from "@/libs/shadcn/utils";
 import { Grip, Pencil } from "lucide-react";
-import { Badge } from "@/components/shadcn/ui/badge";
-
-interface ChaptersListProps {
-  items: Chapter[];
-  onReorder: (updateData: { id: string; position: number }[]) => void;
-  onEdit: (id: string) => void;
-}
 
 export function CourseChaptersList({
   items,
   onEdit,
   onReorder,
-}: ChaptersListProps) {
+}: {
+  items: Chapter[];
+  onReorder: (updateData: { id: string; position: number }[]) => void;
+  onEdit: (id: string) => void;
+}) {
   const [isMounted, setIsMounted] = useState(false);
   const [chapters, setChapters] = useState(items);
 
@@ -63,7 +59,7 @@ export function CourseChaptersList({
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="chapters">
           {(provided) => (
-            <div {...provided.droppableProps} ref={provided.innerRef}>
+            <section {...provided.droppableProps} ref={provided.innerRef}>
               {chapters.map((chapter, index) => (
                 <Draggable
                   key={chapter.id}
@@ -71,48 +67,32 @@ export function CourseChaptersList({
                   index={index}
                 >
                   {(provided) => (
-                    <div
-                      className={cn(
-                        "flex items-center gap-x-2 bg-zinc-200 border-zinc-200 border text-zinc-700 rounded-md mb-4 text-sm",
-                        chapter.isPublished &&
-                          "bg-green-100 border-green-200 text-green-700"
-                      )}
+                    <section
+                      className="flex items-center gap-x-2 border rounded-md mb-4 text-sm bg-green-100 border-green-200 text-green-700"
                       ref={provided.innerRef}
                       {...provided.draggableProps}
                     >
-                      <div
-                        className={cn(
-                          "px-2 py-3 border-r border-r-zinc-200 hover:bg-zinc-300 rounded-l-md transition",
-                          chapter.isPublished &&
-                            "border-r-green-200 hover:bg-green-200"
-                        )}
+                      <article
+                        className="px-2 py-3 border-r rounded-l-md transition border-r-green-200 hover:bg-green-200"
                         {...provided.dragHandleProps}
                       >
                         <Grip className="h-5 w-5" />
-                      </div>
-                      {chapter.title}
+                      </article>
 
-                      <div className="ml-auto p-4 flex items-center gap-x-4">
-                        {chapter.isFree && <Badge>Vista previa</Badge>}
-                        <Badge
-                          className={cn(
-                            "bg-zinc-500",
-                            chapter.isPublished && "bg-green-700"
-                          )}
-                        >
-                          {chapter.isPublished ? "Publicado" : "Borrador"}
-                        </Badge>
+                      <h3 className="font-bold">{chapter.title}</h3>
+
+                      <article className="ml-auto p-4 flex items-center gap-x-4">
                         <Pencil
                           onClick={() => onEdit(chapter.id)}
                           className="w-4 h-4 cursor-pointer hover:opacity-75 transition"
                         />
-                      </div>
-                    </div>
+                      </article>
+                    </section>
                   )}
                 </Draggable>
               ))}
               {provided.placeholder}
-            </div>
+            </section>
           )}
         </Droppable>
       </DragDropContext>
