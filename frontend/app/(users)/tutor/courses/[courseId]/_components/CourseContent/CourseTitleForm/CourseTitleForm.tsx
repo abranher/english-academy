@@ -101,14 +101,15 @@ export function CourseTitleForm({ title }: { title: string }) {
                 </FormItem>
               )}
             />
-            <div className="flex items-center gap-x-2">
+
+            <section className="flex items-center gap-x-2">
               <LoadingButton
                 isLoading={mutation.isPending}
                 isValid={isValid}
                 isSubmitting={isSubmitting}
                 label="Guardar"
               />
-            </div>
+            </section>
           </form>
         </Form>
       </CardContent>

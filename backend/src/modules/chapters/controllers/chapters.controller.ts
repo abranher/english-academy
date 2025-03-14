@@ -1,13 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  Put,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Put } from '@nestjs/common';
 import { ChaptersService } from '../providers/chapters.service';
 import { CreateChapterDto } from '../dto/create-chapter.dto';
 import { UpdateChapterDto } from '../dto/update-chapter.dto';
@@ -16,7 +7,7 @@ import { UpdateChapterDto } from '../dto/update-chapter.dto';
 export class ChaptersController {
   constructor(private readonly chaptersService: ChaptersService) {}
 
-  @Post('/:courseId')
+  @Post(':courseId')
   create(
     @Param('courseId') courseId: string,
     @Body() createChapterDto: CreateChapterDto,
@@ -32,11 +23,6 @@ export class ChaptersController {
     return this.chaptersService.reorderChapters(courseId, updateChapterDto);
   }
 
-  @Get()
-  findAll() {
-    return this.chaptersService.findAll();
-  }
-
   @Get(':id/course/:courseId')
   findOne(@Param('id') id: string, @Param('courseId') courseId: string) {
     return this.chaptersService.findOne(id, courseId);
@@ -49,10 +35,5 @@ export class ChaptersController {
     @Body() updateChapterDto: UpdateChapterDto,
   ) {
     return this.chaptersService.update(id, courseId, updateChapterDto);
-  }
-
-  @Delete(':id/course/:courseId')
-  remove(@Param('id') id: string, @Param('courseId') courseId: string) {
-    return this.chaptersService.remove(id, courseId);
   }
 }

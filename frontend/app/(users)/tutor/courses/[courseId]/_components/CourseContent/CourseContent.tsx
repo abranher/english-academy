@@ -121,7 +121,7 @@ export function CourseContent() {
             )}
 
             {content === "studyPlan" && (
-              <CourseChaptersForm initialData={course} courseId={course.id} />
+              <CourseChaptersForm chapters={course.chapters} />
             )}
           </Card>
 

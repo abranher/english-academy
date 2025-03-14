@@ -52,31 +52,20 @@ export class CoursesService {
 
     try {
       return await this.prisma.course.findUnique({
-        where: {
-          id,
-        },
+        where: { id },
         include: {
           category: true,
           subcategory: true,
           price: true,
           chapters: {
-            orderBy: {
-              position: 'asc',
-            },
+            orderBy: { position: 'asc' },
             include: {
               lessons: {
-                include: {
-                  class: true,
-                  quiz: true,
-                },
+                include: { class: true, quiz: true },
               },
             },
           },
-          attachments: {
-            orderBy: {
-              createdAt: 'desc',
-            },
-          },
+          attachments: { orderBy: { createdAt: 'desc' } },
         },
       });
     } catch (error) {

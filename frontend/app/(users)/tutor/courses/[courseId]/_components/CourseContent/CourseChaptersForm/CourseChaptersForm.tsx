@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 import axios from "@/config/axios";
 import { z } from "zod";
@@ -10,7 +10,7 @@ import { Spinner } from "@heroui/react";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Chapter, Course } from "@/types/models";
+import { Chapter } from "@/types/models";
 
 import { CourseChaptersList } from "./CourseChaptersList";
 import { FormSchema } from "./FormSchema";
@@ -40,39 +40,60 @@ import {
   DialogTrigger,
 } from "@/components/shadcn/ui/dialog";
 import { FolderOpen, Plus } from "lucide-react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { AxiosError } from "axios";
+import { LoadingButton } from "@/components/common/LoadingButton";
 
-export function CourseChaptersForm({
-  initialData,
-  courseId,
-}: {
-  initialData: Course & { chapters: Chapter[] };
-  courseId: string;
-}) {
+export function CourseChaptersForm({ chapters }: { chapters: Chapter[] | [] }) {
   const [isUpdating, setIsUpdating] = useState(false);
   const [open, setOpen] = useState(false);
+
+  const queryClient = useQueryClient();
+  const { courseId } = useParams();
 
   const router = useRouter();
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
-    defaultValues: {
-      title: "",
+    defaultValues: { title: "" },
+  });
+
+  const createMutation = useMutation({
+    mutationFn: (course: { title: string }) =>
+      axios.patch(`/api/chapters/${courseId}`, course),
+    onSuccess: (response) => {
+      if (response.status === 200 || response.status === 201) {
+        toast.success("Capítulo creado!");
+        setOpen(false);
+        queryClient.invalidateQueries({ queryKey: ["get_course", courseId] });
+      }
+    },
+    onError: (error) => {
+      if (error instanceof AxiosError) {
+        const status = error.response?.status;
+        const message = error.response?.data?.message || "Error desconocido";
+
+        const errorMessages: { [key: number]: string } = {
+          400: "Datos no válidos",
+          404: "Curso no encontrado",
+          500: "Error del servidor",
+          "-1": "Error inesperado",
+        };
+
+        if (status) toast.error(errorMessages[status] || message);
+        else toast.error(errorMessages["-1"] || message);
+      } else {
+        toast.error("Error de conexión o error inesperado");
+        console.error("Error que no es de Axios:", error);
+      }
     },
   });
 
-  const { isSubmitting, isValid } = form.formState;
+  async function onSubmit(data: z.infer<typeof FormSchema>) {
+    createMutation.mutate({ title: data.title });
+  }
 
-  const onSubmit = async (values: z.infer<typeof FormSchema>) => {
-    try {
-      await axios.post(`/api/chapters/${courseId}`, values);
-      toast.success("Capítulo creado!");
-      setOpen(false);
-      router.refresh();
-    } catch (error) {
-      console.log(error);
-      toast.error("Something wrong");
-    }
-  };
+  const { isSubmitting, isValid } = form.formState;
 
   const onReorder = async (updateData: { id: string; position: number }[]) => {
     try {
@@ -83,7 +104,7 @@ export function CourseChaptersForm({
       });
 
       toast.success("Capítulos reordenados");
-      router.refresh();
+      // router.refresh();
     } catch (error) {
       console.log(error);
       toast.error("Something went wrong");
@@ -114,24 +135,19 @@ export function CourseChaptersForm({
           aprendizaje.
         </CardDescription>
 
-        <section
-          className={cn(
-            "text-sm my-6 w-full",
-            !initialData.chapters.length && "text-slate-500 italic"
-          )}
-        >
-          {!initialData.chapters.length && (
-            <div className="text-lg w-full">
+        <section className="my-6 italic">
+          {chapters.length === 0 && (
+            <article className="text-lg w-full">
               <p className="flex justify-center flex-col items-center">
                 <FolderOpen className="w-20 h-20" />
                 Sin capítulos
               </p>
-            </div>
+            </article>
           )}
           <CourseChaptersList
             onEdit={onEdit}
             onReorder={onReorder}
-            items={initialData.chapters || []}
+            items={chapters}
           />
         </section>
 
@@ -152,11 +168,11 @@ export function CourseChaptersForm({
             <DialogHeader>
               <DialogTitle>Crear capítulo</DialogTitle>
             </DialogHeader>
-            <div className="grid gap-4 py-4">
+            <div className="grid gap-4 pt-4">
               <Form {...form}>
                 <form
                   onSubmit={form.handleSubmit(onSubmit)}
-                  className="space-y-4 mt-4"
+                  className="flex gap-12 flex-col"
                 >
                   <FormField
                     control={form.control}
@@ -183,11 +199,14 @@ export function CourseChaptersForm({
                     )}
                   />
 
-                  <DialogFooter>
-                    <Button disabled={!isValid || isSubmitting} type="submit">
-                      Crear
-                    </Button>
-                  </DialogFooter>
+                  <section className="flex justify-end">
+                    <LoadingButton
+                      isLoading={createMutation.isPending}
+                      isValid={isValid}
+                      isSubmitting={isSubmitting}
+                      label="Crear"
+                    />
+                  </section>
                 </form>
               </Form>
             </div>

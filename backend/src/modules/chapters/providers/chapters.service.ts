@@ -1,7 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 
-import { CoursePlatformStatus } from '@prisma/client';
-
 import { PrismaService } from 'src/modules/prisma/providers/prisma.service';
 import { CreateChapterDto } from '../dto/create-chapter.dto';
 import { UpdateChapterDto } from '../dto/update-chapter.dto';
@@ -68,10 +66,6 @@ export class ChaptersService {
     };
   }
 
-  findAll() {
-    return `This action returns all chapters`;
-  }
-
   async findOne(id: string, courseId: string) {
     const chapter = await this.prisma.chapter.findUnique({
       where: {
@@ -112,72 +106,7 @@ export class ChaptersService {
       data: updateChapterDto,
     });
 
-    // TODO: handle video upload
-
     return chapter;
-  }
-
-  async remove(id: string, courseId: string) {
-    const ownCourse = this.prisma.course.findUnique({
-      where: {
-        id: courseId,
-      },
-    });
-
-    if (!ownCourse) throw new NotFoundException('Curso no encontrado.');
-
-    const chapter = await this.prisma.chapter.findUnique({
-      where: {
-        id,
-        courseId,
-      },
-    });
-
-    if (!chapter) throw new NotFoundException('Capítulo no encontrado.');
-
-    /*
-    if (chapter.videoUrl) {
-      const existingMuxData = await this.prisma.muxData.findFirst({
-        where: {
-          chapterId: id,
-        },
-      });
-
-      if (existingMuxData) {
-        await Video.Assets.del(existingMuxData.assetId);
-        await this.prisma.muxData.delete({
-          where: {
-            id: existingMuxData.id,
-          },
-        });
-      }
-    }
-      */
-
-    const deletedChapter = await this.prisma.chapter.delete({
-      where: {
-        id,
-      },
-    });
-
-    const publishedChaptersInCourse = await this.prisma.chapter.findMany({
-      where: {
-        courseId,
-      },
-    });
-
-    if (!publishedChaptersInCourse.length) {
-      await this.prisma.course.update({
-        where: {
-          id: courseId,
-        },
-        data: {
-          platformStatus: CoursePlatformStatus.DRAFT,
-        },
-      });
-    }
-
-    return deletedChapter;
   }
 
   // Common service
