@@ -8,7 +8,7 @@ import { Image } from "@heroui/react";
 import { assetImg } from "@/libs/asset";
 import { AxiosError } from "axios";
 import { useDropzone } from "react-dropzone";
-import { useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { formatSize, truncateString } from "@/libs/format";
 import { useCallback, useEffect, useState } from "react";
 
@@ -64,43 +64,42 @@ export function CourseImageForm({ image }: { image: string | null }) {
     },
   });
 
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!selectedFile) return;
-
-    try {
-      setUploadStatus("uploading");
-
-      const formData = new FormData();
-      formData.set("image", selectedFile);
-
-      await axios.post(`/api/courses/files/${courseId}/image`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+  const mutation = useMutation({
+    mutationFn: async (formData: FormData) =>
+      axios.post(`/api/courses/files/${courseId}/image`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
         onUploadProgress: (progressEvent) => {
           const percent = Math.round(
             (progressEvent.loaded * 100) / (progressEvent.total || 1)
           );
           setProgress(percent);
         },
-      });
-
+      }),
+    onSuccess: () => {
       setUploadStatus("done");
       toast.success("Imagen actualizada!");
       setSelectedFile(undefined);
       queryClient.invalidateQueries({ queryKey: ["get_course", courseId] });
-    } catch (error) {
+    },
+    onError: (error: AxiosError | Error) => {
       setUploadStatus("error");
       setProgress(0);
-      if (error instanceof AxiosError) {
-        const message =
-          error.response?.data?.message || "Error al subir la imagen";
-        toast.error(message);
-      } else {
-        toast.error("Error desconocido");
-      }
-    }
+      const message =
+        error instanceof AxiosError
+          ? error.response?.data?.message || "Error al subir la imagen"
+          : "Error desconocido";
+      toast.error(message);
+    },
+  });
+
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!selectedFile) return;
+
+    setUploadStatus("uploading");
+    const formData = new FormData();
+    formData.set("image", selectedFile);
+    mutation.mutate(formData);
   };
 
   const clearFile = () => {
@@ -120,23 +119,21 @@ export function CourseImageForm({ image }: { image: string | null }) {
         <section className="grid grid-cols-1 md:grid-cols-2">
           {/** File upload */}
           {image ? (
-            <>
-              {imageReady ? (
-                <div className="aspect-video rounded-lg">
-                  <Image
-                    src={assetImg(image)}
-                    alt="Imagen del curso"
-                    className="rounded-md"
-                  />
-                </div>
-              ) : (
-                <>
-                  <Skeleton className="w-full h-full flex justify-center items-center">
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  </Skeleton>
-                </>
-              )}
-            </>
+            imageReady ? (
+              <div className="aspect-video rounded-lg">
+                <Image
+                  src={assetImg(image)}
+                  alt="Imagen del curso"
+                  className="rounded-md"
+                />
+              </div>
+            ) : (
+              <>
+                <Skeleton className="w-full h-full flex justify-center items-center">
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                </Skeleton>
+              </>
+            )
           ) : (
             <div className="grid aspect-video place-items-center rounded-lg bg-zinc-200 dark:bg-zinc-800">
               <ImageIcon className="h-9 w-9 text-gray-600 aspect-video" />
@@ -245,7 +242,7 @@ export function CourseImageForm({ image }: { image: string | null }) {
                         type="submit"
                         disabled={
                           !selectedFile ||
-                          uploadStatus === "uploading" ||
+                          mutation.isPending ||
                           uploadStatus === "done"
                         }
                         className="w-full flex gap-2 items-center"
@@ -256,7 +253,7 @@ export function CourseImageForm({ image }: { image: string | null }) {
                             Subir
                           </>
                         )}
-                        {uploadStatus === "uploading" && (
+                        {mutation.isPending && (
                           <>
                             <Loader2 className="h-5 w-5 animate-spin" />
                             Subiendo...
