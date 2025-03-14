@@ -51,15 +51,24 @@ export class CoursesFilesService {
   }
 
   async uploadTrailer(id: string, trailer: string) {
-    const course = await this.prisma.course.update({
-      where: {
-        id,
-      },
-      data: {
-        trailer,
-      },
-    });
+    const course = await this.findCourseOrThrow(id);
 
-    return course;
+    if (course.trailer) {
+      await this.deleteFile(course.image);
+    }
+
+    try {
+      await this.prisma.course.update({
+        where: { id },
+        data: { trailer },
+      });
+    } catch (error) {
+      console.error('Error updating trailer of course:', error);
+      throw new InternalServerErrorException(
+        'Error del servidor. Por favor intenta nuevamente.',
+      );
+    }
+
+    return { message: 'Trailer actualizado exitosamente!' };
   }
 }

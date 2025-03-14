@@ -1,24 +1,16 @@
 "use client";
 
 import axios from "@/config/axios";
-import { useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 
 import { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import ReactPlayer from "react-player";
 
 import { Button } from "@/components/shadcn/ui/button";
-import { CardContent } from "@/components/shadcn/ui/card";
-import { Image } from "@heroui/react";
+import { Card, CardContent } from "@/components/shadcn/ui/card";
 import { toast } from "sonner";
-import {
-  CheckCircle,
-  ImageIcon,
-  Loader2,
-  UploadCloud,
-  Video,
-  XIcon,
-} from "lucide-react";
+import { CheckCircle, Loader2, UploadCloud, Video, XIcon } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -29,68 +21,86 @@ import {
 import { Progress } from "@/components/shadcn/ui/progress";
 import { assetVideo } from "@/libs/asset";
 import { Skeleton } from "@/components/shadcn/ui/skeleton";
-import { truncateString } from "@/libs/format";
+import { formatSize, truncateString } from "@/libs/format";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 
-export function CourseTrailerForm({ course }: any) {
+type UploadStatus = "select" | "uploading" | "done" | "error";
+
+const MAX_SIZE = 5 * 1024 * 1024; // 5MB
+
+export function CourseTrailerForm({ trailer }: { trailer: string | null }) {
+  const [preview, setPreview] = useState<string>("");
   const [selectedFile, setSelectedFile] = useState<File | undefined>(undefined);
   const [progress, setProgress] = useState(0);
-  const [uploadStatus, setUploadStatus] = useState("select");
+  const [uploadStatus, setUploadStatus] = useState<UploadStatus>("select");
   const [playerReady, setPlayerReady] = useState(false);
 
-  // drop zone
-  const onDrop = useCallback((acceptedFiles: any) => {
-    setSelectedFile(acceptedFiles[0]);
-  }, []);
+  const queryClient = useQueryClient();
+  const { courseId } = useParams();
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop: useCallback((acceptedFiles: File[]) => {
+      const file = acceptedFiles[0];
+      setSelectedFile(file);
+      setPreview(URL.createObjectURL(file));
+    }, []),
+    accept: { "video/*": [".mp4"] },
+    maxSize: MAX_SIZE,
+    onDropRejected: (fileRejections) => {
+      fileRejections.forEach((rejection) => {
+        if (rejection.errors.some((e) => e.code === "file-too-large")) {
+          toast.error("El trailer es demasiado grande (máximo 5MB)");
+        } else {
+          toast.error("Formato de video no permitido");
+        }
+      });
+    },
+  });
 
-  const router = useRouter();
-
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    if (typeof selectedFile === "undefined") return;
-
-    try {
-      setUploadStatus("uploading");
-
-      const formData = new FormData();
-      formData.set("trailer", selectedFile);
-
-      await axios.post(`/api/courses/${course.id}/trailer`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+  const mutation = useMutation({
+    mutationFn: async (formData: FormData) =>
+      axios.post(`/api/courses/files/${courseId}/trailer`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
         onUploadProgress: (progressEvent) => {
-          const percentCompleted = Math.round(
+          const percent = Math.round(
             (progressEvent.loaded * 100) / (progressEvent.total || 1)
           );
-
-          setProgress(percentCompleted);
+          setProgress(percent);
         },
-      });
-
+      }),
+    onSuccess: () => {
       setUploadStatus("done");
-      toast.success("Trailer actualizada!");
+      toast.success("Trailer actualizado!");
       setSelectedFile(undefined);
-      router.refresh();
-    } catch (error) {
+      queryClient.invalidateQueries({ queryKey: ["get_course", courseId] });
+    },
+    onError: (error: AxiosError | Error) => {
+      setUploadStatus("error");
       setProgress(0);
-      setUploadStatus("select");
-      toast.error("Something wrong");
-    }
+      const message =
+        error instanceof AxiosError
+          ? error.response?.data?.message || "Error al subir trailer"
+          : "Error desconocido";
+      toast.error(message);
+    },
+  });
+
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!selectedFile) return;
+
+    setUploadStatus("uploading");
+    const formData = new FormData();
+    formData.set("trailer", selectedFile);
+    mutation.mutate(formData);
   };
 
-  const clearFileInput = () => {
+  const clearFile = () => {
     setSelectedFile(undefined);
+    setPreview("");
     setProgress(0);
     setUploadStatus("select");
-  };
-
-  const formatSize = (size: number) => {
-    return `${(size / 1024).toFixed(2)} KB o ${(size / 1024 / 1024).toFixed(
-      2
-    )} MB`;
   };
 
   useEffect(() => {
@@ -102,25 +112,23 @@ export function CourseTrailerForm({ course }: any) {
       <CardContent>
         <section className="grid grid-cols-1 md:grid-cols-2">
           {/** File upload */}
-          {course.trailer ? (
-            <>
-              {playerReady ? (
-                <div className="aspect-video rounded-lg">
-                  <ReactPlayer
-                    controls
-                    width={"100%"}
-                    height={"100%"}
-                    url={assetVideo(course.trailer)}
-                  />
-                </div>
-              ) : (
-                <>
-                  <Skeleton className="w-full h-full flex justify-center items-center">
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  </Skeleton>
-                </>
-              )}
-            </>
+          {trailer ? (
+            playerReady ? (
+              <div className="aspect-video rounded-lg">
+                <ReactPlayer
+                  controls
+                  width={"100%"}
+                  height={"100%"}
+                  url={assetVideo(trailer)}
+                />
+              </div>
+            ) : (
+              <>
+                <Skeleton className="w-full h-full flex justify-center items-center">
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                </Skeleton>
+              </>
+            )
           ) : (
             <div className="grid aspect-video place-items-center rounded-lg bg-zinc-200 dark:bg-zinc-800">
               <Video className="h-9 w-9 text-gray-600 aspect-video" />
@@ -143,7 +151,7 @@ export function CourseTrailerForm({ course }: any) {
               </p>
             </div>
 
-            <Dialog onOpenChange={clearFileInput}>
+            <Dialog onOpenChange={clearFile}>
               <DialogTrigger asChild>
                 <Button className="flex gap-3">
                   <UploadCloud />
@@ -156,24 +164,19 @@ export function CourseTrailerForm({ course }: any) {
                 </DialogHeader>
                 <form onSubmit={onSubmit}>
                   <div className="grid gap-4 py-4">
-                    {selectedFile ? (
-                      <>
-                        {selectedFile.type.startsWith("video/") && (
-                          <ReactPlayer
-                            controls
-                            width={"100%"}
-                            height={"100%"}
-                            url={URL.createObjectURL(selectedFile)}
-                          />
-                        )}
-                      </>
+                    {preview ? (
+                      <ReactPlayer
+                        controls
+                        width={"100%"}
+                        height={"100%"}
+                        url={preview}
+                      />
                     ) : (
-                      <>
-                        <div className="grid aspect-video place-items-center rounded-lg bg-zinc-200 dark:bg-zinc-800">
-                          <Video className="h-9 w-9 text-gray-600" />
-                        </div>
-                      </>
+                      <div className="grid aspect-video place-items-center rounded-lg bg-zinc-200 dark:bg-zinc-800">
+                        <Video className="h-9 w-9 text-gray-600" />
+                      </div>
                     )}
+
                     {/** upload input */}
                     {(uploadStatus === "select" ||
                       uploadStatus === "uploading") && (
@@ -194,66 +197,74 @@ export function CourseTrailerForm({ course }: any) {
                           </p>
                         )}
                         <p className="text-xs font-medium mt-2">
-                          Formatos permitidos: MP4.
+                          Formatos permitidos: MP4 (Máx. 5MB).
                         </p>
                       </section>
                     )}
 
-                    <>
-                      <section className="grid grid-cols-8 py-3 rounded-lg text-gray-700 dark:text-gray-100 bg-zinc-200 dark:bg-zinc-900">
+                    <Card className="grid grid-cols-8 py-2">
+                      <div className="col-span-1 flex justify-center items-center">
+                        <Video />
+                      </div>
+                      <div className="text-xs col-span-6 flex flex-col justify-center gap-1">
+                        <p>
+                          {selectedFile
+                            ? truncateString(selectedFile.name, "md")
+                            : "No hay ningún archivo seleccionado"}
+                        </p>
+                        <p>{selectedFile && formatSize(selectedFile.size)}</p>
+                        <Progress value={progress} className="h-2" />
+                      </div>
+                      {uploadStatus === "select" && selectedFile && (
                         <div className="col-span-1 flex justify-center items-center">
-                          <ImageIcon />
+                          <XIcon
+                            className="cursor-pointer"
+                            onClick={clearFile}
+                          />
                         </div>
-                        <div className="text-xs col-span-6 flex flex-col justify-center gap-1">
-                          <p>
-                            {selectedFile
-                              ? truncateString(selectedFile.name)
-                              : "No hay ningún archivo seleccionado"}
-                          </p>
-                          <p>{selectedFile && formatSize(selectedFile.size)}</p>
-                          <Progress value={progress} className="h-2" />
+                      )}
+                      {uploadStatus === "uploading" && (
+                        <div className="col-span-1 flex justify-center items-center">
+                          {progress}
                         </div>
-                        {uploadStatus === "select" && selectedFile && (
+                      )}
+                      {uploadStatus === "done" && (
+                        <div className="col-span-1 flex justify-center items-center">
+                          <CheckCircle />
+                        </div>
+                      )}
+                    </Card>
+
+                    <div className="space-y-2 text-center">
+                      <Button
+                        type="submit"
+                        disabled={
+                          !selectedFile ||
+                          mutation.isPending ||
+                          uploadStatus === "done"
+                        }
+                        className="w-full flex gap-2 items-center"
+                      >
+                        {uploadStatus === "select" && (
                           <>
-                            <div className="col-span-1 flex justify-center items-center">
-                              <XIcon
-                                className="cursor-pointer"
-                                onClick={clearFileInput}
-                              />
-                            </div>
+                            <UploadCloud className="h-5 w-5" />
+                            Subir
                           </>
                         )}
-                        {uploadStatus === "uploading" && (
+                        {mutation.isPending && (
                           <>
-                            <div className="col-span-1 flex justify-center items-center">
-                              {progress}
-                            </div>
+                            <Loader2 className="h-5 w-5 animate-spin" />
+                            Subiendo...
                           </>
                         )}
                         {uploadStatus === "done" && (
                           <>
-                            <div className="col-span-1 flex justify-center items-center">
-                              <CheckCircle />
-                            </div>
+                            <CheckCircle className="h-5 w-5" />
+                            Listo
                           </>
                         )}
-                      </section>
-                      <Button
-                        type="submit"
-                        disabled={
-                          uploadStatus === "uploading" ||
-                          uploadStatus === "done"
-                        }
-                      >
-                        {uploadStatus === "select" && <UploadCloud />}
-
-                        {uploadStatus === "uploading" && (
-                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        )}
-
-                        {uploadStatus === "done" && <CheckCircle />}
                       </Button>
-                    </>
+                    </div>
                   </div>
                 </form>
               </DialogContent>
