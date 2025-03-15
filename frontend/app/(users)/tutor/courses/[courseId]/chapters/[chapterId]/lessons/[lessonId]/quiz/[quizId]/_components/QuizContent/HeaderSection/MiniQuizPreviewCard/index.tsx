@@ -1,0 +1,1 @@
+export { MiniQuizPreviewCard } from "./MiniQuizPreviewCard";

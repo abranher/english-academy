@@ -1,16 +1,22 @@
 "use client";
 
+import { useParams } from "next/navigation";
+
+import { cn } from "@/libs/shadcn/utils";
+import { Quiz } from "@/types/models";
 import { useState } from "react";
+import { getQuiz } from "../../_services/get-quiz";
+import { useQuery } from "@tanstack/react-query";
+
+import { Title } from "@/components/common/Title";
+import { QuizContentSkeleton } from "./QuizContentSkeleton";
+import { QuizTitleForm } from "./QuizTitleForm";
+import { QuizDescriptionForm } from "./QuizDescriptionForm";
 
 import { Card } from "@/components/shadcn/ui/card";
 import { Separator } from "@/components/shadcn/ui/separator";
-import { cn } from "@/libs/shadcn/utils";
-import Title from "@/components/common/Title";
-import QuizDescriptionForm from "./QuizDescriptionForm";
-import { useParams } from "next/navigation";
 import { BookOpen, Globe } from "lucide-react";
-import QuizTitleForm from "./QuizTitleForm";
-import { ExercisesForm } from "./ExercisesForm";
+import { HeaderSection } from "./HeaderSection";
 
 // Define un tipo para las posibles claves de sectionTitles
 type SectionTitleKey = "mainContent";
@@ -24,17 +30,33 @@ const sectionTitles: SectionTitles = {
   mainContent: "Contenido principal",
 };
 
-export default function Content({ lesson }: { lesson: any }) {
-  const [content, setContent] = useState<SectionTitleKey>("mainContent");
+export function QuizContent() {
+  const { quizId, lessonId } = useParams();
 
-  const { lessonId } = useParams();
+  const {
+    isPending,
+    data: lessonQuiz,
+    isError,
+  } = useQuery<Quiz>({
+    queryKey: ["get_quiz", quizId, lessonId],
+    queryFn: () => getQuiz(quizId as string, lessonId as string),
+  });
+
+  const [content, setContent] = useState<SectionTitleKey>("mainContent");
 
   const handleNavigation = (value: SectionTitleKey) => {
     setContent(value);
   };
 
+  if (isPending) return <QuizContentSkeleton />;
+  if (isError) return <>Ha ocurrido un error al cargar el quiz</>;
+
   return (
     <>
+      <HeaderSection lessonQuiz={lessonQuiz} />
+
+      <Separator className="mb-3" />
+
       <section className="w-full flex">
         <div className="lg:grid lg:grid-cols-4 w-full space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
           <Card className="lg:col-span-3 flex w-full flex-col gap-4 p-5">
@@ -45,21 +67,11 @@ export default function Content({ lesson }: { lesson: any }) {
             <Separator />
             {content === "mainContent" && (
               <>
-                <QuizTitleForm
-                  initialData={lesson}
-                  lessonId={lessonId as string}
-                  quizId={lesson.quiz.id as string}
-                />
+                <QuizTitleForm title={lessonQuiz.title} />
                 <Separator />
 
-                <QuizDescriptionForm
-                  initialData={lesson}
-                  lessonId={lessonId as string}
-                  quizId={lesson.quiz.id as string}
-                />
+                <QuizDescriptionForm description={lessonQuiz.description} />
                 <Separator />
-
-                <ExercisesForm />
               </>
             )}
           </Card>

@@ -1,10 +1,7 @@
-import { LessonType } from '@prisma/client';
-import { IsEnum, IsOptional, IsString } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateClassDto {
-  @IsEnum(LessonType)
-  type: LessonType;
-
+  @IsNotEmpty()
   @IsString()
   title: string;
 

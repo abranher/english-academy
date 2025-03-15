@@ -497,11 +497,6 @@ enum CourseReviewDecision {
   REJECTED // El curso fue rechazado
 }
 
-enum ExerciseType {
-  MULTIPLE_CHOICE
-  FILL_IN_THE_BLANK
-}
-
 enum Language {
   ES
   EN

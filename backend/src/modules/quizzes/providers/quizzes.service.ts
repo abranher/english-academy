@@ -1,66 +1,50 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateQuizDto } from '../dto/create-quiz.dto';
-import { UpdateQuizDto } from '../dto/update-quiz.dto';
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
+
 import { PrismaService } from 'src/modules/prisma/providers/prisma.service';
-import { ExerciseType } from '@prisma/client';
+import { UpdateQuizDto } from '../dto/update-quiz.dto';
 
 @Injectable()
 export class QuizzesService {
   constructor(private readonly prisma: PrismaService) {}
 
-  create(createQuizDto: CreateQuizDto) {
-    return 'This action adds a new quiz';
+  private async findLessonOrThrow(id: string) {
+    const lesson = await this.prisma.lesson.findUnique({ where: { id } });
+    if (!lesson) throw new NotFoundException('Lección no encontrada.');
+    return lesson;
   }
 
-  async createExercise(id: string, createQuizDto: CreateQuizDto) {
-    const ownQuiz = await this.prisma.quiz.findUnique({
-      where: {
-        id,
-      },
-    });
+  async findOne(id: string, lessonId: string) {
+    await this.findLessonOrThrow(lessonId);
 
-    if (!ownQuiz) throw new NotFoundException('Quiz no encontrado.');
-
-    if (createQuizDto.type === ExerciseType.MULTIPLE_CHOICE) {
-      const multipleChoice = await this.prisma.multipleChoiceQuestion.create({
-        data: {
-          quizId: ownQuiz.id,
-        },
+    try {
+      return await this.prisma.quiz.findUnique({
+        where: { id, lessonId },
       });
-
-      return multipleChoice;
+    } catch (error) {
+      console.error('Error al obtener el quiz:', error);
+      throw new InternalServerErrorException(
+        'Error del servidor. Por favor intenta nuevamente.',
+      );
     }
   }
 
-  findAll() {
-    return `This action returns all quizzes`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} quiz`;
-  }
-
   async update(id: string, lessonId: string, updateQuizDto: UpdateQuizDto) {
-    const ownLesson = await this.prisma.lesson.findUnique({
-      where: {
-        id: lessonId,
-      },
-    });
+    await this.findLessonOrThrow(lessonId);
 
-    if (!ownLesson) throw new NotFoundException('Lección no encontrada.');
-
-    const lessonQuiz = await this.prisma.quiz.update({
-      where: {
-        id,
-        lessonId: ownLesson.id,
-      },
-      data: updateQuizDto,
-    });
-
-    return lessonQuiz;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} quiz`;
+    try {
+      return await this.prisma.quiz.update({
+        where: { id, lessonId },
+        data: updateQuizDto,
+      });
+    } catch (error) {
+      console.error('Error al actualizar el quiz:', error);
+      throw new InternalServerErrorException(
+        'Error del servidor. Por favor intenta nuevamente.',
+      );
+    }
   }
 }
