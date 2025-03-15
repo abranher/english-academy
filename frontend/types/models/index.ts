@@ -11,6 +11,8 @@ export { type Lesson } from "./Lesson";
 export { type Notification } from "./Notification";
 export { type Price } from "./Price";
 export { type Quiz } from "./Quiz";
+export { type QuizQuestion } from "./QuizQuestion";
+export { type QuizQuestionOption } from "./QuizQuestionOption";
 export { type Student } from "./Student";
 export { type Tutor } from "./Tutor";
 export { type TutorStatusHistory } from "./TutorStatusHistory";

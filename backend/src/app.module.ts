@@ -28,6 +28,7 @@ import { NotificationsModule } from './modules/notifications/notifications.modul
 import { CertificationsModule } from './modules/certifications/certifications.module';
 import { AdminModule } from './modules/admin/admin.module';
 import { TutorStatusHistoryModule } from './modules/tutor-status-history/tutor-status-history.module';
+import { QuizQuestionsModule } from './modules/quiz-questions/quiz-questions.module';
 
 @Module({
   imports: [
@@ -61,6 +62,7 @@ import { TutorStatusHistoryModule } from './modules/tutor-status-history/tutor-s
     CertificationsModule,
     AdminModule,
     TutorStatusHistoryModule,
+    QuizQuestionsModule,
   ],
 })
 export class AppModule {}
