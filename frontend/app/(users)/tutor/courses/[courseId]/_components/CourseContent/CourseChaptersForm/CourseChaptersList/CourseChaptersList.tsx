@@ -8,6 +8,7 @@ import {
   Droppable,
   DropResult,
 } from "@hello-pangea/dnd";
+
 import { Grip, Pencil } from "lucide-react";
 
 export function CourseChaptersList({

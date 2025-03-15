@@ -85,10 +85,7 @@ export function ChapterContent() {
             )}
             {content === "lessons" && (
               <>
-                <ChapterLessonsForm
-                  initialData={chapter}
-                  chapterId={chapter.id}
-                />
+                <ChapterLessonsForm lessons={chapter.lessons} />
               </>
             )}
           </Card>

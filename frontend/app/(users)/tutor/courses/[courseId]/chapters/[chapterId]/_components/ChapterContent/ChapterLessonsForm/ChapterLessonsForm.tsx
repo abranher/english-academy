@@ -1,9 +1,13 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 
 import axios from "@/config/axios";
-import { useState } from "react";
+import { toast } from "sonner";
+import { Lesson } from "@/types/models";
+import { Spinner } from "@heroui/react";
+import { AxiosError } from "axios";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { ChapterLessonsList } from "./ChapterLessonsList";
 import { CreateLessonModal } from "./CreateLessonModal";
@@ -13,51 +17,54 @@ import {
   CardDescription,
   CardTitle,
 } from "@/components/shadcn/ui/card";
-import { cn } from "@/libs/shadcn/utils";
-import { Chapter } from "@/types/models/Chapter";
-import { FolderOpen, Plus } from "lucide-react";
-import { toast } from "sonner";
-import { Spinner } from "@heroui/react";
-import { Lesson } from "@/types/models/Lesson";
+import { FolderOpen } from "lucide-react";
 
-interface LessonsFormProps {
-  initialData: Chapter & { lessons: Lesson[] };
-  chapterId: string;
-}
+export function ChapterLessonsForm({ lessons }: { lessons: Lesson[] | [] }) {
+  const queryClient = useQueryClient();
+  const { courseId, chapterId } = useParams();
 
-export function ChapterLessonsForm({
-  initialData,
-  chapterId,
-}: LessonsFormProps) {
-  const [isUpdating, setIsUpdating] = useState(false);
-
-  const router = useRouter();
-
-  const onReorder = async (updateData: { id: string; position: number }[]) => {
-    try {
-      setIsUpdating(true);
-
-      await axios.put(`/api/lessons/${chapterId}/reorder`, {
+  const reorderMutation = useMutation({
+    mutationFn: (updateData: { id: string; position: number }[]) =>
+      axios.put(`/api/lessons/chapter/${chapterId}/reorder`, {
         list: updateData,
-      });
+      }),
+    onSuccess: (response) => {
+      if (response.status === 200 || response.status === 201) {
+        const data = response.data;
+        toast.success(data.message);
+        queryClient.invalidateQueries({
+          queryKey: ["get_chapter", courseId, chapterId],
+        });
+      }
+    },
+    onError: (error) => {
+      if (error instanceof AxiosError) {
+        const status = error.response?.status;
+        const message = error.response?.data?.message || "Error desconocido";
 
-      toast.success("Lecciones reordenados");
-      router.refresh();
-    } catch (error) {
-      console.log(error);
-      toast.error("Something went wrong");
-    } finally {
-      setIsUpdating(false);
-    }
-  };
+        const errorMessages: { [key: number]: string } = {
+          400: "Datos no válidos",
+          404: "Capítulo no encontrado",
+          500: "Error del servidor",
+          "-1": "Error inesperado",
+        };
+
+        if (status) toast.error(errorMessages[status] || message);
+        else toast.error(errorMessages["-1"] || message);
+      } else {
+        toast.error("Error de conexión o error inesperado");
+        console.error("Error que no es de Axios:", error);
+      }
+    },
+  });
 
   return (
     <>
       <CardContent className="relative">
-        {isUpdating && (
-          <div className="absolute h-full w-full bg-slate-500/20 top-0 right-0 rounded-md flex items-center justify-center">
+        {reorderMutation.isPending && (
+          <section className="absolute h-full w-full bg-slate-500/20 top-0 right-0 rounded-md flex items-center justify-center">
             <Spinner size="lg" />
-          </div>
+          </section>
         )}
         <CardTitle className="flex justify-between gap-3 text-lg mb-3">
           Lecciones del capítulo
@@ -68,29 +75,25 @@ export function ChapterLessonsForm({
           refuercen el aprendizaje.
         </CardDescription>
 
-        <div
-          className={cn(
-            "text-sm my-6 w-full",
-            !initialData.lessons.length && "text-slate-500 italic"
-          )}
-        >
-          {!initialData.lessons.length && (
-            <div className="text-lg w-full">
+        <section className="my-6 italic">
+          {lessons.length === 0 && (
+            <article className="text-lg w-full">
               <p className="flex justify-center flex-col items-center">
                 <FolderOpen className="w-20 h-20" />
                 Sin lecciones
               </p>
-            </div>
+            </article>
           )}
-          <ChapterLessonsList
-            onReorder={onReorder}
-            items={initialData.lessons || []}
-          />
-        </div>
 
-        <p className="text-xs text-muted-foreground my-4">
-          Arrastre y suelte para reordenar las lecciones
-        </p>
+          <ChapterLessonsList
+            onReorder={reorderMutation.mutate}
+            items={lessons}
+          />
+        </section>
+
+        <CardDescription>
+          Arrastre y suelte para reordenar los lecciones
+        </CardDescription>
 
         <CreateLessonModal />
       </CardContent>
