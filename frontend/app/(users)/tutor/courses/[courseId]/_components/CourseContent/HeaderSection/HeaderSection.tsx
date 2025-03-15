@@ -6,7 +6,7 @@ import { Course } from "@/types/models";
 import { CourseReviewStatus } from "@/types/enums";
 
 import { AlertBanner } from "@/components/common/AlertBanner";
-import { MiniCoursePreviewCard } from "../MiniCoursePreviewCard";
+import { MiniCoursePreviewCard } from "./MiniCoursePreviewCard";
 import { CourseActions } from "../CourseActions";
 
 import { Separator } from "@/components/shadcn/ui/separator";

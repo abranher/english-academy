@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useParams } from "next/navigation";
 
-import { MiniChapterPreviewCard } from "../MiniChapterPreviewCard";
+import { MiniChapterPreviewCard } from "./MiniChapterPreviewCard";
 import { ChapterActions } from "../ChapterActions";
 
 import { Separator } from "@/components/shadcn/ui/separator";
