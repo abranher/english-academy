@@ -69,11 +69,15 @@ export function CourseTrailerForm({ trailer }: { trailer: string | null }) {
           setProgress(percent);
         },
       }),
-    onSuccess: () => {
-      setUploadStatus("done");
-      toast.success("Trailer actualizado!");
-      setSelectedFile(undefined);
-      queryClient.invalidateQueries({ queryKey: ["get_course", courseId] });
+
+    onSuccess: (response) => {
+      if (response.status === 200 || response.status === 201) {
+        const data = response.data;
+        toast.success(data.message);
+        setUploadStatus("done");
+        setSelectedFile(undefined);
+        queryClient.invalidateQueries({ queryKey: ["get_course", courseId] });
+      }
     },
     onError: (error: AxiosError | Error) => {
       setUploadStatus("error");

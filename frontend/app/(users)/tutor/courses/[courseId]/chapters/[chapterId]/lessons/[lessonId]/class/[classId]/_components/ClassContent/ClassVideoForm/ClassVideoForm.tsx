@@ -1,8 +1,8 @@
 "use client";
 
-import axios from "@/config/axios";
 import { useParams } from "next/navigation";
 
+import axios from "@/config/axios";
 import ReactPlayer from "react-player";
 import { toast } from "sonner";
 import { assetVideo } from "@/libs/asset";
@@ -69,14 +69,16 @@ export function ClassVideoForm({ video }: { video: string | null }) {
           setProgress(percent);
         },
       }),
-    onSuccess: () => {
-      setUploadStatus("done");
-      // Mandar mensaje desde server
-      toast.success("Video actualizado!");
-      setSelectedFile(undefined);
-      queryClient.invalidateQueries({
-        queryKey: ["get_class", classId, lessonId],
-      });
+    onSuccess: (response) => {
+      if (response.status === 200 || response.status === 201) {
+        const data = response.data;
+        toast.success(data.message);
+        setUploadStatus("done");
+        setSelectedFile(undefined);
+        queryClient.invalidateQueries({
+          queryKey: ["get_class", classId, lessonId],
+        });
+      }
     },
     onError: (error: AxiosError | Error) => {
       setUploadStatus("error");
