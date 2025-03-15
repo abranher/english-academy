@@ -1,46 +1,51 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 
-import { CreateClassDto } from '../dto/create-class.dto';
-import { UpdateClassDto } from '../dto/update-class.dto';
 import { PrismaService } from 'src/modules/prisma/providers/prisma.service';
+
+import { UpdateClassDto } from '../dto/update-class.dto';
 
 @Injectable()
 export class ClassesService {
   constructor(private readonly prisma: PrismaService) {}
 
-  create(createClassDto: CreateClassDto) {
-    return 'This action adds a new class';
+  private async findLessonOrThrow(id: string) {
+    const lesson = await this.prisma.lesson.findUnique({ where: { id } });
+    if (!lesson) throw new NotFoundException('Lección no encontrada.');
+    return lesson;
   }
 
-  findAll() {
-    return `This action returns all classes`;
-  }
+  async findOne(id: string, lessonId: string) {
+    await this.findLessonOrThrow(lessonId);
 
-  findOne(id: number) {
-    return `This action returns a #${id} class`;
+    try {
+      return await this.prisma.class.findUnique({
+        where: { id, lessonId },
+      });
+    } catch (error) {
+      console.error('Error al obtener la clase:', error);
+      throw new InternalServerErrorException(
+        'Error del servidor. Por favor intenta nuevamente.',
+      );
+    }
   }
 
   async update(id: string, lessonId: string, updateClassDto: UpdateClassDto) {
-    const ownLesson = await this.prisma.lesson.findUnique({
-      where: {
-        id: lessonId,
-      },
-    });
+    await this.findLessonOrThrow(lessonId);
 
-    if (!ownLesson) throw new NotFoundException('Lección no encontrada.');
-
-    const lessonClass = await this.prisma.class.update({
-      where: {
-        id,
-        lessonId: ownLesson.id,
-      },
-      data: updateClassDto,
-    });
-
-    return lessonClass;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} class`;
+    try {
+      return await this.prisma.class.update({
+        where: { id, lessonId },
+        data: updateClassDto,
+      });
+    } catch (error) {
+      console.error('Error al actualizar la clase:', error);
+      throw new InternalServerErrorException(
+        'Error del servidor. Por favor intenta nuevamente.',
+      );
+    }
   }
 }

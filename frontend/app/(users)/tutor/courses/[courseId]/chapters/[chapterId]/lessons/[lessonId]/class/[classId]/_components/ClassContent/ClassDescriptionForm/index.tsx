@@ -1,0 +1,1 @@
+export { ClassDescriptionForm } from "./ClassDescriptionForm";

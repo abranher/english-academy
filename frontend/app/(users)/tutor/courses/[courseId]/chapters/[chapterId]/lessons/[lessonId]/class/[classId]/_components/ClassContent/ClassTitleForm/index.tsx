@@ -1,0 +1,1 @@
+export { ClassTitleForm } from "./ClassTitleForm";

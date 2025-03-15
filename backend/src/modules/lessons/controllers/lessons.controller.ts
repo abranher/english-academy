@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Put } from '@nestjs/common';
+import { Controller, Post, Body, Param, Put } from '@nestjs/common';
 
 import { LessonsService } from '../providers/lessons.service';
 import { CreateLessonDto } from '../dto/create-lesson.dto';
@@ -19,16 +19,14 @@ export class LessonsController {
     return this.lessonsService.create(createLessonDto, chapterId);
   }
 
+  /*
+   * Reorder Lessons
+   */
   @Put('chapter/:chapterId/reorder')
   reorderLessons(
     @Param('chapterId') chapterId: string,
     @Body() updateChapterDto: UpdateLessonDto,
   ) {
     return this.lessonsService.reorderLessons(chapterId, updateChapterDto);
-  }
-
-  @Get(':id/chapter/:chapterId')
-  findOne(@Param('id') id: string, @Param('chapterId') chapterId: string) {
-    return this.lessonsService.findOne(id, chapterId);
   }
 }

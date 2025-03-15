@@ -95,7 +95,7 @@ export function CreateLessonModal() {
         <DialogTrigger asChild>
           <section className="w-full flex justify-end">
             <Button>
-              <Plus />
+              <Plus className="w-5 h-5" />
             </Button>
           </section>
         </DialogTrigger>

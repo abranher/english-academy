@@ -5,15 +5,14 @@ export class CreateClassDto {
   @IsEnum(LessonType)
   type: LessonType;
 
-  @IsOptional()
   @IsString()
   title: string;
 
   @IsOptional()
   @IsString()
-  description: string;
+  description?: string;
 
   @IsOptional()
   @IsString()
-  video: string;
+  video?: string;
 }

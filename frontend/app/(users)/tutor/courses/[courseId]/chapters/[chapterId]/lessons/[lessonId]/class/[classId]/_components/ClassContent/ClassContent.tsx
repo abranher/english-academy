@@ -1,16 +1,23 @@
 "use client";
 
+import { useParams } from "next/navigation";
+
+import { cn } from "@/libs/shadcn/utils";
+import { Class } from "@/types/models";
 import { useState } from "react";
+import { getClass } from "../../_services/get-class";
+import { useQuery } from "@tanstack/react-query";
+
+import { Title } from "@/components/common/Title";
+import { ClassContentSkeleton } from "./ClassContentSkeleton";
+import { ClassTitleForm } from "./ClassTitleForm";
+import { ClassDescriptionForm } from "./ClassDescriptionForm";
+import { ClassVideoForm } from "./ClassVideoForm";
 
 import { Card } from "@/components/shadcn/ui/card";
 import { Separator } from "@/components/shadcn/ui/separator";
-import { cn } from "@/libs/shadcn/utils";
-import Title from "@/components/common/Title";
-import ClassDescriptionForm from "./ClassDescriptionForm";
-import { useParams } from "next/navigation";
 import { BookOpen, Globe } from "lucide-react";
-import ClassTitleForm from "./ClassTitleForm";
-import VideoForm from "./VideoForm";
+import { HeaderSection } from "./HeaderSection";
 
 // Define un tipo para las posibles claves de sectionTitles
 type SectionTitleKey = "mainContent";
@@ -24,17 +31,33 @@ const sectionTitles: SectionTitles = {
   mainContent: "Contenido principal",
 };
 
-export default function Content({ lesson }: { lesson: any }) {
-  const [content, setContent] = useState<SectionTitleKey>("mainContent");
+export function ClassContent() {
+  const { classId, lessonId } = useParams();
 
-  const { chapterId, lessonId } = useParams();
+  const {
+    isPending,
+    data: lessonClass,
+    isError,
+  } = useQuery<Class>({
+    queryKey: ["get_class", classId, lessonId],
+    queryFn: () => getClass(classId as string, lessonId as string),
+  });
+
+  const [content, setContent] = useState<SectionTitleKey>("mainContent");
 
   const handleNavigation = (value: SectionTitleKey) => {
     setContent(value);
   };
 
+  if (isPending) return <ClassContentSkeleton />;
+  if (isError) return <>Ha ocurrido un error al cargar la clase</>;
+
   return (
     <>
+      <HeaderSection lessonClass={lessonClass} />
+
+      <Separator className="mb-3" />
+
       <section className="w-full flex">
         <div className="lg:grid lg:grid-cols-4 w-full space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
           <Card className="lg:col-span-3 flex w-full flex-col gap-4 p-5">
@@ -45,21 +68,13 @@ export default function Content({ lesson }: { lesson: any }) {
             <Separator />
             {content === "mainContent" && (
               <>
-                <ClassTitleForm
-                  initialData={lesson}
-                  lessonId={lessonId as string}
-                  classId={lesson.class.id as string}
-                />
+                <ClassTitleForm title={lessonClass.title} />
                 <Separator />
 
-                <ClassDescriptionForm
-                  initialData={lesson}
-                  classId={lesson.class.id as string}
-                  lessonId={lessonId as string}
-                />
+                <ClassDescriptionForm description={lessonClass.description} />
                 <Separator />
 
-                <VideoForm lesson={lesson} />
+                <ClassVideoForm video={lessonClass.video} />
               </>
             )}
           </Card>

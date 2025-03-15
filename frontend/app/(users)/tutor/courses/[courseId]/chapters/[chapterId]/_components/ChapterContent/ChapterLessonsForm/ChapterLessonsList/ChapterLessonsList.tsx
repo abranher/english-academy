@@ -56,7 +56,7 @@ export function ChapterLessonsList({
   const onEdit = (lesson: Lesson) => {
     if (lesson.type === LessonType.CLASS) {
       router.push(
-        `/tutor/courses/${courseId}/chapters/${chapterId}/lessons/${lesson.id}/class`
+        `/tutor/courses/${courseId}/chapters/${chapterId}/lessons/${lesson.id}/class/${lesson.class?.id}`
       );
     } else if (lesson.type === LessonType.QUIZ) {
       router.push(

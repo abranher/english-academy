@@ -1,7 +1,7 @@
 "use client";
 
 import axios from "@/config/axios";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 import { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
@@ -30,11 +30,17 @@ import { assetVideo } from "@/libs/asset";
 import { Skeleton } from "@/components/shadcn/ui/skeleton";
 import { truncateString } from "@/libs/format";
 
-export default function VideoForm({ lesson }: any) {
+type UploadStatus = "select" | "uploading" | "done" | "error";
+
+const MAX_SIZE = 50 * 1024 * 1024; // 50MB
+
+export function ClassVideoForm({ video }: { video: string | null }) {
   const [selectedFile, setSelectedFile] = useState<File | undefined>(undefined);
   const [progress, setProgress] = useState(0);
   const [uploadStatus, setUploadStatus] = useState("select");
   const [playerReady, setPlayerReady] = useState(false);
+
+  const { lessonId } = useParams();
 
   // drop zone
   const onDrop = useCallback((acceptedFiles: any) => {
@@ -56,7 +62,7 @@ export default function VideoForm({ lesson }: any) {
       const formData = new FormData();
       formData.set("video", selectedFile);
 
-      await axios.post(`/api/lessons/${lesson.id}/video`, formData, {
+      await axios.post(`/api/lessons/${lessonId}/video`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -102,7 +108,7 @@ export default function VideoForm({ lesson }: any) {
       <CardContent>
         <section className="grid grid-cols-1 md:grid-cols-2">
           {/** File upload */}
-          {lesson.video ? (
+          {video ? (
             <>
               {playerReady ? (
                 <div className="aspect-video rounded-lg">
@@ -110,7 +116,7 @@ export default function VideoForm({ lesson }: any) {
                     controls
                     width={"100%"}
                     height={"100%"}
-                    url={assetVideo(lesson.video)}
+                    url={assetVideo(video)}
                   />
                 </div>
               ) : (
