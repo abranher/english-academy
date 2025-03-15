@@ -134,9 +134,8 @@ model Level {
   title       String
   description String
 
-  courses             Course[]
-  student             Student[]
-  translationExercise TranslationExercise[]
+  courses Course[]
+  student Student[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -308,7 +307,6 @@ model Class {
 // *
 // * Lesson quiz
 // *
-
 model Quiz {
   id          String  @id @default(uuid())
   title       String
@@ -317,21 +315,32 @@ model Quiz {
   lessonId String @unique
   lesson   Lesson @relation(fields: [lessonId], references: [id])
 
-  multipleChoiceQuestions MultipleChoiceQuestion[]
+  questions QuizQuestion[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-model MultipleChoiceQuestion {
-  id            String  @id @default(uuid())
-  question      String?
-  text          String?
-  options       Json?
-  correctAnswer String?
+model QuizQuestion {
+  id       String  @id @default(uuid())
+  question String?
 
   quizId String
   quiz   Quiz   @relation(fields: [quizId], references: [id])
+
+  options QuizQuestionOption[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model QuizQuestionOption {
+  id        String  @id @default(uuid())
+  text      String?
+  isCorrect Boolean @default(false)
+
+  quizQuestionId String
+  question       QuizQuestion @relation(fields: [quizQuestionId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -340,7 +349,6 @@ model MultipleChoiceQuestion {
 // *
 // * Student Progress
 // *
-
 model StudentProgress {
   id        String @id @default(uuid())
   studentId String
@@ -355,23 +363,6 @@ model StudentProgress {
 
   @@unique([studentId, chapterId])
   @@index([chapterId])
-}
-
-// *
-// * Exercise type
-// *
-
-model TranslationExercise {
-  id          String   @id @default(uuid())
-  phrase      String
-  translation String
-  language    Language
-
-  levelId String?
-  level   Level?  @relation(fields: [levelId], references: [id])
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }
 
 // *
