@@ -1,6 +1,6 @@
 export interface QuizQuestionOption {
   id: string;
-  text: string;
+  option: string;
   isCorrect: boolean;
 
   quizQuestionId: string;

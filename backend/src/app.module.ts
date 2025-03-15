@@ -29,6 +29,7 @@ import { CertificationsModule } from './modules/certifications/certifications.mo
 import { AdminModule } from './modules/admin/admin.module';
 import { TutorStatusHistoryModule } from './modules/tutor-status-history/tutor-status-history.module';
 import { QuizQuestionsModule } from './modules/quiz-questions/quiz-questions.module';
+import { QuizQuestionOptionsModule } from './modules/quiz-question-options/quiz-question-options.module';
 
 @Module({
   imports: [
@@ -63,6 +64,7 @@ import { QuizQuestionsModule } from './modules/quiz-questions/quiz-questions.mod
     AdminModule,
     TutorStatusHistoryModule,
     QuizQuestionsModule,
+    QuizQuestionOptionsModule,
   ],
 })
 export class AppModule {}

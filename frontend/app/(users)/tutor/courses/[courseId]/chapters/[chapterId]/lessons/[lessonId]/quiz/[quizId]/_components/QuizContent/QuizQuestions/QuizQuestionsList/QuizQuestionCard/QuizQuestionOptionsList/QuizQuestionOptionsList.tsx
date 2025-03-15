@@ -1,59 +1,49 @@
 "use client";
 
-import { useParams } from "next/navigation";
-
-import axios from "@/config/axios";
-import { z } from "zod";
-import { toast } from "sonner";
-import { useForm } from "react-hook-form";
-import { useState } from "react";
-import { AxiosError } from "axios";
-import { FormSchema } from "./FormSchema";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-
 import { LoadingButton } from "@/components/common/LoadingButton";
-
-import { Button } from "@/components/shadcn/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/shadcn/ui/dialog";
+import { CardTitle } from "@/components/shadcn/ui/card";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/shadcn/ui/form";
 import { Input } from "@/components/shadcn/ui/input";
-import { Plus } from "lucide-react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useParams } from "next/navigation";
+import { z } from "zod";
+import { FormSchema } from "../../../CreateQuestionModal/FormSchema";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import axios from "@/config/axios";
+import { toast } from "sonner";
+import { AxiosError } from "axios";
+import { QuizQuestion } from "@/types/models";
+import { CreateOptionModal } from "./CreateOptionModal";
 
-export function CreateQuestionModal() {
-  const [open, setOpen] = useState(false);
-
+export function QuizQuestionOptionsList({
+  quizQuestion,
+}: {
+  quizQuestion: QuizQuestion;
+}) {
   const queryClient = useQueryClient();
   const { quizId, lessonId } = useParams();
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
-    defaultValues: { question: "" },
+    defaultValues: { question: quizQuestion.question },
   });
 
   const createMutation = useMutation({
-    mutationFn: (quizQuestion: { question: string }) =>
-      axios.post(`/api/quiz-questions/quiz/${quizId}`, quizQuestion),
+    mutationFn: (QuizQuestion: { question: string }) =>
+      axios.patch(
+        `/api/quiz-questions/${quizQuestion.id}/quiz/${quizId}`,
+        QuizQuestion
+      ),
     onSuccess: (response) => {
       if (response.status === 200 || response.status === 201) {
-        const data = response.data;
-        toast.success(data.message);
-        setOpen(false);
-        form.reset();
+        toast.success("Pregunta actualizada!");
         queryClient.invalidateQueries({
           queryKey: ["get_quiz", quizId, lessonId],
         });
@@ -88,31 +78,20 @@ export function CreateQuestionModal() {
 
   return (
     <>
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogTrigger asChild>
-          <section className="w-full flex justify-center pt-4">
-            <Button className="flex gap-2" variant="secondary">
-              <Plus className="w-5 h-5" />
-              Nueva pregunta
-            </Button>
-          </section>
-        </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>Crear pregunta</DialogTitle>
-          </DialogHeader>
+      <section>
+        <CardTitle className="text-base">Opciones:</CardTitle>
+
+        <article>
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
-              className="flex gap-12 flex-col mt-5"
+              className="flex gap-4 mt-3"
             >
               <FormField
                 control={form.control}
                 name="question"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Pregunta</FormLabel>
-
                     <FormControl>
                       <Input
                         disabled={isSubmitting}
@@ -121,26 +100,23 @@ export function CreateQuestionModal() {
                       />
                     </FormControl>
 
-                    <FormDescription>
-                      Define la pregunta de manera clara y concisa.
-                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
               />
 
-              <section className="flex justify-end">
-                <LoadingButton
-                  isLoading={createMutation.isPending}
-                  isValid={isValid}
-                  isSubmitting={isSubmitting}
-                  label="Crear"
-                />
-              </section>
+              <LoadingButton
+                isLoading={createMutation.isPending}
+                isValid={isValid}
+                isSubmitting={isSubmitting}
+                label="Actualizar"
+              />
             </form>
           </Form>
-        </DialogContent>
-      </Dialog>
+        </article>
+
+        <CreateOptionModal quizQuestionId={quizQuestion.id} />
+      </section>
     </>
   );
 }

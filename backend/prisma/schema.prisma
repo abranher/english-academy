@@ -336,7 +336,7 @@ model QuizQuestion {
 
 model QuizQuestionOption {
   id        String  @id @default(uuid())
-  text      String
+  option    String
   isCorrect Boolean @default(false)
 
   quizQuestionId String

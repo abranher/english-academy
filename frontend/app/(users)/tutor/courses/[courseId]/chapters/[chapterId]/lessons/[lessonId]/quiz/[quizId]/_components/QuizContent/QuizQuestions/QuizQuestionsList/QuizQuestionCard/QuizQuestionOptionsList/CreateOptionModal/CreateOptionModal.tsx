@@ -34,7 +34,11 @@ import {
 import { Input } from "@/components/shadcn/ui/input";
 import { Plus } from "lucide-react";
 
-export function CreateQuestionModal() {
+export function CreateOptionModal({
+  quizQuestionId,
+}: {
+  quizQuestionId: string;
+}) {
   const [open, setOpen] = useState(false);
 
   const queryClient = useQueryClient();
@@ -42,12 +46,15 @@ export function CreateQuestionModal() {
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
-    defaultValues: { question: "" },
+    defaultValues: { option: "" },
   });
 
   const createMutation = useMutation({
-    mutationFn: (quizQuestion: { question: string }) =>
-      axios.post(`/api/quiz-questions/quiz/${quizId}`, quizQuestion),
+    mutationFn: (quizQuestionOption: { option: string }) =>
+      axios.post(
+        `/api/quiz-question-options/quiz-question/${quizQuestionId}`,
+        quizQuestionOption
+      ),
     onSuccess: (response) => {
       if (response.status === 200 || response.status === 201) {
         const data = response.data;
@@ -66,7 +73,7 @@ export function CreateQuestionModal() {
 
         const errorMessages: { [key: number]: string } = {
           400: "Datos no válidos",
-          404: "Quiz no encontrado",
+          404: "Pregunta no encontrada",
           500: "Error del servidor",
           "-1": "Error inesperado",
         };
@@ -81,7 +88,7 @@ export function CreateQuestionModal() {
   });
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
-    createMutation.mutate({ question: data.question });
+    createMutation.mutate({ option: data.option });
   }
 
   const { isSubmitting, isValid } = form.formState;
@@ -90,16 +97,16 @@ export function CreateQuestionModal() {
     <>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
-          <section className="w-full flex justify-center pt-4">
-            <Button className="flex gap-2" variant="secondary">
+          <section className="w-full flex justify-end">
+            <Button className="flex gap-2" variant="outline">
               <Plus className="w-5 h-5" />
-              Nueva pregunta
+              Nueva opción
             </Button>
           </section>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Crear pregunta</DialogTitle>
+            <DialogTitle>Crear opción</DialogTitle>
           </DialogHeader>
           <Form {...form}>
             <form
@@ -108,21 +115,21 @@ export function CreateQuestionModal() {
             >
               <FormField
                 control={form.control}
-                name="question"
+                name="option"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Pregunta</FormLabel>
+                    <FormLabel>Opción</FormLabel>
 
                     <FormControl>
                       <Input
                         disabled={isSubmitting}
-                        placeholder="p.ej. 'Como se traduce...'"
+                        placeholder="p.ej. 'are...'"
                         {...field}
                       />
                     </FormControl>
 
                     <FormDescription>
-                      Define la pregunta de manera clara y concisa.
+                      Define la opción de manera clara y concisa.
                     </FormDescription>
                     <FormMessage />
                   </FormItem>

@@ -43,7 +43,6 @@ export function QuizQuestionForm({
     onSuccess: (response) => {
       if (response.status === 200 || response.status === 201) {
         toast.success("Pregunta actualizada!");
-        form.reset();
         queryClient.invalidateQueries({
           queryKey: ["get_quiz", quizId, lessonId],
         });
@@ -78,9 +77,10 @@ export function QuizQuestionForm({
 
   return (
     <>
-      <CardTitle className="text-base">
-        Pregunta:{" "}
-        <span className="text-base">
+      <section>
+        <CardTitle className="text-base">Pregunta:</CardTitle>
+
+        <article>
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
@@ -112,8 +112,8 @@ export function QuizQuestionForm({
               />
             </form>
           </Form>
-        </span>
-      </CardTitle>
+        </article>
+      </section>
     </>
   );
 }

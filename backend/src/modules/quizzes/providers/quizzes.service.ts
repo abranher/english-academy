@@ -23,7 +23,12 @@ export class QuizzesService {
     try {
       return await this.prisma.quiz.findUnique({
         where: { id, lessonId },
-        include: { questions: { include: { options: true } } },
+        include: {
+          questions: {
+            include: { options: true },
+            orderBy: { createdAt: 'asc' },
+          },
+        },
       });
     } catch (error) {
       console.error('Error al obtener el quiz:', error);
