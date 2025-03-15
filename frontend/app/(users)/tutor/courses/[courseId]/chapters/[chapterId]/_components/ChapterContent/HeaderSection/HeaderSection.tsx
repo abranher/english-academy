@@ -1,16 +1,10 @@
 "use client";
 
-import Link from "next/link";
-
-import { Course } from "@/types/models";
-import { CourseReviewStatus } from "@/types/enums";
-
-import { AlertBanner } from "@/components/common/AlertBanner";
-import { MiniCoursePreviewCard } from "../MiniCoursePreviewCard";
-import { CourseActions } from "../CourseActions";
-
 import { Separator } from "@/components/shadcn/ui/separator";
+import TitleSection from "../../TitleSection";
+import Link from "next/link";
 import { Button } from "@/components/shadcn/ui/button";
+
 import {
   Tooltip,
   TooltipContent,
@@ -18,16 +12,13 @@ import {
   TooltipTrigger,
 } from "@/components/shadcn/ui/tooltip";
 import { ChevronLeft } from "lucide-react";
+import { useParams } from "next/navigation";
+import { ChapterActions } from "../ChapterActions";
 
-export function HeaderSection({ course }: { course: Course }) {
-  const requieredFields = [
-    course.title,
-    course.description,
-    course.image,
-    course.priceId,
-    course.levelId,
-    course.chapters,
-  ];
+export function HeaderSection({ chapter }: { chapter: any }) {
+  const { courseId } = useParams();
+
+  const requieredFields = [chapter.title, chapter.description];
 
   const totalFields = requieredFields.length;
   const completedFields = requieredFields.filter(Boolean).length;
@@ -38,22 +29,19 @@ export function HeaderSection({ course }: { course: Course }) {
 
   return (
     <>
-      <MiniCoursePreviewCard course={course} />
+      <TitleSection chapter={chapter} />
 
       <Separator />
 
-      {course.reviewStatus !== CourseReviewStatus.APPROVED && (
-        <AlertBanner label="Este curso aun no está aprobado, por lo que no será visible para el estudiante." />
-      )}
-      <section className="flex items-center gap-4">
-        <Link href={"/tutor/courses"}>
+      <div className="flex items-center gap-4">
+        <Link href={`/tutor/courses/${courseId}`}>
           <Button variant="outline" size="icon" className="h-7 w-7">
             <ChevronLeft className="h-4 w-4" />
             <span className="sr-only">atrás</span>
           </Button>
         </Link>
         <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
-          Configuración del curso
+          Configuración del capítulo
         </h1>
         <p className="flex-1 shrink-0 whitespace-nowrap tracking-tight">
           <TooltipProvider>
@@ -66,8 +54,10 @@ export function HeaderSection({ course }: { course: Course }) {
           </TooltipProvider>
         </p>
 
-        <CourseActions course={course} />
-      </section>
+        <div className="hidden items-center gap-2 md:ml-auto md:flex">
+          <ChapterActions />
+        </div>
+      </div>
     </>
   );
 }

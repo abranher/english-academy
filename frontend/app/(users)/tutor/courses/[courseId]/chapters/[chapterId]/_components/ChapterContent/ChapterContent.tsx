@@ -8,10 +8,11 @@ import { Card } from "@/components/shadcn/ui/card";
 import { Separator } from "@/components/shadcn/ui/separator";
 import { cn } from "@/libs/shadcn/utils";
 import { Title } from "@/components/common/Title";
-import ChapterTitleForm from "./ChapterTitleForm";
-import ChapterDescriptionForm from "./ChapterDescriptionForm";
+import ChapterTitleForm from "../ChapterTitleForm";
+import ChapterDescriptionForm from "../ChapterDescriptionForm";
 import { BookOpen, ClipboardPen, Globe } from "lucide-react";
-import LessonsForm from "./LessonsForm";
+import LessonsForm from "../LessonsForm";
+import { HeaderSection } from "./HeaderSection";
 
 // Define un tipo para las posibles claves de sectionTitles
 type SectionTitleKey = "mainContent" | "lessons" | "studyPlan";
@@ -27,7 +28,7 @@ const sectionTitles: SectionTitles = {
   studyPlan: "Plan de estudio",
 };
 
-export default function Content({ chapter }: { chapter: any }) {
+export function ChapterContent({ chapter }: { chapter: any }) {
   const [content, setContent] = useState<SectionTitleKey>("mainContent");
 
   const { chapterId, courseId } = useParams();
@@ -38,6 +39,10 @@ export default function Content({ chapter }: { chapter: any }) {
 
   return (
     <>
+      <HeaderSection chapter={chapter} />
+
+      <Separator className="mb-3" />
+
       <section className="w-full flex">
         <div className="lg:grid lg:grid-cols-4 w-full space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
           <Card className="lg:col-span-3 flex w-full flex-col gap-4 p-5">
