@@ -69,22 +69,21 @@ export class ChaptersService {
   }
 
   async findOne(id: string, courseId: string) {
-    const chapter = await this.prisma.chapter.findUnique({
-      where: {
-        id,
-        courseId,
-      },
-      include: {
-        lessons: {
-          include: {
-            class: true,
-            quiz: true,
-          },
-        },
-      },
-    });
+    await this.findCourseOrThrow(courseId);
 
-    return chapter;
+    try {
+      return await this.prisma.chapter.findUnique({
+        where: { id, courseId },
+        include: {
+          lessons: { include: { class: true, quiz: true } },
+        },
+      });
+    } catch (error) {
+      console.error('Error al obtener el capítulo:', error);
+      throw new InternalServerErrorException(
+        'Error del servidor. Por favor intenta nuevamente.',
+      );
+    }
   }
 
   async update(
@@ -92,23 +91,19 @@ export class ChaptersService {
     courseId: string,
     updateChapterDto: UpdateChapterDto,
   ) {
-    const ownCourse = await this.prisma.course.findUnique({
-      where: {
-        id: courseId,
-      },
-    });
+    await this.findCourseOrThrow(courseId);
 
-    if (!ownCourse) throw new NotFoundException('Curso no encontrado.');
-
-    const chapter = this.prisma.chapter.update({
-      where: {
-        id,
-        courseId,
-      },
-      data: updateChapterDto,
-    });
-
-    return chapter;
+    try {
+      return await this.prisma.chapter.update({
+        where: { id, courseId },
+        data: updateChapterDto,
+      });
+    } catch (error) {
+      console.error('Error al actualizar el capítulo:', error);
+      throw new InternalServerErrorException(
+        'Error del servidor. Por favor intenta nuevamente.',
+      );
+    }
   }
 
   // Common service

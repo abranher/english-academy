@@ -3,16 +3,21 @@
 import { useParams } from "next/navigation";
 
 import { useState } from "react";
+import { cn } from "@/libs/shadcn/utils";
+import { Chapter } from "@/types/models";
+import { useQuery } from "@tanstack/react-query";
+import { getChapter } from "../../_services/get-chapter";
+
+import { ChapterContentSkeleton } from "./ChapterContentSkeleton";
+import { ChapterTitleForm } from "./ChapterTitleForm";
+import { ChapterDescriptionForm } from "./ChapterDescriptionForm";
+import { ChapterLessonsForm } from "./ChapterLessonsForm";
+import { HeaderSection } from "./HeaderSection";
+import { Title } from "@/components/common/Title";
 
 import { Card } from "@/components/shadcn/ui/card";
 import { Separator } from "@/components/shadcn/ui/separator";
-import { cn } from "@/libs/shadcn/utils";
-import { Title } from "@/components/common/Title";
-import ChapterTitleForm from "../ChapterTitleForm";
-import ChapterDescriptionForm from "../ChapterDescriptionForm";
 import { BookOpen, ClipboardPen, Globe } from "lucide-react";
-import LessonsForm from "../LessonsForm";
-import { HeaderSection } from "./HeaderSection";
 
 // Define un tipo para las posibles claves de sectionTitles
 type SectionTitleKey = "mainContent" | "lessons" | "studyPlan";
@@ -28,14 +33,26 @@ const sectionTitles: SectionTitles = {
   studyPlan: "Plan de estudio",
 };
 
-export function ChapterContent({ chapter }: { chapter: any }) {
-  const [content, setContent] = useState<SectionTitleKey>("mainContent");
-
+export function ChapterContent() {
   const { chapterId, courseId } = useParams();
+
+  const {
+    isPending,
+    data: chapter,
+    isError,
+  } = useQuery<Chapter>({
+    queryKey: ["get_chapter", courseId, chapterId],
+    queryFn: () => getChapter(chapterId as string, courseId as string),
+  });
+
+  const [content, setContent] = useState<SectionTitleKey>("mainContent");
 
   const handleNavigation = (value: SectionTitleKey) => {
     setContent(value);
   };
+
+  if (isPending) return <ChapterContentSkeleton />;
+  if (isError) return <>Ha ocurrido un error al cargar el capítulo</>;
 
   return (
     <>
@@ -59,24 +76,19 @@ export function ChapterContent({ chapter }: { chapter: any }) {
             <Separator />
             {content === "mainContent" && (
               <>
-                <ChapterTitleForm
-                  initialData={chapter}
-                  courseId={courseId as string}
-                  chapterId={chapterId as string}
-                />
+                <ChapterTitleForm title={chapter.title} />
 
                 <Separator />
 
-                <ChapterDescriptionForm
-                  initialData={chapter}
-                  courseId={courseId as string}
-                  chapterId={chapterId as string}
-                />
+                <ChapterDescriptionForm description={chapter.description} />
               </>
             )}
             {content === "lessons" && (
               <>
-                <LessonsForm initialData={chapter} chapterId={chapter.id} />
+                <ChapterLessonsForm
+                  initialData={chapter}
+                  chapterId={chapter.id}
+                />
               </>
             )}
           </Card>

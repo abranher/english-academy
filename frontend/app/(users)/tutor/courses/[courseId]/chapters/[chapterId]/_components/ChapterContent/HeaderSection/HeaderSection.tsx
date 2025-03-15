@@ -1,10 +1,13 @@
 "use client";
 
-import { Separator } from "@/components/shadcn/ui/separator";
-import TitleSection from "../../TitleSection";
 import Link from "next/link";
-import { Button } from "@/components/shadcn/ui/button";
+import { useParams } from "next/navigation";
 
+import { MiniChapterPreviewCard } from "../MiniChapterPreviewCard";
+import { ChapterActions } from "../ChapterActions";
+
+import { Separator } from "@/components/shadcn/ui/separator";
+import { Button } from "@/components/shadcn/ui/button";
 import {
   Tooltip,
   TooltipContent,
@@ -12,8 +15,6 @@ import {
   TooltipTrigger,
 } from "@/components/shadcn/ui/tooltip";
 import { ChevronLeft } from "lucide-react";
-import { useParams } from "next/navigation";
-import { ChapterActions } from "../ChapterActions";
 
 export function HeaderSection({ chapter }: { chapter: any }) {
   const { courseId } = useParams();
@@ -29,7 +30,7 @@ export function HeaderSection({ chapter }: { chapter: any }) {
 
   return (
     <>
-      <TitleSection chapter={chapter} />
+      <MiniChapterPreviewCard chapter={chapter} />
 
       <Separator />
 

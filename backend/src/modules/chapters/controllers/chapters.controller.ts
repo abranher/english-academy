@@ -19,6 +19,9 @@ export class ChaptersController {
     return this.chaptersService.create(courseId, createChapterDto);
   }
 
+  /*
+   * Reorder Chapters
+   */
   @Put('course/:courseId/reorder')
   reorderChapters(
     @Param('courseId') courseId: string,
@@ -27,11 +30,17 @@ export class ChaptersController {
     return this.chaptersService.reorderChapters(courseId, updateChapterDto);
   }
 
+  /*
+   * Get Chapter
+   */
   @Get(':id/course/:courseId')
   findOne(@Param('id') id: string, @Param('courseId') courseId: string) {
     return this.chaptersService.findOne(id, courseId);
   }
 
+  /*
+   * Update every field
+   */
   @Patch(':id/course/:courseId')
   update(
     @Param('id') id: string,

@@ -18,7 +18,7 @@ interface LessonsListProps {
   onReorder: (updateData: { id: string; position: number }[]) => void;
 }
 
-export default function LessonsList({ items, onReorder }: LessonsListProps) {
+export function ChapterLessonsList({ items, onReorder }: LessonsListProps) {
   const [isMounted, setIsMounted] = useState(false);
   const [lessons, setLessons] = useState(items);
 

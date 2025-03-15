@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
-import axios from "@/config/axios";
 import { auth } from "@/config/auth";
 
 import { ChapterContent } from "./_components/ChapterContent";
@@ -20,20 +19,11 @@ export default async function ChapterIdPage({
 }: {
   params: {
     courseId: string;
-    chapterId: string;
   };
 }) {
   const session = await auth();
 
   if (!session) redirect("/tutor/dashboard");
-
-  const { data: chapter } = await axios.get(
-    `/api/chapters/${params.chapterId}/course/${params.courseId}`
-  );
-
-  if (!chapter) {
-    return redirect("/tutor/courses");
-  }
 
   return (
     <>
@@ -63,7 +53,7 @@ export default async function ChapterIdPage({
         </BreadcrumbList>
       </Breadcrumb>
 
-      <ChapterContent chapter={chapter} />
+      <ChapterContent />
     </>
   );
 }
