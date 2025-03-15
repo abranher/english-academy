@@ -19,7 +19,7 @@ export class ChaptersController {
     return this.chaptersService.create(courseId, createChapterDto);
   }
 
-  @Put(':courseId/reorder')
+  @Put('course/:courseId/reorder')
   reorderChapters(
     @Param('courseId') courseId: string,
     @Body() updateChapterDto: UpdateChapterDto,

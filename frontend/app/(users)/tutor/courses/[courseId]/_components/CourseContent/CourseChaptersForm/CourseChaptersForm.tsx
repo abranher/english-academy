@@ -6,7 +6,8 @@ import axios from "@/config/axios";
 import { toast } from "sonner";
 import { Chapter } from "@/types/models";
 import { Spinner } from "@heroui/react";
-import { useState } from "react";
+import { AxiosError } from "axios";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { CourseChaptersList } from "./CourseChaptersList";
 import { CreateChapterModal } from "./CreateChapterModal";
@@ -19,29 +20,43 @@ import {
 import { FolderOpen } from "lucide-react";
 
 export function CourseChaptersForm({ chapters }: { chapters: Chapter[] | [] }) {
-  const [isUpdating, setIsUpdating] = useState(false);
-
+  const queryClient = useQueryClient();
   const { courseId } = useParams();
 
   const router = useRouter();
 
-  const onReorder = async (updateData: { id: string; position: number }[]) => {
-    try {
-      setIsUpdating(true);
-
-      await axios.put(`/api/chapters/${courseId}/reorder`, {
+  const reorderMutation = useMutation({
+    mutationFn: (updateData: { id: string; position: number }[]) =>
+      axios.put(`/api/chapters/course/${courseId}/reorder`, {
         list: updateData,
-      });
+      }),
+    onSuccess: (response) => {
+      if (response.status === 200 || response.status === 201) {
+        const data = response.data;
+        toast.success(data.message);
+        queryClient.invalidateQueries({ queryKey: ["get_course", courseId] });
+      }
+    },
+    onError: (error) => {
+      if (error instanceof AxiosError) {
+        const status = error.response?.status;
+        const message = error.response?.data?.message || "Error desconocido";
 
-      toast.success("Capítulos reordenados");
-      // router.refresh();
-    } catch (error) {
-      console.log(error);
-      toast.error("Something went wrong");
-    } finally {
-      setIsUpdating(false);
-    }
-  };
+        const errorMessages: { [key: number]: string } = {
+          400: "Datos no válidos",
+          404: "Curso no encontrado",
+          500: "Error del servidor",
+          "-1": "Error inesperado",
+        };
+
+        if (status) toast.error(errorMessages[status] || message);
+        else toast.error(errorMessages["-1"] || message);
+      } else {
+        toast.error("Error de conexión o error inesperado");
+        console.error("Error que no es de Axios:", error);
+      }
+    },
+  });
 
   const onEdit = (id: string) => {
     router.push(`/tutor/courses/${courseId}/chapters/${id}`);
@@ -50,7 +65,7 @@ export function CourseChaptersForm({ chapters }: { chapters: Chapter[] | [] }) {
   return (
     <>
       <CardContent className="relative">
-        {isUpdating && (
+        {reorderMutation.isPending && (
           <section className="absolute h-full w-full bg-slate-500/20 top-0 right-0 rounded-md flex items-center justify-center">
             <Spinner size="lg" />
           </section>
@@ -75,9 +90,9 @@ export function CourseChaptersForm({ chapters }: { chapters: Chapter[] | [] }) {
             </article>
           )}
           <CourseChaptersList
-            onEdit={onEdit}
-            onReorder={onReorder}
             items={chapters}
+            onEdit={onEdit}
+            onReorder={reorderMutation.mutate}
           />
         </section>
 

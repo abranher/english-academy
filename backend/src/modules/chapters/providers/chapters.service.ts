@@ -19,8 +19,9 @@ export class ChaptersService {
   }
 
   async create(courseId: string, createChapterDto: CreateChapterDto) {
+    await this.findCourseOrThrow(courseId);
+
     try {
-      await this.findCourseOrThrow(courseId);
       const lastChapter = await this.prisma.chapter.findFirst({
         where: { courseId },
         orderBy: { position: 'desc' },
@@ -46,30 +47,25 @@ export class ChaptersService {
   }
 
   async reorderChapters(courseId: string, updateChapterDto: UpdateChapterDto) {
-    const { list } = updateChapterDto;
+    await this.findCourseOrThrow(courseId);
 
-    const ownCourse = await this.prisma.course.findUnique({
-      where: {
-        id: courseId,
-      },
-    });
+    try {
+      const { list } = updateChapterDto;
 
-    if (!ownCourse) throw new NotFoundException('Curso no encontrado.');
+      for (const { id, position } of list) {
+        await this.prisma.chapter.update({
+          where: { id },
+          data: { position },
+        });
+      }
 
-    for (const { id, position } of list) {
-      await this.prisma.chapter.update({
-        where: {
-          id,
-        },
-        data: {
-          position,
-        },
-      });
+      return { message: 'Capítulos reordenados.' };
+    } catch (error) {
+      console.error('Error reordenar los capítulos:', error);
+      throw new InternalServerErrorException(
+        'Error del servidor. Por favor intenta nuevamente.',
+      );
     }
-
-    return {
-      message: 'Actualización exitosa.',
-    };
   }
 
   async findOne(id: string, courseId: string) {

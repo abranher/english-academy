@@ -19,12 +19,7 @@ export function CourseChaptersList({
   onReorder: (updateData: { id: string; position: number }[]) => void;
   onEdit: (id: string) => void;
 }) {
-  const [isMounted, setIsMounted] = useState(false);
   const [chapters, setChapters] = useState(items);
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
 
   useEffect(() => {
     setChapters(items);
@@ -33,26 +28,25 @@ export function CourseChaptersList({
   const onDragEnd = (result: DropResult) => {
     if (!result.destination) return;
 
-    const items = Array.from(chapters);
-    const [reorderedItem] = items.splice(result.source.index, 1);
-    items.splice(result.destination.index, 0, reorderedItem);
+    // Copia del array de capítulos
+    const updatedChapters = Array.from(chapters);
 
-    const startIndex = Math.min(result.source.index, result.destination.index);
-    const endIndex = Math.max(result.source.index, result.destination.index);
+    // Extrae y reinserta el capítulo movido
+    const [movedChapter] = updatedChapters.splice(result.source.index, 1);
+    updatedChapters.splice(result.destination.index, 0, movedChapter);
 
-    const updatedChapters = items.slice(startIndex, endIndex + 1);
+    // Actualiza el estado local
+    setChapters(updatedChapters);
 
-    setChapters(items);
-
-    const bulkUpdateData = updatedChapters.map((chapter) => ({
+    // Prepara los datos para el reordenamiento
+    const bulkUpdateData = updatedChapters.map((chapter, index) => ({
       id: chapter.id,
-      position: items.findIndex((item) => item.id === chapter.id),
+      position: index,
     }));
 
+    // Llama a la función onReorder con los datos actualizados
     onReorder(bulkUpdateData);
   };
-
-  if (!isMounted) return null;
 
   return (
     <>
@@ -72,6 +66,7 @@ export function CourseChaptersList({
                       ref={provided.innerRef}
                       {...provided.draggableProps}
                     >
+                      {/* Ícono de agarre */}
                       <article
                         className="px-2 py-3 border-r rounded-l-md transition border-r-green-200 hover:bg-green-200"
                         {...provided.dragHandleProps}
@@ -79,8 +74,10 @@ export function CourseChaptersList({
                         <Grip className="h-5 w-5" />
                       </article>
 
+                      {/* Título del capítulo */}
                       <h3 className="font-bold">{chapter.title}</h3>
 
+                      {/* Ícono de edición */}
                       <article className="ml-auto p-4 flex items-center gap-x-4">
                         <Pencil
                           onClick={() => onEdit(chapter.id)}
