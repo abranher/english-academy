@@ -1,26 +1,24 @@
 import {
   Controller,
-  Post,
   Param,
+  Post,
   UseInterceptors,
-  UploadedFile,
   Req,
+  UploadedFile,
   BadRequestException,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { PrismaService } from 'src/modules/prisma/providers/prisma.service';
+
 import { diskStorage } from 'multer';
 import { createFileName, videoFileFilter } from 'src/libs/storage';
-import { LessonsFilesService } from '../providers/lessons.files.service';
 
-@Controller('lessons')
-export class LessonsFilesController {
-  constructor(
-    private readonly lessonsFilesService: LessonsFilesService,
-    private prisma: PrismaService,
-  ) {}
+import { ClassesFilesService } from '../providers/classes.files.service';
 
-  // Upload trailer
+@Controller('classes/files')
+export class ClassesFilesController {
+  constructor(private readonly classesFilesService: ClassesFilesService) {}
+
+  // Upload video
   @Post(':id/video')
   @UseInterceptors(
     FileInterceptor('video', {
@@ -31,17 +29,17 @@ export class LessonsFilesController {
       }),
     }),
   )
-  async uploadVideo(
+  async uploadTrailer(
     @Req() req,
     @UploadedFile() file: Express.Multer.File,
     @Param('id') id: string,
   ) {
     if (!file || req.fileValidationError) {
       throw new BadRequestException(
-        'Archivo proporcionado no válido, [archivos de video permitidos]',
+        'Archivo proporcionado no válido, [archivos de video permitido]',
       );
     }
 
-    return this.lessonsFilesService.uploadVideo(id, file.filename);
+    return this.classesFilesService.uploadVideo(id, file.filename);
   }
 }

@@ -1,23 +1,19 @@
 "use client";
 
 import axios from "@/config/axios";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 
-import { useCallback, useEffect, useState } from "react";
-import { useDropzone } from "react-dropzone";
 import ReactPlayer from "react-player";
+import { toast } from "sonner";
+import { assetVideo } from "@/libs/asset";
+import { AxiosError } from "axios";
+import { useDropzone } from "react-dropzone";
+import { formatSize, truncateString } from "@/libs/format";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useCallback, useEffect, useState } from "react";
 
 import { Button } from "@/components/shadcn/ui/button";
-import { CardContent } from "@/components/shadcn/ui/card";
-import { toast } from "sonner";
-import {
-  CheckCircle,
-  ImageIcon,
-  Loader2,
-  UploadCloud,
-  Video,
-  XIcon,
-} from "lucide-react";
+import { Card, CardContent } from "@/components/shadcn/ui/card";
 import {
   Dialog,
   DialogContent,
@@ -26,77 +22,88 @@ import {
   DialogTrigger,
 } from "@/components/shadcn/ui/dialog";
 import { Progress } from "@/components/shadcn/ui/progress";
-import { assetVideo } from "@/libs/asset";
 import { Skeleton } from "@/components/shadcn/ui/skeleton";
-import { truncateString } from "@/libs/format";
+import { CheckCircle, Loader2, UploadCloud, Video, XIcon } from "lucide-react";
 
 type UploadStatus = "select" | "uploading" | "done" | "error";
 
 const MAX_SIZE = 50 * 1024 * 1024; // 50MB
 
 export function ClassVideoForm({ video }: { video: string | null }) {
+  const [preview, setPreview] = useState<string>("");
   const [selectedFile, setSelectedFile] = useState<File | undefined>(undefined);
   const [progress, setProgress] = useState(0);
-  const [uploadStatus, setUploadStatus] = useState("select");
+  const [uploadStatus, setUploadStatus] = useState<UploadStatus>("select");
   const [playerReady, setPlayerReady] = useState(false);
 
-  const { lessonId } = useParams();
+  const queryClient = useQueryClient();
+  const { classId, lessonId } = useParams();
 
-  // drop zone
-  const onDrop = useCallback((acceptedFiles: any) => {
-    setSelectedFile(acceptedFiles[0]);
-  }, []);
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop: useCallback((acceptedFiles: File[]) => {
+      const file = acceptedFiles[0];
+      setSelectedFile(file);
+      setPreview(URL.createObjectURL(file));
+    }, []),
+    accept: { "video/*": [".mp4"] },
+    maxSize: MAX_SIZE,
+    onDropRejected: (fileRejections) => {
+      fileRejections.forEach((rejection) => {
+        if (rejection.errors.some((e) => e.code === "file-too-large")) {
+          toast.error("El video es demasiado grande (máximo 5MB)");
+        } else {
+          toast.error("Formato de video no permitido");
+        }
+      });
+    },
+  });
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
-
-  const router = useRouter();
-
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    if (typeof selectedFile === "undefined") return;
-
-    try {
-      setUploadStatus("uploading");
-
-      const formData = new FormData();
-      formData.set("video", selectedFile);
-
-      await axios.post(`/api/lessons/${lessonId}/video`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+  const mutation = useMutation({
+    mutationFn: async (formData: FormData) =>
+      axios.post(`/api/classes/files/${classId}/video`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
         onUploadProgress: (progressEvent) => {
-          const percentCompleted = Math.round(
+          const percent = Math.round(
             (progressEvent.loaded * 100) / (progressEvent.total || 1)
           );
-
-          setProgress(percentCompleted);
+          setProgress(percent);
         },
-      });
-
+      }),
+    onSuccess: () => {
       setUploadStatus("done");
+      // Mandar mensaje desde server
       toast.success("Video actualizado!");
       setSelectedFile(undefined);
-      router.refresh();
-    } catch (error) {
-      console.log(error);
+      queryClient.invalidateQueries({
+        queryKey: ["get_class", classId, lessonId],
+      });
+    },
+    onError: (error: AxiosError | Error) => {
+      setUploadStatus("error");
       setProgress(0);
-      setUploadStatus("select");
-      toast.error("Something wrong");
-    }
+      const message =
+        error instanceof AxiosError
+          ? error.response?.data?.message || "Error al subir video"
+          : "Error desconocido";
+      toast.error(message);
+    },
+  });
+
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!selectedFile) return;
+
+    setUploadStatus("uploading");
+    const formData = new FormData();
+    formData.set("video", selectedFile);
+    mutation.mutate(formData);
   };
 
-  const clearFileInput = () => {
+  const clearFile = () => {
     setSelectedFile(undefined);
+    setPreview("");
     setProgress(0);
     setUploadStatus("select");
-  };
-
-  const formatSize = (size: number) => {
-    return `${(size / 1024).toFixed(2)} KB o ${(size / 1024 / 1024).toFixed(
-      2
-    )} MB`;
   };
 
   useEffect(() => {
@@ -109,34 +116,30 @@ export function ClassVideoForm({ video }: { video: string | null }) {
         <section className="grid grid-cols-1 md:grid-cols-2">
           {/** File upload */}
           {video ? (
-            <>
-              {playerReady ? (
-                <div className="aspect-video rounded-lg">
-                  <ReactPlayer
-                    controls
-                    width={"100%"}
-                    height={"100%"}
-                    url={assetVideo(video)}
-                  />
-                </div>
-              ) : (
-                <>
-                  <Skeleton className="w-full h-full flex justify-center items-center">
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  </Skeleton>
-                </>
-              )}
-            </>
+            playerReady ? (
+              <article className="aspect-video rounded-lg">
+                <ReactPlayer
+                  controls
+                  width={"100%"}
+                  height={"100%"}
+                  url={assetVideo(video)}
+                />
+              </article>
+            ) : (
+              <Skeleton className="w-full h-full flex justify-center items-center">
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              </Skeleton>
+            )
           ) : (
-            <div className="grid aspect-video place-items-center rounded-lg bg-zinc-200 dark:bg-zinc-800">
+            <article className="grid aspect-video place-items-center rounded-lg bg-zinc-200 dark:bg-zinc-800">
               <Video className="h-9 w-9 text-gray-600 aspect-video" />
-            </div>
+            </article>
           )}
 
           {/** Description */}
           <article className="px-5 py-2 flex flex-col gap-3">
             <h2 className="font-semibold">Video de la clase</h2>
-            <div className="text-small flex flex-col gap-3">
+            <section className="text-small flex flex-col gap-3">
               <p>
                 Los videos son esenciales para el aprendizaje, ya que combinan
                 contenido visual y auditivo que captan la atención y favorecen
@@ -148,9 +151,9 @@ export function ClassVideoForm({ video }: { video: string | null }) {
                 Además, es crucial que tengan una alta calidad de imagen 1080p
                 (1920x1080 píxeles) para una experiencia visual óptima.
               </p>
-            </div>
+            </section>
 
-            <Dialog onOpenChange={clearFileInput}>
+            <Dialog onOpenChange={clearFile}>
               <DialogTrigger asChild>
                 <Button className="flex gap-3">
                   <UploadCloud />
@@ -162,34 +165,28 @@ export function ClassVideoForm({ video }: { video: string | null }) {
                   <DialogTitle>Subir video</DialogTitle>
                 </DialogHeader>
                 <form onSubmit={onSubmit}>
-                  <div className="grid gap-4 py-4">
-                    {selectedFile ? (
-                      <>
-                        {selectedFile.type.startsWith("video/") && (
-                          <ReactPlayer
-                            controls
-                            width={"100%"}
-                            height={"100%"}
-                            url={URL.createObjectURL(selectedFile)}
-                          />
-                        )}
-                      </>
+                  <section className="grid gap-4 py-4">
+                    {preview ? (
+                      <ReactPlayer
+                        controls
+                        width={"100%"}
+                        height={"100%"}
+                        url={preview}
+                      />
                     ) : (
-                      <>
-                        <div className="grid aspect-video place-items-center rounded-lg bg-zinc-200 dark:bg-zinc-800">
-                          <Video className="h-9 w-9 text-gray-600" />
-                        </div>
-                      </>
+                      <article className="grid aspect-video place-items-center rounded-lg bg-zinc-200 dark:bg-zinc-800">
+                        <Video className="h-9 w-9 text-gray-600" />
+                      </article>
                     )}
+
                     {/** upload input */}
                     {(uploadStatus === "select" ||
                       uploadStatus === "uploading") && (
-                      <label
+                      <section
                         {...getRootProps()}
-                        className="p-5 bg-gray-100 dark:bg-zinc-900 text-gray-600 dark:text-gray-100 font-semibold text-xs rounded h-32 flex flex-col items-center justify-center cursor-pointer border-3 border-gray-300 dark:border-zinc-700 border-dashed"
+                        className="p-5 text-center bg-gray-50 dark:bg-zinc-900 text-gray-600 dark:text-gray-100 font-semibold text-xs rounded h-28 sm:h-24 flex flex-col items-center justify-center cursor-pointer border-3 border-gray-500 dark:border-zinc-700 border-dashed"
                       >
                         <UploadCloud className="w-11 mb-2" />
-                        Subir archivo
                         <input {...getInputProps()} className="hidden" />
                         {isDragActive ? (
                           <p>Suelta los archivos aquí ...</p>
@@ -202,67 +199,75 @@ export function ClassVideoForm({ video }: { video: string | null }) {
                           </p>
                         )}
                         <p className="text-xs font-medium mt-2">
-                          Se permiten MP4.
+                          Formatos permitidos: MP4 (Máx. 50MB).
                         </p>
-                      </label>
+                      </section>
                     )}
 
-                    <>
-                      <section className="grid grid-cols-8 py-3 rounded-lg text-gray-700 dark:text-gray-100 bg-zinc-200 dark:bg-zinc-900">
-                        <div className="col-span-1 flex justify-center items-center">
-                          <ImageIcon />
-                        </div>
-                        <div className="text-xs col-span-6 flex flex-col justify-center gap-1">
-                          <p>
-                            {selectedFile
-                              ? truncateString(selectedFile.name)
-                              : "No hay ningún archivo seleccionado"}
-                          </p>
-                          <p>{selectedFile && formatSize(selectedFile.size)}</p>
-                          <Progress value={progress} className="h-2" />
-                        </div>
-                        {uploadStatus === "select" && selectedFile && (
+                    <Card className="grid grid-cols-8 py-2">
+                      <section className="col-span-1 flex justify-center items-center">
+                        <Video />
+                      </section>
+                      <section className="text-xs col-span-6 flex flex-col justify-center gap-1">
+                        <p>
+                          {selectedFile
+                            ? truncateString(selectedFile.name, "md")
+                            : "No hay ningún archivo seleccionado"}
+                        </p>
+                        <p>{selectedFile && formatSize(selectedFile.size)}</p>
+                        <Progress value={progress} className="h-2" />
+                      </section>
+                      {uploadStatus === "select" && selectedFile && (
+                        <section className="col-span-1 flex justify-center items-center">
+                          <XIcon
+                            className="cursor-pointer"
+                            onClick={clearFile}
+                          />
+                        </section>
+                      )}
+                      {uploadStatus === "uploading" && (
+                        <section className="col-span-1 flex justify-center items-center">
+                          {progress}
+                        </section>
+                      )}
+                      {uploadStatus === "done" && (
+                        <section className="col-span-1 flex justify-center items-center">
+                          <CheckCircle />
+                        </section>
+                      )}
+                    </Card>
+
+                    <article className="space-y-2 text-center">
+                      <Button
+                        type="submit"
+                        disabled={
+                          !selectedFile ||
+                          mutation.isPending ||
+                          uploadStatus === "done"
+                        }
+                        className="w-full flex gap-2 items-center"
+                      >
+                        {uploadStatus === "select" && (
                           <>
-                            <div className="col-span-1 flex justify-center items-center">
-                              <XIcon
-                                className="cursor-pointer"
-                                onClick={clearFileInput}
-                              />
-                            </div>
+                            <UploadCloud className="h-5 w-5" />
+                            Subir
                           </>
                         )}
-                        {uploadStatus === "uploading" && (
+                        {mutation.isPending && (
                           <>
-                            <div className="col-span-1 flex justify-center items-center">
-                              {`${progress} %`}
-                            </div>
+                            <Loader2 className="h-5 w-5 animate-spin" />
+                            Subiendo...
                           </>
                         )}
                         {uploadStatus === "done" && (
                           <>
-                            <div className="col-span-1 flex justify-center items-center">
-                              <CheckCircle />
-                            </div>
+                            <CheckCircle className="h-5 w-5" />
+                            Listo
                           </>
                         )}
-                      </section>
-                      <Button
-                        type="submit"
-                        disabled={
-                          uploadStatus === "uploading" ||
-                          uploadStatus === "done"
-                        }
-                      >
-                        {uploadStatus === "select" && <UploadCloud />}
-
-                        {uploadStatus === "uploading" && (
-                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        )}
-
-                        {uploadStatus === "done" && <CheckCircle />}
                       </Button>
-                    </>
-                  </div>
+                    </article>
+                  </section>
                 </form>
               </DialogContent>
             </Dialog>

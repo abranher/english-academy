@@ -114,31 +114,29 @@ export function CourseTrailerForm({ trailer }: { trailer: string | null }) {
           {/** File upload */}
           {trailer ? (
             playerReady ? (
-              <div className="aspect-video rounded-lg">
+              <article className="aspect-video rounded-lg">
                 <ReactPlayer
                   controls
                   width={"100%"}
                   height={"100%"}
                   url={assetVideo(trailer)}
                 />
-              </div>
+              </article>
             ) : (
-              <>
-                <Skeleton className="w-full h-full flex justify-center items-center">
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                </Skeleton>
-              </>
+              <Skeleton className="w-full h-full flex justify-center items-center">
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              </Skeleton>
             )
           ) : (
-            <div className="grid aspect-video place-items-center rounded-lg bg-zinc-200 dark:bg-zinc-800">
+            <article className="grid aspect-video place-items-center rounded-lg bg-zinc-200 dark:bg-zinc-800">
               <Video className="h-9 w-9 text-gray-600 aspect-video" />
-            </div>
+            </article>
           )}
 
           {/** Description */}
           <article className="px-5 py-2 flex flex-col gap-3">
             <h2 className="font-semibold">Trailer del curso</h2>
-            <div className="text-small flex flex-col gap-3">
+            <section className="text-small flex flex-col gap-3">
               <p>
                 El video trailer es la primera impresión que tendrán los
                 estudiantes sobre tu curso. Debe ser visualmente atractivo y
@@ -149,7 +147,7 @@ export function CourseTrailerForm({ trailer }: { trailer: string | null }) {
                 resolución de 1080p (1920x1080 píxeles) para una óptima
                 visualización en diferentes dispositivos.
               </p>
-            </div>
+            </section>
 
             <Dialog onOpenChange={clearFile}>
               <DialogTrigger asChild>
@@ -163,7 +161,7 @@ export function CourseTrailerForm({ trailer }: { trailer: string | null }) {
                   <DialogTitle>Subir trailer</DialogTitle>
                 </DialogHeader>
                 <form onSubmit={onSubmit}>
-                  <div className="grid gap-4 py-4">
+                  <section className="grid gap-4 py-4">
                     {preview ? (
                       <ReactPlayer
                         controls
@@ -172,9 +170,9 @@ export function CourseTrailerForm({ trailer }: { trailer: string | null }) {
                         url={preview}
                       />
                     ) : (
-                      <div className="grid aspect-video place-items-center rounded-lg bg-zinc-200 dark:bg-zinc-800">
+                      <article className="grid aspect-video place-items-center rounded-lg bg-zinc-200 dark:bg-zinc-800">
                         <Video className="h-9 w-9 text-gray-600" />
-                      </div>
+                      </article>
                     )}
 
                     {/** upload input */}
@@ -203,10 +201,10 @@ export function CourseTrailerForm({ trailer }: { trailer: string | null }) {
                     )}
 
                     <Card className="grid grid-cols-8 py-2">
-                      <div className="col-span-1 flex justify-center items-center">
+                      <section className="col-span-1 flex justify-center items-center">
                         <Video />
-                      </div>
-                      <div className="text-xs col-span-6 flex flex-col justify-center gap-1">
+                      </section>
+                      <section className="text-xs col-span-6 flex flex-col justify-center gap-1">
                         <p>
                           {selectedFile
                             ? truncateString(selectedFile.name, "md")
@@ -214,28 +212,28 @@ export function CourseTrailerForm({ trailer }: { trailer: string | null }) {
                         </p>
                         <p>{selectedFile && formatSize(selectedFile.size)}</p>
                         <Progress value={progress} className="h-2" />
-                      </div>
+                      </section>
                       {uploadStatus === "select" && selectedFile && (
-                        <div className="col-span-1 flex justify-center items-center">
+                        <section className="col-span-1 flex justify-center items-center">
                           <XIcon
                             className="cursor-pointer"
                             onClick={clearFile}
                           />
-                        </div>
+                        </section>
                       )}
                       {uploadStatus === "uploading" && (
-                        <div className="col-span-1 flex justify-center items-center">
+                        <section className="col-span-1 flex justify-center items-center">
                           {progress}
-                        </div>
+                        </section>
                       )}
                       {uploadStatus === "done" && (
-                        <div className="col-span-1 flex justify-center items-center">
+                        <section className="col-span-1 flex justify-center items-center">
                           <CheckCircle />
-                        </div>
+                        </section>
                       )}
                     </Card>
 
-                    <div className="space-y-2 text-center">
+                    <article className="space-y-2 text-center">
                       <Button
                         type="submit"
                         disabled={
@@ -264,8 +262,8 @@ export function CourseTrailerForm({ trailer }: { trailer: string | null }) {
                           </>
                         )}
                       </Button>
-                    </div>
-                  </div>
+                    </article>
+                  </section>
                 </form>
               </DialogContent>
             </Dialog>

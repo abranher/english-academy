@@ -18,8 +18,6 @@ export default async function LessonClassPage({
   params: {
     courseId: string;
     chapterId: string;
-    lessonId: string;
-    classId: string;
   };
 }) {
   const session = await auth();
