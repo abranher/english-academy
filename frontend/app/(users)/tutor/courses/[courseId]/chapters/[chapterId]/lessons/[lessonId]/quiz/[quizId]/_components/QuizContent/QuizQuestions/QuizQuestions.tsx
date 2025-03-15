@@ -27,12 +27,12 @@ export function QuizQuestions({ lessonQuiz }: { lessonQuiz: Quiz }) {
 
         <section className="my-6">
           {lessonQuiz.questions.length === 0 && (
-            <article className="text-lg w-full">
+            <CardDescription className="text-lg w-full">
               <p className="flex justify-center flex-col items-center italic">
                 <FolderOpen className="w-20 h-20" />
                 Sin preguntas
               </p>
-            </article>
+            </CardDescription>
           )}
           <QuizQuestionsList questions={lessonQuiz.questions} />
         </section>

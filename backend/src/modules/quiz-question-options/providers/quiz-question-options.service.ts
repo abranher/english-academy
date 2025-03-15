@@ -39,4 +39,24 @@ export class QuizQuestionOptionsService {
       );
     }
   }
+
+  async update(
+    id: string,
+    quizQuestionId: string,
+    updateQuizQuestionOptionDto: UpdateQuizQuestionOptionDto,
+  ) {
+    await this.findQuizQuestionOrThrow(quizQuestionId);
+
+    try {
+      return await this.prisma.quizQuestionOption.update({
+        where: { id, quizQuestionId },
+        data: updateQuizQuestionOptionDto,
+      });
+    } catch (error) {
+      console.error('Error al actualizar la opción:', error);
+      throw new InternalServerErrorException(
+        'Error del servidor. Por favor intenta nuevamente.',
+      );
+    }
+  }
 }

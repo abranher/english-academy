@@ -77,12 +77,12 @@ export function ChapterLessonsForm({ lessons }: { lessons: Lesson[] | [] }) {
 
         <section className="my-6 italic">
           {lessons.length === 0 && (
-            <article className="text-lg w-full">
+            <CardDescription className="text-lg w-full">
               <p className="flex justify-center flex-col items-center">
                 <FolderOpen className="w-20 h-20" />
                 Sin lecciones
               </p>
-            </article>
+            </CardDescription>
           )}
 
           <ChapterLessonsList

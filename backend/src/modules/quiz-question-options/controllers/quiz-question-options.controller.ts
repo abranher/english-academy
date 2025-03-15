@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Param } from '@nestjs/common';
+import { Controller, Post, Body, Param, Patch } from '@nestjs/common';
 
 import { QuizQuestionOptionsService } from '../providers/quiz-question-options.service';
 import { CreateQuizQuestionOptionDto } from '../dto/create-quiz-question-option.dto';
@@ -21,6 +21,22 @@ export class QuizQuestionOptionsController {
     return this.quizQuestionOptionsService.create(
       quizQuestionId,
       createQuizQuestionOptionDto,
+    );
+  }
+
+  /*
+   * Update every field
+   */
+  @Patch(':id/quiz-question/:quizQuestionId')
+  update(
+    @Param('id') id: string,
+    @Param('quizQuestionId') quizQuestionId: string,
+    @Body() updateQuizQuestionOptionDto: UpdateQuizQuestionOptionDto,
+  ) {
+    return this.quizQuestionOptionsService.update(
+      id,
+      quizQuestionId,
+      updateQuizQuestionOptionDto,
     );
   }
 }
