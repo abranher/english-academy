@@ -26,18 +26,16 @@ import { Separator } from "@/components/shadcn/ui/separator";
 import { BookOpen, CalendarCog, DollarSign, Globe, Map } from "lucide-react";
 import { HeaderSection } from "./HeaderSection";
 
-// Define un tipo para las posibles claves de sectionTitles
-type SectionTitleKey = "mainContent" | "price" | "studyPlan";
+type SectionTitleKey = "MAIN_CONTENT" | "PRICE" | "STUDY_PLAN";
 
-// Define el tipo del objeto sectionTitles
 type SectionTitles = {
   [key in SectionTitleKey]: string;
 };
 
 const sectionTitles: SectionTitles = {
-  mainContent: "Contenido principal",
-  price: "Precios",
-  studyPlan: "Plan de estudio",
+  MAIN_CONTENT: "Contenido principal",
+  PRICE: "Precios",
+  STUDY_PLAN: "Plan de estudio",
 };
 
 export function CourseContent() {
@@ -52,7 +50,7 @@ export function CourseContent() {
     queryFn: () => getCourse(courseId as string),
   });
 
-  const [content, setContent] = useState<SectionTitleKey>("mainContent");
+  const [content, setContent] = useState<SectionTitleKey>("MAIN_CONTENT");
 
   const handleNavigation = (value: SectionTitleKey) => {
     setContent(value);
@@ -71,11 +69,11 @@ export function CourseContent() {
         <div className="lg:grid lg:grid-cols-4 w-full space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
           <Card className="lg:col-span-3 flex w-full flex-col gap-4 p-5">
             <h2 className="text-2xl px-5 font-semibold flex gap-3 items-center">
-              {content === "mainContent" ? (
+              {content === "MAIN_CONTENT" ? (
                 <BookOpen />
-              ) : content === "price" ? (
+              ) : content === "PRICE" ? (
                 <DollarSign />
-              ) : content === "studyPlan" ? (
+              ) : content === "STUDY_PLAN" ? (
                 <CalendarCog />
               ) : (
                 <Globe />
@@ -86,7 +84,7 @@ export function CourseContent() {
 
             <Separator />
 
-            {content === "mainContent" && (
+            {content === "MAIN_CONTENT" && (
               <>
                 <CourseTitleForm title={course.title} />
                 <Separator />
@@ -116,11 +114,11 @@ export function CourseContent() {
               </>
             )}
 
-            {content === "price" && (
+            {content === "PRICE" && (
               <CoursePriceForm priceId={course.priceId} />
             )}
 
-            {content === "studyPlan" && (
+            {content === "STUDY_PLAN" && (
               <CourseChaptersForm chapters={course.chapters} />
             )}
           </Card>
@@ -133,31 +131,31 @@ export function CourseContent() {
               </Title>
 
               <nav className="grid gap-3 px-2">
-                <div
+                <section
                   className={cn(
                     "flex gap-2 px-3 py-2 items-center justify-center whitespace-nowrap text-md font-medium transition-colors cursor-pointer",
-                    content === "mainContent" &&
+                    content === "MAIN_CONTENT" &&
                       "bg-zinc-100 text-zinc-900 border-l-3 border-zinc-400 dark:bg-zinc-800/50 dark:text-zinc-50",
                     "justify-start"
                   )}
-                  onClick={() => handleNavigation("mainContent")}
+                  onClick={() => handleNavigation("MAIN_CONTENT")}
                 >
                   <BookOpen />
                   Contenido principal
-                </div>
+                </section>
 
-                <div
+                <section
                   className={cn(
                     "flex gap-2 px-3 py-2 items-center justify-center whitespace-nowrap text-md font-medium transition-colors cursor-pointer",
-                    content === "price" &&
+                    content === "PRICE" &&
                       "bg-zinc-100 text-zinc-900 border-l-3 border-zinc-400 dark:bg-zinc-800/50 dark:text-zinc-50",
                     "justify-start"
                   )}
-                  onClick={() => handleNavigation("price")}
+                  onClick={() => handleNavigation("PRICE")}
                 >
                   <DollarSign />
                   Precios
-                </div>
+                </section>
               </nav>
 
               <Title>
@@ -166,18 +164,18 @@ export function CourseContent() {
               </Title>
 
               <nav className="grid gap-3 px-2">
-                <div
+                <section
                   className={cn(
                     "flex gap-2 px-3 py-2 items-center justify-center whitespace-nowrap text-md font-medium transition-colors cursor-pointer",
-                    content === "studyPlan" &&
+                    content === "STUDY_PLAN" &&
                       "bg-zinc-100 text-zinc-900 border-l-3 border-zinc-400 dark:bg-zinc-800/50 dark:text-zinc-50",
                     "justify-start"
                   )}
-                  onClick={() => handleNavigation("studyPlan")}
+                  onClick={() => handleNavigation("STUDY_PLAN")}
                 >
                   <CalendarCog />
                   Plan de estudio
-                </div>
+                </section>
               </nav>
             </div>
           </aside>

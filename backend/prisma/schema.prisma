@@ -322,8 +322,8 @@ model Quiz {
 }
 
 model QuizQuestion {
-  id       String  @id @default(uuid())
-  question String?
+  id       String @id @default(uuid())
+  question String
 
   quizId String
   quiz   Quiz   @relation(fields: [quizId], references: [id])
@@ -336,7 +336,7 @@ model QuizQuestion {
 
 model QuizQuestionOption {
   id        String  @id @default(uuid())
-  text      String?
+  text      String
   isCorrect Boolean @default(false)
 
   quizQuestionId String

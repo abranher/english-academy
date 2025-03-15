@@ -19,18 +19,16 @@ import { Card } from "@/components/shadcn/ui/card";
 import { Separator } from "@/components/shadcn/ui/separator";
 import { BookOpen, ClipboardPen, Globe } from "lucide-react";
 
-// Define un tipo para las posibles claves de sectionTitles
-type SectionTitleKey = "mainContent" | "lessons" | "studyPlan";
+type SectionTitleKey = "MAIN_CONTENT" | "LESSONS" | "STUDY_PLAN";
 
-// Define el tipo del objeto sectionTitles
 type SectionTitles = {
   [key in SectionTitleKey]: string;
 };
 
 const sectionTitles: SectionTitles = {
-  mainContent: "Contenido principal",
-  lessons: "Lecciones",
-  studyPlan: "Plan de estudio",
+  MAIN_CONTENT: "Contenido principal",
+  LESSONS: "Lecciones",
+  STUDY_PLAN: "Plan de estudio",
 };
 
 export function ChapterContent() {
@@ -45,7 +43,7 @@ export function ChapterContent() {
     queryFn: () => getChapter(chapterId as string, courseId as string),
   });
 
-  const [content, setContent] = useState<SectionTitleKey>("mainContent");
+  const [content, setContent] = useState<SectionTitleKey>("MAIN_CONTENT");
 
   const handleNavigation = (value: SectionTitleKey) => {
     setContent(value);
@@ -64,9 +62,9 @@ export function ChapterContent() {
         <div className="lg:grid lg:grid-cols-4 w-full space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
           <Card className="lg:col-span-3 flex w-full flex-col gap-4 p-5">
             <h2 className="text-2xl px-5 font-semibold flex gap-3 items-center">
-              {content === "mainContent" ? (
+              {content === "MAIN_CONTENT" ? (
                 <BookOpen />
-              ) : content === "lessons" ? (
+              ) : content === "LESSONS" ? (
                 <ClipboardPen />
               ) : (
                 <Globe />
@@ -74,7 +72,7 @@ export function ChapterContent() {
               {sectionTitles[content]}
             </h2>
             <Separator />
-            {content === "mainContent" && (
+            {content === "MAIN_CONTENT" && (
               <>
                 <ChapterTitleForm title={chapter.title} />
 
@@ -83,7 +81,7 @@ export function ChapterContent() {
                 <ChapterDescriptionForm description={chapter.description} />
               </>
             )}
-            {content === "lessons" && (
+            {content === "LESSONS" && (
               <>
                 <ChapterLessonsForm lessons={chapter.lessons} />
               </>
@@ -101,11 +99,11 @@ export function ChapterContent() {
                 <div
                   className={cn(
                     "flex gap-2 px-3 py-2 items-center justify-center whitespace-nowrap text-md font-medium transition-colors cursor-pointer",
-                    content === "mainContent" &&
+                    content === "MAIN_CONTENT" &&
                       "bg-zinc-100 text-zinc-900 border-l-3 border-zinc-400 dark:bg-zinc-800/50 dark:text-zinc-50",
                     "justify-start"
                   )}
-                  onClick={() => handleNavigation("mainContent")}
+                  onClick={() => handleNavigation("MAIN_CONTENT")}
                 >
                   <BookOpen />
                   Contenido principal
@@ -114,11 +112,11 @@ export function ChapterContent() {
                 <div
                   className={cn(
                     "flex gap-2 px-3 py-2 items-center justify-center whitespace-nowrap text-md font-medium transition-colors cursor-pointer",
-                    content === "lessons" &&
+                    content === "LESSONS" &&
                       "bg-zinc-100 text-zinc-900 border-l-3 border-zinc-400 dark:bg-zinc-800/50 dark:text-zinc-50",
                     "justify-start"
                   )}
-                  onClick={() => handleNavigation("lessons")}
+                  onClick={() => handleNavigation("LESSONS")}
                 >
                   <ClipboardPen />
                   Lecciones
