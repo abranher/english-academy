@@ -1,9 +1,9 @@
 import NextLink from "next/link";
 import { usePathname } from "next/navigation";
 
+import { Roles } from "@/types/enums";
 import { useSession } from "next-auth/react";
 import { NavbarContent, Link, NavbarItem } from "@heroui/react";
-import { Roles } from "@/types/enums";
 
 import { AcmeLogo } from "@/components/icons/AcmeLogo";
 
@@ -24,6 +24,20 @@ export function MainLinks() {
         </NavbarItem>
         {status === "authenticated" ? (
           <>
+            {session.user.role === Roles.ADMIN && (
+              <>
+                <NavbarItem className="ml-3" isActive={isActive("/admin")}>
+                  <Link as={NextLink} color="foreground" href="/admin">
+                    Dashboard
+                  </Link>
+                </NavbarItem>
+                <NavbarItem isActive={isActive("/admin/courses")}>
+                  <Link as={NextLink} color="foreground" href="/admin/courses">
+                    Cursos
+                  </Link>
+                </NavbarItem>
+              </>
+            )}
             {session.user.role === Roles.TUTOR && (
               <>
                 <NavbarItem
