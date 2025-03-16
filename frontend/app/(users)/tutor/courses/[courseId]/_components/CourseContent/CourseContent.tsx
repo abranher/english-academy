@@ -11,6 +11,7 @@ import { getCourse } from "../../_services/get-course";
 import { CourseTitleForm } from "./CourseTitleForm";
 import { CourseSubTitleForm } from "./CourseSubTitleForm";
 import { CourseDescriptionForm } from "./CourseDescriptionForm";
+import { CourseLearningObjectivesForm } from "./CourseLearningObjectivesForm";
 import { CourseLevelForm } from "./CourseLevelForm";
 import { CourseCategoryForm } from "./CourseCategoryForm";
 import { CourseSubCategoryForm } from "./CourseSubCategoryForm";
@@ -25,7 +26,6 @@ import { Card } from "@/components/shadcn/ui/card";
 import { Separator } from "@/components/shadcn/ui/separator";
 import { BookOpen, CalendarCog, DollarSign, Globe, Map } from "lucide-react";
 import { HeaderSection } from "./HeaderSection";
-import { CourseLearningObjectivesForm } from "./CourseLearningObjectivesForm";
 
 type SectionTitleKey = "MAIN_CONTENT" | "PRICE" | "STUDY_PLAN";
 

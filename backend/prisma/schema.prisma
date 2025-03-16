@@ -252,10 +252,11 @@ model CourseReview {
 // *
 
 model Chapter {
-  id          String  @id @default(uuid())
-  title       String
-  description String? @db.Text
-  position    Int
+  id                 String  @id @default(uuid())
+  title              String
+  description        String? @db.Text
+  learningObjectives String? @db.Text
+  position           Int
 
   courseId String
   course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)

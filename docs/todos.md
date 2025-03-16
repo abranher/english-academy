@@ -8,8 +8,6 @@ que necesitamos:
 
 - necesitamos que el admin le llegue una notification donde le diga lo que sucedio
 
-- Agregar objetivos de aprendizaje del curso
-- Agregar objetivos de aprendizaje del chapter
 - Mostrar clase
 - Mostrar quiz
 

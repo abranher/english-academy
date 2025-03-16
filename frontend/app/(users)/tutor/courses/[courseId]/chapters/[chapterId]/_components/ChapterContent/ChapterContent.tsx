@@ -11,6 +11,7 @@ import { getChapter } from "../../_services/get-chapter";
 import { ChapterContentSkeleton } from "./ChapterContentSkeleton";
 import { ChapterTitleForm } from "./ChapterTitleForm";
 import { ChapterDescriptionForm } from "./ChapterDescriptionForm";
+import { ChapterLearningObjectivesForm } from "./ChapterLearningObjectivesForm";
 import { ChapterLessonsForm } from "./ChapterLessonsForm";
 import { HeaderSection } from "./HeaderSection";
 import { Title } from "@/components/common/Title";
@@ -75,10 +76,14 @@ export function ChapterContent() {
             {content === "MAIN_CONTENT" && (
               <>
                 <ChapterTitleForm title={chapter.title} />
-
                 <Separator />
 
                 <ChapterDescriptionForm description={chapter.description} />
+                <Separator />
+
+                <ChapterLearningObjectivesForm
+                  learningObjectives={chapter.learningObjectives}
+                />
               </>
             )}
             {content === "LESSONS" && (

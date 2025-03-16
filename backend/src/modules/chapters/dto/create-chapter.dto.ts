@@ -6,9 +6,13 @@ export class CreateChapterDto {
 
   @IsOptional()
   @IsString()
-  description?: string;
+  description: string;
+
+  @IsOptional()
+  @IsString()
+  learningObjectives: string;
 
   @IsOptional()
   @IsInt()
-  position?: number;
+  position: number;
 }
