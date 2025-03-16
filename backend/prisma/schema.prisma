@@ -188,6 +188,7 @@ model Course {
   title              String               @db.Text
   subtitle           String?              @db.Text
   description        String?              @db.Text
+  requirements       String?              @db.Text
   learningObjectives String?              @db.Text
   image              String?              @db.Text
   trailer            String?              @db.Text

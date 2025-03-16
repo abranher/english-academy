@@ -1,0 +1,1 @@
+export { CourseRequirementsForm } from "./CourseRequirementsForm";

@@ -10,6 +10,7 @@ export interface Course {
   title: string;
   subtitle: string | null;
   description: string | null;
+  requirements: string | null;
   learningObjectives: string | null;
 
   image: string | null;
