@@ -12,19 +12,27 @@ import { UpdateQuizQuestionOptionDto } from '../dto/update-quiz-question-option.
 export class QuizQuestionOptionsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  private async findQuizQuestionOrThrow(id: string) {
-    const quizQuestion = await this.prisma.quizQuestion.findUnique({
+  private async findQuestionOrThrow(id: string) {
+    const question = await this.prisma.quizQuestion.findUnique({
       where: { id },
     });
-    if (!quizQuestion) throw new NotFoundException('Pregunta no encontrada.');
-    return quizQuestion;
+    if (!question) throw new NotFoundException('Pregunta no encontrada.');
+    return question;
+  }
+
+  private async findOptionOrThrow(id: string) {
+    const option = await this.prisma.quizQuestionOption.findUnique({
+      where: { id },
+    });
+    if (!option) throw new NotFoundException('Opción no encontrada.');
+    return option;
   }
 
   async create(
     quizQuestionId: string,
     createQuizQuestionOptionDto: CreateQuizQuestionOptionDto,
   ) {
-    await this.findQuizQuestionOrThrow(quizQuestionId);
+    await this.findQuestionOrThrow(quizQuestionId);
 
     try {
       await this.prisma.quizQuestionOption.create({
@@ -32,6 +40,28 @@ export class QuizQuestionOptionsService {
       });
 
       return { message: 'Opción creada exitosamente!' };
+    } catch (error) {
+      console.error('Error al crear la opción:', error);
+      throw new InternalServerErrorException(
+        'Error del servidor. Por favor intenta nuevamente.',
+      );
+    }
+  }
+
+  async correctOption(
+    quizQuestionId: string,
+    updateQuizQuestionOptionDto: UpdateQuizQuestionOptionDto,
+  ) {
+    await this.findQuestionOrThrow(quizQuestionId);
+    await this.findOptionOrThrow(updateQuizQuestionOptionDto.optionId);
+
+    try {
+      await this.prisma.quizQuestionOption.update({
+        where: { id: updateQuizQuestionOptionDto.optionId, quizQuestionId },
+        data: { isCorrect: true },
+      });
+
+      return { message: 'Opción correcta actualizada!' };
     } catch (error) {
       console.error('Error al crear la pregunta:', error);
       throw new InternalServerErrorException(
@@ -45,7 +75,7 @@ export class QuizQuestionOptionsService {
     quizQuestionId: string,
     updateQuizQuestionOptionDto: UpdateQuizQuestionOptionDto,
   ) {
-    await this.findQuizQuestionOrThrow(quizQuestionId);
+    await this.findQuestionOrThrow(quizQuestionId);
 
     try {
       return await this.prisma.quizQuestionOption.update({

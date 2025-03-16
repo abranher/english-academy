@@ -25,6 +25,20 @@ export class QuizQuestionOptionsController {
   }
 
   /*
+   * Updated correct option
+   */
+  @Patch('quiz-question/:quizQuestionId')
+  correctOption(
+    @Param('quizQuestionId') quizQuestionId: string,
+    @Body() updateQuizQuestionOptionDto: UpdateQuizQuestionOptionDto,
+  ) {
+    return this.quizQuestionOptionsService.correctOption(
+      quizQuestionId,
+      updateQuizQuestionOptionDto,
+    );
+  }
+
+  /*
    * Update every field
    */
   @Patch(':id/quiz-question/:quizQuestionId')

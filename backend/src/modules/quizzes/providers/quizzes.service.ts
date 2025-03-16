@@ -25,7 +25,7 @@ export class QuizzesService {
         where: { id, lessonId },
         include: {
           questions: {
-            include: { options: true },
+            include: { options: { orderBy: { createdAt: 'asc' } } },
             orderBy: { createdAt: 'asc' },
           },
         },

@@ -11,8 +11,12 @@ export function QuizQuestionsList({
 }) {
   return (
     <section className="flex flex-col gap-8">
-      {questions.map((question) => (
-        <QuizQuestionCard key={question.id} quizQuestion={question} />
+      {questions.map((question, index) => (
+        <QuizQuestionCard
+          key={question.id}
+          quizQuestion={question}
+          index={index + 1}
+        />
       ))}
     </section>
   );
