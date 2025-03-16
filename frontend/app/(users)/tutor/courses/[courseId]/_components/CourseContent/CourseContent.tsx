@@ -25,6 +25,7 @@ import { Card } from "@/components/shadcn/ui/card";
 import { Separator } from "@/components/shadcn/ui/separator";
 import { BookOpen, CalendarCog, DollarSign, Globe, Map } from "lucide-react";
 import { HeaderSection } from "./HeaderSection";
+import { CourseLearningObjectivesForm } from "./CourseLearningObjectivesForm";
 
 type SectionTitleKey = "MAIN_CONTENT" | "PRICE" | "STUDY_PLAN";
 
@@ -93,6 +94,11 @@ export function CourseContent() {
                 <Separator />
 
                 <CourseDescriptionForm description={course.description} />
+                <Separator />
+
+                <CourseLearningObjectivesForm
+                  learningObjectives={course.learningObjectives}
+                />
                 <Separator />
 
                 <CourseLevelForm levelId={course.levelId} />

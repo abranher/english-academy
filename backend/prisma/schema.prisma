@@ -184,14 +184,15 @@ model Price {
 // *
 
 model Course {
-  id             String               @id @default(uuid())
-  title          String               @db.Text
-  subtitle       String?              @db.Text
-  description    String?              @db.Text
-  image          String?              @db.Text
-  trailer        String?              @db.Text
-  reviewStatus   CourseReviewStatus   @default(DRAFT)
-  platformStatus CoursePlatformStatus @default(DRAFT)
+  id                 String               @id @default(uuid())
+  title              String               @db.Text
+  subtitle           String?              @db.Text
+  description        String?              @db.Text
+  learningObjectives String?              @db.Text
+  image              String?              @db.Text
+  trailer            String?              @db.Text
+  reviewStatus       CourseReviewStatus   @default(DRAFT)
+  platformStatus     CoursePlatformStatus @default(DRAFT)
 
   tutorId String
   tutor   Tutor  @relation(fields: [tutorId], references: [id])

@@ -15,6 +15,10 @@ export class CreateCourseDto {
 
   @IsOptional()
   @IsString()
+  learningObjectives: string;
+
+  @IsOptional()
+  @IsString()
   priceId: string;
 
   @IsOptional()
