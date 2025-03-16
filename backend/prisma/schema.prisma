@@ -340,7 +340,7 @@ model QuizQuestionOption {
   isCorrect Boolean @default(false)
 
   quizQuestionId String
-  question       QuizQuestion @relation(fields: [quizQuestionId], references: [id])
+  question       QuizQuestion @relation(fields: [quizQuestionId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

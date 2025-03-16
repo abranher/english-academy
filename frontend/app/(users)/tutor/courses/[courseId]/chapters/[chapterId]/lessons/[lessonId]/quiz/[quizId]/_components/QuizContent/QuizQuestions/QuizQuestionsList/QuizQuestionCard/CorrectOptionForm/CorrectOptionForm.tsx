@@ -41,10 +41,13 @@ export function CorrectOptionForm({
   const queryClient = useQueryClient();
   const { quizId, lessonId } = useParams();
 
+  const defaultOptionId =
+    quizQuestion.options.find((option) => option.isCorrect)?.id || "";
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      optionId: "",
+      optionId: defaultOptionId,
     },
   });
 
@@ -56,7 +59,8 @@ export function CorrectOptionForm({
       ),
     onSuccess: (response) => {
       if (response.status === 200 || response.status === 201) {
-        toast.success("Opción correcta actualizada!");
+        const data = response.data;
+        toast.success(data.message);
         queryClient.invalidateQueries({
           queryKey: ["get_quiz", quizId, lessonId],
         });

@@ -56,14 +56,22 @@ export class QuizQuestionOptionsService {
     await this.findOptionOrThrow(updateQuizQuestionOptionDto.optionId);
 
     try {
+      await this.prisma.quizQuestionOption.updateMany({
+        where: { quizQuestionId },
+        data: { isCorrect: false },
+      });
+
       await this.prisma.quizQuestionOption.update({
-        where: { id: updateQuizQuestionOptionDto.optionId, quizQuestionId },
+        where: {
+          id: updateQuizQuestionOptionDto.optionId,
+          quizQuestionId,
+        },
         data: { isCorrect: true },
       });
 
       return { message: 'Opción correcta actualizada!' };
     } catch (error) {
-      console.error('Error al crear la pregunta:', error);
+      console.error('Error al actualizar la opción correcta:', error);
       throw new InternalServerErrorException(
         'Error del servidor. Por favor intenta nuevamente.',
       );
