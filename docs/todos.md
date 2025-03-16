@@ -8,6 +8,10 @@ que necesitamos:
 
 - necesitamos que el admin le llegue una notification donde le diga lo que sucedio
 
+- Mostrar cursos publicados y aprobados
+- Mostrar cursos por categoria,
+- mostrar cursos por nivel
+
 - Mostrar clase
 - Mostrar quiz
 
