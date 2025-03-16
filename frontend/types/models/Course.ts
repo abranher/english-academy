@@ -12,11 +12,11 @@ export interface Course {
   description: string | null;
   requirements: string | null;
   learningObjectives: string | null;
-
   image: string | null;
   trailer: string | null;
   reviewStatus: CourseReviewStatus;
   platformStatus: CoursePlatformStatus;
+  publishedAt: Date | null;
 
   price: Price | null;
   category: Category | null;
