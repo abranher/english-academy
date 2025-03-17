@@ -22,3 +22,50 @@ que necesitamos:
 - La fecha de nacimiento del perfil, se guarda de una manera en la bd y luego se muestra como de otra
 - rejected_at (fecha/hora del rechazo para eliminar en 24h)
 - IMPORTANT: -> hacer el componente que crea las certificaciones del tutor igual al createAttachment
+
+
+import React, { useState } from "react";
+import { useDebounce } from "@/hooks/useDebounce"; // Asegúrate de importar tu hook
+
+interface Item {
+  id: string;
+  title: string;
+  description: string;
+}
+
+function filterArrayByText(items: Item[], searchText: string): Item[] {
+  const lowerCaseSearchText = searchText.toLowerCase();
+  return items.filter(
+    (item) =>
+      item.title.toLowerCase().includes(lowerCaseSearchText) ||
+      item.description.toLowerCase().includes(lowerCaseSearchText)
+  );
+}
+
+const SearchComponent: React.FC<{ items: Item[] }> = ({ items }) => {
+  const [searchText, setSearchText] = useState("");
+  const debouncedSearchText = useDebounce(searchText, 500); // Usa el debounce con un retraso de 500ms
+
+  const filteredItems = filterArrayByText(items, debouncedSearchText);
+
+  return (
+    <div>
+      <input
+        type="text"
+        placeholder="Buscar..."
+        value={searchText}
+        onChange={(e) => setSearchText(e.target.value)}
+      />
+      <ul>
+        {filteredItems.map((item) => (
+          <li key={item.id}>
+            <h3>{item.title}</h3>
+            <p>{item.description}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
+export default SearchComponent;
