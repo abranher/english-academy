@@ -8,17 +8,13 @@ import {
   Headers,
 } from '@nestjs/common';
 
-import { PrismaService } from 'src/modules/prisma/providers/prisma.service';
 import { CoursesService } from '../providers/courses.service';
 import { CreateCourseDto } from '../dto/create-course.dto';
 import { UpdateCourseDto } from '../dto/update-course.dto';
 
 @Controller('courses')
 export class CoursesController {
-  constructor(
-    private readonly coursesService: CoursesService,
-    private prisma: PrismaService,
-  ) {}
+  constructor(private readonly coursesService: CoursesService) {}
 
   /**
    * Create Course

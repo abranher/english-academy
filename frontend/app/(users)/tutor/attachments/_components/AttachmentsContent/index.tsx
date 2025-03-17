@@ -1,0 +1,1 @@
+export { AttachmentsContent } from "./AttachmentsContent";

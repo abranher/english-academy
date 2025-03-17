@@ -3,6 +3,8 @@ import { redirect } from "next/navigation";
 
 import { auth } from "@/config/auth";
 
+import { AttachmentsContent } from "./_components/AttachmentsContent";
+
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -11,7 +13,6 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/shadcn/ui/breadcrumb";
-import { CardDescription, CardTitle } from "@/components/shadcn/ui/card";
 
 export default async function AttachmentsTutorPage() {
   const session = await auth();
@@ -34,10 +35,7 @@ export default async function AttachmentsTutorPage() {
         </BreadcrumbList>
       </Breadcrumb>
 
-      <section className="flex flex-col gap-1">
-        <CardTitle>Recursos</CardTitle>
-        <CardDescription>Listado de recursos subidos.</CardDescription>
-      </section>
+      <AttachmentsContent userId={session.user.id} />
     </>
   );
 }

@@ -72,7 +72,6 @@ export class CoursesService {
               },
             },
           },
-          attachments: { orderBy: { createdAt: 'desc' } },
         },
       });
     } catch (error) {
