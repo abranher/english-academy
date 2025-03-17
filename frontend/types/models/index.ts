@@ -6,6 +6,7 @@ export { type Category } from "./Category";
 export { type SubCategory } from "./SubCategory";
 export { type Certification } from "./Certification";
 export { type Class } from "./Class";
+export { type ClassAttachment } from "./ClassAttachment";
 export { type CourseReview } from "./CourseReview";
 export { type Lesson } from "./Lesson";
 export { type Notification } from "./Notification";

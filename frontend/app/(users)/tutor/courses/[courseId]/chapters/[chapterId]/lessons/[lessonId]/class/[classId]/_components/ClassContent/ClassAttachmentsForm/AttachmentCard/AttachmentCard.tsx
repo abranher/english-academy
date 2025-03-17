@@ -4,10 +4,9 @@ import { Attachment } from "@/types/models";
 import { truncateString } from "@/libs/format";
 import { assetAttachments } from "@/libs/asset";
 
-import { DeleteAttachment } from "./DeleteAttachment";
-
 import { Card, CardDescription } from "@/components/shadcn/ui/card";
-import { ImageIcon, FileIcon } from "lucide-react";
+import { ImageIcon, FileIcon, X } from "lucide-react";
+import { Button } from "@/components/shadcn/ui/button";
 
 export function AttachmentCard({
   attachment,
@@ -29,7 +28,7 @@ export function AttachmentCard({
 
   return (
     <>
-      <Card className="p-2 w-60 flex justify-between items-center gap-1">
+      <Card className="p-2 flex justify-between items-center gap-1 w-full">
         <a
           href={assetAttachments(attachment.url)}
           target="_blank"
@@ -42,12 +41,14 @@ export function AttachmentCard({
               <FileIcon className="text-gray-500" />
             )}
             <CardDescription>
-              {truncateString(attachment.title)}
+              {truncateString(attachment.title, "lg")}
             </CardDescription>
           </section>
         </a>
 
-        <DeleteAttachment attachment={attachment} userId={userId} />
+        <Button size="sm" variant="outline">
+          <X className="h-4 w-4" />
+        </Button>
       </Card>
     </>
   );

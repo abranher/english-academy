@@ -6,7 +6,7 @@ import axios from "@/config/axios";
 import { z } from "zod";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
-import { Attachment, Class } from "@/types/models";
+import { Attachment, Class, ClassAttachment } from "@/types/models";
 import { FormSchema } from "./FormSchema";
 import { AxiosError } from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -16,7 +16,11 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ClassAttachmentsFormSkeleton } from "./ClassAttachmentsFormSkeleton";
 import { LoadingButton } from "@/components/common/LoadingButton";
 
-import { CardContent } from "@/components/shadcn/ui/card";
+import {
+  CardContent,
+  CardDescription,
+  CardTitle,
+} from "@/components/shadcn/ui/card";
 import {
   Select,
   SelectContent,
@@ -35,6 +39,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/shadcn/ui/form";
+import { AttachmentCard } from "./AttachmentCard";
 
 export function ClassAttachmentsForm({
   userId,
@@ -70,6 +75,7 @@ export function ClassAttachmentsForm({
       if (response.status === 200 || response.status === 201) {
         const data = response.data;
         toast.success(data.message);
+        form.reset();
         queryClient.invalidateQueries({
           queryKey: ["get_class", classId, lessonId],
         });
@@ -102,12 +108,46 @@ export function ClassAttachmentsForm({
 
   const { isSubmitting, isValid } = form.formState;
 
+  // Transformar ClassAttachment a Attachment
+  const attachedAttachments: Attachment[] = lessonClass.attachments
+    .map((classAttachment) => {
+      const attachment = attachments?.find(
+        (a) => a.id === classAttachment.attachmentId
+      );
+      return attachment ? { ...attachment } : null;
+    })
+    .filter((attachment): attachment is Attachment => attachment !== null);
+
+  // Filtrar los attachments que ya están adjuntos a la clase
+  const availableAttachments = attachments?.filter(
+    (attachment) =>
+      !lessonClass.attachments.some(
+        (classAttachment) => classAttachment.attachmentId === attachment.id
+      )
+  );
+
   if (isPending) return <ClassAttachmentsFormSkeleton />;
   if (isError) return <>Ha ocurrido un error cargando los recursos</>;
 
   return (
     <>
       <CardContent className="w-full">
+        {/* Listar los attachments ya adjuntos */}
+        <section>
+          <article className="mb-4">
+            <CardTitle>Recursos adjuntos</CardTitle>
+          </article>
+          <article className="flex flex-col gap-4">
+            {attachedAttachments.map((attachment) => (
+              <AttachmentCard
+                key={attachment.id}
+                attachment={attachment}
+                userId={userId}
+              />
+            ))}
+          </article>
+        </section>
+
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
@@ -132,7 +172,7 @@ export function ClassAttachmentsForm({
                     <SelectContent>
                       <SelectGroup>
                         <SelectLabel>Recursos</SelectLabel>
-                        {attachments.map((attachment) => (
+                        {availableAttachments?.map((attachment) => (
                           <SelectItem key={attachment.id} value={attachment.id}>
                             {attachment.title}
                           </SelectItem>
