@@ -1,3 +1,5 @@
+import { ClassAttachment } from "./ClassAttachment";
+
 export interface Class {
   id: string;
   title: string;
@@ -5,6 +7,8 @@ export interface Class {
   video: string | null;
 
   lessonId: string;
+
+  attachments: ClassAttachment[] | [];
 
   createdAt: Date;
   updatedAt: Date;

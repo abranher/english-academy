@@ -1,0 +1,1 @@
+export { ClassAttachmentsForm } from "./ClassAttachmentsForm";

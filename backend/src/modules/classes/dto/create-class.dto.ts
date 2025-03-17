@@ -12,4 +12,8 @@ export class CreateClassDto {
   @IsOptional()
   @IsString()
   video?: string;
+
+  @IsOptional()
+  @IsString()
+  attachmentId: string;
 }

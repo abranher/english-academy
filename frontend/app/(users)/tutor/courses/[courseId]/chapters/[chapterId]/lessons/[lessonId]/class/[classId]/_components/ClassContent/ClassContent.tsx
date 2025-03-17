@@ -18,6 +18,8 @@ import { Card } from "@/components/shadcn/ui/card";
 import { Separator } from "@/components/shadcn/ui/separator";
 import { BookOpen, Globe } from "lucide-react";
 import { HeaderSection } from "./HeaderSection";
+import { useSession } from "next-auth/react";
+import { ClassAttachmentsForm } from "./ClassAttachmentsForm";
 
 // Define un tipo para las posibles claves de sectionTitles
 type SectionTitleKey = "mainContent";
@@ -34,6 +36,8 @@ const sectionTitles: SectionTitles = {
 export function ClassContent() {
   const { classId, lessonId } = useParams();
 
+  const { data: session, status } = useSession();
+
   const {
     isPending,
     data: lessonClass,
@@ -49,8 +53,8 @@ export function ClassContent() {
     setContent(value);
   };
 
-  if (isPending) return <ClassContentSkeleton />;
-  if (isError) return <>Ha ocurrido un error al cargar la clase</>;
+  if (isPending || status === "loading") return <ClassContentSkeleton />;
+  if (isError || !session) return <>Ha ocurrido un error al cargar la clase</>;
 
   return (
     <>
@@ -72,6 +76,12 @@ export function ClassContent() {
                 <Separator />
 
                 <ClassDescriptionForm description={lessonClass.description} />
+                <Separator />
+
+                <ClassAttachmentsForm
+                  userId={session.user.id}
+                  lessonClass={lessonClass}
+                />
                 <Separator />
 
                 <ClassVideoForm video={lessonClass.video} />

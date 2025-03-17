@@ -24,6 +24,7 @@ export class ClassesService {
     try {
       return await this.prisma.class.findUnique({
         where: { id, lessonId },
+        include: { attachments: true },
       });
     } catch (error) {
       console.error('Error al obtener la clase:', error);
@@ -41,6 +42,34 @@ export class ClassesService {
         where: { id, lessonId },
         data: updateClassDto,
       });
+    } catch (error) {
+      console.error('Error al actualizar la clase:', error);
+      throw new InternalServerErrorException(
+        'Error del servidor. Por favor intenta nuevamente.',
+      );
+    }
+  }
+
+  async addAttachments(
+    id: string,
+    lessonId: string,
+    updateClassDto: UpdateClassDto,
+  ) {
+    await this.findLessonOrThrow(lessonId);
+
+    try {
+      await this.prisma.class.update({
+        where: { id, lessonId },
+        data: {
+          attachments: {
+            create: {
+              attachmentId: updateClassDto.attachmentId,
+            },
+          },
+        },
+      });
+
+      return { message: 'Recurso adjuntado!' };
     } catch (error) {
       console.error('Error al actualizar la clase:', error);
       throw new InternalServerErrorException(

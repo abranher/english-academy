@@ -1,4 +1,4 @@
-import { Controller, Body, Patch, Param, Get } from '@nestjs/common';
+import { Controller, Body, Patch, Param, Get, Post } from '@nestjs/common';
 
 import { ClassesService } from '../providers/classes.service';
 import { UpdateClassDto } from '../dto/update-class.dto';
@@ -25,5 +25,17 @@ export class ClassesController {
     @Body() updateClassDto: UpdateClassDto,
   ) {
     return this.classesService.update(id, lessonId, updateClassDto);
+  }
+
+  /*
+   * Add attachment
+   */
+  @Post(':id/lesson/:lessonId/attachment')
+  addAttachments(
+    @Param('id') id: string,
+    @Param('lessonId') lessonId: string,
+    @Body() updateClassDto: UpdateClassDto,
+  ) {
+    return this.classesService.addAttachments(id, lessonId, updateClassDto);
   }
 }
