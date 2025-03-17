@@ -312,9 +312,9 @@ model Attachment {
 model ClassAttachment {
   id           String     @id @default(uuid())
   classId      String
-  class        Class      @relation(fields: [classId], references: [id])
+  class        Class      @relation(fields: [classId], references: [id], onDelete: Cascade)
   attachmentId String
-  attachment   Attachment @relation(fields: [attachmentId], references: [id])
+  attachment   Attachment @relation(fields: [attachmentId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

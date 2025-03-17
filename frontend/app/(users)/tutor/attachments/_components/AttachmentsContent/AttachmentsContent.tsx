@@ -52,11 +52,13 @@ export function AttachmentsContent({ userId }: { userId: string }) {
             </p>
           </CardDescription>
         ) : (
-          <>
-            {attachments.map((attachment) => (
-              <AttachmentCard key={attachment.id} attachment={attachment} />
-            ))}
-          </>
+          attachments.map((attachment) => (
+            <AttachmentCard
+              key={attachment.id}
+              attachment={attachment}
+              userId={userId}
+            />
+          ))
         )}
       </section>
     </>

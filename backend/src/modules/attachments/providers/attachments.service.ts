@@ -4,9 +4,9 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 
+import { deleteFile } from 'src/libs/storage';
+
 import { PrismaService } from 'src/modules/prisma/providers/prisma.service';
-import { CreateAttachmentDto } from '../dto/create-attachment.dto';
-import { UpdateAttachmentDto } from '../dto/update-attachment.dto';
 
 @Injectable()
 export class AttachmentsService {
@@ -16,6 +16,14 @@ export class AttachmentsService {
     const user = await this.prisma.user.findUnique({ where: { id } });
     if (!user) throw new NotFoundException('Usuario no encontrado.');
     return user;
+  }
+
+  async findAttachmentOrThrow(id: string) {
+    const attachment = await this.prisma.attachment.findUnique({
+      where: { id },
+    });
+    if (!attachment) throw new NotFoundException('Recurso no encontrado.');
+    return attachment;
   }
 
   async findAll(userId: string) {
@@ -33,6 +41,26 @@ export class AttachmentsService {
       throw new InternalServerErrorException(
         'Error al obtener los recursos:',
         error,
+      );
+    }
+  }
+
+  async deleteAttachment(id: string, userId: string) {
+    await this.findUserOrThrow(userId);
+    const attachment = await this.findAttachmentOrThrow(id);
+
+    try {
+      await deleteFile(attachment.url, 'attachments');
+
+      await this.prisma.attachment.delete({
+        where: { id },
+      });
+
+      return { message: 'Recurso eliminado exitosamente!' };
+    } catch (error) {
+      console.error('Error al eliminar el recurso:', error);
+      throw new InternalServerErrorException(
+        'Error del servidor. Por favor intenta nuevamente.',
       );
     }
   }
