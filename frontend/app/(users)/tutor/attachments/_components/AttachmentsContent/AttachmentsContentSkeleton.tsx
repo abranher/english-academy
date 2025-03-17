@@ -11,7 +11,7 @@ export function AttachmentsContentSkeleton() {
         <Skeleton className="w-80 p-1" />
       </section>
 
-      <Separator className="my-4" />
+      <Separator />
 
       <section className="flex">
         <article className="w-1/2">
@@ -26,7 +26,7 @@ export function AttachmentsContentSkeleton() {
         {[1, 2, 3].map((item) => (
           <Skeleton
             key={item}
-            className="p-2 w-56 h-48 flex flex-col items-center gap-2"
+            className="p-2 w-60 h-16 flex flex-col items-center gap-2"
           />
         ))}
       </section>

@@ -16,8 +16,8 @@ export function AttachmentCard({
 }) {
   return (
     <>
-      <Card className="p-2 w-56 flex flex-col items-center gap-2">
-        <section className="p-1 flex justify-between items-center gap-2 w-full">
+      <Card className="p-2 w-60 flex flex-col items-center gap-2">
+        <section className="p-1 flex justify-between items-center gap-1 w-full">
           <section className="flex items-center gap-2 justify-between">
             <ImageIcon className="text-gray-500" />
             <CardDescription>
@@ -26,10 +26,6 @@ export function AttachmentCard({
           </section>
 
           <DeleteAttachment attachment={attachment} userId={userId} />
-        </section>
-
-        <section className="flex justify-center items-center w-52 aspect-video rounded-lg bg-zinc-100 dark:bg-zinc-800">
-          <ImageIcon className="text-gray-500" />
         </section>
       </Card>
     </>
