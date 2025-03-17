@@ -38,4 +38,15 @@ export class ClassesController {
   ) {
     return this.classesService.addAttachments(id, lessonId, updateClassDto);
   }
+
+  /*
+   * Add attachment
+   */
+  @Post(':id/attachment/:attachmentId')
+  deleteAttachment(
+    @Param('id') id: string,
+    @Param('attachmentId') attachmentId: string,
+  ) {
+    return this.classesService.deleteAttachment(id, attachmentId);
+  }
 }

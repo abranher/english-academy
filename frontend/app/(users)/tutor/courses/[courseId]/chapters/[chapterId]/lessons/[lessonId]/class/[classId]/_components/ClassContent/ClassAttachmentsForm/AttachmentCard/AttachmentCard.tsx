@@ -4,9 +4,10 @@ import { Attachment } from "@/types/models";
 import { truncateString } from "@/libs/format";
 import { assetAttachments } from "@/libs/asset";
 
+import { DeleteAttachment } from "./DeleteAttachment";
+
 import { Card, CardDescription } from "@/components/shadcn/ui/card";
 import { ImageIcon, FileIcon, X } from "lucide-react";
-import { Button } from "@/components/shadcn/ui/button";
 
 export function AttachmentCard({
   attachment,
@@ -46,9 +47,7 @@ export function AttachmentCard({
           </section>
         </a>
 
-        <Button size="sm" variant="outline">
-          <X className="h-4 w-4" />
-        </Button>
+        <DeleteAttachment attachment={attachment} />
       </Card>
     </>
   );
