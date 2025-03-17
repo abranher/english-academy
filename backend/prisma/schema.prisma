@@ -211,29 +211,12 @@ model Course {
   subcategoryId String?
   subcategory   SubCategory? @relation(fields: [subcategoryId], references: [id])
 
-  attachments Attachment[]
-  chapters    Chapter[]
-  purchases   Purchase[]
-  reviews     CourseReview[]
+  chapters  Chapter[]
+  purchases Purchase[]
+  reviews   CourseReview[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-}
-
-model Attachment {
-  id    String @id @default(uuid())
-  title String
-  url   String @db.Text
-
-  tutorId String
-  tutor   Tutor  @relation(fields: [tutorId], references: [id])
-
-  courses Course[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([tutorId])
 }
 
 model CourseReview {
@@ -304,8 +287,39 @@ model Class {
   lessonId String @unique
   lesson   Lesson @relation(fields: [lessonId], references: [id])
 
+  attachments ClassAttachment[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Attachment {
+  id    String @id @default(uuid())
+  title String
+  url   String @db.Text
+
+  tutorId String
+  tutor   Tutor  @relation(fields: [tutorId], references: [id])
+
+  classes ClassAttachment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([tutorId])
+}
+
+model ClassAttachment {
+  id           String     @id @default(uuid())
+  classId      String
+  class        Class      @relation(fields: [classId], references: [id])
+  attachmentId String
+  attachment   Attachment @relation(fields: [attachmentId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([classId, attachmentId])
 }
 
 // *

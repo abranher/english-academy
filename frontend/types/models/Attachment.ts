@@ -1,8 +1,10 @@
 export interface Attachment {
   id: string;
-  name: string;
+  title: string;
   url: string;
-  courseId: string;
+
+  tutorId: string;
+
   createdAt: Date;
   updatedAt: Date;
 }
