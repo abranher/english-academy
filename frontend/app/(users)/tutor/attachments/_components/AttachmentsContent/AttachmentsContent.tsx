@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Attachment } from "@/types/models";
 import { getAttachments } from "../../_services/get-attachments";
 
+import { AttachmentsContentSkeleton } from "./AttachmentsContentSkeleton";
 import { AttachmentCard } from "./AttachmentCard";
 import { CreateAttachment } from "./CreateAttachment";
 
@@ -22,7 +23,7 @@ export function AttachmentsContent({ userId }: { userId: string }) {
     queryFn: () => getAttachments(userId),
   });
 
-  if (isPending) return <>Cargando...</>;
+  if (isPending) return <AttachmentsContentSkeleton />;
   if (isError) return <>Ha ocurrido un error cargando los cursos</>;
 
   return (
