@@ -1,50 +1,74 @@
 "use client";
 
+import { useState } from "react";
 import { Attachment } from "@/types/models";
-import { truncateString } from "@/libs/format";
+import { useDebounce } from "@/hooks/useDebounce";
 
-import { Button } from "@/components/shadcn/ui/button";
-import { Card, CardDescription } from "@/components/shadcn/ui/card";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/shadcn/ui/dropdown-menu";
-import { ImageIcon, MoreVertical, Trash } from "lucide-react";
+import { CreateAttachment } from "./CreateAttachment";
+import { AttachmentCard } from "./AttachmentCard";
 
-export function AttachmentsList({ attachment }: { attachment: Attachment }) {
+import { CardDescription } from "@/components/shadcn/ui/card";
+import { Input } from "@/components/shadcn/ui/input";
+import { FolderOpen } from "lucide-react";
+
+function filterArrayByText(
+  items: Attachment[],
+  searchText: string
+): Attachment[] {
+  const lowerCaseSearchText = searchText.toLowerCase();
+  return items.filter((item) =>
+    item.title.toLowerCase().includes(lowerCaseSearchText)
+  );
+}
+
+export function AttachmentsList({
+  attachments,
+  userId,
+}: {
+  attachments: Attachment[] | [];
+  userId: string;
+}) {
+  const [searchText, setSearchText] = useState("");
+  const debouncedSearchText = useDebounce(searchText, 500);
+
+  const filteredAttachments = filterArrayByText(
+    attachments,
+    debouncedSearchText
+  );
+
   return (
     <>
-      <Card className="p-2 w-56 flex flex-col items-center gap-2">
-        <section className="p-1 flex justify-between items-center gap-2 w-full">
-          <section className="flex items-center gap-2 justify-between">
-            <ImageIcon className="text-gray-500" />
-            <CardDescription>
-              {truncateString(attachment.title)}
-            </CardDescription>
-          </section>
+      <section className="flex">
+        <article className="w-1/2">
+          <Input
+            placeholder="Buscar..."
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
+          />
+        </article>
+        <article className="w-1/2 flex justify-end">
+          <CreateAttachment userId={userId} />
+        </article>
+      </section>
 
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button className="p-0 h-6" variant="ghost">
-                <span className="sr-only">Open menu</span>
-                <MoreVertical className="h-5 w-5" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem>
-                <Trash className="h-4 w-4 mr-2" />
-                Eliminar
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </section>
-
-        <section className="flex justify-center items-center w-52 aspect-video rounded-lg bg-zinc-100 dark:bg-zinc-800">
-          <ImageIcon className="text-gray-500" />
-        </section>
-      </Card>
+      <section className="mt-4 flex justify-center sm:justify-start flex-wrap gap-4">
+        {attachments.length === 0 ? (
+          <CardDescription className="text-lg w-full">
+            <p className="flex justify-center flex-col items-center">
+              <FolderOpen className="w-20 h-20" />
+              Aun no tienes recursos.
+            </p>
+          </CardDescription>
+        ) : (
+          filteredAttachments.map((attachment) => (
+            <AttachmentCard
+              key={attachment.id}
+              attachment={attachment}
+              userId={userId}
+            />
+          ))
+        )}
+      </section>
     </>
   );
 }

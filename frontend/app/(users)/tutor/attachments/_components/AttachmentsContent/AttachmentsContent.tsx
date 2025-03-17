@@ -5,13 +5,10 @@ import { Attachment } from "@/types/models";
 import { getAttachments } from "../../_services/get-attachments";
 
 import { AttachmentsContentSkeleton } from "./AttachmentsContentSkeleton";
-import { AttachmentCard } from "./AttachmentCard";
-import { CreateAttachment } from "./CreateAttachment";
+import { AttachmentsList } from "./AttachmentsList";
 
 import { CardDescription, CardTitle } from "@/components/shadcn/ui/card";
 import { Separator } from "@/components/shadcn/ui/separator";
-import { Input } from "@/components/shadcn/ui/input";
-import { FolderOpen } from "lucide-react";
 
 export function AttachmentsContent({ userId }: { userId: string }) {
   const {
@@ -35,33 +32,7 @@ export function AttachmentsContent({ userId }: { userId: string }) {
 
       <Separator />
 
-      <section className="flex">
-        <article className="w-1/2">
-          <Input placeholder="Buscar..." />
-        </article>
-        <article className="w-1/2 flex justify-end">
-          <CreateAttachment userId={userId} />
-        </article>
-      </section>
-
-      <section className="mt-4 flex justify-center sm:justify-start flex-wrap gap-4">
-        {attachments.length === 0 ? (
-          <CardDescription className="text-lg w-full">
-            <p className="flex justify-center flex-col items-center">
-              <FolderOpen className="w-20 h-20" />
-              Aun no tienes recursos.
-            </p>
-          </CardDescription>
-        ) : (
-          attachments.map((attachment) => (
-            <AttachmentCard
-              key={attachment.id}
-              attachment={attachment}
-              userId={userId}
-            />
-          ))
-        )}
-      </section>
+      <AttachmentsList attachments={attachments} userId={userId} />
     </>
   );
 }
