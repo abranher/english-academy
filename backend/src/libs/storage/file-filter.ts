@@ -1,5 +1,5 @@
 export const imageFileFilter = (req, file, callback) => {
-  const allowedMimeTypes = ['image/jpeg', 'image/png', 'image/gif'];
+  const allowedMimeTypes = ['image/jpg', 'image/jpeg', 'image/png'];
 
   if (!allowedMimeTypes.includes(file.mimetype)) {
     req.fileValidationError = 'Solo se permiten archivos de imagen';
@@ -9,11 +9,10 @@ export const imageFileFilter = (req, file, callback) => {
 };
 
 export const videoFileFilter = (req, file, callback) => {
-  const allowedMimeTypes = ['video/mp4', 'video/webm', 'video/ogg'];
+  const allowedMimeTypes = ['video/mp4'];
 
   if (!allowedMimeTypes.includes(file.mimetype)) {
-    req.fileValidationError =
-      'Solo se permiten archivos de video (MP4, WebM, Ogg)';
+    req.fileValidationError = 'Solo se permiten archivos de video (MP4)';
     return callback(null, false);
   }
   callback(null, true);
@@ -22,15 +21,13 @@ export const videoFileFilter = (req, file, callback) => {
 export const attachmentFilter = (req, file, callback) => {
   const allowedMimeTypes = [
     'application/pdf',
+    'image/jpg',
     'image/jpeg',
     'image/png',
-    'image/gif',
-    'text/plain',
   ];
 
   if (!allowedMimeTypes.includes(file.mimetype)) {
-    req.fileValidationError =
-      'Solo se permiten archivos de imagen, PDF, texto plano';
+    req.fileValidationError = 'Solo se permiten archivos de imagen, PDF, ';
     return callback(null, false);
   }
 

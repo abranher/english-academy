@@ -1,9 +1,11 @@
 import { Module } from '@nestjs/common';
-import { AttachmentsService } from './providers/attachments.service';
 import { AttachmentsController } from './controllers/attachments.controller';
+import { AttachmentsFilesController } from './controllers/attachments.files.controller';
+import { AttachmentsService } from './providers/attachments.service';
+import { AttachmentsFilesService } from './providers/attachments.files.service';
 
 @Module({
-  controllers: [AttachmentsController],
-  providers: [AttachmentsService],
+  controllers: [AttachmentsController, AttachmentsFilesController],
+  providers: [AttachmentsService, AttachmentsFilesService],
 })
 export class AttachmentsModule {}

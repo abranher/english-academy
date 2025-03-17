@@ -1,15 +1,16 @@
 "use client";
 
-import { useParams } from "next/navigation";
-
 import axios from "@/config/axios";
+import { z } from "zod";
 import { toast } from "sonner";
-import { Image } from "@heroui/react";
+import { useForm } from "react-hook-form";
 import { AxiosError } from "axios";
+import { FormSchema } from "./FormSchema";
 import { useDropzone } from "react-dropzone";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useCallback, useState } from "react";
 import { formatSize, truncateString } from "@/libs/format";
-import { useCallback, useEffect, useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { Button } from "@/components/shadcn/ui/button";
 import { Card } from "@/components/shadcn/ui/card";
@@ -21,6 +22,14 @@ import {
   DialogTrigger,
 } from "@/components/shadcn/ui/dialog";
 import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/shadcn/ui/form";
+import {
   CheckCircle,
   ImageIcon,
   Loader2,
@@ -28,35 +37,39 @@ import {
   XIcon,
 } from "lucide-react";
 import { Progress } from "@/components/shadcn/ui/progress";
+import { Input } from "@/components/shadcn/ui/input";
 
 type UploadStatus = "select" | "uploading" | "done" | "error";
 
 const MAX_SIZE = 5 * 1024 * 1024; // 5MB
 
-export function CreateAttachment() {
-  const [preview, setPreview] = useState<string>("");
+export function CreateAttachment({ userId }: { userId: string }) {
   const [selectedFile, setSelectedFile] = useState<File | undefined>(undefined);
   const [progress, setProgress] = useState(0);
   const [uploadStatus, setUploadStatus] = useState<UploadStatus>("select");
-  const [imageReady, setImageReady] = useState(false);
 
   const queryClient = useQueryClient();
-  const { courseId } = useParams();
+
+  const form = useForm<z.infer<typeof FormSchema>>({
+    resolver: zodResolver(FormSchema),
+  });
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop: useCallback((acceptedFiles: File[]) => {
       const file = acceptedFiles[0];
       setSelectedFile(file);
-      setPreview(URL.createObjectURL(file));
     }, []),
-    accept: { "image/*": [".png", ".jpg", ".jpeg"] },
+    accept: {
+      "image/*": [".png", ".jpg", ".jpeg"],
+      "application/pdf": [".pdf"],
+    },
     maxSize: MAX_SIZE,
     onDropRejected: (fileRejections) => {
       fileRejections.forEach((rejection) => {
         if (rejection.errors.some((e) => e.code === "file-too-large")) {
-          toast.error("La imagen es demasiado grande (máximo 5MB)");
+          toast.error("El archivo es demasiado grande (máximo 5MB)");
         } else {
-          toast.error("Formato de imagen no permitido");
+          toast.error("Formato de archivo no permitido");
         }
       });
     },
@@ -64,7 +77,7 @@ export function CreateAttachment() {
 
   const mutation = useMutation({
     mutationFn: async (formData: FormData) =>
-      axios.post(`/api/courses/files/${courseId}/image`, formData, {
+      axios.post(`/api/attachments/files/user/${userId}/attachment`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
         onUploadProgress: (progressEvent) => {
           const percent = Math.round(
@@ -77,9 +90,10 @@ export function CreateAttachment() {
       if (response.status === 200 || response.status === 201) {
         const data = response.data;
         toast.success(data.message);
+        form.reset();
         setUploadStatus("done");
         setSelectedFile(undefined);
-        queryClient.invalidateQueries({ queryKey: ["get_course", courseId] });
+        queryClient.invalidateQueries({ queryKey: ["get_tutor_attachments"] });
       }
     },
     onError: (error: AxiosError | Error) => {
@@ -87,32 +101,32 @@ export function CreateAttachment() {
       setProgress(0);
       const message =
         error instanceof AxiosError
-          ? error.response?.data?.message || "Error al subir la imagen"
+          ? error.response?.data?.message || "Error al subir el archivo"
           : "Error desconocido";
       toast.error(message);
     },
   });
 
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!selectedFile) return;
+  const onSubmit = (data: z.infer<typeof FormSchema>) => {
+    if (!selectedFile) {
+      toast.error("Por favor, selecciona un archivo.");
+      return;
+    }
 
     setUploadStatus("uploading");
     const formData = new FormData();
-    formData.set("image", selectedFile);
+    formData.set("attachment", selectedFile);
+    formData.set("title", data.title);
     mutation.mutate(formData);
   };
 
+  const { isSubmitting, isValid } = form.formState;
+
   const clearFile = () => {
     setSelectedFile(undefined);
-    setPreview("");
     setProgress(0);
     setUploadStatus("select");
   };
-
-  useEffect(() => {
-    setImageReady(true);
-  }, []);
 
   return (
     <>
@@ -127,19 +141,25 @@ export function CreateAttachment() {
           <DialogHeader>
             <DialogTitle>Subir recurso</DialogTitle>
           </DialogHeader>
-          <form onSubmit={onSubmit}>
-            <div className="grid gap-4 py-4">
-              {preview ? (
-                <Image
-                  src={preview}
-                  alt="Preview"
-                  className="rounded-md border-3 border-gray-500"
-                />
-              ) : (
-                <div className="grid aspect-video place-items-center rounded-lg bg-zinc-200 dark:bg-zinc-800">
-                  <ImageIcon className="h-9 w-9 text-gray-600" />
-                </div>
-              )}
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4">
+              <FormField
+                control={form.control}
+                name="title"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Nombre del recurso</FormLabel>
+                    <FormControl>
+                      <Input
+                        disabled={isSubmitting}
+                        placeholder="Ej: Apren..."
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
               {/* Dropzone */}
               {(uploadStatus === "select" || uploadStatus === "uploading") && (
@@ -160,7 +180,7 @@ export function CreateAttachment() {
                     </p>
                   )}
                   <p className="text-xs font-medium mt-2">
-                    Se permiten PNG, JPG, JPEG (Máx. 5MB).
+                    Se permiten PNG, JPG, JPEG y PDF (Máx. 5MB).
                   </p>
                 </section>
               )}
@@ -200,6 +220,8 @@ export function CreateAttachment() {
                   type="submit"
                   disabled={
                     !selectedFile ||
+                    !isValid ||
+                    isSubmitting ||
                     mutation.isPending ||
                     uploadStatus === "done"
                   }
@@ -225,8 +247,8 @@ export function CreateAttachment() {
                   )}
                 </Button>
               </div>
-            </div>
-          </form>
+            </form>
+          </Form>
         </DialogContent>
       </Dialog>
     </>

@@ -18,7 +18,7 @@ export function AttachmentsContent({ userId }: { userId: string }) {
     data: attachments,
     isError,
   } = useQuery<Attachment[] | []>({
-    queryKey: ["get_tutor_attachments_list"],
+    queryKey: ["get_tutor_attachments"],
     queryFn: () => getAttachments(userId),
   });
 
@@ -39,7 +39,7 @@ export function AttachmentsContent({ userId }: { userId: string }) {
           <Input placeholder="Buscar..." />
         </article>
         <article className="w-1/2 flex justify-end">
-          <CreateAttachment />
+          <CreateAttachment userId={userId} />
         </article>
       </section>
 
