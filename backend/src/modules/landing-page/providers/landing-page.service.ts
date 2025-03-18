@@ -5,10 +5,10 @@ import { CoursePlatformStatus, CourseReviewStatus } from '@prisma/client';
 import { PrismaService } from 'src/modules/prisma/providers/prisma.service';
 
 @Injectable()
-export class CoursesLandingService {
+export class LandingPageService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async findAll() {
+  async getCourses() {
     try {
       return await this.prisma.course.findMany({
         where: {

@@ -12,7 +12,7 @@ import { formatPrice } from "@/libs/format";
 
 import { FeaturedCoursesSkeleton } from "./FeaturedCoursesSkeleton";
 import BoxBase from "@/components/common/BoxBase";
-import Title from "@/components/common/Title";
+import { Title } from "@/components/common/Title";
 import { Star } from "@/components/icons/Star";
 
 import { Card } from "@/components/shadcn/ui/card";
@@ -42,8 +42,8 @@ export function FeaturedCoursesSection() {
   const checkCourseInCart = (course: Course) =>
     cart.some((item) => item.id === course.id);
 
-  if (isError) return <>Ha ocurrido un error al cargar los cursos</>;
   if (isPending) return <FeaturedCoursesSkeleton />;
+  if (isError) return <>Ha ocurrido un error al cargar los cursos</>;
   if (courses.length === 0) return;
 
   return (

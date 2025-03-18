@@ -32,6 +32,7 @@ import { QuizQuestionsModule } from './modules/quiz-questions/quiz-questions.mod
 import { QuizQuestionOptionsModule } from './modules/quiz-question-options/quiz-question-options.module';
 import { AttachmentsModule } from './modules/attachments/attachments.module';
 import { ClassAttachmentsModule } from './modules/class-attachments/class-attachments.module';
+import { LandingPageModule } from './modules/landing-page/landing-page.module';
 
 @Module({
   imports: [
@@ -69,6 +70,7 @@ import { ClassAttachmentsModule } from './modules/class-attachments/class-attach
     QuizQuestionOptionsModule,
     AttachmentsModule,
     ClassAttachmentsModule,
+    LandingPageModule,
   ],
 })
 export class AppModule {}
