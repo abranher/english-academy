@@ -57,8 +57,8 @@ model Student {
   levelId String?
   level   Level?  @relation(fields: [levelId], references: [id])
 
-  purchases      Purchase[]
-  purchaseOrders PurchaseOrder[]
+  enrollments            CourseEnrollment[]
+  courseEnrollmentOrders CourseEnrollmentOrder[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -211,9 +211,9 @@ model Course {
   subcategoryId String?
   subcategory   SubCategory? @relation(fields: [subcategoryId], references: [id])
 
-  chapters  Chapter[]
-  purchases Purchase[]
-  reviews   CourseReview[]
+  chapters    Chapter[]
+  enrollments CourseEnrollment[]
+  reviews     CourseReview[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -387,17 +387,17 @@ model StudentProgress {
 // * Purchase model
 // *
 
-model PurchaseOrder {
-  id                String              @id @default(uuid())
-  status            PurchaseOrderStatus @default(UNVERIFIED)
-  total             Float
-  payment_method    String              @default("MOBILE_PAYMENT")
-  payment_reference Int
+model CourseEnrollmentOrder {
+  id               String                @id @default(uuid())
+  status           EnrollmentOrderStatus @default(UNVERIFIED)
+  total            Float
+  paymentMethod    String                @default("MOBILE_PAYMENT")
+  paymentReference Int
 
   studentId String
   student   Student @relation(fields: [studentId], references: [id])
 
-  purchases Purchase[]
+  enrollments CourseEnrollment[] // cursos inscritos
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -405,11 +405,17 @@ model PurchaseOrder {
   @@index([studentId])
 }
 
-model Purchase {
-  id String @id @default(uuid())
+enum EnrollmentOrderStatus {
+  UNVERIFIED
+  COMPLETED
+  CANCELED
+  REFUNDED // para reembolsos tal vez en el futuro
+}
 
-  purchaseOrderId String
-  purchaseOrder   PurchaseOrder @relation(fields: [purchaseOrderId], references: [id])
+model CourseEnrollment {
+  id             String  @id @default(uuid())
+  isActive       Boolean @default(true)
+  purchasedPrice Float
 
   studentId String
   student   Student @relation(fields: [studentId], references: [id])
@@ -417,11 +423,16 @@ model Purchase {
   courseId String
   course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  courseEnrollmentOrderId String
+  courseEnrollmentOrder   CourseEnrollmentOrder @relation(fields: [courseEnrollmentOrderId], references: [id])
+
+  enrolledAt DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
   @@unique([studentId, courseId])
   @@index([courseId])
+  @@index([enrolledAt])
+  @@index([studentId, isActive])
 }
 
 // *
@@ -474,12 +485,6 @@ enum TutorStatusDecision {
   APPROVED
   NEEDS_CHANGES
   REJECTED
-}
-
-enum PurchaseOrderStatus {
-  UNVERIFIED
-  COMPLETED
-  CANCELED
 }
 
 enum LessonType {
