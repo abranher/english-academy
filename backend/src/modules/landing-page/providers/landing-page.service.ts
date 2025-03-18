@@ -15,6 +15,7 @@ export class LandingPageService {
           reviewStatus: CourseReviewStatus.APPROVED,
           platformStatus: CoursePlatformStatus.PUBLISHED,
         },
+        include: { price: true, category: true, subcategory: true },
       });
     } catch (error) {
       throw new InternalServerErrorException('Error obteniendo los cursos');
