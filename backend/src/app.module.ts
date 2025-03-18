@@ -16,8 +16,6 @@ import { CategoriesModule } from './modules/categories/categories.module';
 import { SubcategoriesModule } from './modules/subcategories/subcategories.module';
 import { PricesModule } from './modules/prices/prices.module';
 import { LessonsModule } from './modules/lessons/lessons.module';
-import { PurchaseOrdersModule } from './modules/purchase-orders/purchase-orders.module';
-import { PurchasesModule } from './modules/purchases/purchases.module';
 import { ActivityLogsModule } from './modules/activity-logs/activity-logs.module';
 import { BackupModule } from './modules/backup/backup.module';
 import { ClassesModule } from './modules/classes/classes.module';
@@ -33,6 +31,8 @@ import { QuizQuestionOptionsModule } from './modules/quiz-question-options/quiz-
 import { AttachmentsModule } from './modules/attachments/attachments.module';
 import { ClassAttachmentsModule } from './modules/class-attachments/class-attachments.module';
 import { LandingPageModule } from './modules/landing-page/landing-page.module';
+import { CourseEnrollmentOrdersModule } from './modules/course-enrollment-orders/course-enrollment-orders.module';
+import { CourseEnrollmentsModule } from './modules/course-enrollments/course-enrollments.module';
 
 @Module({
   imports: [
@@ -54,8 +54,6 @@ import { LandingPageModule } from './modules/landing-page/landing-page.module';
     SubcategoriesModule,
     PricesModule,
     LessonsModule,
-    PurchaseOrdersModule,
-    PurchasesModule,
     ActivityLogsModule,
     BackupModule,
     ClassesModule,
@@ -71,6 +69,8 @@ import { LandingPageModule } from './modules/landing-page/landing-page.module';
     AttachmentsModule,
     ClassAttachmentsModule,
     LandingPageModule,
+    CourseEnrollmentOrdersModule,
+    CourseEnrollmentsModule,
   ],
 })
 export class AppModule {}

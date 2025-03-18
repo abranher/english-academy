@@ -7,11 +7,11 @@ import {
   ValidateNested,
 } from 'class-validator';
 
-export class CreatePurchaseOrderDto {
+export class CreateCourseEnrollmentOrderDto {
   @IsArray()
-  @Type(() => CreatePurchaseOrderItemDto)
+  @Type(() => CreateCourseEnrollmentOrderItemDto)
   @ValidateNested({ each: true })
-  courses: CreatePurchaseOrderItemDto[];
+  courses: CreateCourseEnrollmentOrderItemDto[];
 
   @Transform(({ value }) => parseFloat(value), { toClassOnly: true })
   @IsNumber({}, { message: 'El monto debe ser un número válido.' })
@@ -21,10 +21,10 @@ export class CreatePurchaseOrderDto {
   @Matches(/^\d{6}$/, {
     message: 'El número de referencia debe tener exactamente 6 dígitos.',
   })
-  payment_reference: string;
+  paymentReference: string;
 }
 
-export class CreatePurchaseOrderItemDto {
+export class CreateCourseEnrollmentOrderItemDto {
   @IsString()
   courseId: string;
 }

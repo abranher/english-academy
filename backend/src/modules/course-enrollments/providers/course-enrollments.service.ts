@@ -1,12 +1,13 @@
 import { Injectable } from '@nestjs/common';
+
 import { PrismaService } from 'src/modules/prisma/providers/prisma.service';
 
 @Injectable()
-export class PurchasesService {
+export class CourseEnrollmentsService {
   constructor(private readonly prisma: PrismaService) {}
 
   async findAll(studentId: string) {
-    const purchases = await this.prisma.purchase.findMany({
+    const purchases = await this.prisma.courseEnrollment.findMany({
       where: {
         studentId,
       },
