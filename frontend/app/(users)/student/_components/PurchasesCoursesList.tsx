@@ -22,10 +22,13 @@ export default function PurchasesCoursesList({
   } = useQuery({
     queryKey: ["purchases-courses"],
     queryFn: async () => {
-      const response = await axios.get(`/api/purchases/student/${studentId}`);
+      const response = await axios.get(
+        `/api/course-enrollments/student/${studentId}`
+      );
       return response.data;
     },
   });
+
   return (
     <>
       <div className="grid gap-4 md:grid-cols-2 md:gap-8 xl:grid-cols-3">
@@ -44,7 +47,7 @@ export default function PurchasesCoursesList({
           </>
         ) : (
           <>
-            {purchases.length != 0 &&
+            {purchases.length !== 0 &&
               purchases.map((purchase: any) => (
                 <Card key={purchase.id}>
                   <div className="relative aspect-video m-2.5 overflow-hidden text-white rounded-md">

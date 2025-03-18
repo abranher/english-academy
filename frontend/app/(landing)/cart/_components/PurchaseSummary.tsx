@@ -46,7 +46,7 @@ import { Input } from "@/components/shadcn/ui/input";
 import { Button } from "@/components/shadcn/ui/button";
 
 const formSchema = z.object({
-  payment_reference: z
+  paymentReference: z
     .string()
     .regex(/^\d{6}$/, { message: "Debe ser un número de 6 dígitos." }),
 });
@@ -81,7 +81,7 @@ export function PurchaseSummary() {
 
     try {
       await axios.post(
-        `/api/purchase-orders/student/${session?.user.student?.id}`,
+        `/api/course-enrollment-orders/student/${session?.user.student?.id}`,
         {
           ...values,
           courses,
@@ -243,7 +243,7 @@ export function PurchaseSummary() {
                     {/** Lesson title */}
                     <FormField
                       control={form.control}
-                      name="payment_reference"
+                      name="paymentReference"
                       render={({ field }) => (
                         <FormItem className="flex flex-col gap-2">
                           <FormLabel>Número de referencia</FormLabel>

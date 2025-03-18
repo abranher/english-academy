@@ -394,7 +394,7 @@ export function MainButtons() {
                       <DropdownMenuSeparator />
                       <DropdownMenuGroup>
                         <DropdownMenuItem asChild>
-                          <Link href="/tutor/dashboard">
+                          <Link href="/student">
                             <Home className="mr-2 h-4 w-4" />
                             Dashboard
                           </Link>
@@ -405,18 +405,6 @@ export function MainButtons() {
                             <Award className="mr-2 h-4 w-4" />
                             Cursos
                           </Link>
-                        </DropdownMenuItem>
-
-                        <DropdownMenuItem asChild>
-                          <Link href="/tutor/attachments">
-                            <Files className="mr-2 h-4 w-4" />
-                            Recursos
-                          </Link>
-                        </DropdownMenuItem>
-
-                        <DropdownMenuItem>
-                          <CreditCard className="mr-2 h-4 w-4" />
-                          Facturación
                         </DropdownMenuItem>
                       </DropdownMenuGroup>
 
