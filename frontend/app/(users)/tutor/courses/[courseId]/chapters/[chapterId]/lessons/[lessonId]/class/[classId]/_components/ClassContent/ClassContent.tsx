@@ -3,23 +3,23 @@
 import { useParams } from "next/navigation";
 
 import { cn } from "@/libs/shadcn/utils";
-import { Class } from "@/types/models";
 import { useState } from "react";
 import { getClass } from "../../_services/get-class";
 import { useQuery } from "@tanstack/react-query";
+import { useSession } from "next-auth/react";
+import { Attachment, Class, ClassAttachment } from "@/types/models";
 
 import { Title } from "@/components/common/Title";
+import { HeaderSection } from "./HeaderSection";
 import { ClassContentSkeleton } from "./ClassContentSkeleton";
 import { ClassTitleForm } from "./ClassTitleForm";
 import { ClassDescriptionForm } from "./ClassDescriptionForm";
+import { ClassAttachmentsForm } from "./ClassAttachmentsForm";
 import { ClassVideoForm } from "./ClassVideoForm";
 
 import { Card } from "@/components/shadcn/ui/card";
 import { Separator } from "@/components/shadcn/ui/separator";
 import { BookOpen, Globe } from "lucide-react";
-import { HeaderSection } from "./HeaderSection";
-import { useSession } from "next-auth/react";
-import { ClassAttachmentsForm } from "./ClassAttachmentsForm";
 
 // Define un tipo para las posibles claves de sectionTitles
 type SectionTitleKey = "mainContent";
@@ -42,7 +42,11 @@ export function ClassContent() {
     isPending,
     data: lessonClass,
     isError,
-  } = useQuery<Class>({
+  } = useQuery<
+    Class & {
+      attachments: (ClassAttachment & { attachment: Attachment })[] | [];
+    }
+  >({
     queryKey: ["get_class", classId, lessonId],
     queryFn: () => getClass(classId as string, lessonId as string),
   });

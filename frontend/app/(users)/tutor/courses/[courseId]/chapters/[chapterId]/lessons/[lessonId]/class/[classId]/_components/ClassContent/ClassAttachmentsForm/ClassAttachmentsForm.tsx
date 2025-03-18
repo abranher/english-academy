@@ -15,12 +15,9 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { ClassAttachmentsFormSkeleton } from "./ClassAttachmentsFormSkeleton";
 import { LoadingButton } from "@/components/common/LoadingButton";
+import { AttachmentCard } from "./AttachmentCard";
 
-import {
-  CardContent,
-  CardDescription,
-  CardTitle,
-} from "@/components/shadcn/ui/card";
+import { CardContent, CardTitle } from "@/components/shadcn/ui/card";
 import {
   Select,
   SelectContent,
@@ -39,14 +36,15 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/shadcn/ui/form";
-import { AttachmentCard } from "./AttachmentCard";
 
 export function ClassAttachmentsForm({
   userId,
   lessonClass,
 }: {
   userId: string;
-  lessonClass: Class;
+  lessonClass: Class & {
+    attachments: (ClassAttachment & { attachment: Attachment })[] | [];
+  };
 }) {
   const queryClient = useQueryClient();
   const { classId, lessonId } = useParams();
@@ -108,16 +106,6 @@ export function ClassAttachmentsForm({
 
   const { isSubmitting, isValid } = form.formState;
 
-  // Transformar ClassAttachment a Attachment
-  const attachedAttachments: Attachment[] = lessonClass.attachments
-    .map((classAttachment) => {
-      const attachment = attachments?.find(
-        (a) => a.id === classAttachment.attachmentId
-      );
-      return attachment ? { ...attachment } : null;
-    })
-    .filter((attachment): attachment is Attachment => attachment !== null);
-
   // Filtrar los attachments que ya están adjuntos a la clase
   const availableAttachments = attachments?.filter(
     (attachment) =>
@@ -138,11 +126,10 @@ export function ClassAttachmentsForm({
             <CardTitle>Recursos adjuntos</CardTitle>
           </article>
           <article className="flex flex-col gap-4">
-            {attachedAttachments.map((attachment) => (
+            {lessonClass.attachments.map((attachment) => (
               <AttachmentCard
                 key={attachment.id}
-                attachment={attachment}
-                userId={userId}
+                classAttachment={attachment}
               />
             ))}
           </article>
@@ -169,6 +156,7 @@ export function ClassAttachmentsForm({
                         <SelectValue placeholder="Elige un recurso para tu clase" />
                       </SelectTrigger>
                     </FormControl>
+
                     <SelectContent>
                       <SelectGroup>
                         <SelectLabel>Recursos</SelectLabel>

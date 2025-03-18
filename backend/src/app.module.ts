@@ -31,6 +31,7 @@ import { TutorStatusHistoryModule } from './modules/tutor-status-history/tutor-s
 import { QuizQuestionsModule } from './modules/quiz-questions/quiz-questions.module';
 import { QuizQuestionOptionsModule } from './modules/quiz-question-options/quiz-question-options.module';
 import { AttachmentsModule } from './modules/attachments/attachments.module';
+import { ClassAttachmentsModule } from './modules/class-attachments/class-attachments.module';
 
 @Module({
   imports: [
@@ -67,6 +68,7 @@ import { AttachmentsModule } from './modules/attachments/attachments.module';
     QuizQuestionsModule,
     QuizQuestionOptionsModule,
     AttachmentsModule,
+    ClassAttachmentsModule,
   ],
 })
 export class AppModule {}

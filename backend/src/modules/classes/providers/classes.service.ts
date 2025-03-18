@@ -24,13 +24,21 @@ export class ClassesService {
     return lessonClass;
   }
 
+  async findAttachmentOrThrow(id: string) {
+    const attachment = await this.prisma.attachment.findUnique({
+      where: { id },
+    });
+    if (!attachment) throw new NotFoundException('Recurso no encontrado.');
+    return attachment;
+  }
+
   async findOne(id: string, lessonId: string) {
     await this.findLessonOrThrow(lessonId);
 
     try {
       return await this.prisma.class.findUnique({
         where: { id, lessonId },
-        include: { attachments: true },
+        include: { attachments: { include: { attachment: true } } },
       });
     } catch (error) {
       console.error('Error al obtener la clase:', error);
@@ -78,23 +86,6 @@ export class ClassesService {
       return { message: 'Recurso adjuntado!' };
     } catch (error) {
       console.error('Error al actualizar la clase:', error);
-      throw new InternalServerErrorException(
-        'Error del servidor. Por favor intenta nuevamente.',
-      );
-    }
-  }
-
-  async deleteAttachment(id: string, attachmentId: string) {
-    await this.findClassOrThrow(id);
-
-    try {
-      // await this.prisma.classAttachment.delete({
-      //   where: { classId: id, attachmentId },
-      // });
-
-      return { message: 'Recurso adjuntado eliminado exitosamente!' };
-    } catch (error) {
-      console.error('Error al eliminar el recurso:', error);
       throw new InternalServerErrorException(
         'Error del servidor. Por favor intenta nuevamente.',
       );

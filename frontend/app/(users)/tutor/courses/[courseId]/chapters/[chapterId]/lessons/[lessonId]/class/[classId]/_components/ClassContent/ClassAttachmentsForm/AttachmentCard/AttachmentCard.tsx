@@ -1,6 +1,6 @@
 "use client";
 
-import { Attachment } from "@/types/models";
+import { Attachment, ClassAttachment } from "@/types/models";
 import { truncateString } from "@/libs/format";
 import { assetAttachments } from "@/libs/asset";
 
@@ -10,17 +10,15 @@ import { Card, CardDescription } from "@/components/shadcn/ui/card";
 import { ImageIcon, FileIcon, X } from "lucide-react";
 
 export function AttachmentCard({
-  attachment,
-  userId,
+  classAttachment,
 }: {
-  attachment: Attachment;
-  userId: string;
+  classAttachment: ClassAttachment & { attachment: Attachment };
 }) {
   const getFileExtension = (url: string) => {
     return url.split(".").pop()?.toLowerCase();
   };
 
-  const fileExtension = getFileExtension(attachment.url);
+  const fileExtension = getFileExtension(classAttachment.attachment.url);
 
   const isImage =
     fileExtension === "png" ||
@@ -31,7 +29,7 @@ export function AttachmentCard({
     <>
       <Card className="p-2 flex justify-between items-center gap-1 w-full">
         <a
-          href={assetAttachments(attachment.url)}
+          href={assetAttachments(classAttachment.attachment.url)}
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -42,12 +40,15 @@ export function AttachmentCard({
               <FileIcon className="text-gray-500" />
             )}
             <CardDescription>
-              {truncateString(attachment.title, "lg")}
+              {truncateString(classAttachment.attachment.title, "lg")}
             </CardDescription>
           </section>
         </a>
 
-        <DeleteAttachment attachment={attachment} />
+        <DeleteAttachment
+          classAttachmentId={classAttachment.id}
+          attachment={classAttachment.attachment}
+        />
       </Card>
     </>
   );
