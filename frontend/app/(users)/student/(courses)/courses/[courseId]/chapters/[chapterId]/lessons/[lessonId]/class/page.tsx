@@ -20,16 +20,14 @@ export default function CourseLessonClassPage() {
     error,
     data: lesson,
   } = useQuery({
-    queryKey: ["course-purchased-page"],
+    queryKey: ["course-purchased-page-lesson"],
     queryFn: async () => {
-      const response = await axios.get(
-        `/api/lessons/${lessonId}/chapter/${chapterId}`
-      );
+      const response = await axios.get(`/api/lessons/${lessonId}`);
       return response.data;
     },
   });
 
-  console.log(lesson);
+  console.log(error);
 
   useEffect(() => {
     setPlayerReady(true);
@@ -60,9 +58,9 @@ export default function CourseLessonClassPage() {
                 )}
               </>
             ) : (
-              <div className="grid aspect-video place-items-center rounded-lg bg-zinc-200 dark:bg-zinc-800">
+              <section className="grid aspect-video place-items-center rounded-lg bg-zinc-200 dark:bg-zinc-800">
                 <Video className="h-9 w-9 text-gray-600 aspect-video" />
-              </div>
+              </section>
             )}
 
             <h2 className="text-2xl font-semibold">{lesson.title}</h2>

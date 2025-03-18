@@ -26,19 +26,10 @@ export class CourseEnrollmentsService {
 
   async findOne(courseId: string) {
     const coursePurchased = await this.prisma.course.findUnique({
-      where: {
-        id: courseId,
-      },
+      where: { id: courseId },
       include: {
         chapters: {
-          include: {
-            lessons: {
-              include: {
-                class: true,
-                quiz: true,
-              },
-            },
-          },
+          include: { lessons: { include: { class: true, quiz: true } } },
         },
       },
     });

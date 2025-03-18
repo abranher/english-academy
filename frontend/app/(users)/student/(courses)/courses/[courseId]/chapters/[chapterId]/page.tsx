@@ -21,7 +21,9 @@ export default function ChapterIdPage() {
   } = useQuery({
     queryKey: ["course-purchased-chapter-page"],
     queryFn: async () => {
-      const response = await axios.get(`/api/purchases/course/${courseId}`);
+      const response = await axios.get(
+        `/api/course-enrollments/course/${courseId}`
+      );
       return response.data;
     },
   });
@@ -46,20 +48,10 @@ export default function ChapterIdPage() {
                 <section>
                   <Preview value={chapter.description} />
                 </section>
-
-                <h2 className="text-2xl font-semibold">Aprenderás</h2>
-
-                <ul className="list-disc px-12">
-                  <li className="text-lg font-semibold">Frases comunes</li>
-                  <li className="text-lg font-semibold">Palabras comunes</li>
-                  <li className="text-lg font-semibold">
-                    Situaciones cotidianas
-                  </li>
-                  <li className="text-lg font-semibold">
-                    Leer de manera fluida
-                  </li>
-                  <li className="text-lg font-semibold">Hablar fluido</li>
-                </ul>
+                <h2 className="text-xl font-semibold">Aprenderás</h2>
+                <section>
+                  <Preview value={chapter.learningObjectives} />
+                </section>
 
                 <h2 className="text-2xl font-semibold">Lecciones</h2>
 
@@ -76,7 +68,7 @@ export default function ChapterIdPage() {
                               Clase {index + 1}
                             </CardTitle>
                             <div className="text-lg font-bold">
-                              {lesson.class.title}
+                              {lesson.class?.title}
                             </div>
                           </div>
                         </Link>

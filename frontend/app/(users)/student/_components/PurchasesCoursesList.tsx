@@ -31,7 +31,7 @@ export default function PurchasesCoursesList({
 
   return (
     <>
-      <div className="grid gap-4 md:grid-cols-2 md:gap-8 xl:grid-cols-3">
+      <div className="grid gap-4 md:grid-cols-2 md:gap-8">
         {isPending ? (
           <>
             {Array.from({ length: 3 }).map((_, index) => (

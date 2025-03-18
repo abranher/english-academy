@@ -19,7 +19,9 @@ export default function CourseIdPage() {
   } = useQuery({
     queryKey: ["course-purchased-page"],
     queryFn: async () => {
-      const response = await axios.get(`/api/purchases/course/${courseId}`);
+      const response = await axios.get(
+        `/api/course-enrollments/course/${courseId}`
+      );
       return response.data;
     },
   });
@@ -63,7 +65,7 @@ export default function CourseIdPage() {
           Capítulos del curso
         </h2>
 
-        <div className="grid gap-4 md:grid-cols-2 md:gap-8 xl:grid-cols-3">
+        <div className="grid gap-4 md:grid-cols-2 md:gap-8">
           {isPending ? (
             <>
               {Array.from({ length: 3 }).map((_, index) => (

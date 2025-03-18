@@ -28,7 +28,9 @@ export default function CoursesLayout({
   } = useQuery({
     queryKey: ["course-purchased-layout"],
     queryFn: async () => {
-      const response = await axios.get(`/api/purchases/course/${courseId}`);
+      const response = await axios.get(
+        `/api/course-enrollments/course/${courseId}`
+      );
       return response.data;
     },
   });
