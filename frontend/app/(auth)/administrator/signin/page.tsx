@@ -1,5 +1,6 @@
-import HomeLink from "../../_components/HomeLink";
-import SignInForm from "./_components/SignInForm";
+import { HomeLink } from "@/components/auth/HomeLink";
+import { SignInForm } from "./_components/SignInForm";
+
 import {
   Card,
   CardContent,
@@ -10,22 +11,20 @@ import {
 
 export default function AdministradorSigninPage() {
   return (
-    <>
-      <div className="container relative h-[800px] flex flex-col items-center justify-center">
-        <HomeLink />
+    <section className="container relative h-[800px] flex flex-col items-center justify-center">
+      <HomeLink />
 
-        <div className="lg:p-8">
-          <Card className="mx-auto min-w-96">
-            <CardHeader>
-              <CardTitle className="text-2xl">Bienvenido Admin</CardTitle>
-              <CardDescription>Inicia Sesión en tu cuenta</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <SignInForm />
-            </CardContent>
-          </Card>
-        </div>
-      </div>
-    </>
+      <article className="lg:p-8">
+        <Card className="mx-auto min-w-96">
+          <CardHeader>
+            <CardTitle className="text-2xl">Bienvenido Admin</CardTitle>
+            <CardDescription>Inicia Sesión en tu cuenta</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <SignInForm />
+          </CardContent>
+        </Card>
+      </article>
+    </section>
   );
 }

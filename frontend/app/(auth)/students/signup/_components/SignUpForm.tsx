@@ -23,7 +23,7 @@ import { StepSix } from "./StepSix";
 import { StepSeven } from "./StepSeven";
 import { StepFinal } from "./StepFinal";
 
-export default function SignUpForm() {
+export function SignUpForm() {
   const step = useStepStudentStore((state) => state.step);
   const open = useStepStudentStore((state) => state.open);
   const setOpen = useStepStudentStore((state) => state.setOpen);

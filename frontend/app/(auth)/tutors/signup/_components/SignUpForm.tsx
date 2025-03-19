@@ -24,7 +24,7 @@ import { StepSeven } from "./StepSeven";
 import { StepEight } from "./StepEight";
 import { StepFinal } from "./StepFinal";
 
-export default function SignUpForm() {
+export function SignUpForm() {
   const step = useStepTutorStore((state) => state.step);
   const open = useStepTutorStore((state) => state.open);
   const setOpen = useStepTutorStore((state) => state.setOpen);

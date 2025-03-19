@@ -1,13 +1,12 @@
 import Link from "next/link";
-import { Home } from "lucide-react";
-import { buttonVariants } from "@/components/shadcn/ui/button";
-import { cn } from "@/libs/shadcn/utils";
-import { Roles } from "@/types/enums/Roles";
 
-interface HomeLinkProps {
-  role?: Roles;
-}
-export default function HomeLink({ role = Roles.ADMIN }: HomeLinkProps) {
+import { Roles } from "@/types/enums/Roles";
+import { cn } from "@/libs/shadcn/utils";
+
+import { buttonVariants } from "@/components/shadcn/ui/button";
+import { Home } from "lucide-react";
+
+export function HomeLink({ role = Roles.ADMIN }: { role?: Roles }) {
   return (
     <>
       <Link

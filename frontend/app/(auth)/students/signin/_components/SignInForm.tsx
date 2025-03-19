@@ -20,7 +20,7 @@ import { signInSchema } from "@/libs/validations/schemas/signin/signIn";
 import { Roles } from "@/types/enums/Roles";
 import SignInButton from "@/components/auth/SignInButton";
 
-export default function SignInForm() {
+export function SignInForm() {
   const {
     register,
     handleSubmit,

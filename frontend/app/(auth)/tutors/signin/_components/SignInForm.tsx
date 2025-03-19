@@ -20,7 +20,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Roles } from "@/types/enums/Roles";
 import SignInButton from "@/components/auth/SignInButton";
 
-export default function SignInForm() {
+export function SignInForm() {
   const {
     register,
     handleSubmit,
