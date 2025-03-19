@@ -20,18 +20,6 @@ export class LessonsService {
     return chapter;
   }
 
-  async findOne(id: string) {
-    const lessons = await this.prisma.lesson.findUnique({
-      where: { id },
-      include: { class: true },
-    });
-
-    return {
-      ...lessons,
-      video: lessons.class.video,
-    };
-  }
-
   async create(createLessonDto: CreateLessonDto, chapterId: string) {
     await this.findChapterOrThrow(chapterId);
 

@@ -7,7 +7,7 @@ export default function UsersLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="text-foreground bg-background">
+    <section className="text-foreground bg-background">
       <NavMenu />
       <section className="flex justify-center">
         <section className="w-full flex flex-col gap-4 lg:gap-6 max-w-5xl px-8 py-5">
@@ -15,6 +15,6 @@ export default function UsersLayout({
         </section>
       </section>
       <Footer />
-    </div>
+    </section>
   );
 }

@@ -120,12 +120,8 @@ model Country {
   updatedAt DateTime @updatedAt
 }
 
-// curriculum models
-
-// *
 // *
 // * Level
-// *
 // *
 
 model Level {
@@ -141,6 +137,10 @@ model Level {
   updatedAt DateTime @updatedAt
 }
 
+// *
+// * Category
+// *
+
 model Category {
   id          String @id @default(uuid())
   title       String
@@ -152,6 +152,10 @@ model Category {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+// *
+// * SubCategory
+// *
 
 model SubCategory {
   id          String @id @default(uuid())
@@ -167,6 +171,10 @@ model SubCategory {
   updatedAt DateTime @updatedAt
 }
 
+// *
+// * Price
+// *
+
 model Price {
   id     String @id @default(uuid())
   amount Float
@@ -178,9 +186,7 @@ model Price {
 }
 
 // *
-// *
 // * Courses
-// *
 // *
 
 model Course {
@@ -218,6 +224,10 @@ model Course {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+// *
+// * CourseReview
+// *
 
 model CourseReview {
   id         String                @id @default(uuid())
@@ -384,7 +394,7 @@ model StudentProgress {
 }
 
 // *
-// * Purchase model
+// * Course Enrollment Order
 // *
 
 model CourseEnrollmentOrder {
@@ -405,12 +415,9 @@ model CourseEnrollmentOrder {
   @@index([studentId])
 }
 
-enum EnrollmentOrderStatus {
-  UNVERIFIED
-  COMPLETED
-  CANCELED
-  REFUNDED // para reembolsos tal vez en el futuro
-}
+// *
+// * Course Enrollment 
+// *
 
 model CourseEnrollment {
   id             String  @id @default(uuid())
@@ -436,7 +443,7 @@ model CourseEnrollment {
 }
 
 // *
-// * activity log
+// * Activity log
 // * 
 
 model ActivityLog {
@@ -449,6 +456,10 @@ model ActivityLog {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+// *
+// * Notification
+// * 
 
 model Notification {
   id     String           @id @default(uuid())
@@ -518,6 +529,13 @@ enum CourseReviewDecision {
   APPROVED // El curso fue aprobado
   NEEDS_CHANGES // El curso necesita cambios
   REJECTED // El curso fue rechazado
+}
+
+enum EnrollmentOrderStatus {
+  UNVERIFIED
+  COMPLETED
+  CANCELED
+  REFUNDED // para reembolsos tal vez en el futuro
 }
 
 enum Language {

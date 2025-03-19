@@ -9,14 +9,6 @@ export class LessonsController {
   constructor(private readonly lessonsService: LessonsService) {}
 
   /*
-   * Get Lesson for student
-   */
-  @Post(':id')
-  findOne(@Param('id') id: string) {
-    return this.lessonsService.findOne(id);
-  }
-
-  /*
    * Create Lesson
    */
   @Post('chapter/:chapterId')

@@ -4,7 +4,7 @@ import { Search } from "lucide-react";
 import qs from "query-string";
 import React, { useEffect, useState } from "react";
 import { Input } from "@/components/shadcn/ui/input";
-import { useDebounce } from "../hooks/use-debounce";
+import { useDebounce } from "@/hooks/useDebounce";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 export default function SearchInput() {

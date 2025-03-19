@@ -4,7 +4,7 @@ interface BadgeProps {
   level: "A1" | "A2" | "B1" | "B2" | "C1" | "C2";
 }
 
-export default function BadgeLevel({ level }: BadgeProps) {
+export function BadgeLevel({ level }: BadgeProps) {
   const levelColors: Record<string, string> = {
     A1: "bg-blue-50 text-blue-600 border-blue-200 dark:bg-blue-900 dark:text-blue-400 dark:border-blue-700",
     A2: "bg-green-50 text-green-600 border-green-200 dark:bg-green-900 dark:text-green-400 dark:border-green-700",
