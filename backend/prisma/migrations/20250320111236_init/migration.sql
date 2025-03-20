@@ -1,20 +1,29 @@
 -- CreateEnum
+CREATE TYPE "PhoneCode" AS ENUM ('VE_0412', 'VE_0414', 'VE_0416', 'VE_0424', 'VE_0426');
+
+-- CreateEnum
+CREATE TYPE "DocumentType" AS ENUM ('V', 'J', 'E');
+
+-- CreateEnum
+CREATE TYPE "BillingCycle" AS ENUM ('MONTHLY', 'ANNUAL');
+
+-- CreateEnum
+CREATE TYPE "SubscriptionOrderStatus" AS ENUM ('UNVERIFIED', 'NEEDS_REVISION', 'RESUBMITTED', 'COMPLETED', 'CANCELED');
+
+-- CreateEnum
+CREATE TYPE "SubscriptionStatus" AS ENUM ('ACTIVE', 'CANCELED', 'EXPIRED', 'PENDING');
+
+-- CreateEnum
 CREATE TYPE "Roles" AS ENUM ('ADMIN', 'STUDENT', 'TUTOR');
+
+-- CreateEnum
+CREATE TYPE "AccountStatus" AS ENUM ('ACTIVE', 'INACTIVE', 'SUSPENDED', 'DELETED');
 
 -- CreateEnum
 CREATE TYPE "TutorStatus" AS ENUM ('NEW', 'PENDING', 'RESUBMITTED', 'APPROVED', 'REJECTED');
 
 -- CreateEnum
 CREATE TYPE "TutorStatusDecision" AS ENUM ('APPROVED', 'NEEDS_CHANGES', 'REJECTED');
-
--- CreateEnum
-CREATE TYPE "PurchaseOrderStatus" AS ENUM ('UNVERIFIED', 'COMPLETED', 'CANCELED');
-
--- CreateEnum
-CREATE TYPE "LessonType" AS ENUM ('CLASS', 'QUIZ');
-
--- CreateEnum
-CREATE TYPE "AccountStatus" AS ENUM ('ACTIVE', 'INACTIVE', 'SUSPENDED', 'DELETED');
 
 -- CreateEnum
 CREATE TYPE "CourseReviewStatus" AS ENUM ('DRAFT', 'PENDING_REVIEW', 'APPROVED', 'NEEDS_REVISION', 'REJECTED');
@@ -26,13 +35,85 @@ CREATE TYPE "CoursePlatformStatus" AS ENUM ('DRAFT', 'PUBLISHED', 'ARCHIVED', 'D
 CREATE TYPE "CourseReviewDecision" AS ENUM ('APPROVED', 'NEEDS_CHANGES', 'REJECTED');
 
 -- CreateEnum
-CREATE TYPE "ExerciseType" AS ENUM ('MULTIPLE_CHOICE', 'FILL_IN_THE_BLANK');
+CREATE TYPE "LessonType" AS ENUM ('CLASS', 'QUIZ');
 
 -- CreateEnum
-CREATE TYPE "Language" AS ENUM ('ES', 'EN');
+CREATE TYPE "EnrollmentOrderStatus" AS ENUM ('UNVERIFIED', 'NEEDS_REVISION', 'RESUBMITTED', 'COMPLETED', 'CANCELED');
 
 -- CreateEnum
-CREATE TYPE "NotificationType" AS ENUM ('UPDATED_TUTOR_STATUS');
+CREATE TYPE "PaymentMethod" AS ENUM ('MOBILE_PAYMENT');
+
+-- CreateEnum
+CREATE TYPE "NotificationType" AS ENUM ('UPDATED_TUTOR_STATUS', 'UPDATED_COURSE_REVIEW');
+
+-- CreateTable
+CREATE TABLE "Bank" (
+    "id" TEXT NOT NULL,
+    "code" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Bank_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "MobilePayment" (
+    "id" TEXT NOT NULL,
+    "phoneCode" "PhoneCode" NOT NULL,
+    "phoneNumber" INTEGER NOT NULL,
+    "documentType" "DocumentType" NOT NULL,
+    "documentNumber" INTEGER NOT NULL,
+    "bankId" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "MobilePayment_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Plan" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "description" TEXT,
+    "price" DOUBLE PRECISION NOT NULL,
+    "billingCycle" "BillingCycle" NOT NULL,
+    "isActive" BOOLEAN NOT NULL DEFAULT true,
+    "maxCourses" INTEGER,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Plan_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "SubscriptionOrder" (
+    "id" TEXT NOT NULL,
+    "status" "SubscriptionOrderStatus" NOT NULL DEFAULT 'UNVERIFIED',
+    "subscriptionPrice" DOUBLE PRECISION NOT NULL,
+    "paymentMethod" "PaymentMethod" NOT NULL DEFAULT 'MOBILE_PAYMENT',
+    "paymentReference" INTEGER NOT NULL,
+    "tutorId" TEXT NOT NULL,
+    "planId" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "SubscriptionOrder_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Subscription" (
+    "id" TEXT NOT NULL,
+    "startDate" TIMESTAMP(3),
+    "endDate" TIMESTAMP(3),
+    "status" "SubscriptionStatus" NOT NULL DEFAULT 'PENDING',
+    "tutorId" TEXT NOT NULL,
+    "planId" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Subscription_pkey" PRIMARY KEY ("id")
+);
 
 -- CreateTable
 CREATE TABLE "User" (
@@ -76,6 +157,7 @@ CREATE TABLE "Tutor" (
     "status" "TutorStatus" NOT NULL DEFAULT 'NEW',
     "approvedAt" TIMESTAMP(3),
     "userId" TEXT NOT NULL,
+    "mobilePaymentId" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -170,11 +252,13 @@ CREATE TABLE "Course" (
     "title" TEXT NOT NULL,
     "subtitle" TEXT,
     "description" TEXT,
+    "requirements" TEXT,
+    "learningObjectives" TEXT,
     "image" TEXT,
     "trailer" TEXT,
     "reviewStatus" "CourseReviewStatus" NOT NULL DEFAULT 'DRAFT',
     "platformStatus" "CoursePlatformStatus" NOT NULL DEFAULT 'DRAFT',
-    "isPublished" BOOLEAN NOT NULL DEFAULT false,
+    "publishedAt" TIMESTAMP(3),
     "tutorId" TEXT NOT NULL,
     "priceId" TEXT,
     "levelId" TEXT,
@@ -190,23 +274,13 @@ CREATE TABLE "Course" (
 CREATE TABLE "CourseReview" (
     "id" TEXT NOT NULL,
     "feedback" TEXT,
-    "decision" "CourseReviewDecision" NOT NULL,
-    "courseId" TEXT NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-
-    CONSTRAINT "CourseReview_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "Attachment" (
-    "id" TEXT NOT NULL,
-    "name" TEXT NOT NULL,
-    "url" TEXT NOT NULL,
+    "decision" "CourseReviewDecision",
+    "reviewedAt" TIMESTAMP(3),
     "courseId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "Attachment_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "CourseReview_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -214,8 +288,8 @@ CREATE TABLE "Chapter" (
     "id" TEXT NOT NULL,
     "title" TEXT NOT NULL,
     "description" TEXT,
+    "learningObjectives" TEXT,
     "position" INTEGER NOT NULL,
-    "isFree" BOOLEAN NOT NULL DEFAULT false,
     "courseId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -249,6 +323,29 @@ CREATE TABLE "Class" (
 );
 
 -- CreateTable
+CREATE TABLE "Attachment" (
+    "id" TEXT NOT NULL,
+    "title" TEXT NOT NULL,
+    "url" TEXT NOT NULL,
+    "tutorId" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Attachment_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "ClassAttachment" (
+    "id" TEXT NOT NULL,
+    "classId" TEXT NOT NULL,
+    "attachmentId" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "ClassAttachment_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "Quiz" (
     "id" TEXT NOT NULL,
     "title" TEXT NOT NULL,
@@ -261,17 +358,26 @@ CREATE TABLE "Quiz" (
 );
 
 -- CreateTable
-CREATE TABLE "MultipleChoiceQuestion" (
+CREATE TABLE "QuizQuestion" (
     "id" TEXT NOT NULL,
-    "question" TEXT,
-    "text" TEXT,
-    "options" JSONB,
-    "correctAnswer" TEXT,
+    "question" TEXT NOT NULL,
     "quizId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "MultipleChoiceQuestion_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "QuizQuestion_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "QuizQuestionOption" (
+    "id" TEXT NOT NULL,
+    "option" TEXT NOT NULL,
+    "isCorrect" BOOLEAN NOT NULL DEFAULT false,
+    "quizQuestionId" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "QuizQuestionOption_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -287,42 +393,31 @@ CREATE TABLE "StudentProgress" (
 );
 
 -- CreateTable
-CREATE TABLE "TranslationExercise" (
+CREATE TABLE "CourseEnrollmentOrder" (
     "id" TEXT NOT NULL,
-    "phrase" TEXT NOT NULL,
-    "translation" TEXT NOT NULL,
-    "language" "Language" NOT NULL,
-    "levelId" TEXT,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
-
-    CONSTRAINT "TranslationExercise_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "PurchaseOrder" (
-    "id" TEXT NOT NULL,
-    "status" "PurchaseOrderStatus" NOT NULL DEFAULT 'UNVERIFIED',
+    "status" "EnrollmentOrderStatus" NOT NULL DEFAULT 'UNVERIFIED',
     "total" DOUBLE PRECISION NOT NULL,
-    "payment_method" TEXT NOT NULL DEFAULT 'MOBILE_PAYMENT',
-    "payment_reference" INTEGER NOT NULL,
+    "paymentMethod" "PaymentMethod" NOT NULL DEFAULT 'MOBILE_PAYMENT',
+    "paymentReference" INTEGER NOT NULL,
     "studentId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "PurchaseOrder_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "CourseEnrollmentOrder_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "Purchase" (
+CREATE TABLE "CourseEnrollment" (
     "id" TEXT NOT NULL,
-    "purchaseOrderId" TEXT NOT NULL,
+    "isActive" BOOLEAN NOT NULL DEFAULT false,
+    "purchasedPrice" DOUBLE PRECISION NOT NULL,
     "studentId" TEXT NOT NULL,
     "courseId" TEXT NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "courseEnrollmentOrderId" TEXT NOT NULL,
+    "enrolledAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "Purchase_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "CourseEnrollment_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -350,6 +445,24 @@ CREATE TABLE "Notification" (
 );
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Bank_code_key" ON "Bank"("code");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "MobilePayment_phoneCode_phoneNumber_key" ON "MobilePayment"("phoneCode", "phoneNumber");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "MobilePayment_documentType_documentNumber_key" ON "MobilePayment"("documentType", "documentNumber");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Plan_name_billingCycle_key" ON "Plan"("name", "billingCycle");
+
+-- CreateIndex
+CREATE INDEX "SubscriptionOrder_tutorId_idx" ON "SubscriptionOrder"("tutorId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Subscription_tutorId_key" ON "Subscription"("tutorId");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "User_username_key" ON "User"("username");
 
 -- CreateIndex
@@ -365,19 +478,25 @@ CREATE UNIQUE INDEX "Student_userId_key" ON "Student"("userId");
 CREATE UNIQUE INDEX "Tutor_userId_key" ON "Tutor"("userId");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Tutor_mobilePaymentId_key" ON "Tutor"("mobilePaymentId");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Country_code_key" ON "Country"("code");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Level_levelCode_key" ON "Level"("levelCode");
 
 -- CreateIndex
-CREATE INDEX "Attachment_courseId_idx" ON "Attachment"("courseId");
-
--- CreateIndex
 CREATE INDEX "Chapter_courseId_idx" ON "Chapter"("courseId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Class_lessonId_key" ON "Class"("lessonId");
+
+-- CreateIndex
+CREATE INDEX "Attachment_tutorId_idx" ON "Attachment"("tutorId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "ClassAttachment_classId_attachmentId_key" ON "ClassAttachment"("classId", "attachmentId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Quiz_lessonId_key" ON "Quiz"("lessonId");
@@ -389,13 +508,37 @@ CREATE INDEX "StudentProgress_chapterId_idx" ON "StudentProgress"("chapterId");
 CREATE UNIQUE INDEX "StudentProgress_studentId_chapterId_key" ON "StudentProgress"("studentId", "chapterId");
 
 -- CreateIndex
-CREATE INDEX "PurchaseOrder_studentId_idx" ON "PurchaseOrder"("studentId");
+CREATE INDEX "CourseEnrollmentOrder_studentId_idx" ON "CourseEnrollmentOrder"("studentId");
 
 -- CreateIndex
-CREATE INDEX "Purchase_courseId_idx" ON "Purchase"("courseId");
+CREATE UNIQUE INDEX "CourseEnrollment_courseEnrollmentOrderId_key" ON "CourseEnrollment"("courseEnrollmentOrderId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Purchase_studentId_courseId_key" ON "Purchase"("studentId", "courseId");
+CREATE INDEX "CourseEnrollment_courseId_idx" ON "CourseEnrollment"("courseId");
+
+-- CreateIndex
+CREATE INDEX "CourseEnrollment_enrolledAt_idx" ON "CourseEnrollment"("enrolledAt");
+
+-- CreateIndex
+CREATE INDEX "CourseEnrollment_studentId_isActive_idx" ON "CourseEnrollment"("studentId", "isActive");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "CourseEnrollment_studentId_courseId_key" ON "CourseEnrollment"("studentId", "courseId");
+
+-- AddForeignKey
+ALTER TABLE "MobilePayment" ADD CONSTRAINT "MobilePayment_bankId_fkey" FOREIGN KEY ("bankId") REFERENCES "Bank"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "SubscriptionOrder" ADD CONSTRAINT "SubscriptionOrder_tutorId_fkey" FOREIGN KEY ("tutorId") REFERENCES "Tutor"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "SubscriptionOrder" ADD CONSTRAINT "SubscriptionOrder_planId_fkey" FOREIGN KEY ("planId") REFERENCES "Plan"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Subscription" ADD CONSTRAINT "Subscription_tutorId_fkey" FOREIGN KEY ("tutorId") REFERENCES "Tutor"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Subscription" ADD CONSTRAINT "Subscription_planId_fkey" FOREIGN KEY ("planId") REFERENCES "Plan"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "User" ADD CONSTRAINT "User_countryId_fkey" FOREIGN KEY ("countryId") REFERENCES "Country"("id") ON DELETE SET NULL ON UPDATE CASCADE;
@@ -408,6 +551,9 @@ ALTER TABLE "Student" ADD CONSTRAINT "Student_levelId_fkey" FOREIGN KEY ("levelI
 
 -- AddForeignKey
 ALTER TABLE "Tutor" ADD CONSTRAINT "Tutor_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Tutor" ADD CONSTRAINT "Tutor_mobilePaymentId_fkey" FOREIGN KEY ("mobilePaymentId") REFERENCES "MobilePayment"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "TutorStatusHistory" ADD CONSTRAINT "TutorStatusHistory_tutorId_fkey" FOREIGN KEY ("tutorId") REFERENCES "Tutor"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -437,9 +583,6 @@ ALTER TABLE "Course" ADD CONSTRAINT "Course_subcategoryId_fkey" FOREIGN KEY ("su
 ALTER TABLE "CourseReview" ADD CONSTRAINT "CourseReview_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "Course"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Attachment" ADD CONSTRAINT "Attachment_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "Course"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
 ALTER TABLE "Chapter" ADD CONSTRAINT "Chapter_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "Course"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -449,28 +592,37 @@ ALTER TABLE "Lesson" ADD CONSTRAINT "Lesson_chapterId_fkey" FOREIGN KEY ("chapte
 ALTER TABLE "Class" ADD CONSTRAINT "Class_lessonId_fkey" FOREIGN KEY ("lessonId") REFERENCES "Lesson"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "Attachment" ADD CONSTRAINT "Attachment_tutorId_fkey" FOREIGN KEY ("tutorId") REFERENCES "Tutor"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ClassAttachment" ADD CONSTRAINT "ClassAttachment_classId_fkey" FOREIGN KEY ("classId") REFERENCES "Class"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ClassAttachment" ADD CONSTRAINT "ClassAttachment_attachmentId_fkey" FOREIGN KEY ("attachmentId") REFERENCES "Attachment"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "Quiz" ADD CONSTRAINT "Quiz_lessonId_fkey" FOREIGN KEY ("lessonId") REFERENCES "Lesson"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "MultipleChoiceQuestion" ADD CONSTRAINT "MultipleChoiceQuestion_quizId_fkey" FOREIGN KEY ("quizId") REFERENCES "Quiz"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "QuizQuestion" ADD CONSTRAINT "QuizQuestion_quizId_fkey" FOREIGN KEY ("quizId") REFERENCES "Quiz"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "QuizQuestionOption" ADD CONSTRAINT "QuizQuestionOption_quizQuestionId_fkey" FOREIGN KEY ("quizQuestionId") REFERENCES "QuizQuestion"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "StudentProgress" ADD CONSTRAINT "StudentProgress_chapterId_fkey" FOREIGN KEY ("chapterId") REFERENCES "Chapter"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "TranslationExercise" ADD CONSTRAINT "TranslationExercise_levelId_fkey" FOREIGN KEY ("levelId") REFERENCES "Level"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "CourseEnrollmentOrder" ADD CONSTRAINT "CourseEnrollmentOrder_studentId_fkey" FOREIGN KEY ("studentId") REFERENCES "Student"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "PurchaseOrder" ADD CONSTRAINT "PurchaseOrder_studentId_fkey" FOREIGN KEY ("studentId") REFERENCES "Student"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "CourseEnrollment" ADD CONSTRAINT "CourseEnrollment_studentId_fkey" FOREIGN KEY ("studentId") REFERENCES "Student"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Purchase" ADD CONSTRAINT "Purchase_purchaseOrderId_fkey" FOREIGN KEY ("purchaseOrderId") REFERENCES "PurchaseOrder"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "CourseEnrollment" ADD CONSTRAINT "CourseEnrollment_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "Course"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Purchase" ADD CONSTRAINT "Purchase_studentId_fkey" FOREIGN KEY ("studentId") REFERENCES "Student"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Purchase" ADD CONSTRAINT "Purchase_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "Course"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "CourseEnrollment" ADD CONSTRAINT "CourseEnrollment_courseEnrollmentOrderId_fkey" FOREIGN KEY ("courseEnrollmentOrderId") REFERENCES "CourseEnrollmentOrder"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "ActivityLog" ADD CONSTRAINT "ActivityLog_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

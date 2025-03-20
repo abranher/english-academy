@@ -1,4 +1,4 @@
-const levels = [
+export const levels = [
   {
     levelCode: 'A1',
     title: 'Principiante',
@@ -36,5 +36,3 @@ const levels = [
       'Puede comprender con facilidad prácticamente todo lo que lee o oye. Puede expresarse con fluidez, precisión y naturalidad, distinguiendo matices muy finos.',
   },
 ];
-
-export default levels;

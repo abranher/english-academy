@@ -23,7 +23,7 @@ datasource db {
 
 model Bank {
   id   String @id @default(uuid())
-  code Int    @unique
+  code String @unique
   name String
 
   mobilePayments MobilePayment[]
@@ -91,11 +91,11 @@ model Plan {
   // Features
   maxCourses Int? // Null -> ilimitado
 
-  subscriptions Subscription[]
+  subscriptionOrders SubscriptionOrder[]
+  subscriptions      Subscription[]
 
-  createdAt         DateTime            @default(now())
-  updatedAt         DateTime            @updatedAt
-  SubscriptionOrder SubscriptionOrder[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@unique([name, billingCycle])
 }
@@ -107,9 +107,9 @@ model Plan {
 enum SubscriptionOrderStatus {
   UNVERIFIED
   NEEDS_REVISION // El administrador solicitó cambios
+  RESUBMITTED // El tutor reenvio
   COMPLETED
   CANCELED
-  REFUNDED // para reembolsos tal vez en el futuro
 }
 
 model SubscriptionOrder {
@@ -625,9 +625,9 @@ model StudentProgress {
 enum EnrollmentOrderStatus {
   UNVERIFIED
   NEEDS_REVISION // El tutor solicitó cambios
+  RESUBMITTED // El student reenvio
   COMPLETED
   CANCELED
-  REFUNDED // para reembolsos tal vez en el futuro
 }
 
 model CourseEnrollmentOrder {
@@ -640,7 +640,7 @@ model CourseEnrollmentOrder {
   studentId String
   student   Student @relation(fields: [studentId], references: [id])
 
-  enrollments CourseEnrollment[] // cursos inscritos
+  courseEnrollment CourseEnrollment?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -667,7 +667,7 @@ model CourseEnrollment {
   courseId String
   course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
-  courseEnrollmentOrderId String
+  courseEnrollmentOrderId String                @unique
   courseEnrollmentOrder   CourseEnrollmentOrder @relation(fields: [courseEnrollmentOrderId], references: [id])
 
   enrolledAt DateTime @default(now())

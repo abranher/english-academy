@@ -1,4 +1,4 @@
-const prices = [
+export const prices = [
   {
     amount: 19.99,
   },
@@ -36,5 +36,3 @@ const prices = [
     amount: 299.99,
   },
 ];
-
-export default prices;

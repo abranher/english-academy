@@ -1,12 +1,17 @@
 # TODOS:
 
-- Backups para windows
-- Luego mostrar cards de planes mensuales o anuales
-- Generar subscripcion dependiendo del plan
+- Crear perfil de pago para el tutor
 
-que necesitamos:
+- llenar los seeder de bancos -> 5 min
 
-- necesitamos que el admin le llegue una notification donde le diga lo que sucedio
+
+
+- Crear perfil de pago para la plataforma
+- Crear planes
+- Mostrar planes
+- Suscripcion de tutor
+- Prueba final del curso
+- Certificado
 
 - Mostrar cursos publicados y aprobados
 - Mostrar cursos por categoria,
@@ -15,8 +20,11 @@ que necesitamos:
 - Mostrar clase
 - Mostrar quiz
 
+- listado de usuarios
+
 # PARA DESPUES:
 
+- Backups para windows
 - Al verificar tutor necesita iniciar sesion nuevamente para poder pedir la data nueva
 - Creamos un vista para mostrar todas las notificaciones -> 30 min
 - La fecha de nacimiento del perfil, se guarda de una manera en la bd y luego se muestra como de otra

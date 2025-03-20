@@ -1,7 +1,9 @@
 import { PrismaClient, Roles } from '@prisma/client';
 import { hash } from 'bcrypt';
-import levels from './data/levels';
-import prices from './data/prices';
+
+import { banks } from './data/banks';
+import { levels } from './data/levels';
+import { prices } from './data/prices';
 import {
   cultureCategories,
   grammarCategories,
@@ -21,6 +23,10 @@ async function main() {
 
   const pricesResult = await prisma.price.createManyAndReturn({
     data: prices,
+  });
+
+  const banksResult = await prisma.bank.createManyAndReturn({
+    data: banks,
   });
 
   // seed categories and subcategories
@@ -146,6 +152,7 @@ async function main() {
   console.log(
     { abran },
     { carlos },
+    { banks: banksResult },
     { levels: levelsResult },
     { prices: pricesResult },
   );
