@@ -1,9 +1,12 @@
 export { TutorStatus } from "./TutorStatus";
 export { TutorStatusDecision } from "./TutorStatusDecision";
 export { CoursePlatformStatus } from "./CoursePlatformStatus";
+export { DocumentType } from "./DocumentType";
 export { CourseReviewStatus } from "./CourseReviewStatus";
 export { CourseReviewDecision } from "./CourseReviewDecision";
 export { PurchaseOrderStatus } from "./PurchaseOrderStatus";
+export { PaymentMethod } from "./PaymentMethod";
+export { PhoneCode } from "./PhoneCode";
 export { Roles } from "./Roles";
 export { LessonType } from "./LessonType";
 export { AccountStatus } from "./AccountStatus";

@@ -1,24 +1,41 @@
 "use client";
 
+import { useState } from "react";
+import { PaymentMethod } from "@/types/enums";
 import { User } from "@/types/models/User";
 import { useQuery } from "@tanstack/react-query";
 import { TutorStatus } from "@/types/enums";
-import { getUserTutor } from "../../_services/get-user-tutor";
+import { getUserTutorWithPaymentMethod } from "../../_services/get-user-tutor";
 
+import { AlertBanner } from "@/components/common/AlertBanner";
 import { TutorPaymentProfileSkeleton } from "./TutorPaymentProfileSkeleton";
+import { MobilePaymentForm } from "../MobilePaymentForm";
 
 import { CardTitle, CardDescription } from "@/components/shadcn/ui/card";
-import { AlertBanner } from "@/components/common/AlertBanner";
 import { Separator } from "@/components/shadcn/ui/separator";
+import { RadioGroup, RadioGroupItem } from "@/components/shadcn/ui/radio-group";
+import { Label } from "@/components/shadcn/ui/label";
+import { Smartphone } from "lucide-react";
+import { MobilePayment, Tutor } from "@/types/models";
 
 export function TutorPaymentProfile({ userId }: { userId: string }) {
-  const { isPending, data: userTutor } = useQuery<User>({
+  const {
+    isPending,
+    data: userTutor,
+    isError,
+  } = useQuery<
+    User & { tutor: Tutor & { mobilePayment: MobilePayment | null } }
+  >({
     queryKey: ["tutor_user_payment_profile"],
-    queryFn: () => getUserTutor(userId as string),
+    queryFn: () => getUserTutorWithPaymentMethod(userId as string),
   });
 
+  console.log(userTutor);
+
+  const [tabs, setTabs] = useState<string>(PaymentMethod.MOBILE_PAYMENT);
+
   if (isPending) return <TutorPaymentProfileSkeleton />;
-  if (!userTutor) return <div>No se pudo cargar la información.</div>;
+  if (isError) return <div>No se pudo cargar la información.</div>;
 
   return (
     <>
@@ -34,17 +51,62 @@ export function TutorPaymentProfile({ userId }: { userId: string }) {
       {(userTutor.tutor?.status !== TutorStatus.APPROVED ||
         !userTutor.tutor.approvedAt) && (
         <AlertBanner
-          label={"Tu cuenta está en revisión."}
-          description={"Solo puedes editar tu perfil hasta ser aprobado."}
+          label={"Agrega un método para recibir pagos."}
+          description={
+            "No podrás crear cursos si no tienes al menos un metodo de pago."
+          }
         />
       )}
 
-      <section className="w-full grid grid-cols-1 lg:grid-cols-8 gap-4">
-        Tutor card
-        <section className="lg:col-span-5 gap-3 flex flex-col">
-          BiographyCard
+      <CardTitle>Metodos de pago disponibles</CardTitle>
+
+      <RadioGroup
+        onValueChange={setTabs}
+        defaultValue={tabs}
+        className="flex gap-3"
+      >
+        <section className="w-full">
+          <RadioGroupItem
+            value={PaymentMethod.MOBILE_PAYMENT}
+            id={PaymentMethod.MOBILE_PAYMENT}
+            className="peer sr-only"
+          />
+          <Label
+            htmlFor={PaymentMethod.MOBILE_PAYMENT}
+            className="flex flex-col items-center justify-between cursor-pointer rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
+          >
+            <Smartphone className="mb-3 h-6 w-6" />
+            <span className="whitespace-nowrap">Pago móvil</span>
+          </Label>
         </section>
-      </section>
+
+        <section className="w-full">
+          <RadioGroupItem
+            value={PaymentMethod.PAYPAL}
+            id={PaymentMethod.PAYPAL}
+            className="peer sr-only"
+            disabled
+          />
+          <Label
+            htmlFor={PaymentMethod.PAYPAL}
+            className="flex flex-col items-center justify-between cursor-pointer rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
+          >
+            <svg role="img" viewBox="0 0 24 24" className="mb-3 h-6 w-6">
+              <path
+                d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 1.012 4.287-.023.143-.047.288-.077.437-.983 5.05-4.349 6.797-8.647 6.797h-2.19c-.524 0-.968.382-1.05.9l-1.12 7.106zm14.146-14.42a3.35 3.35 0 0 0-.607-.541c-.013.076-.026.175-.041.254-.93 4.778-4.005 7.201-9.138 7.201h-2.19a.563.563 0 0 0-.556.479l-1.187 7.527h-.506l-.24 1.516a.56.56 0 0 0 .554.647h3.882c.46 0 .85-.334.922-.788.06-.26.76-4.852.816-5.09a.932.932 0 0 1 .923-.788h.58c3.76 0 6.705-1.528 7.565-5.946.36-1.847.174-3.388-.777-4.471z"
+                fill="currentColor"
+              ></path>
+            </svg>
+            <span className="whitespace-nowrap">PayPal</span>
+          </Label>
+        </section>
+      </RadioGroup>
+
+      <Separator className="my-3" />
+
+      {tabs === PaymentMethod.MOBILE_PAYMENT && (
+        <MobilePaymentForm userTutor={userTutor} />
+      )}
     </>
   );
 }

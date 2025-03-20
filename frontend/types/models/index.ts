@@ -9,6 +9,7 @@ export { type Class } from "./Class";
 export { type ClassAttachment } from "./ClassAttachment";
 export { type CourseReview } from "./CourseReview";
 export { type Lesson } from "./Lesson";
+export { type MobilePayment } from "./MobilePayment";
 export { type Notification } from "./Notification";
 export { type Price } from "./Price";
 export { type Quiz } from "./Quiz";

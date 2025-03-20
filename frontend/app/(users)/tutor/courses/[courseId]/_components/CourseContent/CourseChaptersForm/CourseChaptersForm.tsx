@@ -80,9 +80,9 @@ export function CourseChaptersForm({ chapters }: { chapters: Chapter[] | [] }) {
           aprendizaje.
         </CardDescription>
 
-        <section className="my-6 italic">
+        <section className="my-6">
           {chapters.length === 0 && (
-            <CardDescription className="text-lg w-full">
+            <CardDescription className="text-lg w-full italic">
               <p className="flex justify-center flex-col items-center">
                 <FolderOpen className="w-20 h-20" />
                 Sin capítulos

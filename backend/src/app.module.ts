@@ -33,6 +33,7 @@ import { ClassAttachmentsModule } from './modules/class-attachments/class-attach
 import { LandingPageModule } from './modules/landing-page/landing-page.module';
 import { CourseEnrollmentOrdersModule } from './modules/course-enrollment-orders/course-enrollment-orders.module';
 import { CourseEnrollmentsModule } from './modules/course-enrollments/course-enrollments.module';
+import { MobilePaymentsModule } from './modules/mobile-payments/mobile-payments.module';
 
 @Module({
   imports: [
@@ -71,6 +72,7 @@ import { CourseEnrollmentsModule } from './modules/course-enrollments/course-enr
     LandingPageModule,
     CourseEnrollmentOrdersModule,
     CourseEnrollmentsModule,
+    MobilePaymentsModule,
   ],
 })
 export class AppModule {}

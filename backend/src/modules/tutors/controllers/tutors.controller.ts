@@ -77,6 +77,14 @@ export class TutorsController {
     return this.tutorsService.findOne(userId);
   }
 
+  /*
+   * Get tutor with payment methdo for payment profile
+   */
+  @Get('user/:userId/payment-method')
+  findOneWithPaymentMethod(@Param('userId') userId: string) {
+    return this.tutorsService.findOneWithPaymentMethod(userId);
+  }
+
   @Get('user/:userId/certifications')
   async findOneWithCertifications(@Param('userId') userId: string) {
     return await this.tutorsService.findOneWithCertifications(userId);

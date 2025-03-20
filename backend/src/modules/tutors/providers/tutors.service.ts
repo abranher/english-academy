@@ -199,15 +199,31 @@ export class TutorsService {
     return tutorUser;
   }
 
+  async findOneWithPaymentMethod(userId: string) {
+    try {
+      const tutorUser = await this.prisma.user.findUnique({
+        where: { id: userId },
+        include: { tutor: { include: { mobilePayment: true } } },
+      });
+
+      if (!tutorUser) throw new NotFoundException('Usuario no encontrado');
+
+      return tutorUser;
+    } catch (error) {
+      console.error('Error obteniendo el user:', error);
+      throw new InternalServerErrorException(
+        'Error del servidor. Por favor intenta nuevamente.',
+      );
+    }
+  }
+
   async findOneWithCertifications(userId: string) {
     const user = await this.findUserOrThrow(userId);
 
     try {
       const tutor = await this.prisma.tutor.findUnique({
         where: { userId: user.id },
-        include: {
-          certifications: true,
-        },
+        include: { certifications: true },
       });
 
       return {
