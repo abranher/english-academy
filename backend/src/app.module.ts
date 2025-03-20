@@ -34,6 +34,7 @@ import { LandingPageModule } from './modules/landing-page/landing-page.module';
 import { CourseEnrollmentOrdersModule } from './modules/course-enrollment-orders/course-enrollment-orders.module';
 import { CourseEnrollmentsModule } from './modules/course-enrollments/course-enrollments.module';
 import { MobilePaymentsModule } from './modules/mobile-payments/mobile-payments.module';
+import { BanksModule } from './modules/banks/banks.module';
 
 @Module({
   imports: [
@@ -73,6 +74,7 @@ import { MobilePaymentsModule } from './modules/mobile-payments/mobile-payments.
     CourseEnrollmentOrdersModule,
     CourseEnrollmentsModule,
     MobilePaymentsModule,
+    BanksModule,
   ],
 })
 export class AppModule {}

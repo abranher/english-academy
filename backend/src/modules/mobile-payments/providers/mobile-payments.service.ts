@@ -1,26 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { CreateMobilePaymentDto } from '../dto/create-mobile-payment.dto';
-import { UpdateMobilePaymentDto } from '../dto/update-mobile-payment.dto';
+
+import { PrismaService } from 'src/modules/prisma/providers/prisma.service';
 
 @Injectable()
 export class MobilePaymentsService {
-  create(createMobilePaymentDto: CreateMobilePaymentDto) {
-    return 'This action adds a new mobilePayment';
-  }
-
-  findAll() {
-    return `This action returns all mobilePayments`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} mobilePayment`;
-  }
-
-  update(id: number, updateMobilePaymentDto: UpdateMobilePaymentDto) {
-    return `This action updates a #${id} mobilePayment`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} mobilePayment`;
-  }
+  constructor(private readonly prisma: PrismaService) {}
 }
