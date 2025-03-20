@@ -1,4 +1,8 @@
+import { redirect } from "next/navigation";
+
 import { auth } from "@/config/auth";
+
+import { TutorPaymentProfile } from "./_components/TutorPaymentProfile";
 
 import {
   Breadcrumb,
@@ -6,10 +10,8 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
 } from "@/components/shadcn/ui/breadcrumb";
-import { TutorProfile } from "./_components/TutorProfile";
-import { redirect } from "next/navigation";
 
-export default async function TutorProfilePage() {
+export default async function TutorPaymentProfilePage() {
   const session = await auth();
 
   if (!session) redirect("/tutor/dashboard");
@@ -19,12 +21,12 @@ export default async function TutorProfilePage() {
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
-            <BreadcrumbPage>Perfil de Usuario</BreadcrumbPage>
+            <BreadcrumbPage>Perfil de Pago</BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
 
-      <TutorProfile userId={session.user.id} />
+      <TutorPaymentProfile userId={session.user.id} />
     </>
   );
 }

@@ -24,7 +24,9 @@ import {
   PlusCircle,
   Settings,
   ShoppingCart,
+  User,
   UserPlus,
+  UserSquare,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -247,21 +249,38 @@ export function MainButtons() {
                             Recursos
                           </Link>
                         </DropdownMenuItem>
-
-                        <DropdownMenuItem>
-                          <CreditCard className="mr-2 h-4 w-4" />
-                          Facturación
-                        </DropdownMenuItem>
                       </DropdownMenuGroup>
 
                       <DropdownMenuSeparator />
 
                       <DropdownMenuGroup>
-                        <DropdownMenuItem asChild>
-                          <Link href="/tutor/profile">
+                        <DropdownMenuSub>
+                          <DropdownMenuSubTrigger>
                             <CircleUser className="mr-2 h-4 w-4" />
-                            Perfil
-                          </Link>
+                            <span>Perfil</span>
+                          </DropdownMenuSubTrigger>
+                          <DropdownMenuPortal>
+                            <DropdownMenuSubContent>
+                              <DropdownMenuItem asChild>
+                                <Link href="/tutor/profile">
+                                  <User className="mr-2 h-4 w-4" />
+                                  De Usuario
+                                </Link>
+                              </DropdownMenuItem>
+
+                              <DropdownMenuItem asChild>
+                                <Link href="/tutor/payment-profile">
+                                  <UserSquare className="mr-2 h-4 w-4" />
+                                  De Pago
+                                </Link>
+                              </DropdownMenuItem>
+                            </DropdownMenuSubContent>
+                          </DropdownMenuPortal>
+                        </DropdownMenuSub>
+
+                        <DropdownMenuItem>
+                          <CreditCard className="mr-2 h-4 w-4" />
+                          Facturación
                         </DropdownMenuItem>
 
                         <DropdownMenuItem asChild>
@@ -270,32 +289,9 @@ export function MainButtons() {
                             Configuración
                           </Link>
                         </DropdownMenuItem>
-
-                        <DropdownMenuSub>
-                          <DropdownMenuSubTrigger>
-                            <UserPlus className="mr-2 h-4 w-4" />
-                            <span>Invite users</span>
-                          </DropdownMenuSubTrigger>
-                          <DropdownMenuPortal>
-                            <DropdownMenuSubContent>
-                              <DropdownMenuItem>
-                                <Mail className="mr-2 h-4 w-4" />
-                                <span>Email</span>
-                              </DropdownMenuItem>
-                              <DropdownMenuItem>
-                                <MessageSquare className="mr-2 h-4 w-4" />
-                                <span>Message</span>
-                              </DropdownMenuItem>
-                              <DropdownMenuSeparator />
-                              <DropdownMenuItem>
-                                <PlusCircle className="mr-2 h-4 w-4" />
-                                <span>More...</span>
-                              </DropdownMenuItem>
-                            </DropdownMenuSubContent>
-                          </DropdownMenuPortal>
-                        </DropdownMenuSub>
                       </DropdownMenuGroup>
                       <DropdownMenuSeparator />
+
                       <DropdownMenuItem
                         onClick={() => {
                           signOut({ callbackUrl: "/" });

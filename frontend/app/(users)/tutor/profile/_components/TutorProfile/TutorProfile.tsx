@@ -14,6 +14,7 @@ import { TutorProfileCard } from "../TutorProfileCard";
 
 import { CardTitle, CardDescription } from "@/components/shadcn/ui/card";
 import { AlertBanner } from "@/components/common/AlertBanner";
+import { Separator } from "@/components/shadcn/ui/separator";
 
 export function TutorProfile({ userId }: { userId: string }) {
   const { isPending, data: userTutor } = useQuery<User>({
@@ -27,12 +28,14 @@ export function TutorProfile({ userId }: { userId: string }) {
   return (
     <>
       <section className="flex flex-col gap-1">
-        <CardTitle>Perfil de usuario</CardTitle>
+        <CardTitle>Perfil de Usuario</CardTitle>
         <CardDescription>
           Accede a tu información personal, actualiza tus datos y gestiona tus
           preferencias.
         </CardDescription>
       </section>
+
+      <Separator />
 
       {(userTutor.tutor?.status !== TutorStatus.APPROVED ||
         !userTutor.tutor.approvedAt) && (

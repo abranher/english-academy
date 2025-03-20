@@ -2,9 +2,7 @@
 
 - Crear perfil de pago para el tutor
 
-- llenar los seeder de bancos -> 5 min
-
-
+- Crear ruta he interfaz -> 30 min
 
 - Crear perfil de pago para la plataforma
 - Crear planes
