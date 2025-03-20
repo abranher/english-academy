@@ -19,6 +19,8 @@ import { Smartphone } from "lucide-react";
 import { MobilePayment, Tutor } from "@/types/models";
 
 export function TutorPaymentProfile({ userId }: { userId: string }) {
+  const [tabs, setTabs] = useState<string>(PaymentMethod.MOBILE_PAYMENT);
+
   const {
     isPending,
     data: userTutor,
@@ -29,10 +31,6 @@ export function TutorPaymentProfile({ userId }: { userId: string }) {
     queryKey: ["tutor_user_payment_profile"],
     queryFn: () => getUserTutorWithPaymentMethod(userId as string),
   });
-
-  console.log(userTutor);
-
-  const [tabs, setTabs] = useState<string>(PaymentMethod.MOBILE_PAYMENT);
 
   if (isPending) return <TutorPaymentProfileSkeleton />;
   if (isError) return <div>No se pudo cargar la información.</div>;

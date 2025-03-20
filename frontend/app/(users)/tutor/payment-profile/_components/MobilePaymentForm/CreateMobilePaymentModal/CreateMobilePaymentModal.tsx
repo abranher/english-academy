@@ -4,19 +4,21 @@ import { useParams } from "next/navigation";
 
 import axios from "@/config/axios";
 import { z } from "zod";
+import { Bank } from "@/types/models";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
+import { getBanks } from "../../../_services/get-banks";
 import { AxiosError } from "axios";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { FormSchema } from "./FormSchema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { DocumentType, PhoneCode } from "@/types/enums";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { LoadingButton } from "@/components/common/LoadingButton";
 
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -32,16 +34,48 @@ import {
 } from "@/components/shadcn/ui/dialog";
 import { useState } from "react";
 import { Button } from "@/components/shadcn/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/shadcn/ui/select";
+import { Label } from "@/components/shadcn/ui/label";
+
+const phoneCodes: PhoneCode[] = [
+  PhoneCode.VE_0412,
+  PhoneCode.VE_0414,
+  PhoneCode.VE_0416,
+  PhoneCode.VE_0424,
+  PhoneCode.VE_0426,
+];
+
+const documentTypes: DocumentType[] = [
+  DocumentType.V,
+  DocumentType.J,
+  DocumentType.E,
+];
 
 export function CreateMobilePaymentModal() {
   const [open, setOpen] = useState(false);
+
+  const {
+    isPending,
+    data: banks,
+    isError,
+  } = useQuery<Bank[] | []>({
+    queryKey: ["get_banks_tutor_payment_profile"],
+    queryFn: getBanks,
+  });
 
   const queryClient = useQueryClient();
   const { courseId, chapterId } = useParams();
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
-    defaultValues: { title: "" },
   });
 
   const createMutation = useMutation({
@@ -79,10 +113,15 @@ export function CreateMobilePaymentModal() {
   });
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
-    createMutation.mutate({ title: data.title });
+    // createMutation.mutate({ });
+
+    toast.error(JSON.stringify(data));
   }
 
   const { isSubmitting, isValid } = form.formState;
+
+  if (isPending) return <>Cargando...</>;
+  if (isError) return <div>No se pudo cargar la información.</div>;
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -97,26 +136,150 @@ export function CreateMobilePaymentModal() {
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-              {/** Lesson title */}
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="space-y-4 flex flex-col gap-4"
+            >
+              <section className="flex flex-col gap-3">
+                <Label>Télefono</Label>
+                <section className="flex gap-3 items-center">
+                  <FormField
+                    control={form.control}
+                    name="phoneCode"
+                    render={({ field }) => (
+                      <FormItem>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Seleccione código" />
+                            </SelectTrigger>
+                          </FormControl>
+
+                          <SelectContent>
+                            <SelectGroup>
+                              <SelectLabel>Códigos</SelectLabel>
+                              {phoneCodes.map((phonecode) => (
+                                <SelectItem key={phonecode} value={phonecode}>
+                                  {phonecode}
+                                </SelectItem>
+                              ))}
+                            </SelectGroup>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="phoneNumber"
+                    render={({ field }) => (
+                      <FormItem className="w-full">
+                        <FormControl>
+                          <Input
+                            disabled={isSubmitting}
+                            placeholder="p.ej. '1234567'"
+                            {...field}
+                          />
+                        </FormControl>
+
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </section>
+              </section>
+
+              <section className="flex flex-col gap-3">
+                <Label>Documento</Label>
+                <section className="flex gap-3 items-center">
+                  <FormField
+                    control={form.control}
+                    name="documentType"
+                    render={({ field }) => (
+                      <FormItem className="w-20">
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Seleccione tipo de documento" />
+                            </SelectTrigger>
+                          </FormControl>
+
+                          <SelectContent>
+                            <SelectGroup>
+                              <SelectLabel>Tipos de documento</SelectLabel>
+                              {documentTypes.map((documentType) => (
+                                <SelectItem
+                                  key={documentType}
+                                  value={documentType}
+                                >
+                                  {documentType}
+                                </SelectItem>
+                              ))}
+                            </SelectGroup>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="documentNumber"
+                    render={({ field }) => (
+                      <FormItem className="w-full">
+                        <FormControl>
+                          <Input
+                            disabled={isSubmitting}
+                            placeholder="p.ej. '12345678'"
+                            {...field}
+                          />
+                        </FormControl>
+
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </section>
+              </section>
+
               <FormField
                 control={form.control}
-                name="title"
+                name="bankId"
                 render={({ field }) => (
-                  <FormItem className="flex flex-col gap-2">
-                    <FormLabel>Título de la lección</FormLabel>
+                  <FormItem>
+                    <FormLabel>Banco</FormLabel>
 
-                    <FormControl>
-                      <Input
-                        disabled={isSubmitting}
-                        placeholder="p.ej. 'Introducción al curso'"
-                        {...field}
-                      />
-                    </FormControl>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Seleccione el banco" />
+                        </SelectTrigger>
+                      </FormControl>
 
-                    <FormDescription>
-                      Define el título de tu lección de manera clara y concisa.
-                    </FormDescription>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectLabel>Bancos</SelectLabel>
+                          {banks.map((bank) => (
+                            <SelectItem key={bank.id} value={bank.id}>
+                              {`${bank.code} - ${bank.name}`}
+                            </SelectItem>
+                          ))}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+
                     <FormMessage />
                   </FormItem>
                 )}
