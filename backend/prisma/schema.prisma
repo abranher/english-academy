@@ -72,12 +72,108 @@ model MobilePayment {
 }
 
 // *
+// * Subscription Plans
+// *
+
+enum BillingCycle {
+  MONTHLY
+  ANNUAL
+}
+
+model Plan {
+  id           String       @id @default(uuid())
+  name         String
+  description  String?
+  price        Float
+  billingCycle BillingCycle
+  isActive     Boolean      @default(true)
+
+  // Features
+  maxCourses Int? // Null -> ilimitado
+
+  subscriptions Subscription[]
+
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  SubscriptionOrder SubscriptionOrder[]
+
+  @@unique([name, billingCycle])
+}
+
+// *
+// * Subscription
+// *
+
+enum SubscriptionOrderStatus {
+  UNVERIFIED
+  NEEDS_REVISION // El administrador solicitó cambios
+  COMPLETED
+  CANCELED
+  REFUNDED // para reembolsos tal vez en el futuro
+}
+
+model SubscriptionOrder {
+  id                String                  @id @default(uuid())
+  status            SubscriptionOrderStatus @default(UNVERIFIED)
+  subscriptionPrice Float
+  paymentMethod     PaymentMethod           @default(MOBILE_PAYMENT)
+  paymentReference  Int
+
+  tutorId String
+  tutor   Tutor  @relation(fields: [tutorId], references: [id])
+
+  planId String
+  plan   Plan   @relation(fields: [planId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([tutorId])
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  CANCELED
+  EXPIRED
+  PENDING // Pendiente de aprobación
+}
+
+model Subscription {
+  id        String             @id @default(uuid())
+  startDate DateTime?
+  endDate   DateTime?
+  status    SubscriptionStatus @default(PENDING)
+
+  tutorId String @unique
+  tutor   Tutor  @relation(fields: [tutorId], references: [id])
+
+  planId String
+  plan   Plan   @relation(fields: [planId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// *
 // * Users models
 // *
 
 // *
 // * User
 // *
+
+enum Roles {
+  ADMIN
+  STUDENT
+  TUTOR
+}
+
+enum AccountStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+  DELETED
+}
 
 model User {
   id              String        @id @default(uuid())
@@ -134,6 +230,14 @@ model Student {
 // * Tutor
 // *
 
+enum TutorStatus {
+  NEW
+  PENDING
+  RESUBMITTED
+  APPROVED
+  REJECTED
+}
+
 model Tutor {
   id         String      @id @default(uuid())
   bio        String?
@@ -147,9 +251,12 @@ model Tutor {
   mobilePaymentId String?        @unique
   mobilePayment   MobilePayment? @relation(fields: [mobilePaymentId], references: [id])
 
+  subscription Subscription?
+
   certifications     Certification[]
   tutorStatusHistory TutorStatusHistory[]
   attachments        Attachment[]
+  subscriptionOrders SubscriptionOrder[]
   courses            Course[]
 
   createdAt DateTime @default(now())
@@ -159,6 +266,12 @@ model Tutor {
 // *
 // * Tutor Status History
 // *
+
+enum TutorStatusDecision {
+  APPROVED
+  NEEDS_CHANGES
+  REJECTED
+}
 
 model TutorStatusHistory {
   id             String              @id @default(uuid())
@@ -274,6 +387,21 @@ model Price {
 // * Courses
 // *
 
+enum CourseReviewStatus {
+  DRAFT // El tutor está trabajando en el curso
+  PENDING_REVIEW // El tutor envió el curso para revisión
+  APPROVED // El administrador aprobó el curso
+  NEEDS_REVISION // El administrador solicitó cambios
+  REJECTED // El administrador rechazó el curso
+}
+
+enum CoursePlatformStatus {
+  DRAFT // El curso está en borrador (no visible)
+  PUBLISHED // El curso está disponible para los estudiantes
+  ARCHIVED // El curso ya no está activo pero se conserva
+  DELETED // El curso fue eliminado (soft delete)
+}
+
 model Course {
   id                 String               @id @default(uuid())
   title              String               @db.Text
@@ -314,6 +442,12 @@ model Course {
 // * CourseReview
 // *
 
+enum CourseReviewDecision {
+  APPROVED // El curso fue aprobado
+  NEEDS_CHANGES // El curso necesita cambios
+  REJECTED // El curso fue rechazado
+}
+
 model CourseReview {
   id         String                @id @default(uuid())
   feedback   String?
@@ -353,6 +487,11 @@ model Chapter {
 // *
 // * Chapter lesson
 // *
+
+enum LessonType {
+  CLASS
+  QUIZ
+}
 
 model Lesson {
   id       String     @id @default(uuid())
@@ -462,6 +601,7 @@ model QuizQuestionOption {
 // *
 // * Student Progress
 // *
+
 model StudentProgress {
   id        String @id @default(uuid())
   studentId String
@@ -482,11 +622,19 @@ model StudentProgress {
 // * Course Enrollment Order
 // *
 
+enum EnrollmentOrderStatus {
+  UNVERIFIED
+  NEEDS_REVISION // El tutor solicitó cambios
+  COMPLETED
+  CANCELED
+  REFUNDED // para reembolsos tal vez en el futuro
+}
+
 model CourseEnrollmentOrder {
   id               String                @id @default(uuid())
   status           EnrollmentOrderStatus @default(UNVERIFIED)
   total            Float
-  paymentMethod    String                @default("MOBILE_PAYMENT")
+  paymentMethod    PaymentMethod         @default(MOBILE_PAYMENT)
   paymentReference Int
 
   studentId String
@@ -500,13 +648,17 @@ model CourseEnrollmentOrder {
   @@index([studentId])
 }
 
+enum PaymentMethod {
+  MOBILE_PAYMENT
+}
+
 // *
 // * Course Enrollment 
 // *
 
 model CourseEnrollment {
   id             String  @id @default(uuid())
-  isActive       Boolean @default(true)
+  isActive       Boolean @default(false)
   purchasedPrice Float
 
   studentId String
@@ -546,6 +698,11 @@ model ActivityLog {
 // * Notification
 // * 
 
+enum NotificationType {
+  UPDATED_TUTOR_STATUS
+  UPDATED_COURSE_REVIEW
+}
+
 model Notification {
   id     String           @id @default(uuid())
   type   NotificationType
@@ -557,78 +714,4 @@ model Notification {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-}
-
-// *
-// * Enums
-// *
-
-enum Roles {
-  ADMIN
-  STUDENT
-  TUTOR
-}
-
-enum TutorStatus {
-  NEW
-  PENDING
-  RESUBMITTED
-  APPROVED
-  REJECTED
-}
-
-enum TutorStatusDecision {
-  APPROVED
-  NEEDS_CHANGES
-  REJECTED
-}
-
-enum LessonType {
-  CLASS
-  QUIZ
-}
-
-enum AccountStatus {
-  ACTIVE
-  INACTIVE
-  SUSPENDED
-  DELETED
-}
-
-enum CourseReviewStatus {
-  DRAFT // El tutor está trabajando en el curso
-  PENDING_REVIEW // El tutor envió el curso para revisión
-  APPROVED // El administrador aprobó el curso
-  NEEDS_REVISION // El administrador solicitó cambios
-  REJECTED // El administrador rechazó el curso
-}
-
-enum CoursePlatformStatus {
-  DRAFT // El curso está en borrador (no visible)
-  PUBLISHED // El curso está disponible para los estudiantes
-  ARCHIVED // El curso ya no está activo pero se conserva
-  DELETED // El curso fue eliminado (soft delete)
-}
-
-enum CourseReviewDecision {
-  APPROVED // El curso fue aprobado
-  NEEDS_CHANGES // El curso necesita cambios
-  REJECTED // El curso fue rechazado
-}
-
-enum EnrollmentOrderStatus {
-  UNVERIFIED
-  COMPLETED
-  CANCELED
-  REFUNDED // para reembolsos tal vez en el futuro
-}
-
-enum Language {
-  ES
-  EN
-}
-
-enum NotificationType {
-  UPDATED_TUTOR_STATUS
-  UPDATED_COURSE_REVIEW
 }
