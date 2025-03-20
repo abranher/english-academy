@@ -14,7 +14,69 @@ datasource db {
 }
 
 // *
+// * Infrastructure models
+// *
+
+// *
+// * Bank
+// *
+
+model Bank {
+  id   String @id @default(uuid())
+  code Int    @unique
+  name String
+
+  mobilePayments MobilePayment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum PhoneCode {
+  VE_0412
+  VE_0414
+  VE_0416
+  VE_0424
+  VE_0426
+}
+
+enum DocumentType {
+  V
+  J
+  E
+}
+
+// *
+// * PhoneCode
+// *
+
+model MobilePayment {
+  id String @id @default(uuid())
+
+  phoneCode   PhoneCode
+  phoneNumber Int
+
+  documentType   DocumentType
+  documentNumber Int
+
+  bankId String
+  bank   Bank   @relation(fields: [bankId], references: [id])
+
+  tutor Tutor?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([phoneCode, phoneNumber])
+  @@unique([documentType, documentNumber])
+}
+
+// *
 // * Users models
+// *
+
+// *
+// * User
 // *
 
 model User {
@@ -46,6 +108,10 @@ model User {
   @@index([username, email])
 }
 
+// *
+// * Student
+// *
+
 model Student {
   id            String    @id @default(uuid())
   bio           String?
@@ -64,6 +130,10 @@ model Student {
   updatedAt DateTime @updatedAt
 }
 
+// *
+// * Tutor
+// *
+
 model Tutor {
   id         String      @id @default(uuid())
   bio        String?
@@ -74,6 +144,9 @@ model Tutor {
   userId String @unique
   user   User   @relation(fields: [userId], references: [id])
 
+  mobilePaymentId String?        @unique
+  mobilePayment   MobilePayment? @relation(fields: [mobilePaymentId], references: [id])
+
   certifications     Certification[]
   tutorStatusHistory TutorStatusHistory[]
   attachments        Attachment[]
@@ -82,6 +155,10 @@ model Tutor {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+// *
+// * Tutor Status History
+// *
 
 model TutorStatusHistory {
   id             String              @id @default(uuid())
@@ -96,6 +173,10 @@ model TutorStatusHistory {
   createdAt DateTime @default(now())
 }
 
+// *
+// * Certification
+// *
+
 model Certification {
   id                  String @id @default(uuid())
   name                String
@@ -108,6 +189,10 @@ model Certification {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+// *
+// * Country
+// *
 
 model Country {
   id   String @id @default(uuid())
