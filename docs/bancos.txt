@@ -1,0 +1,32 @@
+INSTITUCIONES BANCARIAS PARTICIPANTES EN EL SISTEMA DE CÁMARA DE COMPENSACIÓN ELECTRÓNICA
+Código	IBP	RIF
+0001	Banco Central de Venezuela	G200001100
+0102	Banco de Venezuela S.A.C.A. Banco Universal	G200099976
+0104	Venezolano de Crédito, S.A. Banco Universal	J000029709
+0105	Mercantil Banco, C.A. Banco Universal	J000029610
+0108	BBVA Provincial, S.A. Banco Universal	J000029679
+0114	Bancaribe C.A. Banco Universal	J000029490
+0115	Banco Exterior C.A. Banco Universal	J000029504
+0128	Banco Caroní C.A. Banco Universal	J095048551
+0134	Banesco, Banco Universal S.A.C.A.	J070133805
+0137	Banco Sofitasa, Banco Universal	J090283846
+0138	Banco Plaza, Banco Universal	J002970553
+0146	Bangente C.A	J301442040
+0151	BFC Banco Fondo Común C.A. Banco Universal	J000723060
+0156	100% Banco, Banco Universal C.A.	J085007768
+0157	DelSur Banco Universal C.A.	J000797234
+0163	Banco del Tesoro, C.A. Banco Universal	G200051876
+0166	Banco Agrícola de Venezuela, C.A. Banco Universal	G200057955
+0168	Bancrecer, S.A. Banco Microfinanciero	J316374173
+0169	R4, Banco Microfinanciero C.A.	J315941023
+0171	Banco Activo, Banco Universal	J080066227
+0172	Bancamiga, Banco Universal C.A.	J316287599
+0173	Banco Internacional de Desarrollo, C.A. Banco Universal	J294640109
+0174	Banplus Banco Universal, C.A	J000423032
+0007	Banco Digital de Los Trabajadores	G200091487
+0177	Banco de la Fuerza Armada Nacional Bolivariana, B.U.	G200106573
+0178	N58 Banco Digital, S.A.	J503581107
+0191	Banco Nacional de Crédito, C.A. Banco Universal	J309841327
+0601	Instituto Municipal de Crédito Popular	J000145903
+Véase también
+Referencias
