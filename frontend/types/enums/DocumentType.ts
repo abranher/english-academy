@@ -1,5 +1,7 @@
 export enum DocumentType {
-  V = "V",
-  J = "J",
-  E = "E",
+  VENEZOLANO = "VENEZOLANO",
+  EXTRANJERO = "EXTRANJERO",
+  PASAPORTE = "PASAPORTE",
+  JURIDICO = "JURIDICO",
+  GUBERNAMENTAL = "GUBERNAMENTAL",
 }

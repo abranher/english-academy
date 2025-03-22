@@ -25,9 +25,18 @@ export const FormSchema = z.object({
     .regex(/^\d{7}$/, { message: "Debe ser un número de 7 dígitos." })
     .refine((val) => !isNaN(Number(val)), { message: "Debe ser un número" })
     .transform(Number),
-  documentType: z.enum([DocumentType.V, DocumentType.J, DocumentType.E], {
-    required_error: "Debe seleccionar un tipo de documento.",
-  }),
+  documentType: z.enum(
+    [
+      DocumentType.VENEZOLANO,
+      DocumentType.EXTRANJERO,
+      DocumentType.JURIDICO,
+      DocumentType.PASAPORTE,
+      DocumentType.GUBERNAMENTAL,
+    ],
+    {
+      required_error: "Debe seleccionar un tipo de documento.",
+    }
+  ),
   documentNumber: z
     .string()
     .min(MIN_DOCUMENT, messages.min(MIN_DOCUMENT))

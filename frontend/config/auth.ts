@@ -1,9 +1,10 @@
 import NextAuth, { CredentialsSignin } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
+
 import axios from "@/config/axios";
 import SessionService from "@/libs/auth/Session";
 import { object, string, ZodError } from "zod";
-import { Roles } from "@/types/enums/Roles";
+import { Roles } from "@/types/enums";
 
 class NotStudentError extends CredentialsSignin {
   code = "No eres estudiante.";

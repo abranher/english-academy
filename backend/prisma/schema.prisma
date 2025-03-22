@@ -41,9 +41,11 @@ enum PhoneCode {
 }
 
 enum DocumentType {
-  V
-  J
-  E
+  VENEZOLANO
+  EXTRANJERO
+  PASAPORTE
+  JURIDICO
+  GUBERNAMENTAL
 }
 
 // *

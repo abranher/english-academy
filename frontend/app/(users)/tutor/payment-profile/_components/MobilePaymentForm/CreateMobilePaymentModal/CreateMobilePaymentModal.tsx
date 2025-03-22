@@ -54,9 +54,11 @@ const phoneCodes: PhoneCode[] = [
 ];
 
 const documentTypes: DocumentType[] = [
-  DocumentType.V,
-  DocumentType.J,
-  DocumentType.E,
+  DocumentType.VENEZOLANO,
+  DocumentType.EXTRANJERO,
+  DocumentType.JURIDICO,
+  DocumentType.PASAPORTE,
+  DocumentType.GUBERNAMENTAL,
 ];
 
 export function CreateMobilePaymentModal() {
@@ -201,7 +203,7 @@ export function CreateMobilePaymentModal() {
                     control={form.control}
                     name="documentType"
                     render={({ field }) => (
-                      <FormItem className="w-20">
+                      <FormItem>
                         <Select
                           onValueChange={field.onChange}
                           defaultValue={field.value}
