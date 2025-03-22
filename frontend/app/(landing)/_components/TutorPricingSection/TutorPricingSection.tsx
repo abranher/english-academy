@@ -16,6 +16,7 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/shadcn/ui/tabs";
+import { CardDescription } from "@/components/shadcn/ui/card";
 
 export function TutorPricingSection() {
   const {
@@ -31,59 +32,59 @@ export function TutorPricingSection() {
   if (isError) return <>Ha ocurrido un error al cargar los planes</>;
 
   return (
-    <>
-      <BoxBase size="xl">
-        <section className="mb-12">
-          <article className="text-center flex flex-col items-center">
-            <Title size="lxl">Potencia tu enseñanza con nuestros planes.</Title>
+    <BoxBase size="xl">
+      <section className="mb-12">
+        <article className="text-center flex flex-col items-center">
+          <Title size="lxl">Potencia tu enseñanza con nuestros planes.</Title>
 
-            <p className="text-2xl">
-              Elige el que mejor se adapte a tus necesidades.
-            </p>
-          </article>
+          <p className="text-2xl">
+            Elige el que mejor se adapte a tus necesidades.
+          </p>
+        </article>
 
-          <section className="pt-12">
-            <Tabs defaultValue={BillingCycle.MONTHLY}>
-              <section className="flex justify-center gap-3">
-                <TabsList>
-                  <TabsTrigger value={BillingCycle.MONTHLY}>
-                    Mensual
-                  </TabsTrigger>
-                  <TabsTrigger value={BillingCycle.ANNUAL}>Anual</TabsTrigger>
-                </TabsList>
+        <section className="pt-12">
+          <Tabs defaultValue={BillingCycle.MONTHLY}>
+            <section className="flex justify-center gap-3">
+              <TabsList>
+                <TabsTrigger value={BillingCycle.MONTHLY}>Mensual</TabsTrigger>
+                <TabsTrigger value={BillingCycle.ANNUAL}>Anual</TabsTrigger>
+              </TabsList>
+            </section>
+
+            <TabsContent
+              value={BillingCycle.MONTHLY}
+              className="border-none p-6 outline-none"
+            >
+              <section className="flex items-center justify-center gap-5">
+                {plans
+                  .filter((plan) => plan.billingCycle === BillingCycle.MONTHLY)
+                  .map((plan) => (
+                    <PlanCard key={plan.id} plan={plan} />
+                  ))}
               </section>
+            </TabsContent>
 
-              <TabsContent
-                value={BillingCycle.MONTHLY}
-                className="border-none p-6 outline-none"
-              >
-                <section className="flex items-center justify-center gap-5">
-                  {plans
-                    .filter(
-                      (plan) => plan.billingCycle === BillingCycle.MONTHLY
-                    )
-                    .map((plan) => (
-                      <PlanCard key={plan.id} plan={plan} />
-                    ))}
-                </section>
-              </TabsContent>
-
-              <TabsContent
-                value={BillingCycle.ANNUAL}
-                className="border-none p-6 outline-none"
-              >
-                <section className="flex items-center justify-center gap-5">
-                  {plans
-                    .filter((plan) => plan.billingCycle === BillingCycle.ANNUAL)
-                    .map((plan) => (
-                      <PlanCard key={plan.id} plan={plan} />
-                    ))}
-                </section>
-              </TabsContent>
-            </Tabs>
-          </section>
+            <TabsContent
+              value={BillingCycle.ANNUAL}
+              className="border-none p-6 outline-none"
+            >
+              <section className="flex items-center justify-center gap-5">
+                {plans
+                  .filter((plan) => plan.billingCycle === BillingCycle.ANNUAL)
+                  .map((plan) => (
+                    <PlanCard key={plan.id} plan={plan} />
+                  ))}
+              </section>
+            </TabsContent>
+          </Tabs>
         </section>
-      </BoxBase>
-    </>
+
+        <section className="pt-12 flex justify-center">
+          <CardDescription className="text-xl">
+            Elige el que mejor se adapte a tus necesidades.
+          </CardDescription>
+        </section>
+      </section>
+    </BoxBase>
   );
 }
