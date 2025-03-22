@@ -36,6 +36,7 @@ import { CourseEnrollmentsModule } from './modules/course-enrollments/course-enr
 import { MobilePaymentsModule } from './modules/mobile-payments/mobile-payments.module';
 import { BanksModule } from './modules/banks/banks.module';
 import { PlatformModule } from './modules/platform/platform.module';
+import { PlansModule } from './modules/plans/plans.module';
 
 @Module({
   imports: [
@@ -77,6 +78,7 @@ import { PlatformModule } from './modules/platform/platform.module';
     MobilePaymentsModule,
     BanksModule,
     PlatformModule,
+    PlansModule,
   ],
 })
 export class AppModule {}

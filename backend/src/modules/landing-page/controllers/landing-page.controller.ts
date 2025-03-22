@@ -10,4 +10,9 @@ export class LandingPageController {
   getCourses() {
     return this.landingPageService.getCourses();
   }
+
+  @Get('plans')
+  getPlans() {
+    return this.landingPageService.getPlans();
+  }
 }

@@ -1,10 +1,5 @@
 # TODOS:
 
-- Crear perfil de pago para el tutor
-
-- Crear ruta he interfaz -> 30 min
-
-- Crear perfil de pago para la plataforma
 - Crear planes
 - Mostrar planes
 - Suscripcion de tutor

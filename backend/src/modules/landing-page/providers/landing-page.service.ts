@@ -21,4 +21,14 @@ export class LandingPageService {
       throw new InternalServerErrorException('Error obteniendo los cursos');
     }
   }
+
+  async getPlans() {
+    try {
+      return await this.prisma.plan.findMany({
+        where: { isActive: true },
+      });
+    } catch (error) {
+      throw new InternalServerErrorException('Error obteniendo los planes');
+    }
+  }
 }

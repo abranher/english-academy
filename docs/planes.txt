@@ -1,0 +1,49 @@
+### **Planes Mensuales para Tutores**
+
+1. **Plan Básico Mensual**  
+   - **Nombre**: "Básico Mensual"  
+   - **Descripción**: "Ideal para tutores que están comenzando. Con este plan, puedes crear **hasta 1 curso** y comenzar a compartir tu conocimiento con el mundo. ¡Perfecto para dar tus primeros pasos como tutor!"  
+   - **Precio**: 3.00 USD  
+   - **Ciclo de facturación**: Mensual  
+   - **Cursos máximos**: 1  
+
+2. **Plan Avanzado Mensual**  
+   - **Nombre**: "Avanzado Mensual"  
+   - **Descripción**: "Para tutores que quieren expandir su impacto. Con este plan, puedes crear **hasta 25 cursos** y llegar a más estudiantes. ¡Ideal para tutores que buscan crecer y diversificar su oferta!"  
+   - **Precio**: 15.00 USD  
+   - **Ciclo de facturación**: Mensual  
+   - **Cursos máximos**: 25  
+
+3. **Plan Premium Mensual**  
+   - **Nombre**: "Premium Mensual"  
+   - **Descripción**: "El plan definitivo para tutores profesionales. Con **acceso ilimitado para crear cursos**, podrás publicar todo el contenido que desees sin restricciones. ¡Ideal para expertos que quieren maximizar su alcance!"  
+   - **Precio**: 30.00 USD  
+   - **Ciclo de facturación**: Mensual  
+   - **Cursos máximos**: Ilimitado  
+
+---
+
+### **Planes Anuales para Tutores**
+
+1. **Plan Avanzado Anual**  
+   - **Nombre**: "Avanzado Anual"  
+   - **Descripción**: "Ahorra mientras creces como tutor. Con este plan, puedes crear **hasta 25 cursos al año** y disfrutar de un **descuento especial por pago anual**. Perfecto para tutores comprometidos que buscan ahorrar a largo plazo."  
+   - **Precio**: 150.00 USD (equivalente a 12.50 USD por mes)  
+   - **Ciclo de facturación**: Anual  
+   - **Cursos máximos**: 25  
+
+2. **Plan Premium Anual**  
+   - **Nombre**: "Premium Anual"  
+   - **Descripción**: "El máximo ahorro para el máximo impacto. Con **acceso ilimitado para crear cursos** durante todo el año y un **descuento exclusivo por pago anual**, este plan es ideal para tutores que quieren liderar en su campo."  
+   - **Precio**: 300.00 USD (equivalente a 25.00 USD por mes)  
+   - **Ciclo de facturación**: Anual  
+   - **Cursos máximos**: Ilimitado  
+
+---
+
+### Alternativas a "Avanzado"
+Si prefieres otra palabra en lugar de "Avanzado", aquí tienes algunas opciones que podrían funcionar:
+- **Pro**: "Plan Pro Mensual" o "Plan Pro Anual".
+- **Creador**: "Plan Creador Mensual" o "Plan Creador Anual".
+- **Experto**: "Plan Experto Mensual" o "Plan Experto Anual".
+- **Amplio**: "Plan Amplio Mensual" o "Plan Amplio Anual".

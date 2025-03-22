@@ -1,0 +1,1 @@
+export { TutorPricingSection } from "./TutorPricingSection";
