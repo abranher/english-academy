@@ -36,7 +36,7 @@ export function EditMobilePaymentForm({
         Accede y gestiona los datos de tu pago móvil
       </CardDescription>
 
-      <section className="grid gap-4 py-5">
+      <section className="grid gap-6 py-5">
         {isPending ? (
           <EditMobilePaymentSkeleton />
         ) : (

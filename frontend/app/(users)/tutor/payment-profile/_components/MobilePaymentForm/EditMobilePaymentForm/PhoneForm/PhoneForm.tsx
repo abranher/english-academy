@@ -4,6 +4,7 @@ import axios from "@/config/axios";
 import { z } from "zod";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
+import { useState } from "react";
 import { PhoneCode } from "@/types/enums";
 import { AxiosError } from "axios";
 import { FormSchema } from "./FormSchema";
@@ -31,6 +32,8 @@ import {
   SelectValue,
 } from "@/components/shadcn/ui/select";
 import { Label } from "@/components/shadcn/ui/label";
+import { Card } from "@/components/shadcn/ui/card";
+import { PenLine, X } from "lucide-react";
 
 export function PhoneForm({
   phoneCode,
@@ -41,6 +44,8 @@ export function PhoneForm({
   phoneNumber: number;
   tutorId: string;
 }) {
+  const [isEditing, setIsEditing] = useState(false);
+
   const { phoneCodes } = useMobilePaymentData();
 
   const queryClient = useQueryClient();
@@ -95,7 +100,25 @@ export function PhoneForm({
   const { isSubmitting, isValid } = form.formState;
 
   return (
-    <>
+    <Card className="p-4">
+      <section className="flex justify-end">
+        {!isEditing ? (
+          <PenLine
+            className="w-4 cursor-pointer hover:opacity-80"
+            onClick={() => {
+              setIsEditing(true);
+            }}
+          />
+        ) : (
+          <X
+            className="w-4 cursor-pointer hover:opacity-80"
+            onClick={() => {
+              setIsEditing(false);
+            }}
+          />
+        )}
+      </section>
+
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -112,6 +135,7 @@ export function PhoneForm({
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}
+                      disabled={!isEditing}
                     >
                       <FormControl>
                         <SelectTrigger>
@@ -142,7 +166,7 @@ export function PhoneForm({
                   <FormItem className="w-full">
                     <FormControl>
                       <Input
-                        disabled={isSubmitting}
+                        disabled={isSubmitting || !isEditing}
                         placeholder="p.ej. '1234567'"
                         {...field}
                       />
@@ -152,19 +176,19 @@ export function PhoneForm({
                   </FormItem>
                 )}
               />
-            </section>
-          </section>
 
-          <section className="flex justify-end">
-            <LoadingButton
-              isLoading={createMutation.isPending}
-              isValid={isValid}
-              isSubmitting={isSubmitting}
-              label="Actualizar"
-            />
+              {isEditing && (
+                <LoadingButton
+                  isLoading={createMutation.isPending}
+                  isValid={isValid}
+                  isSubmitting={isSubmitting}
+                  label="Actualizar"
+                />
+              )}
+            </section>
           </section>
         </form>
       </Form>
-    </>
+    </Card>
   );
 }

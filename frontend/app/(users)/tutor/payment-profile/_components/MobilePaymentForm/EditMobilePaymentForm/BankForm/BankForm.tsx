@@ -5,6 +5,7 @@ import { z } from "zod";
 import { Bank } from "@/types/models";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
+import { useState } from "react";
 import { AxiosError } from "axios";
 import { FormSchema } from "./FormSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -17,7 +18,6 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/shadcn/ui/form";
 import {
@@ -29,6 +29,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/shadcn/ui/select";
+import { Label } from "@/components/shadcn/ui/label";
+import { Card } from "@/components/shadcn/ui/card";
+import { PenLine, X } from "lucide-react";
 
 export function BankForm({
   bankId,
@@ -39,6 +42,8 @@ export function BankForm({
   banks: Bank[] | [];
   tutorId: string;
 }) {
+  const [isEditing, setIsEditing] = useState(false);
+
   const queryClient = useQueryClient();
 
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -86,56 +91,77 @@ export function BankForm({
   const { isSubmitting, isValid } = form.formState;
 
   return (
-    <>
+    <Card className="p-4">
+      <section className="flex justify-end">
+        {!isEditing ? (
+          <PenLine
+            className="w-4 cursor-pointer hover:opacity-80"
+            onClick={() => {
+              setIsEditing(true);
+            }}
+          />
+        ) : (
+          <X
+            className="w-4 cursor-pointer hover:opacity-80"
+            onClick={() => {
+              setIsEditing(false);
+            }}
+          />
+        )}
+      </section>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className="space-y-4 flex flex-col gap-4"
         >
-          <FormField
-            control={form.control}
-            name="bankId"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Banco</FormLabel>
+          <section className="flex flex-col gap-3">
+            <Label>Banco</Label>
+            <section className="flex gap-3 items-center">
+              <FormField
+                control={form.control}
+                name="bankId"
+                render={({ field }) => (
+                  <FormItem>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                      disabled={!isEditing}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Seleccione el banco" />
+                        </SelectTrigger>
+                      </FormControl>
 
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Seleccione el banco" />
-                    </SelectTrigger>
-                  </FormControl>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectLabel>Bancos</SelectLabel>
+                          {banks.map((bank) => (
+                            <SelectItem key={bank.id} value={bank.id}>
+                              {`${bank.code} - ${bank.name}`}
+                            </SelectItem>
+                          ))}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
 
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectLabel>Bancos</SelectLabel>
-                      {banks.map((bank) => (
-                        <SelectItem key={bank.id} value={bank.id}>
-                          {`${bank.code} - ${bank.name}`}
-                        </SelectItem>
-                      ))}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <section className="flex justify-end">
-            <LoadingButton
-              isLoading={createMutation.isPending}
-              isValid={isValid}
-              isSubmitting={isSubmitting}
-              label="Actualizar"
-            />
+              {isEditing && (
+                <LoadingButton
+                  isLoading={createMutation.isPending}
+                  isValid={isValid}
+                  isSubmitting={isSubmitting}
+                  label="Actualizar"
+                />
+              )}
+            </section>
           </section>
         </form>
       </Form>
-    </>
+    </Card>
   );
 }
