@@ -2,7 +2,7 @@
 CREATE TYPE "PhoneCode" AS ENUM ('VE_0412', 'VE_0414', 'VE_0416', 'VE_0424', 'VE_0426');
 
 -- CreateEnum
-CREATE TYPE "DocumentType" AS ENUM ('V', 'J', 'E');
+CREATE TYPE "DocumentType" AS ENUM ('VENEZOLANO', 'EXTRANJERO', 'PASAPORTE', 'JURIDICO', 'GUBERNAMENTAL');
 
 -- CreateEnum
 CREATE TYPE "BillingCycle" AS ENUM ('MONTHLY', 'ANNUAL');
@@ -45,6 +45,22 @@ CREATE TYPE "PaymentMethod" AS ENUM ('MOBILE_PAYMENT');
 
 -- CreateEnum
 CREATE TYPE "NotificationType" AS ENUM ('UPDATED_TUTOR_STATUS', 'UPDATED_COURSE_REVIEW');
+
+-- CreateTable
+CREATE TABLE "Platform" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "description" TEXT,
+    "supportEmail" TEXT,
+    "supportPhone" TEXT,
+    "socialMedia" JSONB,
+    "maintenanceMode" BOOLEAN NOT NULL DEFAULT false,
+    "mobilePaymentId" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Platform_pkey" PRIMARY KEY ("id")
+);
 
 -- CreateTable
 CREATE TABLE "Bank" (
@@ -445,6 +461,15 @@ CREATE TABLE "Notification" (
 );
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Platform_name_key" ON "Platform"("name");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Platform_mobilePaymentId_key" ON "Platform"("mobilePaymentId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Platform_id_key" ON "Platform"("id");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Bank_code_key" ON "Bank"("code");
 
 -- CreateIndex
@@ -524,6 +549,9 @@ CREATE INDEX "CourseEnrollment_studentId_isActive_idx" ON "CourseEnrollment"("st
 
 -- CreateIndex
 CREATE UNIQUE INDEX "CourseEnrollment_studentId_courseId_key" ON "CourseEnrollment"("studentId", "courseId");
+
+-- AddForeignKey
+ALTER TABLE "Platform" ADD CONSTRAINT "Platform_mobilePaymentId_fkey" FOREIGN KEY ("mobilePaymentId") REFERENCES "MobilePayment"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "MobilePayment" ADD CONSTRAINT "MobilePayment_bankId_fkey" FOREIGN KEY ("bankId") REFERENCES "Bank"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

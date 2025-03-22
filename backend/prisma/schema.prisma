@@ -17,6 +17,24 @@ datasource db {
 // * Infrastructure models
 // *
 
+model Platform {
+  id              String  @id @default(uuid())
+  name            String  @unique
+  description     String?
+  supportEmail    String?
+  supportPhone    String?
+  socialMedia     Json? // Ej: { twitter: "...", facebook: "...", instagram: "..." }
+  maintenanceMode Boolean @default(false)
+
+  mobilePaymentId String        @unique
+  mobilePayment   MobilePayment @relation(fields: [mobilePaymentId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([id])
+}
+
 // *
 // * Bank
 // *
@@ -64,7 +82,8 @@ model MobilePayment {
   bankId String
   bank   Bank   @relation(fields: [bankId], references: [id])
 
-  tutor Tutor?
+  platform Platform?
+  tutor    Tutor?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

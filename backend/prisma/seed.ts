@@ -1,4 +1,4 @@
-import { PrismaClient, Roles } from '@prisma/client';
+import { DocumentType, PhoneCode, PrismaClient, Roles } from '@prisma/client';
 import { hash } from 'bcrypt';
 
 import { banks } from './data/banks';
@@ -27,6 +27,21 @@ async function main() {
 
   const banksResult = await prisma.bank.createManyAndReturn({
     data: banks,
+  });
+
+  const platform = await prisma.platform.create({
+    data: {
+      name: 'Academy',
+      mobilePayment: {
+        create: {
+          phoneCode: PhoneCode.VE_0412,
+          phoneNumber: 1234556,
+          documentType: DocumentType.JURIDICO,
+          documentNumber: 15456789,
+          bankId: banksResult.find((bank) => bank.code === '0105').id,
+        },
+      },
+    },
   });
 
   // seed categories and subcategories
@@ -155,6 +170,7 @@ async function main() {
     { banks: banksResult },
     { levels: levelsResult },
     { prices: pricesResult },
+    { platform },
   );
 }
 
