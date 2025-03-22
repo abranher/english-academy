@@ -80,9 +80,9 @@ export function TutorPricingSection() {
         </section>
 
         <section className="pt-12 flex justify-center">
-          <CardDescription className="text-xl">
-            Elige el que mejor se adapte a tus necesidades.
-          </CardDescription>
+<CardDescription className="text-xl">
+  Elige el que mejor se adapte a tus necesidades. Primero, debes registrarte en la plataforma. Después, pasarás por un proceso de validación de tus datos como tutor. Una vez validado, podrás suscribirte a uno de los planes.
+</CardDescription>
         </section>
       </section>
     </BoxBase>
