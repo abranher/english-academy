@@ -3,6 +3,7 @@
 import { MobilePayment, Tutor, User } from "@/types/models";
 
 import { CreateMobilePaymentModal } from "./CreateMobilePaymentModal";
+import { EditMobilePaymentForm } from "./EditMobilePaymentForm";
 
 import { CardDescription } from "@/components/shadcn/ui/card";
 import { FolderOpen } from "lucide-react";
@@ -23,9 +24,11 @@ export function MobilePaymentForm({
             </CardDescription>
           </article>
 
-          <CreateMobilePaymentModal />
+          <CreateMobilePaymentModal userTutor={userTutor} />
         </>
       )}
+
+      {userTutor.tutor.mobilePayment && <EditMobilePaymentForm />}
     </section>
   );
 }
