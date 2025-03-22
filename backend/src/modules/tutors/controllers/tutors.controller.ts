@@ -78,7 +78,7 @@ export class TutorsController {
   }
 
   /*
-   * Get tutor with payment methdo for payment profile
+   * Get tutor with payment method for payment profile
    */
   @Get('user/:userId/payment-method')
   findOneWithPaymentMethod(@Param('userId') userId: string) {

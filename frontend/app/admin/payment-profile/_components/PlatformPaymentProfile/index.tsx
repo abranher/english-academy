@@ -1,0 +1,1 @@
+export { PlatformPaymentProfile } from "./PlatformPaymentProfile";

@@ -41,7 +41,7 @@ const NavLink = ({
   };
 
   return (
-    <div className="flex flex-col gap-1">
+    <section className="flex flex-col gap-1">
       <div
         className={cn(
           "group flex items-center justify-between cursor-pointer rounded-sm px-3 py-2 text-sm font-medium transition-colors",
@@ -96,7 +96,7 @@ const NavLink = ({
           ))}
         </div>
       )}
-    </div>
+    </section>
   );
 };
 

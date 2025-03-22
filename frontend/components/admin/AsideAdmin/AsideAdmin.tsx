@@ -12,6 +12,7 @@ import {
   GraduationCap,
   Home,
   Package2,
+  Settings,
   Users,
 } from "lucide-react";
 
@@ -46,6 +47,16 @@ const adminLinks = [
       {
         title: "Categorías",
         href: "/admin/courses/categories",
+      },
+    ],
+  },
+  {
+    title: "Configuración",
+    icon: Settings,
+    subItems: [
+      {
+        title: "Perfil de Pago",
+        href: "/admin/payment-profile",
       },
     ],
   },
