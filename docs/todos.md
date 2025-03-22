@@ -28,3 +28,12 @@
 - La fecha de nacimiento del perfil, se guarda de una manera en la bd y luego se muestra como de otra
 - rejected_at (fecha/hora del rechazo para eliminar en 24h)
 - IMPORTANT: -> hacer el componente que crea las certificaciones del tutor igual al createAttachment
+
+
+Claro, aquí tienes los tipos de documentos en letras mayúsculas:
+ * VENEZOLANO
+ * EXTRANJERO
+ * PASAPORTE
+ * JURÍDICO
+ * GUBERNAMENTAL
+ * FIRMA PERSONAL
