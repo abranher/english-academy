@@ -2,6 +2,7 @@ import { DocumentType, PhoneCode, PrismaClient, Roles } from '@prisma/client';
 import { hash } from 'bcrypt';
 
 import { banks } from './data/banks';
+import { plans } from './data/plans';
 import { levels } from './data/levels';
 import { prices } from './data/prices';
 import {
@@ -17,16 +18,20 @@ import {
 const prisma = new PrismaClient();
 
 async function main() {
+  const banksResult = await prisma.bank.createManyAndReturn({
+    data: banks,
+  });
+
+  const plansResult = await prisma.plan.createManyAndReturn({
+    data: plans,
+  });
+
   const levelsResult = await prisma.level.createManyAndReturn({
     data: levels,
   });
 
   const pricesResult = await prisma.price.createManyAndReturn({
     data: prices,
-  });
-
-  const banksResult = await prisma.bank.createManyAndReturn({
-    data: banks,
   });
 
   const platform = await prisma.platform.create({
@@ -170,6 +175,7 @@ async function main() {
     { banks: banksResult },
     { levels: levelsResult },
     { prices: pricesResult },
+    { plans: plansResult },
     { platform },
   );
 }
