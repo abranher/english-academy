@@ -1,147 +1,88 @@
 "use client";
 
-import Link from "next/link";
-
+import { Plan } from "@/types/models";
 import { useQuery } from "@tanstack/react-query";
-import { getLandingCourses } from "../../_services/getLandingCourses";
-import { useCartStore } from "@/services/store/cart";
-import { Course } from "@/types/models/Course";
-import { Chip, Image } from "@heroui/react";
-import { assetImg } from "@/libs/asset";
-import { formatPrice } from "@/libs/format";
+import { BillingCycle } from "@/types/enums";
+import { getLandingPlans } from "../../_services/getLandingPlans";
 
-import { TutorPricingSectionSkeleton } from "./TutorPricingSectionSkeleton";
 import BoxBase from "@/components/common/BoxBase";
 import { Title } from "@/components/common/Title";
-import { Star } from "@/components/icons/Star";
+import { TutorPricingSectionSkeleton } from "./TutorPricingSectionSkeleton";
+import { PlanCard } from "./PlanCard";
 
-import { Card } from "@/components/shadcn/ui/card";
 import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/shadcn/ui/carousel";
-import { Button } from "@/components/shadcn/ui/button";
-import { ShoppingCart, XIcon } from "lucide-react";
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/shadcn/ui/tabs";
 
 export function TutorPricingSection() {
   const {
     isPending,
-    data: courses,
+    data: plans,
     isError,
-  } = useQuery<Course[] | []>({
+  } = useQuery<Plan[] | []>({
     queryKey: ["plans_landing_page"],
-    queryFn: getLandingCourses,
+    queryFn: getLandingPlans,
   });
 
-  const cart = useCartStore((state) => state.cart);
-  const addToCart = useCartStore((state) => state.addToCart);
-  const removeFromCart = useCartStore((state) => state.removeFromCart);
-  const checkCourseInCart = (course: Course) =>
-    cart.some((item) => item.id === course.id);
-
   if (isPending) return <TutorPricingSectionSkeleton />;
-  if (isError) return <>Ha ocurrido un error al cargar los cursos</>;
-  if (courses.length === 0) return;
+  if (isError) return <>Ha ocurrido un error al cargar los planes</>;
 
   return (
     <>
       <BoxBase size="xl">
         <section className="mb-12">
-          <Title size="lxl">Una gran variedad de cursos.</Title>
+          <article className="text-center flex flex-col items-center">
+            <Title size="lxl">Potencia tu enseñanza con nuestros planes.</Title>
 
-          <p className="text-2xl p-6">
-            Amplía tus conocimientos con nuestra biblioteca de más de 250,000
-            cursos en video, en constante crecimiento.
-          </p>
+            <p className="text-2xl">
+              Elige el que mejor se adapte a tus necesidades.
+            </p>
+          </article>
+
+          <section className="pt-12">
+            <Tabs defaultValue={BillingCycle.MONTHLY}>
+              <section className="flex justify-center gap-3">
+                <TabsList>
+                  <TabsTrigger value={BillingCycle.MONTHLY}>
+                    Mensual
+                  </TabsTrigger>
+                  <TabsTrigger value={BillingCycle.ANNUAL}>Anual</TabsTrigger>
+                </TabsList>
+              </section>
+
+              <TabsContent
+                value={BillingCycle.MONTHLY}
+                className="border-none p-6 outline-none"
+              >
+                <section className="flex items-center justify-center gap-5">
+                  {plans
+                    .filter(
+                      (plan) => plan.billingCycle === BillingCycle.MONTHLY
+                    )
+                    .map((plan) => (
+                      <PlanCard key={plan.id} plan={plan} />
+                    ))}
+                </section>
+              </TabsContent>
+
+              <TabsContent
+                value={BillingCycle.ANNUAL}
+                className="border-none p-6 outline-none"
+              >
+                <section className="flex items-center justify-center gap-5">
+                  {plans
+                    .filter((plan) => plan.billingCycle === BillingCycle.ANNUAL)
+                    .map((plan) => (
+                      <PlanCard key={plan.id} plan={plan} />
+                    ))}
+                </section>
+              </TabsContent>
+            </Tabs>
+          </section>
         </section>
-
-        <Carousel className="w-full">
-          <CarouselContent className="-ml-1">
-            <>
-              {courses.map((course) => {
-                const isCourseInCart = checkCourseInCart(course);
-
-                return (
-                  <CarouselItem
-                    key={course.id}
-                    className="p-3 md:basis-1/2 lg:basis-1/3"
-                  >
-                    <Card>
-                      <Link href={`/courses/${course.id}`}>
-                        <div className="relative aspect-video m-2.5 overflow-hidden text-white rounded-md">
-                          <Image
-                            src={assetImg(course.image)}
-                            alt="card-image"
-                          />
-                        </div>
-
-                        <div className="px-4">
-                          <h2 className="text-3xl font-bold">
-                            {formatPrice(course.price?.amount ?? 0)}
-                          </h2>
-
-                          <h6 className="mb-2 text-zinc-800 dark:text-zinc-50 text-xl md:text-md font-semibold">
-                            {`${course.title} - ${course.subtitle}`}
-                          </h6>
-
-                          <div className="flex items-center my-3">
-                            <Star className="w-8 h-8 fill-yellow-300 me-1" />
-                            <Star className="w-8 h-8 fill-yellow-300 me-1" />
-                            <Star className="w-8 h-8 fill-yellow-300 me-1" />
-                            <Star className="w-8 h-8 fill-yellow-300 me-1" />
-                            <Star className="w-8 h-8 fill-gray-300 me-1 dark:fill-gray-500" />
-
-                            <p className="ms-1 text-lg font-medium text-gray-400">
-                              4.95 de 5
-                            </p>
-                          </div>
-                        </div>
-
-                        <div className="px-4 flex gap-2">
-                          <Chip color="danger" size="lg">
-                            {course.category?.title}
-                          </Chip>
-                          <Chip color="primary" size="lg">
-                            {course.subcategory?.title}
-                          </Chip>
-                        </div>
-                      </Link>
-
-                      <div className="p-4 w-full">
-                        <Button
-                          className="flex gap-2 w-full"
-                          variant={isCourseInCart ? "outline" : "default"}
-                          onClick={() => {
-                            isCourseInCart
-                              ? removeFromCart(course)
-                              : addToCart(course);
-                          }}
-                        >
-                          {isCourseInCart ? (
-                            <>
-                              <XIcon className="h-4 w-4" />
-                              Remover
-                            </>
-                          ) : (
-                            <>
-                              <ShoppingCart className="h-4 w-4" />
-                              Añadir al carrito
-                            </>
-                          )}
-                        </Button>
-                      </div>
-                    </Card>
-                  </CarouselItem>
-                );
-              })}
-            </>
-          </CarouselContent>
-          <CarouselPrevious />
-          <CarouselNext />
-        </Carousel>
       </BoxBase>
     </>
   );

@@ -1,5 +1,8 @@
 "use client";
 
+import BoxBase from "@/components/common/BoxBase";
+import { Title } from "@/components/common/Title";
+
 import {
   Carousel,
   CarouselContent,
@@ -7,34 +10,30 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/shadcn/ui/carousel";
-import BoxBase from "@/components/common/BoxBase";
 import { Skeleton } from "@/components/shadcn/ui/skeleton";
 
 export function TutorPricingSectionSkeleton() {
   return (
     <>
       <BoxBase size="xl">
-        <Carousel className="w-full">
-          <CarouselContent className="-ml-1">
-            <>
-              {Array.from({ length: 3 }).map((_, index) => (
-                <CarouselItem
-                  className="p-3 md:basis-1/2 lg:basis-1/3 flex flex-col gap-3 mt-1"
-                  key={index}
-                >
-                  <Skeleton className="w-full h-52" />
-                  <Skeleton className="w-full h-10" />
-                  <Skeleton className="w-full h-10" />
-                  <Skeleton className="w-full h-10" />
-                  <Skeleton className="w-full h-10" />
-                  <Skeleton className="w-full h-10" />
-                </CarouselItem>
-              ))}
-            </>
-          </CarouselContent>
-          <CarouselPrevious />
-          <CarouselNext />
-        </Carousel>
+        <section className="mb-12">
+          <article className="text-center flex flex-col items-center">
+            <Title size="lxl">Potencia tu enseñanza con nuestros planes.</Title>
+
+            <p className="text-2xl">
+              Elige el que mejor se adapte a tus necesidades.
+            </p>
+          </article>
+        </section>
+
+        <section className="flex justify-center gap-3 py-3">
+          <Skeleton className="w-32 py-4" />
+        </section>
+        <section className="flex items-center justify-center gap-5">
+          {[1, 2, 3].map((item) => (
+            <Skeleton className="min-w-96 max-w-96 h-96" key={item} />
+          ))}
+        </section>
       </BoxBase>
     </>
   );

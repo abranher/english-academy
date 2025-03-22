@@ -2,18 +2,18 @@
 
 import Link from "next/link";
 
+import { Course } from "@/types/models";
 import { useQuery } from "@tanstack/react-query";
-import { getLandingCourses } from "../../_services/getLandingCourses";
-import { useCartStore } from "@/services/store/cart";
-import { Course } from "@/types/models/Course";
-import { Chip, Image } from "@heroui/react";
 import { assetImg } from "@/libs/asset";
 import { formatPrice } from "@/libs/format";
+import { Chip, Image } from "@heroui/react";
+import { useCartStore } from "@/services/store/cart";
+import { getLandingCourses } from "../../_services/getLandingCourses";
 
-import { FeaturedCoursesSkeleton } from "./FeaturedCoursesSkeleton";
 import BoxBase from "@/components/common/BoxBase";
-import { Title } from "@/components/common/Title";
 import { Star } from "@/components/icons/Star";
+import { Title } from "@/components/common/Title";
+import { FeaturedCoursesSkeleton } from "./FeaturedCoursesSkeleton";
 
 import { Card } from "@/components/shadcn/ui/card";
 import {

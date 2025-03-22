@@ -1,3 +1,4 @@
+export { BillingCycle } from "./BillingCycle";
 export { TutorStatus } from "./TutorStatus";
 export { TutorStatusDecision } from "./TutorStatusDecision";
 export { CoursePlatformStatus } from "./CoursePlatformStatus";

@@ -18,10 +18,8 @@ export function Title({
   size?: keyof typeof titleSizes;
 }>) {
   return (
-    <>
-      <h2 className={`font-bold ${titleSizes[size]} py-3 flex gap-2`}>
-        {children}
-      </h2>
-    </>
+    <h2 className={`font-bold ${titleSizes[size]} py-3 flex gap-2`}>
+      {children}
+    </h2>
   );
 }
