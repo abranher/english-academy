@@ -16,7 +16,7 @@ import { Separator } from "@/components/shadcn/ui/separator";
 import { RadioGroup, RadioGroupItem } from "@/components/shadcn/ui/radio-group";
 import { Label } from "@/components/shadcn/ui/label";
 import { Smartphone } from "lucide-react";
-import { MobilePayment, Tutor } from "@/types/models";
+import { Bank, MobilePayment, Tutor } from "@/types/models";
 
 export function TutorPaymentProfile({ userId }: { userId: string }) {
   const [tabs, setTabs] = useState<string>(PaymentMethod.MOBILE_PAYMENT);
@@ -26,7 +26,9 @@ export function TutorPaymentProfile({ userId }: { userId: string }) {
     data: userTutor,
     isError,
   } = useQuery<
-    User & { tutor: Tutor & { mobilePayment: MobilePayment | null } }
+    User & {
+      tutor: Tutor & { mobilePayment: (MobilePayment & { bank: Bank }) | null };
+    }
   >({
     queryKey: ["tutor_user_payment_profile"],
     queryFn: () => getUserTutorWithPaymentMethod(userId as string),

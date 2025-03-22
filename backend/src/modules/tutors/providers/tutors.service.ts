@@ -203,7 +203,9 @@ export class TutorsService {
     try {
       const tutorUser = await this.prisma.user.findUnique({
         where: { id: userId },
-        include: { tutor: { include: { mobilePayment: true } } },
+        include: {
+          tutor: { include: { mobilePayment: { include: { bank: true } } } },
+        },
       });
 
       if (!tutorUser) throw new NotFoundException('Usuario no encontrado');

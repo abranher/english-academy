@@ -13,6 +13,7 @@ import { Bank, MobilePayment, Tutor, User } from "@/types/models";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { LoadingButton } from "@/components/common/LoadingButton";
+import { useMobilePaymentData } from "@/hooks/useMobilePaymentData";
 import { CreateMobilePaymentSkeleton } from "./CreateMobilePaymentSkeleton";
 
 import {
@@ -44,27 +45,14 @@ import {
 } from "@/components/shadcn/ui/select";
 import { Label } from "@/components/shadcn/ui/label";
 
-const phoneCodes: PhoneCode[] = [
-  PhoneCode.VE_0412,
-  PhoneCode.VE_0414,
-  PhoneCode.VE_0416,
-  PhoneCode.VE_0424,
-  PhoneCode.VE_0426,
-];
-
-const documentTypes: DocumentType[] = [
-  DocumentType.VENEZOLANO,
-  DocumentType.EXTRANJERO,
-  DocumentType.JURIDICO,
-  DocumentType.PASAPORTE,
-  DocumentType.GUBERNAMENTAL,
-];
-
 export function CreateMobilePaymentModal({
   userTutor,
 }: {
-  userTutor: User & { tutor: Tutor & { mobilePayment: MobilePayment | null } };
+  userTutor: User & {
+    tutor: Tutor & { mobilePayment: (MobilePayment & { bank: Bank }) | null };
+  };
 }) {
+  const { phoneCodes, documentTypes } = useMobilePaymentData();
   const [open, setOpen] = useState(false);
 
   const {
@@ -72,7 +60,7 @@ export function CreateMobilePaymentModal({
     data: banks,
     isError,
   } = useQuery<Bank[] | []>({
-    queryKey: ["get_banks_tutor_payment_profile"],
+    queryKey: ["get_banks_tutor_payment_profile_create"],
     queryFn: getBanks,
   });
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { MobilePayment, Tutor, User } from "@/types/models";
+import { Bank, MobilePayment, Tutor, User } from "@/types/models";
 
 import { CreateMobilePaymentModal } from "./CreateMobilePaymentModal";
 import { EditMobilePaymentForm } from "./EditMobilePaymentForm";
@@ -11,7 +11,9 @@ import { FolderOpen } from "lucide-react";
 export function MobilePaymentForm({
   userTutor,
 }: {
-  userTutor: User & { tutor: Tutor & { mobilePayment: MobilePayment | null } };
+  userTutor: User & {
+    tutor: Tutor & { mobilePayment: (MobilePayment & { bank: Bank }) | null };
+  };
 }) {
   return (
     <section>
@@ -28,7 +30,12 @@ export function MobilePaymentForm({
         </>
       )}
 
-      {userTutor.tutor.mobilePayment && <EditMobilePaymentForm />}
+      {userTutor.tutor.mobilePayment && (
+        <EditMobilePaymentForm
+          mobilePayment={userTutor.tutor.mobilePayment}
+          tutorId={userTutor.tutor.id}
+        />
+      )}
     </section>
   );
 }
