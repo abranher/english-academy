@@ -33,7 +33,7 @@ export function EditMobilePaymentForm({
     <Card className="p-8">
       <CardTitle>Pago Móvil</CardTitle>
       <CardDescription>
-        Accede y gestiona los datos de tu pago móvil
+        Accede y gestiona los datos del pago móvil
       </CardDescription>
 
       <section className="grid gap-6 py-5">

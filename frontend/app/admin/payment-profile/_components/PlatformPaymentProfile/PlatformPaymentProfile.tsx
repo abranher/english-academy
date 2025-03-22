@@ -35,7 +35,7 @@ export function PlatformPaymentProfile({ userId }: { userId: string }) {
       <section className="flex flex-col gap-1">
         <CardTitle>Perfil de Pago</CardTitle>
         <CardDescription>
-          Accede y gestiona tu información para recibir pagos.
+          Accede y gestiona la información para recibir pagos.
         </CardDescription>
       </section>
 

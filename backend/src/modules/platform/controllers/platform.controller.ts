@@ -6,7 +6,7 @@ import { PlatformService } from '../providers/platform.service';
 export class PlatformController {
   constructor(private readonly platformService: PlatformService) {}
 
-  @Get('admin/:userId/payment-method')
+  @Get('admin/user/:userId/payment-method')
   findOne(@Param('userId') userId: string) {
     return this.platformService.findOne(userId);
   }

@@ -8,6 +8,9 @@ import { UpdateMobilePaymentDto } from '../dto/update-mobile-payment.dto';
 export class MobilePaymentsController {
   constructor(private readonly mobilePaymentsService: MobilePaymentsService) {}
 
+  /*
+   * Create Mobile payment for tutor
+   */
   @Post('tutor/:tutorId')
   create(
     @Param('tutorId') tutorId: string,
@@ -16,6 +19,9 @@ export class MobilePaymentsController {
     return this.mobilePaymentsService.create(tutorId, createMobilePaymentDto);
   }
 
+  /*
+   * Update Mobile payment for tutor
+   */
   @Patch('tutor/:tutorId')
   update(
     @Param('tutorId') tutorId: string,

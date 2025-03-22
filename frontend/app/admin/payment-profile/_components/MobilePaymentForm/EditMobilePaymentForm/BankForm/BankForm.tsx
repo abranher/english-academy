@@ -53,13 +53,13 @@ export function BankForm({
 
   const createMutation = useMutation({
     mutationFn: (mobilePayment: { bankId: string }) =>
-      axios.patch(`/api/mobile-payments/tutor/${tutorId}`, mobilePayment),
+      axios.patch(`/api/admin/mobile-payments/user/${userId}`, mobilePayment),
     onSuccess: (response) => {
       if (response.status === 200 || response.status === 201) {
         const data = response.data;
         toast.success(data.message);
         queryClient.invalidateQueries({
-          queryKey: ["tutor_user_payment_profile"],
+          queryKey: ["admin_platform_payment_profile"],
         });
       }
     },
@@ -70,7 +70,7 @@ export function BankForm({
 
         const errorMessages: { [key: number]: string } = {
           400: "Datos no válidos",
-          404: "Tutor no encontrado",
+          404: "Usuario o plataforma no encontrado",
           500: "Error del servidor",
           "-1": "Error inesperado",
         };
