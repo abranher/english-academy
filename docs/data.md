@@ -59,3 +59,32 @@
 - **Australian culture:** Cultural aspects of Australia.
 - **Canadian culture:** Cultural aspects of Canada.
 - **Other cultures:** Cultural aspects of other English-speaking countries.
+
+
+// mobile-payment.dto.ts
+import { IsEnum, IsNumber, IsString, Matches, MinLength } from 'class-validator';
+import { DocumentType, PhoneCode } from '@/types/enums';
+
+export class CreateMobilePaymentDto {
+  @IsEnum(PhoneCode, {
+    message: 'Debe seleccionar un código de teléfono válido',
+  })
+  phoneCode: PhoneCode;
+
+  @IsString()
+  @Matches(/^\d{7}$/, { message: 'Debe ser un número de 7 dígitos' })
+  phoneNumber: string;
+
+  @IsEnum(DocumentType, {
+    message: 'Debe seleccionar un tipo de documento válido',
+  })
+  documentType: DocumentType;
+
+  @IsString()
+  @MinLength(7, { message: 'Debe tener al menos 7 caracteres' })
+  documentNumber: string;
+
+  @IsString()
+  @MinLength(1, { message: 'Debe seleccionar un banco' })
+  bankId: string;
+}
