@@ -2,6 +2,9 @@
 
 import Link from "next/link";
 
+import { SideNav } from "@/components/admin/SideNav";
+
+import { Button } from "@/components/shadcn/ui/button";
 import {
   Bell,
   ClipboardList,
@@ -11,8 +14,6 @@ import {
   Package2,
   Users,
 } from "lucide-react";
-import { Button } from "@/components/shadcn/ui/button";
-import { SideNav } from "@/components/common/SideNav";
 
 const adminLinks = [
   {

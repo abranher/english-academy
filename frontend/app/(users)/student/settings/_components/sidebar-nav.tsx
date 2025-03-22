@@ -1,6 +1,6 @@
 "use client";
 
-import SideNav from "@/components/common/SideNav";
+import SideNav from "@/components/admin/SideNav/SideNav";
 import { AtSign, MessageCircle, Pencil, UserPenIcon } from "lucide-react";
 
 export function SidebarNav() {

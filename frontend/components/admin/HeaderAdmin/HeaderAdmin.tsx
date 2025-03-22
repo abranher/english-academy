@@ -2,8 +2,13 @@
 
 import Link from "next/link";
 
-import { signOut, useSession } from "next-auth/react";
 import Avvvatars from "avvvatars-react";
+import { Avatar } from "@heroui/react";
+import { assetImg } from "@/libs/asset";
+import { signOut, useSession } from "next-auth/react";
+
+import DropdownItemLink from "@/components/common/DropdownItemLink";
+import { ThemeSwitcher } from "@/components/common/NavMenu/MainButtons/ThemeSwitcher";
 
 import {
   DropdownMenu,
@@ -34,13 +39,9 @@ import {
   LogOut,
   Menu,
 } from "lucide-react";
-import { ThemeSwitcher } from "@/components/common/NavMenu/MainButtons/ThemeSwitcher/ThemeSwitcher";
 import { Badge } from "@/components/shadcn/ui/badge";
-import DropdownItemLink from "@/components/common/DropdownItemLink";
-import { Avatar } from "@heroui/react";
-import { assetImg } from "@/libs/asset";
 
-export default function HeaderAdmin() {
+export function HeaderAdmin() {
   const { data: session, status } = useSession();
 
   return (
