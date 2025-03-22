@@ -26,3 +26,65 @@
 0178	N58 Banco Digital, S.A.	
 0191	Banco Nacional de Crédito, C.A. Banco Universal	
 0601	Instituto Municipal de Crédito Popular	
+
+
+¡Claro! Podemos usar **"Avanzado"** en lugar de "Intermedio" para darle un toque más dinámico y sugerir un mayor nivel de compromiso o progreso. Aquí tienes las descripciones actualizadas:
+
+---
+
+### **Planes Mensuales**
+
+1. **Plan Básico Mensual**  
+   - **Nombre**: "Básico Mensual"  
+   - **Descripción**: "El plan perfecto si estás empezando. Accede a **1 curso por mes** y comienza tu viaje de aprendizaje sin comprometer tu presupuesto. ¡Ideal para explorar y descubrir tus intereses!"  
+   - **Precio**: 3.00 USD  
+   - **Ciclo de facturación**: Mensual  
+   - **Cursos máximos**: 1  
+   - **Activo**: Sí  
+
+2. **Plan Avanzado Mensual**  
+   - **Nombre**: "Avanzado Mensual"  
+   - **Descripción**: "Para los que quieren más. Accede a **hasta 25 cursos por mes** y amplía tus conocimientos en diferentes áreas. Perfecto para estudiantes curiosos que quieren profundizar en varios temas."  
+   - **Precio**: 15.00 USD  
+   - **Ciclo de facturación**: Mensual  
+   - **Cursos máximos**: 25  
+   - **Activo**: Sí  
+
+3. **Plan Premium Mensual**  
+   - **Nombre**: "Premium Mensual"  
+   - **Descripción**: "El plan definitivo para los más ambiciosos. **Acceso ilimitado a todos los cursos** y contenido exclusivo. ¡Aprende todo lo que quieras, cuando quieras, sin límites!"  
+   - **Precio**: 30.00 USD  
+   - **Ciclo de facturación**: Mensual  
+   - **Cursos máximos**: Ilimitado  
+   - **Activo**: Sí  
+
+---
+
+### **Planes Anuales**
+
+1. **Plan Avanzado Anual**  
+   - **Nombre**: "Avanzado Anual"  
+   - **Descripción**: "Ahorra y aprende más. Con este plan, tienes acceso a **hasta 25 cursos al año** y disfrutas de un **descuento especial por pago anual**. Ideal para quienes buscan constancia y ahorro."  
+   - **Precio**: 150.00 USD (equivalente a 12.50 USD por mes)  
+   - **Ciclo de facturación**: Anual  
+   - **Cursos máximos**: 25  
+   - **Activo**: Sí  
+
+2. **Plan Premium Anual**  
+   - **Nombre**: "Premium Anual"  
+   - **Descripción**: "El máximo ahorro para el máximo aprendizaje. **Acceso ilimitado a todos los cursos** durante todo el año, con un **descuento exclusivo por pago anual**. ¡Para los que no quieren perderse nada!"  
+   - **Precio**: 300.00 USD (equivalente a 25.00 USD por mes)  
+   - **Ciclo de facturación**: Anual  
+   - **Cursos máximos**: Ilimitado  
+   - **Activo**: Sí  
+
+---
+
+### Alternativas a "Intermedio"
+Si prefieres otras palabras en lugar de "Avanzado", aquí tienes algunas opciones:
+- **Plus**: "Plan Plus Mensual" o "Plan Plus Anual".
+- **Pro**: "Plan Pro Mensual" o "Plan Pro Anual".
+- **Explorador**: "Plan Explorador Mensual" o "Plan Explorador Anual".
+- **Amplio**: "Plan Amplio Mensual" o "Plan Amplio Anual".
+
+¿Te gustaría que use alguna de estas alternativas? 😊
