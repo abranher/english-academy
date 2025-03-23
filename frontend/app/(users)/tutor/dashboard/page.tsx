@@ -13,8 +13,15 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
 } from "@/components/shadcn/ui/breadcrumb";
+import { auth } from "@/config/auth";
+import { redirect } from "next/navigation";
 
-export default function TutorDashboardPage() {
+export default async function TutorDashboardPage() {
+  const session = await auth();
+
+  if (!session) redirect("/tutor/dashboard");
+  if (!session.user.tutor?.activeSubscription) redirect("/tutor/plans");
+
   return (
     <>
       <Breadcrumb>
