@@ -59,7 +59,7 @@ export function TutorPricingSection() {
               value={BillingCycle.MONTHLY}
               className="border-none p-6 outline-none"
             >
-              <section className="flex items-center justify-center gap-5">
+              <section className="flex flex-wrap items-center justify-center gap-7">
                 {plans
                   .filter((plan) => plan.billingCycle === BillingCycle.MONTHLY)
                   .map((plan) => (
@@ -72,7 +72,7 @@ export function TutorPricingSection() {
               value={BillingCycle.ANNUAL}
               className="border-none p-6 outline-none"
             >
-              <section className="flex items-center justify-center gap-5">
+              <section className="flex flex-wrap items-center justify-center gap-7">
                 {plans
                   .filter((plan) => plan.billingCycle === BillingCycle.ANNUAL)
                   .map((plan) => (

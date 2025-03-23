@@ -1,19 +1,28 @@
 # TODOS:
 
-- Crear planes
-- Mostrar planes
-- Suscripcion de tutor
-- Prueba final del curso
-- Certificado
+- Mostrar planes para tutor
 
-- Mostrar cursos publicados y aprobados
-- Mostrar cursos por categoria,
-- mostrar cursos por nivel
+* Crear una vista donde el tutor pueda ver los planes -> 20 min
+* Crear una seccion donde el tutor pueda ver el plan que se quiere suscribir
+* Agregar el id del plan en la url, y llamar al id del tutor
+* Checkout donde pueda agregar los datos de su pago
+* Enviar a admin
+* Mostrar seccion donde pueda ver el status de su orden
+* Crear seccion para gestionar la ordenes en el admin
 
-- Mostrar clase
-- Mostrar quiz
+* Suscripcion de tutor
 
-- listado de usuarios
+* Prueba final del curso
+* Certificado
+
+* Mostrar cursos publicados y aprobados
+* Mostrar cursos por categoria,
+* mostrar cursos por nivel
+
+* Mostrar clase
+* Mostrar quiz
+
+* listado de usuarios
 
 # PARA DESPUES:
 
@@ -23,7 +32,6 @@
 - La fecha de nacimiento del perfil, se guarda de una manera en la bd y luego se muestra como de otra
 - rejected_at (fecha/hora del rechazo para eliminar en 24h)
 - IMPORTANT: -> hacer el componente que crea las certificaciones del tutor igual al createAttachment
-
 
 tengo esto:
 import NextAuth, { CredentialsSignin } from "next-auth";
@@ -35,44 +43,44 @@ import { object, string, ZodError } from "zod";
 import { Roles } from "@/types/enums";
 
 class NotStudentError extends CredentialsSignin {
-  code = "No eres estudiante.";
+code = "No eres estudiante.";
 }
 
 class NotTutorError extends CredentialsSignin {
-  code = "No eres tutor.";
+code = "No eres tutor.";
 }
 
 class NotAdminError extends CredentialsSignin {
-  code = "No eres administrador.";
+code = "No eres administrador.";
 }
 
 class InvalidCredentialsError extends CredentialsSignin {
-  code = "Credenciales no validas";
+code = "Credenciales no validas";
 }
 
 class UserNotFound extends CredentialsSignin {
-  code = "Usuario no encontrado";
+code = "Usuario no encontrado";
 }
 
 export const signInSchema = object({
-  email: string({ required_error: "Correo electrónico es requerido" })
-    .min(1, "Correo electrónico es requerido")
-    .email("Correo electrónico no válido"),
-  password: string({ required_error: "Contraseña es requerida" })
-    .min(1, "Contraseña es requerida")
-    .min(8, "La contraseña debe tener más de 8 caracteres")
-    .max(32, "La contraseña debe tener menos de 32 caracteres"),
+email: string({ required_error: "Correo electrónico es requerido" })
+.min(1, "Correo electrónico es requerido")
+.email("Correo electrónico no válido"),
+password: string({ required_error: "Contraseña es requerida" })
+.min(1, "Contraseña es requerida")
+.min(8, "La contraseña debe tener más de 8 caracteres")
+.max(32, "La contraseña debe tener menos de 32 caracteres"),
 });
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
-  providers: [
-    Credentials({
-      credentials: { email: {}, password: {}, type: {} },
-      authorize: async (credentials) => {
-        try {
-          const { email, password } = await signInSchema.parseAsync(
-            credentials
-          );
+providers: [
+Credentials({
+credentials: { email: {}, password: {}, type: {} },
+authorize: async (credentials) => {
+try {
+const { email, password } = await signInSchema.parseAsync(
+credentials
+);
 
           const response = await axios.post("/api/auth/signin", {
             email,
@@ -105,39 +113,40 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         }
       },
     }),
-  ],
-  callbacks: {
-    async jwt({ token, user, account }) {
-      if (account && user) return { ...token, ...user };
-      if (new Date().getTime() < token.backendTokens.expiresIn) return token;
-      return await SessionService.refreshToken(token);
-    },
+
+],
+callbacks: {
+async jwt({ token, user, account }) {
+if (account && user) return { ...token, ...user };
+if (new Date().getTime() < token.backendTokens.expiresIn) return token;
+return await SessionService.refreshToken(token);
+},
 
     async session({ token, session }) {
       session.user = token.user;
       session.backendTokens = token.backendTokens;
       return session;
     },
-  },
+
+},
 });
 
 luego esto:
-
 
 import { NEXT_PUBLIC_BACKEND_URL } from "@/config/app";
 import { JWT } from "next-auth/jwt";
 
 export default class SessionService {
-  static async refreshToken(token: JWT): Promise<JWT> {
-    const response = await fetch(
-      NEXT_PUBLIC_BACKEND_URL + "/api/auth/refresh",
-      {
-        method: "POST",
-        headers: {
-          authorization: `Refresh ${token.backendTokens.refreshToken}`,
-        },
-      }
-    );
+static async refreshToken(token: JWT): Promise<JWT> {
+const response = await fetch(
+NEXT_PUBLIC_BACKEND_URL + "/api/auth/refresh",
+{
+method: "POST",
+headers: {
+authorization: `Refresh ${token.backendTokens.refreshToken}`,
+},
+}
+);
 
     const data = await response.json();
 
@@ -145,7 +154,8 @@ export default class SessionService {
       ...token,
       backendTokens: data,
     };
-  }
+
+}
 }
 
 estas son las definiciones
@@ -154,44 +164,45 @@ import NextAuth from "next-auth";
 import { User } from "@/types/models/User";
 
 declare module "next-auth" {
-  interface Session {
-    user: User;
+interface Session {
+user: User;
 
     backendTokens: {
       accessToken: string;
       refreshToken: string;
       expiresIn: number;
     };
-  }
+
+}
 }
 
 import { JWT } from "next-auth/jwt";
 
 declare module "next-auth/jwt" {
-  interface JWT {
-    user: User;
+interface JWT {
+user: User;
 
     backendTokens: {
       accessToken: string;
       refreshToken: string;
       expiresIn: number;
     };
-  }
-}
 
+}
+}
 
 este es el back:
 
 import {
-  Body,
-  Controller,
-  Get,
-  HttpCode,
-  HttpStatus,
-  Param,
-  Post,
-  Request,
-  UseGuards,
+Body,
+Controller,
+Get,
+HttpCode,
+HttpStatus,
+Param,
+Post,
+Request,
+UseGuards,
 } from '@nestjs/common';
 
 import { AuthService } from '../providers/auth.service';
@@ -201,39 +212,39 @@ import { RefreshJwtGuard } from '../guards/refresh.guard';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+constructor(private readonly authService: AuthService) {}
 
-  @HttpCode(HttpStatus.OK)
-  @Post('signin')
-  async signIn(@Body() signInDto: SignInDto) {
-    return await this.authService.signIn(signInDto);
-  }
-
-  @UseGuards(RefreshJwtGuard)
-  @Post('refresh')
-  async refreshToken(@Request() req) {
-    console.log('refreshed');
-
-    return await this.authService.refreshToken(req.user);
-  }
-
-  @UseGuards(AuthGuard)
-  @Get('profile')
-  getProfile(@Request() req) {
-    return req.user;
-  }
-
-  @Get('user/:userId/tutor/profile')
-  getTutorProfile(@Param('userId') userId: string) {
-    return this.authService.getTutorProfile(userId);
-  }
+@HttpCode(HttpStatus.OK)
+@Post('signin')
+async signIn(@Body() signInDto: SignInDto) {
+return await this.authService.signIn(signInDto);
 }
 
+@UseGuards(RefreshJwtGuard)
+@Post('refresh')
+async refreshToken(@Request() req) {
+console.log('refreshed');
+
+    return await this.authService.refreshToken(req.user);
+
+}
+
+@UseGuards(AuthGuard)
+@Get('profile')
+getProfile(@Request() req) {
+return req.user;
+}
+
+@Get('user/:userId/tutor/profile')
+getTutorProfile(@Param('userId') userId: string) {
+return this.authService.getTutorProfile(userId);
+}
+}
 
 import {
-  Injectable,
-  NotFoundException,
-  UnauthorizedException,
+Injectable,
+NotFoundException,
+UnauthorizedException,
 } from '@nestjs/common';
 
 import { JwtService } from '@nestjs/jwt';
@@ -244,29 +255,30 @@ import { UsersService } from 'src/modules/users/providers/users.service';
 import { PrismaService } from 'src/modules/prisma/providers/prisma.service';
 import { SignInDto } from '../dto/auth.dto';
 
-const EXPIRE_TIME = 20 * 1000;
+const EXPIRE_TIME = 20 \* 1000;
 
 @Injectable()
 export class AuthService {
-  constructor(
-    private readonly usersService: UsersService,
-    private readonly jwtService: JwtService,
-    private readonly configService: ConfigService,
-    private readonly prisma: PrismaService,
-  ) {}
+constructor(
+private readonly usersService: UsersService,
+private readonly jwtService: JwtService,
+private readonly configService: ConfigService,
+private readonly prisma: PrismaService,
+) {}
 
-  async validateUser(signInDto: SignInDto) {
-    const user = await this.usersService.findByEmail(signInDto.email);
+async validateUser(signInDto: SignInDto) {
+const user = await this.usersService.findByEmail(signInDto.email);
 
     if (user && (await compare(signInDto.password, user.password))) {
       const { password, ...result } = user;
       return result;
     }
     throw new UnauthorizedException();
-  }
 
-  async signIn(signInDto: SignInDto) {
-    const user = await this.validateUser(signInDto);
+}
+
+async signIn(signInDto: SignInDto) {
+const user = await this.validateUser(signInDto);
 
     const payload = {
       username: user.email,
@@ -289,13 +301,14 @@ export class AuthService {
         expiresIn: new Date().setTime(new Date().getTime() + EXPIRE_TIME),
       },
     };
-  }
 
-  async refreshToken(user: any) {
-    const payload = {
-      username: user.username,
-      sub: user.sub,
-    };
+}
+
+async refreshToken(user: any) {
+const payload = {
+username: user.username,
+sub: user.sub,
+};
 
     return {
       accessToken: await this.jwtService.signAsync(payload, {
@@ -308,29 +321,29 @@ export class AuthService {
       }),
       expiresIn: new Date().setTime(new Date().getTime() + EXPIRE_TIME),
     };
-  }
 
-  async getTutorProfile(userId: string) {
-    const tutorUser = await this.prisma.user.findUnique({
-      where: { id: userId },
-      include: {
-        tutor: { include: { certifications: true, tutorStatusHistory: true } },
-      },
-    });
+}
+
+async getTutorProfile(userId: string) {
+const tutorUser = await this.prisma.user.findUnique({
+where: { id: userId },
+include: {
+tutor: { include: { certifications: true, tutorStatusHistory: true } },
+},
+});
 
     if (!tutorUser) throw new NotFoundException('Usuario no encontrado');
 
     return tutorUser;
-  }
+
+}
 }
 
-
-
 import {
-  CanActivate,
-  ExecutionContext,
-  Injectable,
-  UnauthorizedException,
+CanActivate,
+ExecutionContext,
+Injectable,
+UnauthorizedException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
@@ -338,14 +351,14 @@ import { Request } from 'express';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  constructor(
-    private jwtService: JwtService,
-    private readonly configService: ConfigService,
-  ) {}
+constructor(
+private jwtService: JwtService,
+private readonly configService: ConfigService,
+) {}
 
-  async canActivate(context: ExecutionContext): Promise<boolean> {
-    const request = context.switchToHttp().getRequest();
-    const token = this.extractTokenFromHeader(request);
+async canActivate(context: ExecutionContext): Promise<boolean> {
+const request = context.switchToHttp().getRequest();
+const token = this.extractTokenFromHeader(request);
 
     if (!token) throw new UnauthorizedException();
 
@@ -359,20 +372,20 @@ export class AuthGuard implements CanActivate {
       throw new UnauthorizedException();
     }
     return true;
-  }
 
-  private extractTokenFromHeader(request: Request): string | undefined {
-    const [type, token] = request.headers.authorization?.split(' ') ?? [];
-    return type === 'Bearer' ? token : undefined;
-  }
 }
 
+private extractTokenFromHeader(request: Request): string | undefined {
+const [type, token] = request.headers.authorization?.split(' ') ?? [];
+return type === 'Bearer' ? token : undefined;
+}
+}
 
 import {
-  CanActivate,
-  ExecutionContext,
-  Injectable,
-  UnauthorizedException,
+CanActivate,
+ExecutionContext,
+Injectable,
+UnauthorizedException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
@@ -380,14 +393,14 @@ import { Request } from 'express';
 
 @Injectable()
 export class RefreshJwtGuard implements CanActivate {
-  constructor(
-    private jwtService: JwtService,
-    private readonly configService: ConfigService,
-  ) {}
+constructor(
+private jwtService: JwtService,
+private readonly configService: ConfigService,
+) {}
 
-  async canActivate(context: ExecutionContext): Promise<boolean> {
-    const request = context.switchToHttp().getRequest();
-    const token = this.extractTokenFromHeader(request);
+async canActivate(context: ExecutionContext): Promise<boolean> {
+const request = context.switchToHttp().getRequest();
+const token = this.extractTokenFromHeader(request);
 
     if (!token) throw new UnauthorizedException();
 
@@ -402,10 +415,11 @@ export class RefreshJwtGuard implements CanActivate {
     }
 
     return true;
-  }
 
-  private extractTokenFromHeader(request: Request) {
-    const [type, token] = request.headers.authorization?.split(' ') ?? [];
-    return type === 'Refresh' ? token : undefined;
-  }
+}
+
+private extractTokenFromHeader(request: Request) {
+const [type, token] = request.headers.authorization?.split(' ') ?? [];
+return type === 'Refresh' ? token : undefined;
+}
 }
