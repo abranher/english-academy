@@ -11,3 +11,5 @@ export { PhoneCode } from "./PhoneCode";
 export { Roles } from "./Roles";
 export { LessonType } from "./LessonType";
 export { AccountStatus } from "./AccountStatus";
+export { SubscriptionOrderStatus } from "./SubscriptionOrderStatus";
+export { SubscriptionStatus } from "./SubscriptionStatus";

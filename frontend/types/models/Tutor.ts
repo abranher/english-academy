@@ -1,5 +1,7 @@
 import { TutorStatus } from "../enums";
 import { Certification } from "./Certification";
+import { MobilePayment } from "./MobilePayment";
+import { Subscription } from "./Subscription";
 import { TutorStatusHistory } from "./TutorStatusHistory";
 import { User } from "./User";
 
@@ -10,9 +12,13 @@ export interface Tutor {
   status: TutorStatus;
   approvedAt: Date | null;
 
-  user: User | null;
-
   userId: string;
+  mobilePaymentId: string | null;
+  activeSubscriptionId: string | null;
+
+  user: User | null;
+  mobilePayment: MobilePayment | null;
+  activeSubscription: Subscription | null;
 
   tutorStatusHistory: TutorStatusHistory[] | [];
   certifications: Certification[] | [];

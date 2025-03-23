@@ -15,11 +15,6 @@ export default auth((req) => {
   if (!isAuthenticated && !isPublicRoute)
     return NextResponse.redirect(new URL(ROOT, req.nextUrl));
 
-  // guest for student
-  // if (isAuthenticated && isPublicRoute && role === Roles.STUDENT) {
-  //   return Response.redirect(new URL(STUDENT.DEFAULT_REDIRECT, req.nextUrl));
-  // }
-
   if (isAuthenticated) {
     // Check email verification for all authenticated users
     // if (!isEmailVerified) {
@@ -34,6 +29,13 @@ export default auth((req) => {
       ) {
         if (nextUrl.pathname !== "/tutor/profile") {
           return NextResponse.redirect(new URL("/tutor/profile", req.nextUrl));
+        }
+      }
+
+      // Check if the tutor has an active subscription
+      if (!req.auth?.user.tutor?.activeSubscription) {
+        if (nextUrl.pathname !== "/tutor/plans") {
+          return NextResponse.redirect(new URL("/tutor/plans", req.nextUrl));
         }
       }
     }
