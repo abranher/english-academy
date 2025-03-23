@@ -1,4 +1,8 @@
+import { redirect } from "next/navigation";
+
 import { auth } from "@/config/auth";
+
+import { TutorProfile } from "./_components/TutorProfile";
 
 import {
   Breadcrumb,
@@ -6,8 +10,6 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
 } from "@/components/shadcn/ui/breadcrumb";
-import { TutorProfile } from "./_components/TutorProfile";
-import { redirect } from "next/navigation";
 
 export default async function TutorProfilePage() {
   const session = await auth();

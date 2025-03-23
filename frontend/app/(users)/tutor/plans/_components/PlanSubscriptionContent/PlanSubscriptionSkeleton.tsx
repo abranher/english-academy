@@ -5,7 +5,7 @@ import { Title } from "@/components/common/Title";
 
 import { Skeleton } from "@/components/shadcn/ui/skeleton";
 
-export function TutorPricingSectionSkeleton() {
+export function PlanSubscriptionSkeleton() {
   return (
     <BoxBase size="xl">
       <section className="mb-12">

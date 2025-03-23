@@ -1,4 +1,8 @@
+import { redirect } from "next/navigation";
+
 import { auth } from "@/config/auth";
+
+import { PlanSubscriptionContent } from "./_components/PlanSubscriptionContent";
 
 import {
   Breadcrumb,
@@ -6,9 +10,8 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
 } from "@/components/shadcn/ui/breadcrumb";
-import { redirect } from "next/navigation";
 
-export default async function PlansSubscriptionPage() {
+export default async function PlanSubscriptionPage() {
   const session = await auth();
 
   if (!session) redirect("/tutor/dashboard");
@@ -18,11 +21,12 @@ export default async function PlansSubscriptionPage() {
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
-            <BreadcrumbPage>Perfil de Usuario</BreadcrumbPage>
+            <BreadcrumbPage>Planes</BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
 
+      <PlanSubscriptionContent />
     </>
   );
 }
