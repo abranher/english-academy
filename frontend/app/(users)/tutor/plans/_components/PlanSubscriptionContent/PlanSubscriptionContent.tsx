@@ -88,3 +88,15 @@ export function PlanSubscriptionContent() {
     </section>
   );
 }
+
+¡Claro, Abraham! Aquí tienes una versión más corta:
+
+---
+
+**CardDescription:**
+
+"¡Bienvenido a nuestra comunidad de tutores! Ahora que tu perfil está validado, elige el plan que mejor se adapte a tus necesidades y accede a recursos exclusivos y soporte prioritario. ¡Comienza a transformar la vida de tus estudiantes hoy mismo!"
+
+---
+
+Así es más conciso pero sigue transmitiendo la información esencial. ¿Te gusta esta opción?
