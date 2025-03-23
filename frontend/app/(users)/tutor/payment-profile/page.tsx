@@ -1,6 +1,4 @@
-import { redirect } from "next/navigation";
-
-import { auth } from "@/config/auth";
+import { validateTutorSession } from "@/libs/middleware/authValidation";
 
 import { TutorPaymentProfile } from "./_components/TutorPaymentProfile";
 
@@ -12,9 +10,7 @@ import {
 } from "@/components/shadcn/ui/breadcrumb";
 
 export default async function TutorPaymentProfilePage() {
-  const session = await auth();
-
-  if (!session) redirect("/tutor/dashboard");
+  const session = await validateTutorSession();
 
   return (
     <>

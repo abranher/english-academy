@@ -5,6 +5,8 @@ import { formatPrice } from "@/libs/format";
 import { BillingCycle } from "@/types/enums";
 
 import { Title } from "@/components/common/Title";
+import { PlanSubscriptionCheckout } from "./PlanSubscriptionCheckout";
+
 import { Card, CardDescription, CardTitle } from "@/components/shadcn/ui/card";
 import { Check } from "lucide-react";
 
@@ -21,6 +23,10 @@ export function PlanCard({ plan }: { plan: Plan }) {
           </span>
         </section>
         <CardDescription>{plan.description}</CardDescription>
+      </section>
+
+      <section>
+        <PlanSubscriptionCheckout plan={plan} />
       </section>
 
       <section>

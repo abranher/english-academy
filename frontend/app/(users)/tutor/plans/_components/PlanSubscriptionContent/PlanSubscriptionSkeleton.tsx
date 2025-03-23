@@ -2,18 +2,20 @@
 
 import { Title } from "@/components/common/Title";
 
+import { CardDescription } from "@/components/shadcn/ui/card";
 import { Skeleton } from "@/components/shadcn/ui/skeleton";
 
 export function PlanSubscriptionSkeleton() {
   return (
     <>
-      <section className="mb-12">
+      <section className="mb-8">
         <article className="text-center flex flex-col items-center">
           <Title size="lxl">Potencia tu enseñanza con nuestros planes.</Title>
 
-          <p className="text-2xl">
-            Elige el que mejor se adapte a tus necesidades.
-          </p>
+          <CardDescription className="text-xl">
+            ¡Bienvenido a nuestra comunidad de tutores! Ahora que tu perfil está
+            validado, elige el plan que mejor se adapte a tus necesidades.
+          </CardDescription>
         </article>
       </section>
 

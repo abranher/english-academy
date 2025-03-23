@@ -1,7 +1,6 @@
 import Link from "next/link";
-import { redirect } from "next/navigation";
 
-import { auth } from "@/config/auth";
+import { validateTutorSession } from "@/libs/middleware/authValidation";
 
 import { AttachmentsContent } from "./_components/AttachmentsContent";
 
@@ -15,9 +14,7 @@ import {
 } from "@/components/shadcn/ui/breadcrumb";
 
 export default async function AttachmentsTutorPage() {
-  const session = await auth();
-
-  if (!session) redirect("/tutor/dashboard");
+  const session = await validateTutorSession();
 
   return (
     <>
