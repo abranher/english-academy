@@ -6,8 +6,7 @@ import { BillingCycle } from "@/types/enums";
 
 import { Title } from "@/components/common/Title";
 import { Card, CardDescription, CardTitle } from "@/components/shadcn/ui/card";
-import { Button } from "@/components/shadcn/ui/button";
-import { ArrowRight, Check } from "lucide-react";
+import { Check } from "lucide-react";
 
 export function PlanCard({ plan }: { plan: Plan }) {
   return (
@@ -25,13 +24,6 @@ export function PlanCard({ plan }: { plan: Plan }) {
       </section>
 
       <section>
-        <Button className="flex gap-3">
-          Solicitar
-          <ArrowRight className="w-5" />
-        </Button>
-      </section>
-
-      <section>
         <ul className="flex flex-col gap-3">
           <li className="flex items-center gap-2">
             <Check className="w-5 h-5" />
@@ -45,7 +37,7 @@ export function PlanCard({ plan }: { plan: Plan }) {
           </li>
           <li className="flex items-center gap-2">
             <Check className="w-5 h-5" />
-            <p>Soporte prioritario</p>
+            <p>Soporte 24/7</p>
           </li>
           <li className="flex items-center gap-2">
             <Check className="w-5 h-5" />

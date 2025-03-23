@@ -1,6 +1,5 @@
-import Image from "next/image";
-import BoxBase from "../../../components/common/BoxBase";
-import SectionTitle from "./common/SectionTitle";
+import BoxBase from "@/components/common/BoxBase";
+import SectionTitle from "../common/SectionTitle";
 
 const checkIcon = (
   <svg width="16" height="13" viewBox="0 0 16 13" className="fill-current">
@@ -8,7 +7,7 @@ const checkIcon = (
   </svg>
 );
 
-export default function AboutSection() {
+export function AboutSection() {
   const List = ({ text }: { text: string }) => (
     <p className="mb-5 flex items-center text-lg font-medium text-body-color">
       <span className="mr-4 flex h-[30px] w-[30px] items-center justify-center rounded-md bg-primary bg-opacity-10 text-primary">

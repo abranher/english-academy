@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 import { Plan } from "@/types/models";
 import { useQuery } from "@tanstack/react-query";
 import { BillingCycle } from "@/types/enums";
@@ -17,6 +19,8 @@ import {
   TabsTrigger,
 } from "@/components/shadcn/ui/tabs";
 import { CardDescription } from "@/components/shadcn/ui/card";
+import { Button } from "@/components/shadcn/ui/button";
+import { ArrowRight } from "lucide-react";
 
 export function TutorPricingSection() {
   const {
@@ -79,10 +83,21 @@ export function TutorPricingSection() {
           </Tabs>
         </section>
 
-        <section className="pt-12 flex justify-center">
-<CardDescription className="text-xl">
-  Elige el que mejor se adapte a tus necesidades. Primero, debes registrarte en la plataforma. Después, pasarás por un proceso de validación de tus datos como tutor. Una vez validado, podrás suscribirte a uno de los planes.
-</CardDescription>
+        <section className="pt-8 flex flex-col gap-5 text-center">
+          <CardDescription className="text-xl">
+            Elige el que mejor se adapte a tus necesidades. Primero, debes
+            registrarte en la plataforma. Después, pasarás por un proceso de
+            validación de tus datos como tutor. Una vez validado, podrás
+            suscribirte a uno de los planes.
+          </CardDescription>
+          <article className="flex justify-center">
+            <Link href="/tutors/signup">
+              <Button className="flex gap-3">
+                Solicitar
+                <ArrowRight className="w-5" />
+              </Button>
+            </Link>
+          </article>
         </section>
       </section>
     </BoxBase>
