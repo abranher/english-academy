@@ -1,14 +1,17 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { auth } from "@/config/auth";
 
-import { CheckoutContent } from "./CheckoutContent";
+import { CheckoutContent } from "./_components/CheckoutContent";
 
 import {
   Breadcrumb,
   BreadcrumbItem,
+  BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
+  BreadcrumbSeparator,
 } from "@/components/shadcn/ui/breadcrumb";
 
 export default async function PlanSubscriptionCheckoutPage() {
@@ -21,7 +24,15 @@ export default async function PlanSubscriptionCheckoutPage() {
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
-            <BreadcrumbPage>Checkout</BreadcrumbPage>
+            <BreadcrumbLink asChild>
+              <Link href="/tutor/plans">Planes</Link>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>
+              Confirmación de la Orden de Suscripción
+            </BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>

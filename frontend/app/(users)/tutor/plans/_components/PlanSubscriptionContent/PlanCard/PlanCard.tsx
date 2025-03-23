@@ -1,13 +1,15 @@
 "use client";
 
+import Link from "next/link";
+
 import { Plan } from "@/types/models";
 import { formatPrice } from "@/libs/format";
 import { BillingCycle } from "@/types/enums";
 
 import { Title } from "@/components/common/Title";
-import { PlanSubscriptionCheckout } from "./PlanSubscriptionCheckout";
 
 import { Card, CardDescription, CardTitle } from "@/components/shadcn/ui/card";
+import { Button } from "@/components/shadcn/ui/button";
 import { Check } from "lucide-react";
 
 export function PlanCard({ plan }: { plan: Plan }) {
@@ -26,11 +28,15 @@ export function PlanCard({ plan }: { plan: Plan }) {
       </section>
 
       <section>
-        <PlanSubscriptionCheckout plan={plan} />
+        <Button asChild>
+          <Link href={`/tutor/plans/${plan.id}/checkout`}>
+            Empieza con {plan.name}
+          </Link>
+        </Button>
       </section>
 
       <section>
-        <ul className="flex flex-col gap-3">
+        <ul className="flex flex-col gap-3 font-bold">
           <li className="flex items-center gap-2">
             <Check className="w-5 h-5" />
             <p>
