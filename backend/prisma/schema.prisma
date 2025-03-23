@@ -146,6 +146,9 @@ model SubscriptionOrder {
   planId String
   plan   Plan   @relation(fields: [planId], references: [id])
 
+  subscriptionId String       @unique
+  subscription   Subscription @relation(fields: [subscriptionId], references: [id])
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -165,11 +168,12 @@ model Subscription {
   endDate   DateTime?
   status    SubscriptionStatus @default(PENDING)
 
-  tutorId String @unique
-  tutor   Tutor  @relation(fields: [tutorId], references: [id])
-
   planId String
   plan   Plan   @relation(fields: [planId], references: [id])
+
+  tutor Tutor?
+
+  subscriptionOrder SubscriptionOrder?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -272,7 +276,8 @@ model Tutor {
   mobilePaymentId String?        @unique
   mobilePayment   MobilePayment? @relation(fields: [mobilePaymentId], references: [id])
 
-  subscription Subscription?
+  activeSubscriptionId String?       @unique
+  activeSubscription   Subscription? @relation(fields: [activeSubscriptionId], references: [id])
 
   certifications     Certification[]
   tutorStatusHistory TutorStatusHistory[]

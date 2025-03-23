@@ -18,7 +18,10 @@ export class LandingPageService {
         include: { price: true, category: true, subcategory: true },
       });
     } catch (error) {
-      throw new InternalServerErrorException('Error obteniendo los cursos');
+      throw new InternalServerErrorException(
+        'Error obteniendo los cursos',
+        error,
+      );
     }
   }
 
@@ -28,7 +31,10 @@ export class LandingPageService {
         where: { isActive: true },
       });
     } catch (error) {
-      throw new InternalServerErrorException('Error obteniendo los planes');
+      throw new InternalServerErrorException(
+        'Error obteniendo los planes',
+        error,
+      );
     }
   }
 }
