@@ -57,22 +57,26 @@ export class AuthService {
     };
   }
 
-  async refreshToken(user: any) {
-    const payload = {
-      username: user.username,
-      sub: user.sub,
-    };
+  async refreshToken(userPayload: any) {
+    const user = await this.usersService.findByEmail(userPayload.username);
+
+    if (!user) throw new UnauthorizedException();
+
+    const payload = { username: userPayload.username, sub: userPayload.sub };
 
     return {
-      accessToken: await this.jwtService.signAsync(payload, {
-        expiresIn: '120s',
-        secret: this.configService.get<string>('JWT_SECRET_KEY'),
-      }),
-      refreshToken: await this.jwtService.signAsync(payload, {
-        expiresIn: '7d',
-        secret: this.configService.get<string>('JWT_REFRESH_SECRET_KEY'),
-      }),
-      expiresIn: new Date().setTime(new Date().getTime() + EXPIRE_TIME),
+      user,
+      backendTokens: {
+        accessToken: await this.jwtService.signAsync(payload, {
+          expiresIn: '120s',
+          secret: this.configService.get<string>('JWT_SECRET_KEY'),
+        }),
+        refreshToken: await this.jwtService.signAsync(payload, {
+          expiresIn: '7d',
+          secret: this.configService.get<string>('JWT_REFRESH_SECRET_KEY'),
+        }),
+        expiresIn: new Date().setTime(new Date().getTime() + EXPIRE_TIME),
+      },
     };
   }
 

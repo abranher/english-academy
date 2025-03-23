@@ -35,9 +35,10 @@ export function PlanSubscriptionContent() {
       <article className="text-center flex flex-col items-center">
         <Title size="lxl">Potencia tu enseñanza con nuestros planes.</Title>
 
-        <p className="text-2xl">
-          Elige el que mejor se adapte a tus necesidades.
-        </p>
+        <CardDescription className="text-xl">
+          ¡Bienvenido a nuestra comunidad de tutores! Ahora que tu perfil está
+          validado, elige el plan que mejor se adapte a tus necesidades.
+        </CardDescription>
       </article>
 
       <section className="pt-12">
@@ -79,24 +80,9 @@ export function PlanSubscriptionContent() {
 
       <section className="pt-8 flex flex-col gap-5 text-center">
         <CardDescription className="text-xl">
-          Elige el que mejor se adapte a tus necesidades. Primero, debes
-          registrarte en la plataforma. Después, pasarás por un proceso de
-          validación de tus datos como tutor. Una vez validado, podrás
-          suscribirte a uno de los planes.
+          ¡Comienza a transformar la vida de tus estudiantes hoy mismo!
         </CardDescription>
       </section>
     </section>
   );
 }
-
-¡Claro, Abraham! Aquí tienes una versión más corta:
-
----
-
-**CardDescription:**
-
-"¡Bienvenido a nuestra comunidad de tutores! Ahora que tu perfil está validado, elige el plan que mejor se adapte a tus necesidades y accede a recursos exclusivos y soporte prioritario. ¡Comienza a transformar la vida de tus estudiantes hoy mismo!"
-
----
-
-Así es más conciso pero sigue transmitiendo la información esencial. ¿Te gusta esta opción?

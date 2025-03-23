@@ -16,8 +16,10 @@ export interface User {
   accountStatus: AccountStatus;
   profileComplete: boolean;
   countryId: string | null;
+
   student: Student | null;
   tutor: Tutor | null;
+
   createdAt: Date;
   updatedAt: Date;
 }

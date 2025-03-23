@@ -33,7 +33,11 @@ export default auth((req) => {
       }
 
       // Check if the tutor has an active subscription
-      if (!req.auth?.user.tutor?.activeSubscription) {
+      const isCheckoutRoute =
+        nextUrl.pathname.startsWith("/tutor/plans") &&
+        nextUrl.pathname.endsWith("/checkout");
+
+      if (!req.auth?.user.tutor?.activeSubscription && !isCheckoutRoute) {
         if (nextUrl.pathname !== "/tutor/plans") {
           return NextResponse.redirect(new URL("/tutor/plans", req.nextUrl));
         }

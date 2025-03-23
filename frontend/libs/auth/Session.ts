@@ -17,7 +17,8 @@ export default class SessionService {
 
     return {
       ...token,
-      backendTokens: data,
+      user: data.user,
+      backendTokens: data.backendTokens,
     };
   }
 }
