@@ -31,17 +31,6 @@ export default auth((req) => {
           return NextResponse.redirect(new URL("/tutor/profile", req.nextUrl));
         }
       }
-
-      // Check if the tutor has an active subscription
-      const isCheckoutRoute =
-        nextUrl.pathname.startsWith("/tutor/plans") &&
-        nextUrl.pathname.endsWith("/checkout");
-
-      if (!req.auth?.user.tutor?.activeSubscription && !isCheckoutRoute) {
-        if (nextUrl.pathname !== "/tutor/plans") {
-          return NextResponse.redirect(new URL("/tutor/plans", req.nextUrl));
-        }
-      }
     }
 
     if (

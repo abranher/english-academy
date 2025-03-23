@@ -79,7 +79,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     }),
   ],
   callbacks: {
-    async jwt({ token, user, account }) {
+    async jwt({ token, user, account, trigger }) {
+      if (trigger === "update") return await SessionService.refreshToken(token);
       if (account && user) return { ...token, ...user };
       if (new Date().getTime() < token.backendTokens.expiresIn) return token;
       return await SessionService.refreshToken(token);
