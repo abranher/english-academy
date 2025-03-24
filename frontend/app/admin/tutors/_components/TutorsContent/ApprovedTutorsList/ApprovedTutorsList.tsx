@@ -1,14 +1,20 @@
 "use client";
 
-import { TutorStatus } from "@/types/enums";
-import { getByStatusTutors } from "../../_services";
+import { User } from "@/types/models";
 import { useQuery } from "@tanstack/react-query";
-import { User } from "@/types/models/User";
+import { TutorStatus } from "@/types/enums";
+import { getByStatusTutors } from "../../../_services";
+
+import { MiniTutorCard } from "../../MiniTutorCard";
 
 import { Separator } from "@/components/shadcn/ui/separator";
 import { Skeleton } from "@/components/shadcn/ui/skeleton";
 import { FolderOpen } from "lucide-react";
-import { MiniTutorCard } from "../MiniTutorCard";
+import {
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/shadcn/ui/card";
 
 export function ApprovedTutorsList() {
   const {
@@ -24,17 +30,13 @@ export function ApprovedTutorsList() {
 
   return (
     <>
-      <div className="flex items-center justify-between">
-        <div className="space-y-1">
-          <h2 className="text-2xl font-semibold tracking-tight">
-            Listado de Tutores Aprobados
-          </h2>
-          <p className="text-sm text-muted-foreground">
-            En esta sección encontrarás todos los tutores aprobados en la
-            plataforma.
-          </p>
-        </div>
-      </div>
+      <CardHeader>
+        <CardTitle>Listado de Tutores Aprobados</CardTitle>
+        <CardDescription>
+          En esta sección encontrarás todos los tutores aprobados en la
+          plataforma.
+        </CardDescription>
+      </CardHeader>
 
       <Separator className="my-4" />
 

@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+import { TutorsContent } from "./_components/TutorsContent";
+
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -9,7 +11,6 @@ import {
   BreadcrumbSeparator,
 } from "@/components/shadcn/ui/breadcrumb";
 import { CardDescription, CardTitle } from "@/components/shadcn/ui/card";
-import { ContentPage } from "./_components/ContentPage";
 
 export default function TurorsAdminPage() {
   return (
@@ -31,7 +32,7 @@ export default function TurorsAdminPage() {
       <CardTitle>Tutores</CardTitle>
       <CardDescription>Listados de Tutores</CardDescription>
 
-      <ContentPage />
+      <TutorsContent />
     </>
   );
 }
