@@ -26,3 +26,27 @@
 0178	N58 Banco Digital, S.A.	
 0191	Banco Nacional de Crédito, C.A. Banco Universal	
 0601	Instituto Municipal de Crédito Popular	
+
+
+// *
+// * Subscription Order History
+// *
+
+enum SubscriptionOrderStatusDecision {
+  APPROVED
+  NEEDS_CHANGES
+  REJECTED
+}
+
+model SubscriptionOrderHistory {
+  id             String                       @id @default(uuid())
+  comment        String
+  previousStatus SubscriptionOrderStatus
+  decision       SubscriptionOrderStatusDecision
+  resubmittedAt  DateTime?
+
+  subscriptionOrderId String
+  subscriptionOrder   SubscriptionOrder @relation(fields: [subscriptionOrderId], references: [id])
+
+  createdAt DateTime @default(now())
+}
