@@ -13,12 +13,12 @@ import {
 } from "@/types/models";
 
 import { StatusManagementHistory } from "../StatusManagementHistory";
+import { OrderCard } from "../OrderCard";
 
 import { CardDescription, CardTitle } from "@/components/shadcn/ui/card";
 import { Separator } from "@/components/shadcn/ui/separator";
-import { OrderCard } from "../OrderCard";
 
-export function Order() {
+export function Order({ tutorId }: { tutorId: string }) {
   const { subscriptionOrderId } = useParams();
 
   const {
@@ -33,7 +33,7 @@ export function Order() {
     }
   >({
     queryKey: ["admin_subscription_order", subscriptionOrderId],
-    queryFn: () => getSubscriptionOrder(subscriptionOrderId as string),
+    queryFn: () => getSubscriptionOrder(subscriptionOrderId as string, tutorId),
   });
 
   if (isPending) return <>Cargando...</>;

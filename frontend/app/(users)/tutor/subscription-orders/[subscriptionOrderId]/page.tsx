@@ -17,6 +17,7 @@ import {
 export default async function SubscriptionOrderPage() {
   const session = await auth();
   if (!session) redirect("/");
+  if (!session.user.tutor) redirect("/");
 
   return (
     <>
@@ -44,7 +45,7 @@ export default async function SubscriptionOrderPage() {
         </BreadcrumbList>
       </Breadcrumb>
 
-      <Order />
+      <Order tutorId={session.user.tutor.id} />
     </>
   );
 }

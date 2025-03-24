@@ -14,7 +14,7 @@ import {
 export default async function PlatformPaymentProfilePage() {
   const session = await auth();
 
-  if (!session) redirect("/admin");
+  if (!session) redirect("/");
 
   return (
     <>

@@ -16,7 +16,7 @@ import { Separator } from "@/components/shadcn/ui/separator";
 import { Skeleton } from "@/components/shadcn/ui/skeleton";
 import { FolderOpen } from "lucide-react";
 
-export function UnverifiedSubscriptionOrders() {
+export function UnverifiedSubscriptionOrders({ tutorId }: { tutorId: string }) {
   const {
     isPending,
     data: subscriptionOrders,
@@ -26,7 +26,7 @@ export function UnverifiedSubscriptionOrders() {
   >({
     queryKey: ["admin_subscription_order", SubscriptionOrderStatus.UNVERIFIED],
     queryFn: () =>
-      getSubscriptionOrderByStatus(SubscriptionOrderStatus.UNVERIFIED),
+      getSubscriptionOrderByStatus(SubscriptionOrderStatus.UNVERIFIED, tutorId),
   });
 
   if (isError) return <div>Ocurrió un error al cargar las órdenes</div>;

@@ -18,7 +18,7 @@ import {
   TabsTrigger,
 } from "@/components/shadcn/ui/tabs";
 
-export function SubscriptionOrders() {
+export function SubscriptionOrders({ tutorId }: { tutorId: string }) {
   return (
     <>
       <section className="flex flex-col gap-1">
@@ -53,42 +53,42 @@ export function SubscriptionOrders() {
         </div>
 
         <TabsContent value="ALL" className="border-none p-0 outline-none">
-          <AllSubscriptionOrders />
+          <AllSubscriptionOrders tutorId={tutorId} />
         </TabsContent>
 
         <TabsContent
           value={SubscriptionOrderStatus.UNVERIFIED}
           className="border-none p-0 outline-none"
         >
-          <UnverifiedSubscriptionOrders />
+          <UnverifiedSubscriptionOrders tutorId={tutorId} />
         </TabsContent>
 
         <TabsContent
           value={SubscriptionOrderStatus.NEEDS_REVISION}
           className="border-none p-0 outline-none"
         >
-          <NeedsRevisionSubscriptionOrders />
+          <NeedsRevisionSubscriptionOrders tutorId={tutorId} />
         </TabsContent>
 
         <TabsContent
           value={SubscriptionOrderStatus.RESUBMITTED}
           className="border-none p-0 outline-none"
         >
-          <ResubmittedSubscriptionOrders />
+          <ResubmittedSubscriptionOrders tutorId={tutorId} />
         </TabsContent>
 
         <TabsContent
           value={SubscriptionOrderStatus.APPROVED}
           className="border-none p-0 outline-none"
         >
-          <ApprovedSubscriptionOrders />
+          <ApprovedSubscriptionOrders tutorId={tutorId} />
         </TabsContent>
 
         <TabsContent
           value={SubscriptionOrderStatus.CANCELED}
           className="border-none p-0 outline-none"
         >
-          <CanceledSubscriptionOrders />
+          <CanceledSubscriptionOrders tutorId={tutorId} />
         </TabsContent>
       </Tabs>
     </>

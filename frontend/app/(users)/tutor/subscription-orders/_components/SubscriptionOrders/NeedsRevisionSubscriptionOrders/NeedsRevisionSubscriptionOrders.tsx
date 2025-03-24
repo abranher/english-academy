@@ -16,7 +16,11 @@ import { Separator } from "@/components/shadcn/ui/separator";
 import { Skeleton } from "@/components/shadcn/ui/skeleton";
 import { FolderOpen } from "lucide-react";
 
-export function NeedsRevisionSubscriptionOrders() {
+export function NeedsRevisionSubscriptionOrders({
+  tutorId,
+}: {
+  tutorId: string;
+}) {
   const {
     isPending,
     data: subscriptionOrders,
@@ -29,7 +33,10 @@ export function NeedsRevisionSubscriptionOrders() {
       SubscriptionOrderStatus.NEEDS_REVISION,
     ],
     queryFn: () =>
-      getSubscriptionOrderByStatus(SubscriptionOrderStatus.NEEDS_REVISION),
+      getSubscriptionOrderByStatus(
+        SubscriptionOrderStatus.NEEDS_REVISION,
+        tutorId
+      ),
   });
 
   if (isError) return <div>Ocurrió un error al cargar las órdenes</div>;

@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 import {
   Plan,
   SubscriptionOrder,
@@ -7,6 +9,12 @@ import {
   Tutor,
   User,
 } from "@/types/models";
+import { formatDate } from "@/libs/date";
+import { BillingCycle } from "@/types/enums";
+import { formatPrice, truncateString } from "@/libs/format";
+
+import { Title } from "@/components/common/Title";
+import { OrderStatusBadge } from "@/components/subscription-orders";
 
 import {
   Card,
@@ -16,14 +24,7 @@ import {
   CardTitle,
 } from "@/components/shadcn/ui/card";
 import { Separator } from "@/components/shadcn/ui/separator";
-import { formatPrice, truncateString } from "@/libs/format";
-import { Check } from "lucide-react";
-import { BillingCycle } from "@/types/enums";
-import { Title } from "@/components/common/Title";
-import { OrderStatusBadge } from "@/components/subscription-orders";
-import Link from "next/link";
 import { Button } from "@/components/shadcn/ui/button";
-import { formatDate, formatDateForHumans } from "@/libs/date";
 
 export function OrderCard({
   subscriptionOrder,

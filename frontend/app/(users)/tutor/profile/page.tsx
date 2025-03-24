@@ -13,8 +13,7 @@ import {
 
 export default async function TutorProfilePage() {
   const session = await auth();
-
-  if (!session) redirect("/tutor/dashboard");
+  if (!session) redirect("/");
 
   return (
     <>

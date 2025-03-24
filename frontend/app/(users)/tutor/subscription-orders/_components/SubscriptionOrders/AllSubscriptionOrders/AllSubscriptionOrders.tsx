@@ -15,7 +15,7 @@ import { Separator } from "@/components/shadcn/ui/separator";
 import { Skeleton } from "@/components/shadcn/ui/skeleton";
 import { FolderOpen } from "lucide-react";
 
-export function AllSubscriptionOrders() {
+export function AllSubscriptionOrders({ tutorId }: { tutorId: string }) {
   const {
     isPending,
     data: subscriptionOrders,
@@ -23,8 +23,8 @@ export function AllSubscriptionOrders() {
   } = useQuery<
     (SubscriptionOrder & { tutor: Tutor & { user: User }; plan: Plan })[] | []
   >({
-    queryKey: ["admin_subscription_orders"],
-    queryFn: getSubscriptionOrders,
+    queryKey: ["tutor_subscription_orders"],
+    queryFn: () => getSubscriptionOrders(tutorId),
   });
 
   if (isError) return <div>Ocurrió un error al cargar las órdenes</div>;
