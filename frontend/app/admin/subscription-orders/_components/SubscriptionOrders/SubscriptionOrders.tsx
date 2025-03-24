@@ -4,6 +4,10 @@ import { SubscriptionOrderStatus } from "@/types/enums";
 
 import { AllSubscriptionOrders } from "./AllSubscriptionOrders";
 import { UnverifiedSubscriptionOrders } from "./UnverifiedSubscriptionOrders";
+import { NeedsRevisionSubscriptionOrders } from "./NeedsRevisionSubscriptionOrders";
+import { ResubmittedSubscriptionOrders } from "./ResubmittedSubscriptionOrders";
+import { CompletedSubscriptionOrders } from "./CompletedSubscriptionOrders";
+import { CanceledSubscriptionOrders } from "./CanceledSubscriptionOrders";
 
 import { CardDescription, CardTitle } from "@/components/shadcn/ui/card";
 import { Separator } from "@/components/shadcn/ui/separator";
@@ -63,28 +67,28 @@ export function SubscriptionOrders() {
           value={SubscriptionOrderStatus.NEEDS_REVISION}
           className="border-none p-0 outline-none"
         >
-          {/* <PendingTutorsList /> */}
+          <NeedsRevisionSubscriptionOrders />
         </TabsContent>
 
         <TabsContent
           value={SubscriptionOrderStatus.RESUBMITTED}
           className="border-none p-0 outline-none"
         >
-          {/* <ResubmittedTutorsList /> */}
+          <ResubmittedSubscriptionOrders />
         </TabsContent>
 
         <TabsContent
           value={SubscriptionOrderStatus.COMPLETED}
           className="border-none p-0 outline-none"
         >
-          {/* <ApprovedTutorsList /> */}
+          <CompletedSubscriptionOrders />
         </TabsContent>
 
         <TabsContent
           value={SubscriptionOrderStatus.CANCELED}
           className="border-none p-0 outline-none"
         >
-          {/* <RejectedTutorsList /> */}
+          <CanceledSubscriptionOrders />
         </TabsContent>
       </Tabs>
     </>
