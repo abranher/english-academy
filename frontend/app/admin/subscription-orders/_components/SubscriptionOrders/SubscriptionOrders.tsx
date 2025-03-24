@@ -3,6 +3,7 @@
 import { SubscriptionOrderStatus } from "@/types/enums";
 
 import { AllSubscriptionOrders } from "./AllSubscriptionOrders";
+import { UnverifiedSubscriptionOrders } from "./UnverifiedSubscriptionOrders";
 
 import { CardDescription, CardTitle } from "@/components/shadcn/ui/card";
 import { Separator } from "@/components/shadcn/ui/separator";
@@ -55,32 +56,32 @@ export function SubscriptionOrders() {
           value={SubscriptionOrderStatus.UNVERIFIED}
           className="border-none p-0 outline-none"
         >
-          {/* <NewTutorsList /> */}
+          <UnverifiedSubscriptionOrders />
         </TabsContent>
 
         <TabsContent
-          value={SubscriptionOrderStatus.UNVERIFIED}
+          value={SubscriptionOrderStatus.NEEDS_REVISION}
           className="border-none p-0 outline-none"
         >
           {/* <PendingTutorsList /> */}
         </TabsContent>
 
         <TabsContent
-          value={SubscriptionOrderStatus.UNVERIFIED}
+          value={SubscriptionOrderStatus.RESUBMITTED}
           className="border-none p-0 outline-none"
         >
           {/* <ResubmittedTutorsList /> */}
         </TabsContent>
 
         <TabsContent
-          value={SubscriptionOrderStatus.UNVERIFIED}
+          value={SubscriptionOrderStatus.COMPLETED}
           className="border-none p-0 outline-none"
         >
           {/* <ApprovedTutorsList /> */}
         </TabsContent>
 
         <TabsContent
-          value={SubscriptionOrderStatus.UNVERIFIED}
+          value={SubscriptionOrderStatus.CANCELED}
           className="border-none p-0 outline-none"
         >
           {/* <RejectedTutorsList /> */}
