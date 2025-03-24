@@ -1,12 +1,11 @@
 "use client";
 
-import Link from "next/link";
-
 import { useStepPlanSubscriptionStore } from "@/services/store/tutor/plan-subscription";
 
-import { CardDescription, CardTitle } from "@/components/shadcn/ui/card";
+import { Title } from "@/components/common/Title";
+
+import { CardContent, CardDescription } from "@/components/shadcn/ui/card";
 import { Button } from "@/components/shadcn/ui/button";
-import { Separator } from "@/components/shadcn/ui/separator";
 
 export function StepThree() {
   const nextStep = useStepPlanSubscriptionStore((state) => state.nextStep);
@@ -14,30 +13,21 @@ export function StepThree() {
 
   return (
     <>
-      <section className="text-center mb-6">
-        <CardTitle className="mb-3">¡Orden de subscripción creada!</CardTitle>
-        <CardDescription>
-          .
+      <CardContent className="text-center flex flex-col items-center gap-4 my-16">
+        <Title size="lxl">🎉 ¡Éxito! 🎉</Title>
+        <CardDescription className="text-lg">
+          Tu orden de suscripción ha sido creada con éxito. En este momento,
+          está en proceso de verificación. Te mantendremos informado sobre el
+          estado de tu orden.
         </CardDescription>
-      </section>
 
-      <Separator />
+        <CardDescription className="text-lg">
+          Para revisar tus órdenes de suscripción, haz clic en el botón a
+          continuación:
+        </CardDescription>
 
-      <article className="w-full flex justify-between mt-5">
-        <Button variant="outline" asChild>
-          <Link href={"/tutor/plans"}>Volver</Link>
-        </Button>
-
-        <Button onClick={() => resetSteps()}>Reset</Button>
-
-        <Button
-          onClick={() => {
-            nextStep();
-          }}
-        >
-          Continuar
-        </Button>
-      </article>
+        <Button>Ver historial de órdenes</Button>
+      </CardContent>
     </>
   );
 }
