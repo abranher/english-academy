@@ -8,7 +8,10 @@ CREATE TYPE "DocumentType" AS ENUM ('VENEZOLANO', 'EXTRANJERO', 'PASAPORTE', 'JU
 CREATE TYPE "BillingCycle" AS ENUM ('MONTHLY', 'ANNUAL');
 
 -- CreateEnum
-CREATE TYPE "SubscriptionOrderStatus" AS ENUM ('UNVERIFIED', 'NEEDS_REVISION', 'RESUBMITTED', 'COMPLETED', 'CANCELED');
+CREATE TYPE "SubscriptionOrderStatus" AS ENUM ('UNVERIFIED', 'NEEDS_REVISION', 'RESUBMITTED', 'APPROVED', 'CANCELED');
+
+-- CreateEnum
+CREATE TYPE "SubscriptionOrderStatusDecision" AS ENUM ('APPROVED', 'NEEDS_CHANGES', 'REJECTED');
 
 -- CreateEnum
 CREATE TYPE "SubscriptionStatus" AS ENUM ('ACTIVE', 'CANCELED', 'EXPIRED', 'PENDING');
@@ -116,6 +119,19 @@ CREATE TABLE "SubscriptionOrder" (
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "SubscriptionOrder_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "SubscriptionOrderHistory" (
+    "id" TEXT NOT NULL,
+    "comment" TEXT NOT NULL,
+    "previousStatus" "SubscriptionOrderStatus" NOT NULL,
+    "decision" "SubscriptionOrderStatusDecision" NOT NULL,
+    "resubmittedAt" TIMESTAMP(3),
+    "subscriptionOrderId" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "SubscriptionOrderHistory_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -568,6 +584,9 @@ ALTER TABLE "SubscriptionOrder" ADD CONSTRAINT "SubscriptionOrder_planId_fkey" F
 
 -- AddForeignKey
 ALTER TABLE "SubscriptionOrder" ADD CONSTRAINT "SubscriptionOrder_subscriptionId_fkey" FOREIGN KEY ("subscriptionId") REFERENCES "Subscription"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "SubscriptionOrderHistory" ADD CONSTRAINT "SubscriptionOrderHistory_subscriptionOrderId_fkey" FOREIGN KEY ("subscriptionOrderId") REFERENCES "SubscriptionOrder"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Subscription" ADD CONSTRAINT "Subscription_planId_fkey" FOREIGN KEY ("planId") REFERENCES "Plan"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
