@@ -270,8 +270,8 @@ model Student {
   levelId String?
   level   Level?  @relation(fields: [levelId], references: [id])
 
-  enrollments            CourseEnrollment[]
-  courseEnrollmentOrders CourseEnrollmentOrder[]
+  enrollments      Enrollment[]
+  enrollmentOrders EnrollmentOrder[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -482,9 +482,10 @@ model Course {
   subcategoryId String?
   subcategory   SubCategory? @relation(fields: [subcategoryId], references: [id])
 
-  chapters    Chapter[]
-  enrollments CourseEnrollment[]
-  reviews     CourseReview[]
+  chapters         Chapter[]
+  reviews          CourseReview[]
+  enrollmentOrders EnrollmentOrder[]
+  enrollments      Enrollment[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -678,21 +679,27 @@ enum EnrollmentOrderStatus {
   UNVERIFIED
   NEEDS_REVISION // El tutor solicitó cambios
   RESUBMITTED // El student reenvio
-  COMPLETED
+  APPROVED
   CANCELED
 }
 
-model CourseEnrollmentOrder {
+model EnrollmentOrder {
   id               String                @id @default(uuid())
   status           EnrollmentOrderStatus @default(UNVERIFIED)
-  total            Float
+  enrollmentPrice  Float
   paymentMethod    PaymentMethod         @default(MOBILE_PAYMENT)
   paymentReference Int
+  approvedAt       DateTime?
 
   studentId String
   student   Student @relation(fields: [studentId], references: [id])
 
-  courseEnrollment CourseEnrollment?
+  courseId String
+  course   Course @relation(fields: [courseId], references: [id])
+
+  enrollment Enrollment?
+
+  enrollmentOrderHistory EnrollmentOrderHistory[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -700,15 +707,26 @@ model CourseEnrollmentOrder {
   @@index([studentId])
 }
 
-enum PaymentMethod {
-  MOBILE_PAYMENT
+enum EnrollmentOrderStatusDecision {
+  APPROVED
+  NEEDS_CHANGES
+  REJECTED
 }
 
-// *
-// * Course Enrollment 
-// *
+model EnrollmentOrderHistory {
+  id             String                        @id @default(uuid())
+  comment        String
+  previousStatus EnrollmentOrderStatus
+  decision       EnrollmentOrderStatusDecision
+  resubmittedAt  DateTime?
 
-model CourseEnrollment {
+  enrollmentOrderId String
+  enrollmentOrder   EnrollmentOrder @relation(fields: [enrollmentOrderId], references: [id])
+
+  createdAt DateTime @default(now())
+}
+
+model Enrollment {
   id             String  @id @default(uuid())
   isActive       Boolean @default(false)
   purchasedPrice Float
@@ -719,8 +737,8 @@ model CourseEnrollment {
   courseId String
   course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
-  courseEnrollmentOrderId String                @unique
-  courseEnrollmentOrder   CourseEnrollmentOrder @relation(fields: [courseEnrollmentOrderId], references: [id])
+  enrollmentOrderId String          @unique
+  enrollmentOrder   EnrollmentOrder @relation(fields: [enrollmentOrderId], references: [id])
 
   enrolledAt DateTime @default(now())
   updatedAt  DateTime @updatedAt
@@ -729,6 +747,10 @@ model CourseEnrollment {
   @@index([courseId])
   @@index([enrolledAt])
   @@index([studentId, isActive])
+}
+
+enum PaymentMethod {
+  MOBILE_PAYMENT
 }
 
 // *
