@@ -26,3 +26,19 @@
 0178	N58 Banco Digital, S.A.	
 0191	Banco Nacional de Crédito, C.A. Banco Universal	
 0601	Instituto Municipal de Crédito Popular	
+
+¡Hola, Abraham! Me parece genial que quieras darle un buen mensaje al tutor tras el pago. Aquí tienes una sugerencia de cómo podrías redactar ese mensaje:
+
+---
+
+🎉 ¡Éxito! 🎉
+
+Tu orden de suscripción ha sido creada con éxito. En este momento, está en proceso de verificación. Te mantendremos informado sobre el estado de tu orden.
+
+Para revisar tus órdenes de suscripción, haz clic en el botón a continuación:
+
+[Ver historial de órdenes]
+
+---
+
+¿Qué te parece? Si necesitas hacerle alguna modificación o agregar algo más, ¡dímelo!
