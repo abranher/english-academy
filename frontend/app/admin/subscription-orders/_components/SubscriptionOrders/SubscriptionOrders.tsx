@@ -6,7 +6,7 @@ import { AllSubscriptionOrders } from "./AllSubscriptionOrders";
 import { UnverifiedSubscriptionOrders } from "./UnverifiedSubscriptionOrders";
 import { NeedsRevisionSubscriptionOrders } from "./NeedsRevisionSubscriptionOrders";
 import { ResubmittedSubscriptionOrders } from "./ResubmittedSubscriptionOrders";
-import { CompletedSubscriptionOrders } from "./CompletedSubscriptionOrders";
+import { ApprovedSubscriptionOrders } from "./ApprovedSubscriptionOrders";
 import { CanceledSubscriptionOrders } from "./CanceledSubscriptionOrders";
 
 import { CardDescription, CardTitle } from "@/components/shadcn/ui/card";
@@ -43,8 +43,8 @@ export function SubscriptionOrders() {
             <TabsTrigger value={SubscriptionOrderStatus.RESUBMITTED}>
               Reenviadas
             </TabsTrigger>
-            <TabsTrigger value={SubscriptionOrderStatus.COMPLETED}>
-              Completadas
+            <TabsTrigger value={SubscriptionOrderStatus.APPROVED}>
+              Aprobadas
             </TabsTrigger>
             <TabsTrigger value={SubscriptionOrderStatus.CANCELED}>
               Canceladas
@@ -78,10 +78,10 @@ export function SubscriptionOrders() {
         </TabsContent>
 
         <TabsContent
-          value={SubscriptionOrderStatus.COMPLETED}
+          value={SubscriptionOrderStatus.APPROVED}
           className="border-none p-0 outline-none"
         >
-          <CompletedSubscriptionOrders />
+          <ApprovedSubscriptionOrders />
         </TabsContent>
 
         <TabsContent

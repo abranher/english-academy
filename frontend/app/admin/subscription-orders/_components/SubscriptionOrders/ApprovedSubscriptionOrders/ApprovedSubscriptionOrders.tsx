@@ -16,7 +16,7 @@ import { Separator } from "@/components/shadcn/ui/separator";
 import { Skeleton } from "@/components/shadcn/ui/skeleton";
 import { FolderOpen } from "lucide-react";
 
-export function CompletedSubscriptionOrders() {
+export function ApprovedSubscriptionOrders() {
   const {
     isPending,
     data: subscriptionOrders,
@@ -24,9 +24,9 @@ export function CompletedSubscriptionOrders() {
   } = useQuery<
     (SubscriptionOrder & { tutor: Tutor & { user: User }; plan: Plan })[] | []
   >({
-    queryKey: ["admin_subscription_order", SubscriptionOrderStatus.COMPLETED],
+    queryKey: ["admin_subscription_order", SubscriptionOrderStatus.APPROVED],
     queryFn: () =>
-      getSubscriptionOrderByStatus(SubscriptionOrderStatus.COMPLETED),
+      getSubscriptionOrderByStatus(SubscriptionOrderStatus.APPROVED),
   });
 
   if (isError) return <div>Ocurrió un error al cargar las órdenes</div>;
@@ -34,10 +34,10 @@ export function CompletedSubscriptionOrders() {
   return (
     <>
       <CardHeader>
-        <CardTitle>Listado de órdenes de suscripción completadas</CardTitle>
+        <CardTitle>Listado de órdenes de suscripción aprobadas</CardTitle>
         <CardDescription>
           En esta sección encontrarás todas las órdenes de suscripción
-          completadas.
+          aprobadas.
         </CardDescription>
       </CardHeader>
 
@@ -59,7 +59,7 @@ export function CompletedSubscriptionOrders() {
           <section className="w-full text-zinc-700 dark:text-zinc-200 py-4">
             <h2 className="flex justify-center flex-col items-center">
               <FolderOpen className="w-24 h-24" />
-              No hay órdenes completadas.
+              No hay órdenes aprobadas.
             </h2>
           </section>
         )}

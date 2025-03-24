@@ -54,7 +54,7 @@ export class OrdersAdminService {
           where: { status },
           include: { tutor: { include: { user: true } }, plan: true },
         });
-      } else if (status === SubscriptionOrderStatus.COMPLETED) {
+      } else if (status === SubscriptionOrderStatus.APPROVED) {
         return await this.prisma.subscriptionOrder.findMany({
           where: { status },
           include: { tutor: { include: { user: true } }, plan: true },
