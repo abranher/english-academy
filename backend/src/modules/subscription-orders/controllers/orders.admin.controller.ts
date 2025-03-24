@@ -12,6 +12,11 @@ export class OrdersAdminController {
     return this.ordersAdminService.findAll();
   }
 
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.ordersAdminService.findOne(id);
+  }
+
   @Get('status/:status')
   findByStatus(@Param('status') status: SubscriptionOrderStatus) {
     return this.ordersAdminService.findByStatus(status);

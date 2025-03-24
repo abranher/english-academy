@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 
 import { auth } from "@/config/auth";
 
-import { SubscriptionOrder } from "./_components/SubscriptionOrder";
+import { Order } from "./_components/Order";
 
 import {
   Breadcrumb,
@@ -44,7 +44,7 @@ export default async function SubscriptionOrderPage() {
         </BreadcrumbList>
       </Breadcrumb>
 
-      <SubscriptionOrder />
+      <Order />
     </>
   );
 }

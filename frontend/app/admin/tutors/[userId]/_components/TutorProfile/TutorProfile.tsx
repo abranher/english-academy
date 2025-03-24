@@ -16,7 +16,11 @@ import { CardTitle, CardDescription } from "@/components/shadcn/ui/card";
 import { TutorProfileCard } from "../TutorProfileCard";
 
 export function TutorProfile() {
-  const { isPending, data: userTutor } = useQuery<User>({
+  const {
+    isPending,
+    data: userTutor,
+    isError,
+  } = useQuery<User>({
     queryKey: ["tutor-admin-profile"],
     queryFn: () => getUserTutor(userId as string),
   });
@@ -24,7 +28,7 @@ export function TutorProfile() {
   const { userId } = useParams();
 
   if (isPending) return <TutorProfileSkeleton />;
-  if (!userTutor) return <div>No se pudo cargar la información del tutor.</div>;
+  if (isError) return <div>No se pudo cargar la información del tutor.</div>;
 
   return (
     <>

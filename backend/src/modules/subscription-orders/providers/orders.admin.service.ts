@@ -21,6 +21,22 @@ export class OrdersAdminService {
     }
   }
 
+  async findOne(id: string) {
+    await this.prisma.findSubscriptionOrderOrThrow(id);
+
+    try {
+      return this.prisma.subscriptionOrder.findUnique({
+        where: { id },
+        include: { tutor: { include: { user: true } }, plan: true },
+      });
+    } catch (error) {
+      throw new InternalServerErrorException(
+        'Error del servidor. Por favor intenta nuevamente.',
+        error,
+      );
+    }
+  }
+
   async findByStatus(status: SubscriptionOrderStatus) {
     try {
       if (status === SubscriptionOrderStatus.UNVERIFIED) {

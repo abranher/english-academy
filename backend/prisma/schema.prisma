@@ -129,7 +129,7 @@ enum SubscriptionOrderStatus {
   UNVERIFIED
   NEEDS_REVISION // El administrador solicitó cambios
   RESUBMITTED // El tutor reenvio
-  COMPLETED
+  APPROVED
   CANCELED
 }
 
@@ -149,10 +149,35 @@ model SubscriptionOrder {
   subscriptionId String       @unique
   subscription   Subscription @relation(fields: [subscriptionId], references: [id])
 
+  subscriptionOrderHistory SubscriptionOrderHistory[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([tutorId])
+}
+
+// *
+// * Subscription Order History
+// *
+
+enum SubscriptionOrderStatusDecision {
+  APPROVED
+  NEEDS_CHANGES
+  REJECTED
+}
+
+model SubscriptionOrderHistory {
+  id             String                          @id @default(uuid())
+  comment        String
+  previousStatus SubscriptionOrderStatus
+  decision       SubscriptionOrderStatusDecision
+  resubmittedAt  DateTime?
+
+  subscriptionOrderId String
+  subscriptionOrder   SubscriptionOrder @relation(fields: [subscriptionOrderId], references: [id])
+
+  createdAt DateTime @default(now())
 }
 
 enum SubscriptionStatus {
