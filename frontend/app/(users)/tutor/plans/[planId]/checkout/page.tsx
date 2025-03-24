@@ -18,6 +18,7 @@ export default async function PlanSubscriptionCheckoutPage() {
   const session = await auth();
 
   if (!session) redirect("/");
+  if (!session.user.tutor) redirect("/");
 
   return (
     <>
@@ -37,7 +38,10 @@ export default async function PlanSubscriptionCheckoutPage() {
         </BreadcrumbList>
       </Breadcrumb>
 
-      <CheckoutContent />
+      <CheckoutContent
+        userId={session.user.id}
+        tutorId={session.user.tutor.id}
+      />
     </>
   );
 }

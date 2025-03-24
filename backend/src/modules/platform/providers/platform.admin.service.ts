@@ -8,7 +8,7 @@ import { PrismaService } from 'src/modules/prisma/providers/prisma.service';
 import { UsersService } from 'src/modules/users/providers/users.service';
 
 @Injectable()
-export class PlatformService {
+export class PlatformAdminService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly userService: UsersService,
@@ -24,11 +24,9 @@ export class PlatformService {
     await this.findUserOrThrow(userId);
 
     try {
-      const { mobilePayment } = await this.prisma.platform.findFirst({
+      return await this.prisma.platform.findFirst({
         include: { mobilePayment: { include: { bank: true } } },
       });
-
-      return { ...mobilePayment };
     } catch (error) {
       console.error('Error al obtener los datos de la plataforma:', error);
       throw new InternalServerErrorException(

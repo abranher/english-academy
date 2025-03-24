@@ -37,6 +37,7 @@ import { MobilePaymentsModule } from './modules/mobile-payments/mobile-payments.
 import { BanksModule } from './modules/banks/banks.module';
 import { PlatformModule } from './modules/platform/platform.module';
 import { PlansModule } from './modules/plans/plans.module';
+import { SubscriptionOrdersModule } from './modules/subscription-orders/subscription-orders.module';
 
 @Module({
   imports: [
@@ -79,6 +80,7 @@ import { PlansModule } from './modules/plans/plans.module';
     BanksModule,
     PlatformModule,
     PlansModule,
+    SubscriptionOrdersModule,
   ],
 })
 export class AppModule {}

@@ -36,7 +36,7 @@ export function StepOne({ plan }: { plan: Plan }) {
         </CardDescription>
       </section>
 
-      <section className="p-8 flex flex-col gap-5">
+      <section className="flex flex-col gap-5">
         <section>
           <CardTitle>{plan.name}</CardTitle>
           <section className="flex gap-2 items-center">
@@ -73,41 +73,45 @@ export function StepOne({ plan }: { plan: Plan }) {
         </section>
       </section>
 
-      <Separator />
+      <Separator className="my-4" />
 
-      <section className="flex justify-between items-end py-4">
+      <section className="flex flex-col py-4">
         <Card>
           <CardHeader>
             <CardTitle>Código de promoción:</CardTitle>
           </CardHeader>
 
           <CardContent>
-            <section className="flex gap-1 py-2">
+            <section className="flex gap-3 py-2">
               <Input />
               <Button>Aplicar</Button>
             </section>
             <CardDescription>Nota: solo puedes usar una vez</CardDescription>
           </CardContent>
         </Card>
-        <article className="flex flex-col items-end py-3">
-          <article className="flex gap-2 items-center">
-            <CardDescription>Subtotal:</CardDescription>
-            <CardDescription className="font-bold text-lg text-zinc-800">
-              {formatPrice(plan.price)}
-            </CardDescription>
-          </article>
-          <article className="flex gap-2 items-center">
-            <CardDescription>Descuento:</CardDescription>
-            <CardDescription className="font-bold text-lg text-zinc-800">
-              $0.00
-            </CardDescription>
-          </article>
-          <article className="flex gap-2 items-center">
-            <CardDescription>Total a pagar:</CardDescription>
-            <CardDescription className="font-bold text-lg text-zinc-800">
-              {formatPrice(plan.price)}
-            </CardDescription>
-          </article>
+
+        <Separator className="my-4" />
+
+        <article className="flex justify-between">
+          <CardDescription>Subtotal:</CardDescription>
+          <CardDescription className="font-bold text-lg text-zinc-800">
+            {formatPrice(plan.price)}
+          </CardDescription>
+        </article>
+
+        <article className="flex justify-between">
+          <CardDescription>Descuento:</CardDescription>
+          <CardDescription className="font-bold text-lg text-zinc-800">
+            $0.00
+          </CardDescription>
+        </article>
+        <Separator className="my-4" />
+
+        <article className="flex justify-between">
+          <CardDescription>Total a pagar:</CardDescription>
+          <CardDescription className="font-bold text-lg text-zinc-800">
+            {formatPrice(plan.price)}
+          </CardDescription>
         </article>
       </section>
 

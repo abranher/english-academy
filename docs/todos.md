@@ -2,7 +2,6 @@
 
 - Mostrar planes para tutor
 
-* Crear una vista donde el tutor pueda ver los planes -> 20 min
 * Crear una seccion donde el tutor pueda ver el plan que se quiere suscribir
 * Agregar el id del plan en la url, y llamar al id del tutor
 * Checkout donde pueda agregar los datos de su pago

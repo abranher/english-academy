@@ -11,7 +11,7 @@ interface StepPlanSubscriptionState {
 }
 
 const STEP = 1;
-const TOTAL_STEPS = 2;
+const TOTAL_STEPS = 3;
 
 export const useStepPlanSubscriptionStore = create<StepPlanSubscriptionState>()(
   persist(
