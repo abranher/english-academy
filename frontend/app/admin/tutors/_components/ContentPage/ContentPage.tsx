@@ -1,12 +1,5 @@
 "use client";
 
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/shadcn/ui/tabs";
-
 import { AllTutorsList } from "../AllTutorsList";
 import { PendingTutorsList } from "../PendingTutorsList";
 import { ApprovedTutorsList } from "../ApprovedTutorsList";
@@ -14,6 +7,13 @@ import { RejectedTutorsList } from "../RejectedTutorsList";
 import { NewTutorsList } from "../NewTutorsList";
 import { TutorStatus } from "@/types/enums";
 import { ResubmittedTutorsList } from "../ResubmittedTutorsList";
+
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/shadcn/ui/tabs";
 
 export function ContentPage() {
   return (

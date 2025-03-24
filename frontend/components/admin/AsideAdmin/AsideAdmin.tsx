@@ -7,10 +7,13 @@ import { SideNav } from "@/components/admin/SideNav";
 import { Button } from "@/components/shadcn/ui/button";
 import {
   Bell,
+  BookMarked,
+  Clipboard,
   ClipboardList,
   DatabaseBackup,
   GraduationCap,
   Home,
+  List,
   Package2,
   Settings,
   Users,
@@ -33,6 +36,20 @@ const adminLinks = [
       {
         title: "Estudiantes",
         href: "/admin/students",
+      },
+    ],
+  },
+  {
+    title: "Suscripciones",
+    icon: BookMarked,
+    subItems: [
+      {
+        title: "Órdenes de suscripción",
+        href: "/admin/subscription-orders",
+      },
+      {
+        title: "Suscripciones",
+        href: "/admin/courses/categories",
       },
     ],
   },
