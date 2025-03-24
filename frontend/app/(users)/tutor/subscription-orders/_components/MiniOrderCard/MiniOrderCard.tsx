@@ -39,19 +39,10 @@ export function MiniOrderCard({
           </section>
 
           <section className="flex items-center gap-3">
-            <CardTitle className="text-lg">Tutor:</CardTitle>
-            <Link href={`/admin/tutors/${subscriptionOrder.tutor.user.id}`}>
-              <Button variant="link" size="sm" className="p-0 h-3">
-                @{subscriptionOrder.tutor.user.username}
-              </Button>
-            </Link>
-          </section>
-
-          <section className="flex items-center gap-3">
             <OrderStatusBadge status={subscriptionOrder.status} />
           </section>
 
-          <Link href={`/admin/subscription-orders/${subscriptionOrder.id}`}>
+          <Link href={`/tutor/subscription-orders/${subscriptionOrder.id}`}>
             <Button className="flex gap-2">
               Ver más
               <ArrowUpRight className="opacity-90 w-4" />

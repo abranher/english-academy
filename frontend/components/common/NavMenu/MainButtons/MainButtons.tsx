@@ -14,6 +14,7 @@ import { ThemeSwitcher } from "./ThemeSwitcher";
 import { Button } from "@/components/shadcn/ui/button";
 import {
   Award,
+  BookMarked,
   CircleUser,
   CreditCard,
   Files,
@@ -81,7 +82,7 @@ export function MainButtons() {
                       )}
                     </DropdownMenuTrigger>
                     <DropdownMenuContent
-                      className="w-56"
+                      className="w-64"
                       align="end"
                       forceMount
                     >
@@ -191,7 +192,7 @@ export function MainButtons() {
                       )}
                     </DropdownMenuTrigger>
                     <DropdownMenuContent
-                      className="w-56"
+                      className="w-64"
                       align="end"
                       forceMount
                     >
@@ -284,6 +285,13 @@ export function MainButtons() {
                         </DropdownMenuItem>
 
                         <DropdownMenuItem asChild>
+                          <Link href="/tutor/subscription-orders">
+                            <BookMarked className="mr-2 h-4 w-4" />
+                            Mis Órdenes de Suscripción
+                          </Link>
+                        </DropdownMenuItem>
+
+                        <DropdownMenuItem asChild>
                           <Link href="/student/settings">
                             <Settings className="mr-2 h-4 w-4" />
                             Configuración
@@ -351,7 +359,7 @@ export function MainButtons() {
                       )}
                     </DropdownMenuTrigger>
                     <DropdownMenuContent
-                      className="w-56"
+                      className="w-64"
                       align="end"
                       forceMount
                     >

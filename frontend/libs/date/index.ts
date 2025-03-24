@@ -22,6 +22,13 @@ export function formatDateShort(isoDateString: Date): string {
   });
 }
 
+export function formatDateForOrders(isoDateString: Date): string {
+  const date = new Date(isoDateString);
+  return format(date, "'Se generó el 'dd' de 'MMMM 'de' yyyy", {
+    locale: es,
+  });
+}
+
 export function formatDateForHumans(date: Date): string {
   const now = new Date();
   return formatDistance(date, now, {
