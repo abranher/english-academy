@@ -1,27 +1,26 @@
 "use client";
 
-import { SubscriptionOrderHistory } from "@/types/models";
-import { formatDateNormal } from "@/libs/date";
 import { truncateString } from "@/libs/format";
+import { formatDateNormal } from "@/libs/date";
 import { SubscriptionOrderStatusDecision } from "@/types/enums";
+import { SubscriptionOrder, SubscriptionOrderHistory } from "@/types/models";
 
 import { OrderStatusBadge } from "@/components/subscription-orders";
+import { ResubmittedAction } from "./ResubmittedAction";
 import { ShowHistoryModal } from "./ShowHistoryModal";
 
 import { CardDescription, CardTitle } from "@/components/shadcn/ui/card";
+import { CalendarDays, CircleCheck, NotebookPen, UserPen } from "lucide-react";
 import { Badge } from "@/components/shadcn/ui/badge";
-import {
-  CalendarDays,
-  CircleAlert,
-  CircleCheck,
-  NotebookPen,
-  UserPen,
-} from "lucide-react";
 
-export function StatusHistoryCard({
+export function TutorStatusHistoryCard({
   history,
+  subscriptionOrder,
+  tutorId,
 }: {
   history: SubscriptionOrderHistory;
+  subscriptionOrder: SubscriptionOrder;
+  tutorId: string;
 }) {
   return (
     <>
@@ -40,10 +39,11 @@ export function StatusHistoryCard({
               SubscriptionOrderStatusDecision.NEEDS_CHANGES && (
               <>
                 {history.resubmittedAt === null ? (
-                  <Badge variant="warning" className="flex gap-1 items-center">
-                    <CircleAlert className="w-4" />
-                    En espera
-                  </Badge>
+                  <ResubmittedAction
+                    tutorId={tutorId}
+                    history={history}
+                    subscriptionOrder={subscriptionOrder}
+                  />
                 ) : (
                   <Badge
                     variant="secondary"

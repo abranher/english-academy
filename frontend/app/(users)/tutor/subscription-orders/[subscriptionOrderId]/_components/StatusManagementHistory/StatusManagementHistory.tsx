@@ -1,11 +1,8 @@
 "use client";
 
-import { SubscriptionOrder, SubscriptionOrderHistory } from "@/types/models";
 import { useState } from "react";
+import { SubscriptionOrder, SubscriptionOrderHistory } from "@/types/models";
 
-import { StatusHistoryCard } from "./StatusHistoryCard";
-
-import { Button } from "@/components/shadcn/ui/button";
 import {
   Card,
   CardContent,
@@ -13,21 +10,26 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/shadcn/ui/card";
-import { ChevronsDown, ChevronsUp, CircleCheck, History } from "lucide-react";
-import { ChangeStatusModal } from "./ChangeStatusModal";
-import { SubscriptionOrderStatus } from "@/types/enums";
+import { ChevronsDown, ChevronsUp, History } from "lucide-react";
+import { Button } from "@/components/shadcn/ui/button";
+import { TutorStatusHistoryCard } from "./TutorStatusHistoryCard";
+
+const MIN = 0;
+const MAX = 2;
 
 export function StatusManagementHistory({
   subscriptionOrderHistory,
   subscriptionOrder,
+  tutorId,
 }: {
   subscriptionOrderHistory: SubscriptionOrderHistory[] | [];
   subscriptionOrder: SubscriptionOrder;
+  tutorId: string;
 }) {
   const [showAll, setShowAll] = useState(false);
 
   return (
-    <Card>
+    <Card className="w-full">
       <CardHeader>
         <CardTitle className="flex gap-3 items-center">
           Historial de Status
@@ -43,12 +45,22 @@ export function StatusManagementHistory({
               <>
                 {showAll
                   ? subscriptionOrderHistory.map((history) => (
-                      <StatusHistoryCard key={history.id} history={history} />
+                      <TutorStatusHistoryCard
+                        key={history.id}
+                        history={history}
+                        subscriptionOrder={subscriptionOrder}
+                        tutorId={tutorId}
+                      />
                     ))
                   : subscriptionOrderHistory
-                      .slice(0, 2)
+                      .slice(MIN, MAX)
                       .map((history) => (
-                        <StatusHistoryCard key={history.id} history={history} />
+                        <TutorStatusHistoryCard
+                          key={history.id}
+                          history={history}
+                          subscriptionOrder={subscriptionOrder}
+                          tutorId={tutorId}
+                        />
                       ))}
               </>
             )}
@@ -84,25 +96,6 @@ export function StatusManagementHistory({
               </>
             )}
           </article>
-        </section>
-
-        <section className="w-full flex justify-end gap-3 pt-3">
-          {subscriptionOrder.status === SubscriptionOrderStatus.APPROVED ? (
-            <Button disabled className="flex gap-1">
-              <CircleCheck className="w-4" />
-              Aprobado
-            </Button>
-          ) : (
-            <>
-              {subscriptionOrderHistory.length === 0 ||
-              subscriptionOrderHistory[subscriptionOrderHistory.length - 1]
-                .resubmittedAt ? (
-                <ChangeStatusModal />
-              ) : (
-                <Button disabled>En espera</Button>
-              )}
-            </>
-          )}
         </section>
       </CardContent>
     </Card>

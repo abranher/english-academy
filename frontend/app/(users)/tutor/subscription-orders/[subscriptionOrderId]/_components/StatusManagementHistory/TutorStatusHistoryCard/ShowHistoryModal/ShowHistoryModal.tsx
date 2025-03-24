@@ -15,8 +15,8 @@ import {
   DialogTrigger,
 } from "@/components/shadcn/ui/dialog";
 import { Button } from "@/components/shadcn/ui/button";
-import { CardDescription, CardTitle } from "@/components/shadcn/ui/card";
 import { CalendarDays, Eye, NotebookPen, UserPen } from "lucide-react";
+import { CardDescription, CardTitle } from "@/components/shadcn/ui/card";
 
 export function ShowHistoryModal({
   history,
@@ -65,7 +65,7 @@ export function ShowHistoryModal({
             <article className="flex flex-col gap-1">
               <DialogTitle className="flex gap-1 items-center">
                 <CalendarDays className="w-4" />
-                Tutor reenvió perfil:
+                Reenvié:
               </DialogTitle>
               <CardDescription>
                 {formatDate(history.resubmittedAt)}

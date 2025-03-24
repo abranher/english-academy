@@ -1,7 +1,5 @@
 "use client";
 
-import Link from "next/link";
-
 import {
   Plan,
   SubscriptionOrder,
@@ -24,7 +22,6 @@ import {
   CardTitle,
 } from "@/components/shadcn/ui/card";
 import { Separator } from "@/components/shadcn/ui/separator";
-import { Button } from "@/components/shadcn/ui/button";
 
 export function OrderCard({
   subscriptionOrder,
@@ -71,16 +68,6 @@ export function OrderCard({
               {subscriptionOrder.plan.description}
             </CardDescription>
           </section>
-        </section>
-        <Separator className="my-4" />
-
-        <section className="flex items-center gap-3">
-          <Title size="lg">Tutor:</Title>
-          <Link href={`/admin/tutors/${subscriptionOrder.tutor.user.id}`}>
-            <Button variant="link" size="sm" className="p-0 h-3">
-              @{subscriptionOrder.tutor.user.username}
-            </Button>
-          </Link>
         </section>
         <Separator className="my-4" />
 

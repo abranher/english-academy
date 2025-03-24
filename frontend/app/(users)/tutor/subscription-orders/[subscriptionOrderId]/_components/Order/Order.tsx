@@ -32,7 +32,7 @@ export function Order({ tutorId }: { tutorId: string }) {
       subscriptionOrderHistory: SubscriptionOrderHistory[] | [];
     }
   >({
-    queryKey: ["admin_subscription_order", subscriptionOrderId],
+    queryKey: ["tutor_subscription_order", subscriptionOrderId],
     queryFn: () => getSubscriptionOrder(subscriptionOrderId as string, tutorId),
   });
 
@@ -57,6 +57,7 @@ export function Order({ tutorId }: { tutorId: string }) {
       <StatusManagementHistory
         subscriptionOrderHistory={subscriptionOrder.subscriptionOrderHistory}
         subscriptionOrder={subscriptionOrder}
+        tutorId={tutorId}
       />
     </>
   );

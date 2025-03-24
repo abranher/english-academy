@@ -26,4 +26,15 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
       throw new NotFoundException('Órden de suscripción no encontrada');
     return order;
   }
+
+  async findSubscriptionOrderHistoryOrThrow(id: string) {
+    const history = await this.subscriptionOrderHistory.findUnique({
+      where: { id },
+    });
+    if (!history)
+      throw new NotFoundException(
+        'Historial de Órden de suscripción no encontrado',
+      );
+    return history;
+  }
 }

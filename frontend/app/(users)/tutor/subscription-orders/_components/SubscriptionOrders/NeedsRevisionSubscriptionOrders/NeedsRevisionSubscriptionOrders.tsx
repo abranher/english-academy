@@ -49,7 +49,7 @@ export function NeedsRevisionSubscriptionOrders({
         </CardTitle>
         <CardDescription>
           En esta sección encontrarás todas las órdenes de suscripción que
-          necesitan revisión por parte del tutor.
+          necesitan ser revisadas.
         </CardDescription>
       </CardHeader>
 

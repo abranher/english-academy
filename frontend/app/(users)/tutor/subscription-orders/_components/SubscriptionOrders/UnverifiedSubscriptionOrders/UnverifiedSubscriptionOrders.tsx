@@ -37,7 +37,7 @@ export function UnverifiedSubscriptionOrders({ tutorId }: { tutorId: string }) {
         <CardTitle>Listado de órdenes de suscripción sin verificar</CardTitle>
         <CardDescription>
           En esta sección encontrarás todas las órdenes de suscripción que aún
-          no haz verificado.
+          no se han verificado.
         </CardDescription>
       </CardHeader>
 

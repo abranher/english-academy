@@ -6,7 +6,6 @@ import { truncateString } from "@/libs/format";
 
 import { CardDescription, CardTitle } from "@/components/shadcn/ui/card";
 import { StatusBadge } from "@/components/tutors/StatusBadge";
-import { Button } from "@/components/shadcn/ui/button";
 import { CalendarDays, CircleCheck, NotebookPen, UserPen } from "lucide-react";
 import { ShowHistoryModal } from "./ShowHistoryModal";
 import { ResubmittedAction } from "./ResubmittedAction";
