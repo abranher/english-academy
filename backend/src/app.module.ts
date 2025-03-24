@@ -38,6 +38,7 @@ import { BanksModule } from './modules/banks/banks.module';
 import { PlatformModule } from './modules/platform/platform.module';
 import { PlansModule } from './modules/plans/plans.module';
 import { SubscriptionOrdersModule } from './modules/subscription-orders/subscription-orders.module';
+import { SubscriptionOrderHistoryModule } from './modules/subscription-order-history/subscription-order-history.module';
 
 @Module({
   imports: [
@@ -81,6 +82,7 @@ import { SubscriptionOrdersModule } from './modules/subscription-orders/subscrip
     PlatformModule,
     PlansModule,
     SubscriptionOrdersModule,
+    SubscriptionOrderHistoryModule,
   ],
 })
 export class AppModule {}

@@ -21,6 +21,7 @@ export { type QuizQuestionOption } from "./QuizQuestionOption";
 export { type Student } from "./Student";
 export { type Subscription } from "./Subscription";
 export { type SubscriptionOrder } from "./SubscriptionOrder";
+export { type SubscriptionOrderHistory } from "./SubscriptionOrderHistory";
 export { type Tutor } from "./Tutor";
 export { type TutorStatusHistory } from "./TutorStatusHistory";
 export { type User } from "./User";

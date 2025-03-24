@@ -27,7 +27,11 @@ export class OrdersAdminService {
     try {
       return this.prisma.subscriptionOrder.findUnique({
         where: { id },
-        include: { tutor: { include: { user: true } }, plan: true },
+        include: {
+          tutor: { include: { user: true } },
+          plan: true,
+          subscriptionOrderHistory: true,
+        },
       });
     } catch (error) {
       throw new InternalServerErrorException(

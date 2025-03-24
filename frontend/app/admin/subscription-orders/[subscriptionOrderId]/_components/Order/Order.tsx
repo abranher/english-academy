@@ -4,10 +4,19 @@ import { useParams } from "next/navigation";
 
 import { useQuery } from "@tanstack/react-query";
 import { getSubscriptionOrder } from "../../_services";
-import { Plan, SubscriptionOrder, Tutor, User } from "@/types/models";
+import {
+  Plan,
+  SubscriptionOrder,
+  SubscriptionOrderHistory,
+  Tutor,
+  User,
+} from "@/types/models";
+
+import { StatusManagementHistory } from "../StatusManagementHistory";
 
 import { CardDescription, CardTitle } from "@/components/shadcn/ui/card";
 import { Separator } from "@/components/shadcn/ui/separator";
+import { OrderCard } from "../OrderCard";
 
 export function Order() {
   const { subscriptionOrderId } = useParams();
@@ -17,7 +26,11 @@ export function Order() {
     data: subscriptionOrder,
     isError,
   } = useQuery<
-    SubscriptionOrder & { tutor: Tutor & { user: User }; plan: Plan }
+    SubscriptionOrder & {
+      tutor: Tutor & { user: User };
+      plan: Plan;
+      subscriptionOrderHistory: SubscriptionOrderHistory[] | [];
+    }
   >({
     queryKey: ["admin_subscription_order", subscriptionOrderId],
     queryFn: () => getSubscriptionOrder(subscriptionOrderId as string),
@@ -36,6 +49,15 @@ export function Order() {
       </section>
 
       <Separator />
+
+      <OrderCard subscriptionOrder={subscriptionOrder} />
+
+      <Separator />
+
+      <StatusManagementHistory
+        subscriptionOrderHistory={subscriptionOrder.subscriptionOrderHistory}
+        subscriptionOrder={subscriptionOrder}
+      />
     </>
   );
 }

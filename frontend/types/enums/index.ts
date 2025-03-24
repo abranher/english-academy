@@ -12,4 +12,5 @@ export { Roles } from "./Roles";
 export { LessonType } from "./LessonType";
 export { AccountStatus } from "./AccountStatus";
 export { SubscriptionOrderStatus } from "./SubscriptionOrderStatus";
+export { SubscriptionOrderStatusDecision } from "./SubscriptionOrderStatusDecision";
 export { SubscriptionStatus } from "./SubscriptionStatus";

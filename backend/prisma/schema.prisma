@@ -139,6 +139,7 @@ model SubscriptionOrder {
   subscriptionPrice Float
   paymentMethod     PaymentMethod           @default(MOBILE_PAYMENT)
   paymentReference  Int
+  approvedAt        DateTime?
 
   tutorId String
   tutor   Tutor  @relation(fields: [tutorId], references: [id])
