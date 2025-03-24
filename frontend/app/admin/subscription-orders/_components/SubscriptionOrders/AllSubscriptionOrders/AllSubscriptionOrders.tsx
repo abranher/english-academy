@@ -42,9 +42,7 @@ export function AllSubscriptionOrders() {
 
       <section className="flex w-full flex-wrap gap-3">
         {isPending ? (
-          [1, 2, 3].map((_, i) => (
-            <Skeleton key={i} className="w-44 rounded-xl" />
-          ))
+          [1, 2, 3].map((i) => <Skeleton key={i} className="w-44 rounded-xl" />)
         ) : subscriptionOrders.length > 0 ? (
           subscriptionOrders.map((subscriptionOrder) => (
             <MiniOrderCard
