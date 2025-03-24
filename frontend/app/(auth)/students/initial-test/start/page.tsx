@@ -8,30 +8,28 @@ export default function InitialTestStartPage() {
   const exercises = useInitialTestStore((state) => state.exercises);
 
   return (
-    <>
-      <div
-        className={
-          exercises.length === 0
-            ? "container h-screen flex flex-col items-center justify-center"
-            : "container h-full flex flex-col items-center justify-center"
-        }
-      >
-        <div className="m-auto lg:p-12 my-8">
-          <div className="flex flex-col gap-4">
-            {exercises.length === 0 && (
-              <>
-                <div className="text-5xl">
-                  <h2>¿Listo para comenzar?</h2>
-                </div>
-                <div className="flex justify-center pt-5">
-                  <Start />
-                </div>
-              </>
-            )}
-            {exercises.length > 0 && <Test />}
-          </div>
+    <section
+      className={
+        exercises.length === 0
+          ? "container h-screen flex flex-col items-center justify-center"
+          : "container h-full flex flex-col items-center justify-center"
+      }
+    >
+      <div className="m-auto lg:p-12 my-8">
+        <div className="flex flex-col gap-4">
+          {exercises.length === 0 && (
+            <>
+              <div className="text-5xl">
+                <h2>¿Listo para comenzar?</h2>
+              </div>
+              <div className="flex justify-center pt-5">
+                <Start />
+              </div>
+            </>
+          )}
+          {exercises.length > 0 && <Test />}
         </div>
       </div>
-    </>
+    </section>
   );
 }

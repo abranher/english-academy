@@ -1,1 +1,1 @@
-export { BadgeLevel } from "./BadgeLevel";
+export { LevelBadge } from "./LevelBadge";

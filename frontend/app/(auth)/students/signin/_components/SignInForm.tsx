@@ -47,7 +47,7 @@ export function SignInForm() {
       if (response === undefined || response.error) {
         setError(response?.code);
       } else {
-        router.push("/student");
+        router.push("/student/home");
         router.refresh();
       }
     } catch (error) {

@@ -3,10 +3,14 @@ import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { SubscriptionOrderStatus } from '@prisma/client';
 
 import { PrismaService } from 'src/modules/prisma/providers/prisma.service';
+import { InfrastructureService } from 'src/modules/infrastructure/infrastructure.service';
 
 @Injectable()
 export class OrdersAdminService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly InfrastructureService: InfrastructureService,
+  ) {}
 
   async findAll() {
     try {
@@ -22,7 +26,7 @@ export class OrdersAdminService {
   }
 
   async findOne(id: string) {
-    await this.prisma.findSubscriptionOrderOrThrow(id);
+    await this.InfrastructureService.findSubscriptionOrderOrThrow(id);
 
     try {
       return this.prisma.subscriptionOrder.findUnique({

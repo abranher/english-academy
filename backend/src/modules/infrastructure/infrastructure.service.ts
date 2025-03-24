@@ -1,0 +1,46 @@
+import { Injectable, NotFoundException } from '@nestjs/common';
+
+import { PrismaService } from '../prisma/providers/prisma.service';
+
+@Injectable()
+export class InfrastructureService {
+  constructor(private readonly prisma: PrismaService) {}
+
+  async findUserOrThrow(id: string) {
+    const user = await this.prisma.user.findUnique({ where: { id } });
+    if (!user) throw new NotFoundException('Usuario no encontrado');
+    return user;
+  }
+
+  async findTutorOrThrow(id: string) {
+    const tutor = await this.prisma.tutor.findUnique({ where: { id } });
+    if (!tutor) throw new NotFoundException('Tutor no encontrado');
+    return tutor;
+  }
+
+  async findPlanOrThrow(id: string) {
+    const plan = await this.prisma.plan.findUnique({ where: { id } });
+    if (!plan) throw new NotFoundException('Plan no encontrado');
+    return plan;
+  }
+
+  async findSubscriptionOrderOrThrow(id: string) {
+    const order = await this.prisma.subscriptionOrder.findUnique({
+      where: { id },
+    });
+    if (!order)
+      throw new NotFoundException('Órden de suscripción no encontrada');
+    return order;
+  }
+
+  async findSubscriptionOrderHistoryOrThrow(id: string) {
+    const history = await this.prisma.subscriptionOrderHistory.findUnique({
+      where: { id },
+    });
+    if (!history)
+      throw new NotFoundException(
+        'Historial de Órden de suscripción no encontrado',
+      );
+    return history;
+  }
+}

@@ -1,8 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/config/auth";
 import { ADMIN, PUBLIC_ROUTES, ROOT, STUDENT, TUTOR } from "@/libs/routes";
-import { Roles } from "@/types/enums/Roles";
-import { TutorStatus } from "./types/enums";
+import { Roles, TutorStatus } from "./types/enums";
 
 export default auth((req) => {
   const { nextUrl } = req;

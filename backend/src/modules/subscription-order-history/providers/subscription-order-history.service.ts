@@ -1,12 +1,17 @@
 import { Injectable } from '@nestjs/common';
+
 import { SubscriptionOrderStatus } from '@prisma/client';
 
 import { PrismaService } from 'src/modules/prisma/providers/prisma.service';
+import { InfrastructureService } from 'src/modules/infrastructure/infrastructure.service';
 import { UpdateSubscriptionOrderDto } from 'src/modules/subscription-orders/dto/update-subscription-order.dto';
 
 @Injectable()
 export class SubscriptionOrderHistoryService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly InfrastructureService: InfrastructureService,
+  ) {}
 
   async resubmittedAt(
     id: string,
@@ -14,9 +19,11 @@ export class SubscriptionOrderHistoryService {
     tutorId: string,
     updateSubscriptionOrderDto: UpdateSubscriptionOrderDto,
   ) {
-    await this.prisma.findSubscriptionOrderHistoryOrThrow(id);
-    await this.prisma.findSubscriptionOrderOrThrow(subscriptionOrderId);
-    await this.prisma.findTutorOrThrow(tutorId);
+    await this.InfrastructureService.findSubscriptionOrderHistoryOrThrow(id);
+    await this.InfrastructureService.findSubscriptionOrderOrThrow(
+      subscriptionOrderId,
+    );
+    await this.InfrastructureService.findTutorOrThrow(tutorId);
 
     await this.prisma.subscriptionOrderHistory.update({
       where: { id },

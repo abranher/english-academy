@@ -3,21 +3,28 @@ import { Injectable } from '@nestjs/common';
 import {
   SubscriptionOrderStatus,
   SubscriptionOrderStatusDecision,
+  SubscriptionStatus,
 } from '@prisma/client';
 
 import { PrismaService } from 'src/modules/prisma/providers/prisma.service';
+import { InfrastructureService } from 'src/modules/infrastructure/infrastructure.service';
 import { CreateSubscriptionOrderHistoryDto } from '../dto/create-subscription-order-history.dto';
 
 @Injectable()
 export class OrderHistoryAdminService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly InfrastructureService: InfrastructureService,
+  ) {}
 
   async create(
     subscriptionOrderId: string,
     createSubscriptionOrderHistoryDto: CreateSubscriptionOrderHistoryDto,
   ) {
     const subscriptionOrder =
-      await this.prisma.findSubscriptionOrderOrThrow(subscriptionOrderId);
+      await this.InfrastructureService.findSubscriptionOrderOrThrow(
+        subscriptionOrderId,
+      );
 
     if (
       createSubscriptionOrderHistoryDto.status ===
@@ -28,7 +35,7 @@ export class OrderHistoryAdminService {
           comment: createSubscriptionOrderHistoryDto.comment,
           previousStatus: subscriptionOrder.status,
           decision: SubscriptionOrderStatusDecision.NEEDS_CHANGES,
-          subscriptionOrderId: subscriptionOrder.id,
+          subscriptionOrderId,
         },
       });
 
@@ -54,7 +61,7 @@ export class OrderHistoryAdminService {
           comment: createSubscriptionOrderHistoryDto.comment,
           previousStatus: subscriptionOrder.status,
           decision: SubscriptionOrderStatusDecision.APPROVED,
-          subscriptionOrderId: subscriptionOrder.id,
+          subscriptionOrderId,
         },
       });
 
@@ -64,6 +71,9 @@ export class OrderHistoryAdminService {
           data: {
             status: createSubscriptionOrderHistoryDto.status,
             approvedAt: new Date(),
+            subscription: {
+              update: { data: { status: SubscriptionStatus.ACTIVE } },
+            },
           },
         });
 

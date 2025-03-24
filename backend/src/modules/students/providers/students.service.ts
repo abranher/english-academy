@@ -9,6 +9,7 @@ import { hash } from 'bcrypt';
 import { Roles } from '@prisma/client';
 
 import { PrismaService } from 'src/modules/prisma/providers/prisma.service';
+import { InfrastructureService } from 'src/modules/infrastructure/infrastructure.service';
 import { UsersService } from 'src/modules/users/providers/users.service';
 import { CreateStudentDto } from '../dto/create-student.dto';
 import { BIOGRAPHY_DEFAULT } from '../constants';
@@ -17,6 +18,7 @@ import { BIOGRAPHY_DEFAULT } from '../constants';
 export class StudentsService {
   constructor(
     private readonly prisma: PrismaService,
+    private readonly InfrastructureService: InfrastructureService,
     private readonly userService: UsersService,
   ) {}
 
@@ -167,5 +169,21 @@ export class StudentsService {
     }
 
     return { message: '¡Genial! solo un poco más!' };
+  }
+
+  async findOne(userId: string) {
+    this.InfrastructureService.findUserOrThrow(userId);
+
+    try {
+      return await this.prisma.user.findUnique({
+        where: { id: userId },
+        include: { student: { include: { level: true } } },
+      });
+    } catch (error) {
+      throw new InternalServerErrorException(
+        'Error del servidor. Por favor intenta nuevamente.',
+        error,
+      );
+    }
   }
 }

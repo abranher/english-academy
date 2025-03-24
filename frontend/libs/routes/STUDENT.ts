@@ -1,4 +1,4 @@
 export const STUDENT = {
-  DEFAULT_REDIRECT: "/student",
+  DEFAULT_REDIRECT: "/student/home",
   ROUTES: ["/student"],
 };

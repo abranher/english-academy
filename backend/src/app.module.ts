@@ -39,6 +39,7 @@ import { PlatformModule } from './modules/platform/platform.module';
 import { PlansModule } from './modules/plans/plans.module';
 import { SubscriptionOrdersModule } from './modules/subscription-orders/subscription-orders.module';
 import { SubscriptionOrderHistoryModule } from './modules/subscription-order-history/subscription-order-history.module';
+import { InfrastructureModule } from './modules/infrastructure/infrastructure.module';
 
 @Module({
   imports: [
@@ -83,6 +84,7 @@ import { SubscriptionOrderHistoryModule } from './modules/subscription-order-his
     PlansModule,
     SubscriptionOrdersModule,
     SubscriptionOrderHistoryModule,
+    InfrastructureModule,
   ],
 })
 export class AppModule {}
