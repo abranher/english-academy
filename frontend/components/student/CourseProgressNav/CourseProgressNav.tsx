@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+
 import { cn } from "@/libs/shadcn/utils";
+import { useState } from "react";
 import {
   ChevronDown,
   CheckCircle2,
@@ -48,11 +49,11 @@ const NavLink = ({
   const getHref = () => {
     switch (type) {
       case "chapter":
-        return `/course/${courseId}/chapter/${id}`;
+        return `/student/course/${courseId}/chapter/${id}`;
       case "class":
-        return `/course/${courseId}/chapter/${chapterId}/lesson/${lessonId}/class/${id}`;
+        return `/student/course/${courseId}/chapter/${chapterId}/lesson/${lessonId}/class/${id}`;
       case "quiz":
-        return `/course/${courseId}/chapter/${chapterId}/lesson/${lessonId}/quiz/${id}`;
+        return `/student/course/${courseId}/chapter/${chapterId}/lesson/${lessonId}/quiz/${id}`;
       default:
         return "#";
     }
