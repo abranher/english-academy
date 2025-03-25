@@ -3,6 +3,8 @@ import { redirect } from "next/navigation";
 
 import { auth } from "@/config/auth";
 
+import { CourseContent } from "./_components/CourseContent";
+
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -32,6 +34,8 @@ export default async function CoursePage() {
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
+
+      <CourseContent studentId={session.user.student.id} />
     </>
   );
 }

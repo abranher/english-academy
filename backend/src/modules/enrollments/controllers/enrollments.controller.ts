@@ -15,10 +15,29 @@ export class EnrollmentsController {
   }
 
   /*
+   * Get Enrollment One
+   */
+  @Get('student/:studentId/course/:courseId')
+  findOne(
+    @Param('studentId') studentId: string,
+    @Param('courseId') courseId: string,
+  ) {
+    return this.enrollmentsService.findOne(studentId, courseId);
+  }
+
+  /*
    * Get Course Enrollment Tutors
    */
   @Get('student/:studentId/tutors')
   findAllTutors(@Param('studentId') studentId: string) {
     return this.enrollmentsService.findAllTutors(studentId);
+  }
+
+  @Get('student/:studentId/course/:courseId/progress-navigation')
+  async getNavigation(
+    @Param('studentId') studentId: string,
+    @Param('courseId') courseId: string,
+  ) {
+    return this.enrollmentsService.getCourseProgressNav(studentId, courseId);
   }
 }
