@@ -88,7 +88,7 @@ export function Enrollments({ studentId }: { studentId: string }) {
               </div>
 
               <section className="px-3">
-                <Link href={`/courses/${enrollment.course.id}`}>
+                <Link href={`/student/course/${enrollment.course.id}`}>
                   <Button size="icon" variant="ghost">
                     <ArrowRight />
                   </Button>

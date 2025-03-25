@@ -1,17 +1,18 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { auth } from "@/config/auth";
 
-import { StudentHome } from "./_components/StudentHome";
-
 import {
   Breadcrumb,
   BreadcrumbItem,
+  BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
+  BreadcrumbSeparator,
 } from "@/components/shadcn/ui/breadcrumb";
 
-export default async function StudentHomePage() {
+export default async function CoursePage() {
   const session = await auth();
   if (!session) redirect("/");
   if (!session.user.student) redirect("/");
@@ -21,15 +22,16 @@ export default async function StudentHomePage() {
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
-            <BreadcrumbPage>Home</BreadcrumbPage>
+            <BreadcrumbLink asChild>
+              <Link href="/student/home">Home</Link>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>Curso</BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-
-      <StudentHome
-        userId={session.user.id}
-        studentId={session.user.student.id}
-      />
     </>
   );
 }

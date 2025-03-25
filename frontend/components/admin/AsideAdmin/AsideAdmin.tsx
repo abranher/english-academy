@@ -8,12 +8,10 @@ import { Button } from "@/components/shadcn/ui/button";
 import {
   Bell,
   BookMarked,
-  Clipboard,
   ClipboardList,
   DatabaseBackup,
   GraduationCap,
   Home,
-  List,
   Package2,
   Settings,
   Users,
