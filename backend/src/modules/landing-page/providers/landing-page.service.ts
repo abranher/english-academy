@@ -1,6 +1,6 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 
-import { CoursePlatformStatus, CourseReviewStatus } from '@prisma/client';
+import { CourseReviewStatus } from '@prisma/client';
 
 import { PrismaService } from 'src/modules/prisma/providers/prisma.service';
 
@@ -13,9 +13,13 @@ export class LandingPageService {
       return await this.prisma.course.findMany({
         where: {
           reviewStatus: CourseReviewStatus.APPROVED,
-          platformStatus: CoursePlatformStatus.PUBLISHED,
         },
-        include: { price: true, category: true, subcategory: true },
+        include: {
+          price: true,
+          category: true,
+          subcategory: true,
+          tutor: true,
+        },
       });
     } catch (error) {
       throw new InternalServerErrorException(

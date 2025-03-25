@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 import { useStepPlanSubscriptionStore } from "@/services/store/tutor/plan-subscription";
 
 import { Title } from "@/components/common/Title";
@@ -26,7 +28,11 @@ export function StepThree() {
           continuación:
         </CardDescription>
 
-        <Button>Ver historial de órdenes</Button>
+        <Button asChild>
+          <Link href={`/tutor/subscription-orders`}>
+            Ver historial de órdenes
+          </Link>
+        </Button>
       </CardContent>
     </>
   );

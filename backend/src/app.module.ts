@@ -31,8 +31,6 @@ import { QuizQuestionOptionsModule } from './modules/quiz-question-options/quiz-
 import { AttachmentsModule } from './modules/attachments/attachments.module';
 import { ClassAttachmentsModule } from './modules/class-attachments/class-attachments.module';
 import { LandingPageModule } from './modules/landing-page/landing-page.module';
-import { CourseEnrollmentOrdersModule } from './modules/course-enrollment-orders/course-enrollment-orders.module';
-import { CourseEnrollmentsModule } from './modules/course-enrollments/course-enrollments.module';
 import { MobilePaymentsModule } from './modules/mobile-payments/mobile-payments.module';
 import { BanksModule } from './modules/banks/banks.module';
 import { PlatformModule } from './modules/platform/platform.module';
@@ -40,6 +38,7 @@ import { PlansModule } from './modules/plans/plans.module';
 import { SubscriptionOrdersModule } from './modules/subscription-orders/subscription-orders.module';
 import { SubscriptionOrderHistoryModule } from './modules/subscription-order-history/subscription-order-history.module';
 import { InfrastructureModule } from './modules/infrastructure/infrastructure.module';
+import { EnrollmentOrdersModule } from './modules/enrollment-orders/enrollment-orders.module';
 
 @Module({
   imports: [
@@ -76,8 +75,6 @@ import { InfrastructureModule } from './modules/infrastructure/infrastructure.mo
     AttachmentsModule,
     ClassAttachmentsModule,
     LandingPageModule,
-    CourseEnrollmentOrdersModule,
-    CourseEnrollmentsModule,
     MobilePaymentsModule,
     BanksModule,
     PlatformModule,
@@ -85,6 +82,7 @@ import { InfrastructureModule } from './modules/infrastructure/infrastructure.mo
     SubscriptionOrdersModule,
     SubscriptionOrderHistoryModule,
     InfrastructureModule,
+    EnrollmentOrdersModule,
   ],
 })
 export class AppModule {}

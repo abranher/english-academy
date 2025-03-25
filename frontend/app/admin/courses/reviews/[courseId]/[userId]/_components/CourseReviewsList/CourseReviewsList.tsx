@@ -34,7 +34,7 @@ export function CourseReviewsList() {
             <article className="text-lg w-full">
               <p className="flex justify-center flex-col items-center">
                 <FolderOpen className="w-20 h-20" />
-                Aun no has enviado a revisión.
+                Aun no has revisado.
               </p>
             </article>
           </>
