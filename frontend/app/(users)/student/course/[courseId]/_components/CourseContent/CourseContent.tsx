@@ -2,6 +2,8 @@
 
 import { useParams } from "next/navigation";
 
+import ReactPlayer from "react-player";
+import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import {
   Category,
@@ -11,7 +13,7 @@ import {
   SubCategory,
 } from "@/types/models";
 import { Chip, Image } from "@heroui/react";
-import { assetImg } from "@/libs/asset";
+import { assetImg, assetVideo } from "@/libs/asset";
 import { truncateString } from "@/libs/format";
 import { getEnrollment } from "@/services/network/enrollments";
 
@@ -24,11 +26,21 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/shadcn/ui/card";
-import { ClipboardList, FileVideo, ImageIcon, Medal } from "lucide-react";
+import {
+  ClipboardList,
+  FileVideo,
+  ImageIcon,
+  Loader2,
+  Medal,
+  Video,
+} from "lucide-react";
 import { Separator } from "@/components/shadcn/ui/separator";
 import Preview from "@/components/shadcn/ui/preview";
+import { Skeleton } from "@/components/shadcn/ui/skeleton";
 
 export function CourseContent({ studentId }: { studentId: string }) {
+  const [playerReady, setPlayerReady] = useState(false);
+
   const { courseId } = useParams();
 
   const {
@@ -47,6 +59,10 @@ export function CourseContent({ studentId }: { studentId: string }) {
     queryKey: ["enrollment_course_datails", courseId],
     queryFn: () => getEnrollment(studentId, courseId as string),
   });
+
+  useEffect(() => {
+    setPlayerReady(true);
+  }, []);
 
   if (isPending) return <>Cargando...</>;
   if (isError) return <div>No se pudo cargar la información del curso.</div>;
@@ -94,6 +110,30 @@ export function CourseContent({ studentId }: { studentId: string }) {
       <section className="w-full grid grid-cols-1 lg:grid-cols-8 gap-4">
         <NavProgress studentId={studentId} />
         <section className="lg:col-span-5 gap-3 flex flex-col">
+          <section className="aspect-video">
+            {enrollment.course.trailer ? (
+              <>
+                {playerReady ? (
+                  <article className="aspect-video rounded-lg">
+                    <ReactPlayer
+                      controls
+                      width={"100%"}
+                      height={"100%"}
+                      url={assetVideo(enrollment.course.trailer)}
+                    />
+                  </article>
+                ) : (
+                  <Skeleton className="w-full h-full flex justify-center items-center">
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  </Skeleton>
+                )}
+              </>
+            ) : (
+              <div className="grid aspect-video place-items-center rounded-lg bg-zinc-200 dark:bg-zinc-800">
+                <Video className="h-9 w-9 text-gray-600 aspect-video" />
+              </div>
+            )}
+          </section>
           <article className="flex gap-3">
             <Card className="min-w-44">
               <CardHeader>
