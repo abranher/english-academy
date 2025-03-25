@@ -2,12 +2,9 @@
 
 import Link from "next/link";
 
-import { Course } from "@/types/models";
+import { Category, Course, Price, SubCategory } from "@/types/models";
 import { formatPrice } from "@/libs/format";
-import { BillingCycle } from "@/types/enums";
 import { useStepEnrollmentStore } from "@/services/store/student/enrollment";
-
-import { Title } from "@/components/common/Title";
 
 import {
   Card,
@@ -19,9 +16,18 @@ import {
 import { Button } from "@/components/shadcn/ui/button";
 import { Separator } from "@/components/shadcn/ui/separator";
 import { Input } from "@/components/shadcn/ui/input";
-import { Check } from "lucide-react";
+import { Chip, Image } from "@heroui/react";
+import { assetImg } from "@/libs/asset";
 
-export function StepOne({ course }: { course: Course }) {
+export function StepOne({
+  course,
+}: {
+  course: Course & {
+    price: Price;
+    category: Category;
+    subcategory: SubCategory;
+  };
+}) {
   const nextStep = useStepEnrollmentStore((state) => state.nextStep);
   const resetSteps = useStepEnrollmentStore((state) => state.resetSteps);
 
@@ -29,48 +35,47 @@ export function StepOne({ course }: { course: Course }) {
     <>
       <section className="text-center mb-6">
         <CardTitle className="mb-3">
-          Confirmación de la Orden de Suscripción
+          Confirmación de la Orden de inscripción
         </CardTitle>
         <CardDescription>
-          Verifica el plan y haz clic en continuar.
+          Verifica el curso y haz clic en continuar.
         </CardDescription>
       </section>
 
-      <section className="flex flex-col gap-5">
-        <section>
-          <CardTitle>{course.}</CardTitle>
-          <section className="flex gap-2 items-center">
-            <Title size="lxl">{formatPrice(plan.price)}</Title>
-            <span>
-              {plan.billingCycle === BillingCycle.MONTHLY && "/mes"}
-              {plan.billingCycle === BillingCycle.ANNUAL && "/año"}
-            </span>
-          </section>
-          <CardDescription>{plan.description}</CardDescription>
-        </section>
+      <section className="lg:col-span-2 space-y-4">
+        <div className="grid grid-cols-8 items-start gap-4">
+          <Link
+            href={`/courses/${course.id}`}
+            className="col-span-7 flex items-start gap-4"
+          >
+            <div className="aspect-video w-52 shrink-0">
+              <Image
+                src={assetImg(course.image)}
+                alt={course.title}
+                className="w-full h-full object-contain"
+              />
+            </div>
 
-        <section>
-          <ul className="flex flex-col gap-3 font-bold">
-            <li className="flex items-center gap-2">
-              <Check className="w-5 h-5" />
-              <p>
-                {plan.maxCourses
-                  ? plan.maxCourses > 1
-                    ? `${plan.maxCourses} cursos`
-                    : `${plan.maxCourses} curso`
-                  : "Cursos ilimitados"}
-              </p>
-            </li>
-            <li className="flex items-center gap-2">
-              <Check className="w-5 h-5" />
-              <p>Soporte 24/7</p>
-            </li>
-            <li className="flex items-center gap-2">
-              <Check className="w-5 h-5" />
-              <p>Avanced analytics</p>
-            </li>
-          </ul>
-        </section>
+            <div className="flex flex-col gap-3 w-full">
+              <h3 className="text-sm font-bold text-gray-800">
+                {`${course.title} - ${course.subtitle}`}
+              </h3>
+
+              <h4 className="text-lg max-sm:text-base font-bold text-gray-800">
+                {formatPrice(course.price?.amount ?? 0)}
+              </h4>
+
+              <div className="flex gap-2">
+                <Chip color="danger" size="lg">
+                  {course.category?.title}
+                </Chip>
+                <Chip color="primary" size="lg">
+                  {course.subcategory?.title}
+                </Chip>
+              </div>
+            </div>
+          </Link>
+        </div>
       </section>
 
       <Separator className="my-4" />
@@ -95,7 +100,7 @@ export function StepOne({ course }: { course: Course }) {
         <article className="flex justify-between">
           <CardDescription>Subtotal:</CardDescription>
           <CardDescription className="font-bold text-lg text-zinc-800">
-            {formatPrice(plan.price)}
+            {formatPrice(course.price.amount)}
           </CardDescription>
         </article>
 
@@ -110,7 +115,7 @@ export function StepOne({ course }: { course: Course }) {
         <article className="flex justify-between">
           <CardDescription>Total a pagar:</CardDescription>
           <CardDescription className="font-bold text-lg text-zinc-800">
-            {formatPrice(plan.price)}
+            {formatPrice(course.price.amount)}
           </CardDescription>
         </article>
       </section>

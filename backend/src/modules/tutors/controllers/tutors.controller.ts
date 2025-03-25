@@ -67,9 +67,9 @@ export class TutorsController {
    * @Get()
    */
 
-  @Get()
-  findAll() {
-    return this.tutorsService.findAll();
+  @Get('tutor/:tutorId/payment-method')
+  findTutorWithPaymentMethod(@Param('tutorId') tutorId: string) {
+    return this.tutorsService.findTutorWithPaymentMethod(tutorId);
   }
 
   @Get('user/:userId')

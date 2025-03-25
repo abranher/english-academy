@@ -384,9 +384,9 @@ export function MainButtons() {
                       <DropdownMenuSeparator />
                       <DropdownMenuGroup>
                         <DropdownMenuItem asChild>
-                          <Link href="/student">
+                          <Link href="/student/home">
                             <Home className="mr-2 h-4 w-4" />
-                            Dashboard
+                            Home
                           </Link>
                         </DropdownMenuItem>
 

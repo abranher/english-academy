@@ -12,6 +12,7 @@ import { hash } from 'bcrypt';
 import { totp } from 'otplib';
 
 import { PrismaService } from 'src/modules/prisma/providers/prisma.service';
+import { InfrastructureService } from 'src/modules/infrastructure/infrastructure.service';
 import { MailService } from 'src/modules/mail/providers/mail.service';
 import { CreateTutorDto } from '../dto/create-tutor.dto';
 import { BIOGRAPHY_DEFAULT } from '../constants';
@@ -26,6 +27,7 @@ export class TutorsService {
     private readonly prisma: PrismaService,
     private readonly mail: MailService,
     private readonly userService: UsersService,
+    private readonly InfrastructureService: InfrastructureService,
     private readonly config: ConfigService,
   ) {}
 
@@ -184,10 +186,6 @@ export class TutorsService {
     return { message: '¡Genial! solo un poco más!' };
   }
 
-  findAll() {
-    return `This action returns all tutors`;
-  }
-
   async findOne(userId: string) {
     const tutorUser = await this.prisma.user.findUnique({
       where: { id: userId },
@@ -197,6 +195,24 @@ export class TutorsService {
     if (!tutorUser) throw new NotFoundException('Usuario no encontrado');
 
     return tutorUser;
+  }
+
+  async findTutorWithPaymentMethod(tutorId: string) {
+    await this.InfrastructureService.findTutorOrThrow(tutorId);
+
+    try {
+      return await this.prisma.tutor.findUnique({
+        where: { id: tutorId },
+        include: {
+          mobilePayment: { include: { bank: true } },
+        },
+      });
+    } catch (error) {
+      console.error('Error obteniendo el tutor:', error);
+      throw new InternalServerErrorException(
+        'Error del servidor. Por favor intenta nuevamente.',
+      );
+    }
   }
 
   async findOneWithPaymentMethod(userId: string) {

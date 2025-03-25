@@ -1,7 +1,17 @@
 "use client";
 
+import { useParams } from "next/navigation";
+
 import axios from "@/config/axios";
-import { Bank, MobilePayment, Plan } from "@/types/models";
+import {
+  Bank,
+  Category,
+  Course,
+  MobilePayment,
+  Price,
+  SubCategory,
+  Tutor,
+} from "@/types/models";
 import { formatPrice } from "@/libs/format";
 import { PaymentMethod } from "@/types/enums";
 import { useStepEnrollmentStore } from "@/services/store/student/enrollment";
@@ -29,7 +39,6 @@ import { Button } from "@/components/shadcn/ui/button";
 import { Separator } from "@/components/shadcn/ui/separator";
 import { IdCard, Landmark, Phone, Smartphone } from "lucide-react";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { getPaymentMethods } from "@/services/network/platform/get-payment-methods";
 import { RadioGroup, RadioGroupItem } from "@/components/shadcn/ui/radio-group";
 import { useState } from "react";
 import { Label } from "@/components/shadcn/ui/label";
@@ -40,28 +49,33 @@ import { FormSchema } from "./FormSchema";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
 import { LoadingButton } from "@/components/common/LoadingButton";
+import { getTutorPaymentMethods } from "@/services/network/tutors/get-tutor-payment-methods";
 
 export function StepTwo({
-  plan,
-  userId,
+  course,
   studentId,
 }: {
-  plan: Plan;
-  userId: string;
+  course: Course & {
+    price: Price;
+    category: Category;
+    subcategory: SubCategory;
+  };
   studentId: string;
 }) {
   const [tabs, setTabs] = useState<string>(PaymentMethod.MOBILE_PAYMENT);
+
+  const { tutorId } = useParams();
 
   const nextStep = useStepEnrollmentStore((state) => state.nextStep);
   const prevStep = useStepEnrollmentStore((state) => state.prevStep);
 
   const {
     isPending,
-    data: mobilePayment,
+    data: tutor,
     isError,
-  } = useQuery<MobilePayment & { bank: Bank }>({
-    queryKey: ["get_payment_method_checkout_form"],
-    queryFn: () => getPaymentMethods(userId as string),
+  } = useQuery<Tutor & { mobilePayment: MobilePayment & { bank: Bank } }>({
+    queryKey: ["get_tutor_payment_method_checkout_form"],
+    queryFn: () => getTutorPaymentMethods(tutorId as string),
   });
 
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -69,12 +83,12 @@ export function StepTwo({
   });
 
   const mutation = useMutation({
-    mutationFn: (subscriptionOrder: { paymentReference: number }) =>
+    mutationFn: (enrollmentOrder: { paymentReference: number }) =>
       axios.post(
-        `/api/subscription-orders/tutor/${studentId}/plan/${plan.id}`,
+        `/api/enrollment-orders/student/${studentId}/course/${course.id}`,
         {
-          ...subscriptionOrder,
-          subscriptionPrice: plan.price,
+          ...enrollmentOrder,
+          enrollmentPrice: course.price.amount,
         }
       ),
     onSuccess: (response) => {
@@ -92,7 +106,7 @@ export function StepTwo({
 
         const errorMessages: { [key: number]: string } = {
           400: "Datos no válidos",
-          404: "Tutor o plan no encontrado",
+          404: "Estudiante o curso no encontrado",
           500: "Error del servidor",
           "-1": "Error inesperado",
         };
@@ -118,9 +132,9 @@ export function StepTwo({
   return (
     <>
       <section className="text-center mb-6">
-        <CardTitle className="mb-3">Pagar Orden de Suscripción</CardTitle>
+        <CardTitle className="mb-3">Pagar Orden de Inscripción</CardTitle>
         <CardDescription>
-          Realiza el pago de tu Suscripción y haz clic en Pagar.
+          Realiza el pago de tu Inscripción y haz clic en Pagar.
         </CardDescription>
       </section>
 
@@ -188,17 +202,17 @@ export function StepTwo({
             <section className="flex flex-col gap-4">
               <CardDescription className="text-lg flex items-center gap-3">
                 <Phone className="h-6 w-6" />
-                {`${mobilePayment.phoneCode} - ${mobilePayment.phoneNumber}`}
+                {`${tutor.mobilePayment.phoneCode} - ${tutor.mobilePayment.phoneNumber}`}
               </CardDescription>
 
               <CardDescription className="text-lg flex items-center gap-3">
                 <IdCard className="h-6 w-6" />
-                {`${mobilePayment.documentType} - ${mobilePayment.documentNumber}`}
+                {`${tutor.mobilePayment.documentType} - ${tutor.mobilePayment.documentNumber}`}
               </CardDescription>
 
               <CardDescription className="text-lg flex items-center gap-3">
                 <Landmark className="h-6 w-6" />
-                {`${mobilePayment.bank.code} - ${mobilePayment.bank.name}`}
+                {`${tutor.mobilePayment.bank.code} - ${tutor.mobilePayment.bank.name}`}
               </CardDescription>
             </section>
 
@@ -207,7 +221,7 @@ export function StepTwo({
             <article className="flex justify-between">
               <CardDescription>Subtotal:</CardDescription>
               <CardDescription className="font-bold text-lg text-zinc-800">
-                {formatPrice(plan.price)}
+                {formatPrice(course.price.amount)}
               </CardDescription>
             </article>
 
@@ -222,7 +236,7 @@ export function StepTwo({
             <article className="flex justify-between">
               <CardDescription>Total a pagar:</CardDescription>
               <CardDescription className="font-bold text-lg text-zinc-800">
-                {formatPrice(plan.price)}
+                {formatPrice(course.price.amount)}
               </CardDescription>
             </article>
 

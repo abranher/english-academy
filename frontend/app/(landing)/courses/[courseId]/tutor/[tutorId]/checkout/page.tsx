@@ -58,10 +58,7 @@ export default async function EnrollmentCheckoutPage({
           </BreadcrumbList>
         </Breadcrumb>
 
-        <CheckoutContent
-          userId={session.user.id}
-          studentId={session.user.student.id}
-        />
+        <CheckoutContent studentId={session.user.student.id} />
       </section>
     </section>
   );

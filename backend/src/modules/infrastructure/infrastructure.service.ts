@@ -18,6 +18,18 @@ export class InfrastructureService {
     return tutor;
   }
 
+  async findStudentOrThrow(id: string) {
+    const student = await this.prisma.student.findUnique({ where: { id } });
+    if (!student) throw new NotFoundException('Estudiante no encontrado');
+    return student;
+  }
+
+  async findCourseOrThrow(id: string) {
+    const course = await this.prisma.course.findUnique({ where: { id } });
+    if (!course) throw new NotFoundException('Curso no encontrado');
+    return course;
+  }
+
   async findPlanOrThrow(id: string) {
     const plan = await this.prisma.plan.findUnique({ where: { id } });
     if (!plan) throw new NotFoundException('Plan no encontrado');

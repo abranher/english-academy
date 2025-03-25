@@ -18,18 +18,18 @@ export function StepThree() {
       <CardContent className="text-center flex flex-col items-center gap-4 my-16">
         <Title size="lxl">🎉 ¡Éxito! 🎉</Title>
         <CardDescription className="text-lg">
-          Tu orden de suscripción ha sido creada con éxito. En este momento,
+          Tu orden de inscripción ha sido creada con éxito. En este momento,
           está en proceso de verificación. Te mantendremos informado sobre el
           estado de tu orden.
         </CardDescription>
 
         <CardDescription className="text-lg">
-          Para revisar tus órdenes de suscripción, haz clic en el botón a
+          Para revisar tus órdenes de inscripción, haz clic en el botón a
           continuación:
         </CardDescription>
 
         <Button asChild>
-          <Link href={`/tutor/subscription-orders`}>
+          <Link href={`/student/enrollment-orders`}>
             Ver historial de órdenes
           </Link>
         </Button>

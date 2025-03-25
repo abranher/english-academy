@@ -2,7 +2,7 @@
 
 import { useParams } from "next/navigation";
 
-import { Course, Plan } from "@/types/models";
+import { Category, Course, Price, SubCategory } from "@/types/models";
 import { useQuery } from "@tanstack/react-query";
 import { useStepEnrollmentStore } from "@/services/store/student/enrollment";
 
@@ -19,13 +19,7 @@ import {
 } from "@/components/shadcn/ui/card";
 import { getCourse } from "@/services/network/courses";
 
-export function CheckoutContent({
-  userId,
-  studentId,
-}: {
-  userId: string;
-  studentId: string;
-}) {
+export function CheckoutContent({ studentId }: { studentId: string }) {
   const { courseId } = useParams();
 
   const step = useStepEnrollmentStore((state) => state.step);
@@ -35,15 +29,21 @@ export function CheckoutContent({
 
   const {
     isPending,
-    data: plan,
+    data: course,
     isError,
-  } = useQuery<Course>({
+  } = useQuery<
+    Course & {
+      price: Price;
+      category: Category;
+      subcategory: SubCategory;
+    }
+  >({
     queryKey: ["course_enrollment_checkout"],
     queryFn: () => getCourse(courseId as string),
   });
 
   if (isPending) return <>Cargando...</>;
-  if (isError) return <>Ha ocurrido un error al cargar el plan</>;
+  if (isError) return <>Ha ocurrido un error al cargar el curso</>;
 
   return (
     <Card>
@@ -55,10 +55,8 @@ export function CheckoutContent({
           <Progress value={progressValue} className="mb-6" />
         </CardTitle>
         <CardContent>
-          {step === 1 && <StepOne plan={plan} />}
-          {step === 2 && (
-            <StepTwo userId={userId} studentId={studentId} plan={plan} />
-          )}
+          {step === 1 && <StepOne course={course} />}
+          {step === 2 && <StepTwo studentId={studentId} course={course} />}
           {step === 3 && <StepThree />}
         </CardContent>
       </CardHeader>
