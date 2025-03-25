@@ -17,7 +17,7 @@ import {
 export default async function CourseIdPage() {
   const session = await auth();
 
-  if (!session) redirect("/tutor/dashboard");
+  if (!session) redirect("/");
 
   return (
     <>

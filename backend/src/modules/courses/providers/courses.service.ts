@@ -52,7 +52,7 @@ export class CoursesService {
   }
 
   /**
-   * Get Course
+   * Get Course for landing page
    */
   async findOne(id: string) {
     await this.findCourseOrThrow(id);

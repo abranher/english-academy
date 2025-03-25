@@ -2,12 +2,11 @@
 
 import Link from "next/link";
 
-import { Course } from "@/types/models";
+import { Course, Tutor } from "@/types/models";
 import { useQuery } from "@tanstack/react-query";
 import { assetImg } from "@/libs/asset";
 import { formatPrice } from "@/libs/format";
 import { Chip, Image } from "@heroui/react";
-import { useCartStore } from "@/services/store/cart";
 import { getLandingCourses } from "../../_services/getLandingCourses";
 
 import BoxBase from "@/components/common/BoxBase";
@@ -24,23 +23,17 @@ import {
   CarouselPrevious,
 } from "@/components/shadcn/ui/carousel";
 import { Button } from "@/components/shadcn/ui/button";
-import { ShoppingCart, XIcon } from "lucide-react";
+import { ShoppingCart } from "lucide-react";
 
 export function FeaturedCoursesSection() {
   const {
     isPending,
     data: courses,
     isError,
-  } = useQuery<Course[] | []>({
+  } = useQuery<(Course & { tutor: Tutor })[] | []>({
     queryKey: ["courses_landing_page"],
     queryFn: getLandingCourses,
   });
-
-  const cart = useCartStore((state) => state.cart);
-  const addToCart = useCartStore((state) => state.addToCart);
-  const removeFromCart = useCartStore((state) => state.removeFromCart);
-  const checkCourseInCart = (course: Course) =>
-    cart.some((item) => item.id === course.id);
 
   if (isPending) return <FeaturedCoursesSkeleton />;
   if (isError) return <>Ha ocurrido un error al cargar los cursos</>;
@@ -62,15 +55,15 @@ export function FeaturedCoursesSection() {
           <CarouselContent className="-ml-1">
             <>
               {courses.map((course) => {
-                const isCourseInCart = checkCourseInCart(course);
-
                 return (
                   <CarouselItem
                     key={course.id}
                     className="p-3 md:basis-1/2 lg:basis-1/3"
                   >
                     <Card>
-                      <Link href={`/courses/${course.id}`}>
+                      <Link
+                        href={`/courses/${course.id}/tutor/${course.tutorId}`}
+                      >
                         <div className="relative aspect-video m-2.5 overflow-hidden text-white rounded-md">
                           <Image
                             src={assetImg(course.image)}
@@ -111,27 +104,14 @@ export function FeaturedCoursesSection() {
                       </Link>
 
                       <div className="p-4 w-full">
-                        <Button
-                          className="flex gap-2 w-full"
-                          variant={isCourseInCart ? "outline" : "default"}
-                          onClick={() => {
-                            isCourseInCart
-                              ? removeFromCart(course)
-                              : addToCart(course);
-                          }}
+                        <Link
+                          href={`/courses/${course.id}/tutor/${course.tutorId}/checkout`}
                         >
-                          {isCourseInCart ? (
-                            <>
-                              <XIcon className="h-4 w-4" />
-                              Remover
-                            </>
-                          ) : (
-                            <>
-                              <ShoppingCart className="h-4 w-4" />
-                              Añadir al carrito
-                            </>
-                          )}
-                        </Button>
+                          <Button size="lg" className="flex gap-2 w-full text-xl">
+                            <ShoppingCart className="h-6 w-6" />
+                            Comprar ahora
+                          </Button>
+                        </Link>
                       </div>
                     </Card>
                   </CarouselItem>

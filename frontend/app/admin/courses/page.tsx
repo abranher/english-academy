@@ -1,5 +1,4 @@
 import Link from "next/link";
-import axios from "@/config/axios";
 
 import {
   Breadcrumb,

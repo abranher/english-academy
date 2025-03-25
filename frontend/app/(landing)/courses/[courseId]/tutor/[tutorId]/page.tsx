@@ -19,11 +19,9 @@ import {
   Loader2,
   ShoppingCart,
   Video,
-  XIcon,
 } from "lucide-react";
 import { formatPrice } from "@/libs/format";
 import { Button } from "@/components/shadcn/ui/button";
-import { useCartStore } from "@/services/store/cart";
 import { Card } from "@/components/shadcn/ui/card";
 import { Star } from "@/components/icons/Star";
 import Preview from "@/components/shadcn/ui/preview";
@@ -33,6 +31,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/shadcn/ui/accordion";
+import Link from "next/link";
 
 export default function CourseDetailsPage() {
   const [playerReady, setPlayerReady] = useState(false);
@@ -46,12 +45,6 @@ export default function CourseDetailsPage() {
     queryKey: ["course_details_page"],
     queryFn: () => getCourse(courseId as string),
   });
-
-  const cart = useCartStore((state) => state.cart);
-  const addToCart = useCartStore((state) => state.addToCart);
-  const removeFromCart = useCartStore((state) => state.removeFromCart);
-  const checkCourseInCart = (course: Course) =>
-    cart.some((item) => item.id === course.id);
 
   useEffect(() => {
     setPlayerReady(true);
@@ -97,30 +90,17 @@ export default function CourseDetailsPage() {
                 </div>
               </div>
 
-              <div className="flex my-10">
-                <Button
-                  className="flex gap-4 items-center text-2xl py-9"
-                  variant={checkCourseInCart(course) ? "default" : "outline"}
-                  size="lg"
-                  onClick={() => {
-                    checkCourseInCart(course)
-                      ? removeFromCart(course)
-                      : addToCart(course);
-                  }}
-                >
-                  {checkCourseInCart(course) ? (
-                    <>
-                      <XIcon className="h-8 w-8" />
-                      Remover
-                    </>
-                  ) : (
-                    <>
-                      <ShoppingCart className="h-8 w-8" />
-                      Añadir al carrito
-                    </>
-                  )}
+              <section className="flex my-10">
+                <Button size="lg" asChild>
+                  <Link
+                    href={`/courses/${course.id}/tutor/${course.tutorId}/checkout`}
+                    className="flex gap-4 items-center text-2xl py-9"
+                  >
+                    <ShoppingCart className="h-8 w-8" />
+                    Comprar ahora
+                  </Link>
                 </Button>
-              </div>
+              </section>
             </section>
 
             <section className="max-lg:mt-12 h-full">
@@ -136,11 +116,9 @@ export default function CourseDetailsPage() {
                       />
                     </div>
                   ) : (
-                    <>
-                      <Skeleton className="w-full h-full flex justify-center items-center">
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      </Skeleton>
-                    </>
+                    <Skeleton className="w-full h-full flex justify-center items-center">
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    </Skeleton>
                   )}
                 </>
               ) : (

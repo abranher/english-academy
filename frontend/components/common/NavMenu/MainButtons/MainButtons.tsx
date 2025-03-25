@@ -24,7 +24,6 @@ import {
   MessageSquare,
   PlusCircle,
   Settings,
-  ShoppingCart,
   User,
   UserPlus,
   UserSquare,
@@ -317,19 +316,6 @@ export function MainButtons() {
             {session.user.role === Roles.STUDENT && (
               <>
                 <NavbarItem>
-                  <Link href="/cart">
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="rounded-full"
-                      type="button"
-                    >
-                      <ShoppingCart className="w-5 h-5" />
-                    </Button>
-                  </Link>
-                </NavbarItem>
-
-                <NavbarItem>
                   <NotificationsDropdown userId={session.user.id} />
                 </NavbarItem>
 
@@ -470,19 +456,6 @@ export function MainButtons() {
           </>
         ) : (
           <>
-            <NavbarItem>
-              <Link href="/cart">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="rounded-full"
-                  type="button"
-                >
-                  <ShoppingCart className="w-5 h-5" />
-                </Button>
-              </Link>
-            </NavbarItem>
-
             <NavbarItem>
               <ThemeSwitcher />
             </NavbarItem>
