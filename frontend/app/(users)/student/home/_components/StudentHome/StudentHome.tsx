@@ -5,16 +5,19 @@ import { Level, Student, User } from "@/types/models";
 import { getUserStudent } from "../../_services";
 
 import { StudentHomeSkeleton } from "./StudentHomeSkeleton";
-import { ProfileCard } from "../ProfileCard";
-import {
-  Card,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/shadcn/ui/card";
+import { ProfileCard } from "./ProfileCard";
+import { Enrollments } from "./Enrollments";
+
+import { Card, CardDescription, CardHeader } from "@/components/shadcn/ui/card";
 import { Clipboard } from "lucide-react";
 
-export function StudentHome({ userId }: { userId: string }) {
+export function StudentHome({
+  userId,
+  studentId,
+}: {
+  userId: string;
+  studentId: string;
+}) {
   const {
     isPending,
     data: userStudent,
@@ -28,56 +31,56 @@ export function StudentHome({ userId }: { userId: string }) {
   if (isError) return <div>No se pudo cargar la información.</div>;
 
   return (
-    <>
-      <section className="w-full grid grid-cols-1 lg:grid-cols-8 gap-4">
-        <ProfileCard userStudent={userStudent} />
+    <section className="w-full grid grid-cols-1 lg:grid-cols-8 gap-4">
+      <ProfileCard userStudent={userStudent} />
 
-        <section className="lg:col-span-5 gap-3 flex flex-col">
-          <article className="flex gap-3">
-            <Card className="min-w-44">
-              <CardHeader>
-                <section className="flex flex-col items-center gap-2">
-                  <CardDescription className="font-bold text-lg text-center">
-                    Cursos inscritos
-                  </CardDescription>
-                  <CardDescription className="flex items-center gap-3 font-bold text-4xl">
-                    <Clipboard className="w-12 h-12" />
-                    12
-                  </CardDescription>
-                </section>
-              </CardHeader>
-            </Card>
+      <section className="lg:col-span-5 gap-3 flex flex-col">
+        <article className="flex gap-3">
+          <Card className="min-w-44">
+            <CardHeader>
+              <section className="flex flex-col items-center gap-2">
+                <CardDescription className="font-bold text-lg text-center">
+                  Cursos inscritos
+                </CardDescription>
+                <CardDescription className="flex items-center gap-3 font-bold text-4xl">
+                  <Clipboard className="w-12 h-12" />
+                  12
+                </CardDescription>
+              </section>
+            </CardHeader>
+          </Card>
 
-            <Card className="min-w-44">
-              <CardHeader>
-                <section className="flex flex-col items-center gap-2 ">
-                  <CardDescription className="font-bold text-lg text-center">
-                    Cursos completados
-                  </CardDescription>
-                  <CardDescription className="flex items-center gap-3 font-bold text-4xl">
-                    <Clipboard className="w-12 h-12" />
-                    12
-                  </CardDescription>
-                </section>
-              </CardHeader>
-            </Card>
+          <Card className="min-w-44">
+            <CardHeader>
+              <section className="flex flex-col items-center gap-2 ">
+                <CardDescription className="font-bold text-lg text-center">
+                  Cursos completados
+                </CardDescription>
+                <CardDescription className="flex items-center gap-3 font-bold text-4xl">
+                  <Clipboard className="w-12 h-12" />
+                  12
+                </CardDescription>
+              </section>
+            </CardHeader>
+          </Card>
 
-            <Card className="min-w-44">
-              <CardHeader>
-                <section className="flex flex-col items-center gap-2">
-                  <CardDescription className="font-bold text-lg text-center">
-                    Cursos
-                  </CardDescription>
-                  <CardDescription className="flex items-center gap-3 font-bold text-4xl">
-                    <Clipboard className="w-12 h-12" />
-                    12
-                  </CardDescription>
-                </section>
-              </CardHeader>
-            </Card>
-          </article>
-        </section>
+          <Card className="min-w-44">
+            <CardHeader>
+              <section className="flex flex-col items-center gap-2">
+                <CardDescription className="font-bold text-lg text-center">
+                  Cursos
+                </CardDescription>
+                <CardDescription className="flex items-center gap-3 font-bold text-4xl">
+                  <Clipboard className="w-12 h-12" />
+                  12
+                </CardDescription>
+              </section>
+            </CardHeader>
+          </Card>
+        </article>
+
+        <Enrollments studentId={studentId} />
       </section>
-    </>
+    </section>
   );
 }

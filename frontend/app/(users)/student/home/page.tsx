@@ -14,6 +14,7 @@ import {
 export default async function StudentHomePage() {
   const session = await auth();
   if (!session) redirect("/");
+  if (!session.user.student) redirect("/");
 
   return (
     <>
@@ -25,7 +26,10 @@ export default async function StudentHomePage() {
         </BreadcrumbList>
       </Breadcrumb>
 
-      <StudentHome userId={session.user.id} />
+      <StudentHome
+        userId={session.user.id}
+        studentId={session.user.student.id}
+      />
     </>
   );
 }

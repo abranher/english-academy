@@ -1,10 +1,12 @@
 "use client";
 
-import { Level, Student, User } from "@/types/models";
+import Avvvatars from "avvvatars-react";
 import { Avatar } from "@heroui/react";
 import { assetImg } from "@/libs/asset";
 import { formatDateShort } from "@/libs/date";
-import Avvvatars from "avvvatars-react";
+import { Level, Student, User } from "@/types/models";
+
+import { LevelBadge } from "@/components/student/BadgeLevel";
 
 import {
   Card,
@@ -22,7 +24,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/shadcn/ui/alert-dialog";
-import { LevelBadge } from "@/components/student/BadgeLevel";
 
 export function ProfileCard({
   userStudent,
