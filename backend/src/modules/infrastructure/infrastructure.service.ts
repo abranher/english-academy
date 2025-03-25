@@ -30,6 +30,18 @@ export class InfrastructureService {
     return course;
   }
 
+  async findClassOrThrow(id: string) {
+    const lesson = await this.prisma.class.findUnique({ where: { id } });
+    if (!lesson) throw new NotFoundException('Clase no encontrada');
+    return lesson;
+  }
+
+  async findQuizOrThrow(id: string) {
+    const lesson = await this.prisma.quiz.findUnique({ where: { id } });
+    if (!lesson) throw new NotFoundException('Quiz no encontrado');
+    return lesson;
+  }
+
   async findPlanOrThrow(id: string) {
     const plan = await this.prisma.plan.findUnique({ where: { id } });
     if (!plan) throw new NotFoundException('Plan no encontrado');

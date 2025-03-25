@@ -11,6 +11,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/shadcn/ui/breadcrumb";
+import { ClassContent } from "./_components/ClassContent";
 
 export default async function ClassPage({
   params,
@@ -58,6 +59,8 @@ export default async function ClassPage({
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
+
+      <ClassContent studentId={session.user.student.id} />
     </>
   );
 }

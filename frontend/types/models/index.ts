@@ -8,6 +8,7 @@ export { type SubCategory } from "./SubCategory";
 export { type Certification } from "./Certification";
 export { type Enrollment } from "./Enrollment";
 export { type Class } from "./Class";
+export { type ClassProgress } from "./ClassProgress";
 export { type ClassAttachment } from "./ClassAttachment";
 export { type CourseReview } from "./CourseReview";
 export { type Lesson } from "./Lesson";

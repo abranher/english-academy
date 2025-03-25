@@ -1,0 +1,1 @@
+export { ClassContent } from "./ClassContent";
