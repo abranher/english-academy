@@ -272,6 +272,8 @@ model Student {
 
   enrollments      Enrollment[]
   enrollmentOrders EnrollmentOrder[]
+  classProgress    ClassProgress[]
+  quizProgress     QuizProgress[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -528,8 +530,7 @@ model Chapter {
   courseId String
   course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
-  lessons         Lesson[]
-  studentProgress StudentProgress[]
+  lessons Lesson[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -574,7 +575,8 @@ model Class {
   lessonId String @unique
   lesson   Lesson @relation(fields: [lessonId], references: [id])
 
-  attachments ClassAttachment[]
+  attachments   ClassAttachment[]
+  classProgress ClassProgress[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -620,7 +622,8 @@ model Quiz {
   lessonId String @unique
   lesson   Lesson @relation(fields: [lessonId], references: [id])
 
-  questions QuizQuestion[]
+  questions    QuizQuestion[]
+  quizProgress QuizProgress[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -655,20 +658,38 @@ model QuizQuestionOption {
 // * Student Progress
 // *
 
-model StudentProgress {
-  id        String @id @default(uuid())
-  studentId String
-
-  chapterId String
-  chapter   Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
-
+model ClassProgress {
+  id          String  @id @default(uuid())
   isCompleted Boolean @default(false)
+
+  studentId String
+  student   Student @relation(fields: [studentId], references: [id])
+
+  classId String
+  class   Class  @relation(fields: [classId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@unique([studentId, chapterId])
-  @@index([chapterId])
+  @@unique([studentId, classId])
+  @@index([classId])
+}
+
+model QuizProgress {
+  id          String  @id @default(uuid())
+  isCompleted Boolean @default(false)
+
+  studentId String
+  student   Student @relation(fields: [studentId], references: [id])
+
+  quizId String
+  quiz   Quiz   @relation(fields: [quizId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([studentId, quizId])
+  @@index([quizId])
 }
 
 // *
