@@ -2,10 +2,10 @@
 
 import Link from "next/link";
 
-import { Plan } from "@/types/models";
+import { Course } from "@/types/models";
 import { formatPrice } from "@/libs/format";
 import { BillingCycle } from "@/types/enums";
-import { useStepPlanSubscriptionStore } from "@/services/store/tutor/plan-subscription";
+import { useStepEnrollmentStore } from "@/services/store/student/enrollment";
 
 import { Title } from "@/components/common/Title";
 
@@ -21,9 +21,9 @@ import { Separator } from "@/components/shadcn/ui/separator";
 import { Input } from "@/components/shadcn/ui/input";
 import { Check } from "lucide-react";
 
-export function StepOne({ plan }: { plan: Plan }) {
-  const nextStep = useStepPlanSubscriptionStore((state) => state.nextStep);
-  const resetSteps = useStepPlanSubscriptionStore((state) => state.resetSteps);
+export function StepOne({ course }: { course: Course }) {
+  const nextStep = useStepEnrollmentStore((state) => state.nextStep);
+  const resetSteps = useStepEnrollmentStore((state) => state.resetSteps);
 
   return (
     <>
@@ -38,7 +38,7 @@ export function StepOne({ plan }: { plan: Plan }) {
 
       <section className="flex flex-col gap-5">
         <section>
-          <CardTitle>{plan.name}</CardTitle>
+          <CardTitle>{course.}</CardTitle>
           <section className="flex gap-2 items-center">
             <Title size="lxl">{formatPrice(plan.price)}</Title>
             <span>

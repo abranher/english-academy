@@ -4,7 +4,7 @@ import axios from "@/config/axios";
 import { Bank, MobilePayment, Plan } from "@/types/models";
 import { formatPrice } from "@/libs/format";
 import { PaymentMethod } from "@/types/enums";
-import { useStepPlanSubscriptionStore } from "@/services/store/tutor/plan-subscription";
+import { useStepEnrollmentStore } from "@/services/store/student/enrollment";
 
 import { Title } from "@/components/common/Title";
 
@@ -52,8 +52,8 @@ export function StepTwo({
 }) {
   const [tabs, setTabs] = useState<string>(PaymentMethod.MOBILE_PAYMENT);
 
-  const nextStep = useStepPlanSubscriptionStore((state) => state.nextStep);
-  const prevStep = useStepPlanSubscriptionStore((state) => state.prevStep);
+  const nextStep = useStepEnrollmentStore((state) => state.nextStep);
+  const prevStep = useStepEnrollmentStore((state) => state.prevStep);
 
   const {
     isPending,
@@ -70,10 +70,13 @@ export function StepTwo({
 
   const mutation = useMutation({
     mutationFn: (subscriptionOrder: { paymentReference: number }) =>
-      axios.post(`/api/subscription-orders/tutor/${studentId}/plan/${plan.id}`, {
-        ...subscriptionOrder,
-        subscriptionPrice: plan.price,
-      }),
+      axios.post(
+        `/api/subscription-orders/tutor/${studentId}/plan/${plan.id}`,
+        {
+          ...subscriptionOrder,
+          subscriptionPrice: plan.price,
+        }
+      ),
     onSuccess: (response) => {
       if (response.status === 200 || response.status === 201) {
         const data = response.data;

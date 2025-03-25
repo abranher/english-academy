@@ -34,7 +34,7 @@ export default async function EnrollmentCheckoutPage({
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink asChild>
-                <Link href="/tutor">Inicio</Link>
+                <Link href="/">Inicio</Link>
               </BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />

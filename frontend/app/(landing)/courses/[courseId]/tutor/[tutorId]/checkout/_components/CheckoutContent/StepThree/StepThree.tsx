@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 
-import { useStepPlanSubscriptionStore } from "@/services/store/tutor/plan-subscription";
+import { useStepEnrollmentStore } from "@/services/store/student/enrollment";
 
 import { Title } from "@/components/common/Title";
 
@@ -10,8 +10,8 @@ import { CardContent, CardDescription } from "@/components/shadcn/ui/card";
 import { Button } from "@/components/shadcn/ui/button";
 
 export function StepThree() {
-  const nextStep = useStepPlanSubscriptionStore((state) => state.nextStep);
-  const resetSteps = useStepPlanSubscriptionStore((state) => state.resetSteps);
+  const nextStep = useStepEnrollmentStore((state) => state.nextStep);
+  const resetSteps = useStepEnrollmentStore((state) => state.resetSteps);
 
   return (
     <>

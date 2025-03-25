@@ -1,12 +1,13 @@
 "use client";
 
+import Link from "next/link";
 import { useParams } from "next/navigation";
 
 import ReactPlayer from "react-player";
 import { Chapter, Course } from "@/types/models";
 import { useQuery } from "@tanstack/react-query";
-import { getCourse } from "./_services/getCourse";
 import { assetVideo } from "@/libs/asset";
+import { getCourse } from "@/services/network/courses";
 import { LessonType } from "@/types/enums";
 import { useEffect, useState } from "react";
 import { Chip, Image } from "@heroui/react";
@@ -31,7 +32,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/shadcn/ui/accordion";
-import Link from "next/link";
 
 export default function CourseDetailsPage() {
   const [playerReady, setPlayerReady] = useState(false);

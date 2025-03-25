@@ -2,10 +2,9 @@
 
 import { useParams } from "next/navigation";
 
-import { Plan } from "@/types/models";
-import { getPlan } from "@/services/network/plans/get-plan";
+import { Course, Plan } from "@/types/models";
 import { useQuery } from "@tanstack/react-query";
-import { useStepPlanSubscriptionStore } from "@/services/store/tutor/plan-subscription";
+import { useStepEnrollmentStore } from "@/services/store/student/enrollment";
 
 import { StepOne } from "./StepOne";
 import { StepTwo } from "./StepTwo";
@@ -18,6 +17,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/shadcn/ui/card";
+import { getCourse } from "@/services/network/courses";
 
 export function CheckoutContent({
   userId,
@@ -26,10 +26,10 @@ export function CheckoutContent({
   userId: string;
   studentId: string;
 }) {
-  const { planId } = useParams();
+  const { courseId } = useParams();
 
-  const step = useStepPlanSubscriptionStore((state) => state.step);
-  const totalSteps = useStepPlanSubscriptionStore((state) => state.totalSteps);
+  const step = useStepEnrollmentStore((state) => state.step);
+  const totalSteps = useStepEnrollmentStore((state) => state.totalSteps);
 
   const progressValue = (step / totalSteps) * 100;
 
@@ -37,9 +37,9 @@ export function CheckoutContent({
     isPending,
     data: plan,
     isError,
-  } = useQuery<Plan>({
-    queryKey: ["plan_subscription_checkout"],
-    queryFn: () => getPlan(planId as string),
+  } = useQuery<Course>({
+    queryKey: ["course_enrollment_checkout"],
+    queryFn: () => getCourse(courseId as string),
   });
 
   if (isPending) return <>Cargando...</>;
