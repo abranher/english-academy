@@ -10,7 +10,7 @@ import {
   Level,
   SubCategory,
 } from "@/types/models";
-import { Image } from "@heroui/react";
+import { Chip, Image } from "@heroui/react";
 import { assetImg } from "@/libs/asset";
 import { truncateString } from "@/libs/format";
 import { getEnrollment } from "@/services/network/enrollments";
@@ -19,11 +19,14 @@ import { NavProgress } from "./NavProgress";
 
 import {
   Card,
+  CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/shadcn/ui/card";
 import { ClipboardList, FileVideo, ImageIcon, Medal } from "lucide-react";
+import { Separator } from "@/components/shadcn/ui/separator";
+import Preview from "@/components/shadcn/ui/preview";
 
 export function CourseContent({ studentId }: { studentId: string }) {
   const { courseId } = useParams();
@@ -50,7 +53,7 @@ export function CourseContent({ studentId }: { studentId: string }) {
 
   return (
     <>
-      <Card className="flex flex-wrap items-start gap-5 p-3 relative">
+      <section className="flex flex-wrap items-start gap-5 p-1 relative">
         {enrollment.course.image ? (
           <article className="aspect-video rounded-lg w-40">
             <Image
@@ -73,9 +76,20 @@ export function CourseContent({ studentId }: { studentId: string }) {
             <CardDescription>
               {truncateString(enrollment.course.subtitle ?? "", "lg")}
             </CardDescription>
+
+            <article className="flex gap-2">
+              <Chip color="danger" size="lg">
+                {enrollment.course.category.title}
+              </Chip>
+              <Chip color="primary" size="lg">
+                {enrollment.course.subcategory.title}
+              </Chip>
+            </article>
           </article>
         </section>
-      </Card>
+      </section>
+
+      <Separator />
 
       <section className="w-full grid grid-cols-1 lg:grid-cols-8 gap-4">
         <NavProgress studentId={studentId} />
@@ -121,6 +135,28 @@ export function CourseContent({ studentId }: { studentId: string }) {
               </CardHeader>
             </Card>
           </article>
+
+          <section className="flex flex-col p-3 gap-4">
+            {enrollment.course.description && (
+              <Card>
+                <CardHeader>
+                  <CardTitle>Descripción</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <Preview value={enrollment.course.description} />
+                </CardContent>
+              </Card>
+            )}
+
+            {enrollment.course.learningObjectives && (
+              <Card>
+                <CardHeader>
+                  <CardTitle>Objetivos de Aprendizaje</CardTitle>
+                  <Preview value={enrollment.course.learningObjectives} />
+                </CardHeader>
+              </Card>
+            )}
+          </section>
         </section>
       </section>
     </>
