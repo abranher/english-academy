@@ -7,9 +7,10 @@ import { getUserStudent } from "../../_services";
 import { StudentHomeSkeleton } from "./StudentHomeSkeleton";
 import { ProfileCard } from "./ProfileCard";
 import { Enrollments } from "./Enrollments";
+import { MyTutors } from "./MyTutors";
 
 import { Card, CardDescription, CardHeader } from "@/components/shadcn/ui/card";
-import { Clipboard } from "lucide-react";
+import { Clipboard, ClipboardCheck, Medal } from "lucide-react";
 
 export function StudentHome({
   userId,
@@ -57,7 +58,7 @@ export function StudentHome({
                   Cursos completados
                 </CardDescription>
                 <CardDescription className="flex items-center gap-3 font-bold text-4xl">
-                  <Clipboard className="w-12 h-12" />
+                  <ClipboardCheck className="w-12 h-12" />
                   12
                 </CardDescription>
               </section>
@@ -68,11 +69,11 @@ export function StudentHome({
             <CardHeader>
               <section className="flex flex-col items-center gap-2">
                 <CardDescription className="font-bold text-lg text-center">
-                  Cursos
+                  Puntos
                 </CardDescription>
                 <CardDescription className="flex items-center gap-3 font-bold text-4xl">
-                  <Clipboard className="w-12 h-12" />
-                  12
+                  <Medal className="w-12 h-12" />
+                  500
                 </CardDescription>
               </section>
             </CardHeader>
@@ -80,6 +81,8 @@ export function StudentHome({
         </article>
 
         <Enrollments studentId={studentId} />
+
+        <MyTutors studentId={studentId} />
       </section>
     </section>
   );

@@ -29,4 +29,24 @@ export class EnrollmentsService {
       );
     }
   }
+
+  async findAllTutors(studentId: string) {
+    await this.InfrastructureService.findStudentOrThrow(studentId);
+
+    try {
+      return await this.prisma.tutor.findMany({
+        where: {
+          courses: {
+            some: { enrollments: { some: { studentId: studentId } } },
+          },
+        },
+        include: { user: true },
+      });
+    } catch (error) {
+      throw new InternalServerErrorException(
+        'Error del servidor. Por favor intenta nuevamente.',
+        error,
+      );
+    }
+  }
 }

@@ -2,16 +2,11 @@
 
 import Link from "next/link";
 
+import Avvvatars from "avvvatars-react";
 import { assetImg } from "@/libs/asset";
-import { getEnrollments } from "@/services/network/enrollments";
-import {
-  Category,
-  Course,
-  Enrollment,
-  Level,
-  SubCategory,
-} from "@/types/models";
-import { Chip, Image } from "@heroui/react";
+import { getTutors } from "@/services/network/enrollments";
+import { Tutor, User } from "@/types/models";
+import { Avatar } from "@heroui/react";
 import { useQuery } from "@tanstack/react-query";
 
 import {
@@ -25,23 +20,19 @@ import { ArrowRight, FolderOpen } from "lucide-react";
 import { Button } from "@/components/shadcn/ui/button";
 import { Separator } from "@/components/shadcn/ui/separator";
 
-export function Enrollments({ studentId }: { studentId: string }) {
+export function MyTutors({ studentId }: { studentId: string }) {
   const {
     isPending,
-    data: enrollments,
+    data: tutors,
     isError,
   } = useQuery<
-    | (Enrollment & {
-        course: Course & {
-          category: Category;
-          subcategory: SubCategory;
-          level: Level;
-        };
+    | (Tutor & {
+        user: User;
       })[]
     | []
   >({
-    queryKey: ["student_home", "get_enrollments"],
-    queryFn: () => getEnrollments(studentId as string),
+    queryKey: ["student_home", "get_tutors"],
+    queryFn: () => getTutors(studentId as string),
   });
 
   if (isPending) return <>Cragando...</>;
@@ -50,45 +41,46 @@ export function Enrollments({ studentId }: { studentId: string }) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Cursos inscritos</CardTitle>
+        <CardTitle>Mis tutores</CardTitle>
       </CardHeader>
       <CardContent>
-        {enrollments.length === 0 && (
+        {tutors.length === 0 && (
           <CardDescription className="text-lg w-full italic">
             <p className="flex justify-center flex-col items-center">
               <FolderOpen className="w-20 h-20" />
-              Sin cursos
+              Sin tutores
             </p>
           </CardDescription>
         )}
-        {enrollments.map((enrollment) => (
-          <section key={enrollment.id}>
+        {tutors.map((tutor) => (
+          <section key={tutor.id}>
             <article className="col-span-7 flex items-start gap-4">
-              <div className="aspect-video w-44 shrink-0">
-                <Image
-                  src={assetImg(enrollment.course.image)}
-                  alt={enrollment.course.title}
-                  className="w-full h-full object-contain"
-                />
-              </div>
+              <section>
+                {tutor.user.avatarUrl ? (
+                  <Avatar
+                    isBordered
+                    className="w-16 h-16 cursor-pointer"
+                    color="default"
+                    src={assetImg(tutor.user.avatarUrl)}
+                  />
+                ) : (
+                  <Avatar
+                    isBordered
+                    className="w-16 h-16 cursor-pointer"
+                    color="default"
+                    icon={<Avvvatars size={70} value={tutor.user.email} />}
+                  />
+                )}
+              </section>
 
               <div className="flex flex-col gap-3 w-full">
                 <h3 className="text-base font-bold text-gray-800 dark:text-zinc-50">
-                  {`${enrollment.course.title} - ${enrollment.course.subtitle}`}
+                  {`${tutor.user.name} - ${tutor.user.lastName}`}
                 </h3>
-
-                <div className="flex gap-2">
-                  <Chip color="danger" size="lg">
-                    {enrollment.course.category.title}
-                  </Chip>
-                  <Chip color="primary" size="lg">
-                    {enrollment.course.subcategory.title}
-                  </Chip>
-                </div>
               </div>
 
               <section className="px-3">
-                <Link href={`/courses/${enrollment.course.id}`}>
+                <Link href={`/courses/${tutor.id}`}>
                   <Button size="icon" variant="ghost">
                     <ArrowRight />
                   </Button>
