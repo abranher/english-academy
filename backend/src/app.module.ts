@@ -46,6 +46,7 @@ import { ClassProgressModule } from './modules/class-progress/class-progress.mod
   imports: [
     ServeStaticModule.forRoot({
       rootPath: join(process.cwd(), './public'),
+      serveStaticOptions: { index: false },
     }),
     ConfigModule.forRoot({
       isGlobal: true,
