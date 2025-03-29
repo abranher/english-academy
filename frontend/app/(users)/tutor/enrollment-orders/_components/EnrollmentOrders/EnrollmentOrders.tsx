@@ -5,6 +5,7 @@ import { EnrollmentOrderStatus } from "@/types/enums";
 import { AllEnrollmentOrders } from "./AllEnrollmentOrders";
 import { UnverifiedEnrollmentOrders } from "./UnverifiedEnrollmentOrders";
 import { NeedsRevisionEnrollmentOrders } from "./NeedsRevisionEnrollmentOrders";
+import { ResubmittedEnrollmentOrders } from "./ResubmittedEnrollmentOrders";
 
 import { CardDescription, CardTitle } from "@/components/shadcn/ui/card";
 import { Separator } from "@/components/shadcn/ui/separator";
@@ -65,6 +66,13 @@ export function EnrollmentOrders({ tutorId }: { tutorId: string }) {
           className="border-none p-0 outline-none"
         >
           <NeedsRevisionEnrollmentOrders tutorId={tutorId} />
+        </TabsContent>
+
+        <TabsContent
+          value={EnrollmentOrderStatus.RESUBMITTED}
+          className="border-none p-0 outline-none"
+        >
+          <ResubmittedEnrollmentOrders tutorId={tutorId} />
         </TabsContent>
       </Tabs>
     </>
