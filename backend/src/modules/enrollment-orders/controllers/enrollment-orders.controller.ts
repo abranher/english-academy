@@ -1,5 +1,7 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 
+import { EnrollmentOrderStatus } from '@prisma/client';
+
 import { EnrollmentOrdersService } from '../providers/enrollment-orders.service';
 import { CreateEnrollmentOrderDto } from '../dto/create-enrollment-order.dto';
 
@@ -13,8 +15,22 @@ export class EnrollmentOrdersController {
    * Get tutor enrollment orders
    */
   @Get('tutor/:tutorId')
-  getTutorEnrollmentOrders(@Param('tutorId') tutorId: string) {
-    return this.enrollmentOrdersService.getTutorEnrollmentOrders(tutorId);
+  findAllForTutor(@Param('tutorId') tutorId: string) {
+    return this.enrollmentOrdersService.findAllForTutor(tutorId);
+  }
+
+  /*
+   * Get tutor enrollment orders
+   */
+  @Get('status/:status/tutor/:tutorId')
+  findAllForTutorByStatus(
+    @Param('status') status: EnrollmentOrderStatus,
+    @Param('tutorId') tutorId: string,
+  ) {
+    return this.enrollmentOrdersService.findAllForTutorByStatus(
+      status,
+      tutorId,
+    );
   }
 
   /*

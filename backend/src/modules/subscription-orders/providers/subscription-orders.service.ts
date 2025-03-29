@@ -54,32 +54,10 @@ export class SubscriptionOrdersService {
     await this.InfrastructureService.findTutorOrThrow(tutorId);
 
     try {
-      if (status === SubscriptionOrderStatus.UNVERIFIED) {
-        return await this.prisma.subscriptionOrder.findMany({
-          where: { status, tutorId },
-          include: { tutor: { include: { user: true } }, plan: true },
-        });
-      } else if (status === SubscriptionOrderStatus.NEEDS_REVISION) {
-        return await this.prisma.subscriptionOrder.findMany({
-          where: { status, tutorId },
-          include: { tutor: { include: { user: true } }, plan: true },
-        });
-      } else if (status === SubscriptionOrderStatus.RESUBMITTED) {
-        return await this.prisma.subscriptionOrder.findMany({
-          where: { status, tutorId },
-          include: { tutor: { include: { user: true } }, plan: true },
-        });
-      } else if (status === SubscriptionOrderStatus.APPROVED) {
-        return await this.prisma.subscriptionOrder.findMany({
-          where: { status, tutorId },
-          include: { tutor: { include: { user: true } }, plan: true },
-        });
-      } else if (status === SubscriptionOrderStatus.CANCELED) {
-        return await this.prisma.subscriptionOrder.findMany({
-          where: { status, tutorId },
-          include: { tutor: { include: { user: true } }, plan: true },
-        });
-      }
+      return await this.prisma.subscriptionOrder.findMany({
+        where: { status, tutorId },
+        include: { tutor: { include: { user: true } }, plan: true },
+      });
     } catch (error) {
       throw new InternalServerErrorException(
         'Error del servidor. Por favor intenta nuevamente.',

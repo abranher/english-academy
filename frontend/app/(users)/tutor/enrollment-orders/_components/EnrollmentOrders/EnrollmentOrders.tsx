@@ -3,6 +3,7 @@
 import { EnrollmentOrderStatus } from "@/types/enums";
 
 import { AllEnrollmentOrders } from "./AllEnrollmentOrders";
+import { UnverifiedEnrollmentOrders } from "./UnverifiedEnrollmentOrders";
 
 import { CardDescription, CardTitle } from "@/components/shadcn/ui/card";
 import { Separator } from "@/components/shadcn/ui/separator";
@@ -49,6 +50,13 @@ export function EnrollmentOrders({ tutorId }: { tutorId: string }) {
 
         <TabsContent value="ALL" className="border-none p-0 outline-none">
           <AllEnrollmentOrders tutorId={tutorId} />
+        </TabsContent>
+
+        <TabsContent
+          value={EnrollmentOrderStatus.UNVERIFIED}
+          className="border-none p-0 outline-none"
+        >
+          <UnverifiedEnrollmentOrders tutorId={tutorId} />
         </TabsContent>
       </Tabs>
     </>

@@ -1,8 +1,9 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
+import { EnrollmentOrderStatus } from "@/types/enums";
 import { Course, EnrollmentOrder, Student, User } from "@/types/models";
-import { getTutorEnrollmentOrders } from "@/services/network/enrollment-orders";
+import { getTutorEnrollmentOrdersByStatus } from "@/services/network/enrollment-orders";
 
 import { MiniOrderCard } from "../../MiniOrderCard";
 
@@ -15,7 +16,7 @@ import { Separator } from "@/components/shadcn/ui/separator";
 import { Skeleton } from "@/components/shadcn/ui/skeleton";
 import { FolderOpen } from "lucide-react";
 
-export function AllEnrollmentOrders({ tutorId }: { tutorId: string }) {
+export function UnverifiedEnrollmentOrders({ tutorId }: { tutorId: string }) {
   const {
     isPending,
     data: enrollmentOrders,
@@ -27,8 +28,12 @@ export function AllEnrollmentOrders({ tutorId }: { tutorId: string }) {
       })[]
     | []
   >({
-    queryKey: ["tutor_enrollment_orders"],
-    queryFn: () => getTutorEnrollmentOrders(tutorId),
+    queryKey: ["tutor_enrollment_orders", EnrollmentOrderStatus.UNVERIFIED],
+    queryFn: () =>
+      getTutorEnrollmentOrdersByStatus(
+        EnrollmentOrderStatus.UNVERIFIED,
+        tutorId
+      ),
   });
 
   if (isError) return <div>Ocurrió un error al cargar las órdenes</div>;
@@ -36,9 +41,10 @@ export function AllEnrollmentOrders({ tutorId }: { tutorId: string }) {
   return (
     <>
       <CardHeader>
-        <CardTitle>Listado de órdenes de inscripción</CardTitle>
+        <CardTitle>Listado de órdenes de inscripción sin verificar</CardTitle>
         <CardDescription>
-          En esta sección encontrarás todas las órdenes de inscripción.
+          En esta sección encontrarás todas las órdenes de inscripción sin
+          verificar.
         </CardDescription>
       </CardHeader>
 
@@ -58,7 +64,7 @@ export function AllEnrollmentOrders({ tutorId }: { tutorId: string }) {
           <section className="w-full text-zinc-700 dark:text-zinc-200 py-4">
             <h2 className="flex justify-center flex-col items-center">
               <FolderOpen className="w-24 h-24" />
-              No hay registros.
+              No hay órdenes sin verificar.
             </h2>
           </section>
         )}
