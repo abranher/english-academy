@@ -5,6 +5,8 @@ export { CoursePlatformStatus } from "./CoursePlatformStatus";
 export { DocumentType } from "./DocumentType";
 export { CourseReviewStatus } from "./CourseReviewStatus";
 export { CourseReviewDecision } from "./CourseReviewDecision";
+export { EnrollmentOrderStatus } from "./EnrollmentOrderStatus";
+export { EnrollmentOrderStatusDecision } from "./EnrollmentOrderStatusDecision";
 export { PurchaseOrderStatus } from "./PurchaseOrderStatus";
 export { PaymentMethod } from "./PaymentMethod";
 export { PhoneCode } from "./PhoneCode";
