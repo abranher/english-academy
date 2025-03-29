@@ -4,6 +4,7 @@ import { EnrollmentOrderStatus } from "@/types/enums";
 
 import { AllEnrollmentOrders } from "./AllEnrollmentOrders";
 import { UnverifiedEnrollmentOrders } from "./UnverifiedEnrollmentOrders";
+import { NeedsRevisionEnrollmentOrders } from "./NeedsRevisionEnrollmentOrders";
 
 import { CardDescription, CardTitle } from "@/components/shadcn/ui/card";
 import { Separator } from "@/components/shadcn/ui/separator";
@@ -57,6 +58,13 @@ export function EnrollmentOrders({ tutorId }: { tutorId: string }) {
           className="border-none p-0 outline-none"
         >
           <UnverifiedEnrollmentOrders tutorId={tutorId} />
+        </TabsContent>
+
+        <TabsContent
+          value={EnrollmentOrderStatus.NEEDS_REVISION}
+          className="border-none p-0 outline-none"
+        >
+          <NeedsRevisionEnrollmentOrders tutorId={tutorId} />
         </TabsContent>
       </Tabs>
     </>
