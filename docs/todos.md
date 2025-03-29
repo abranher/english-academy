@@ -1,13 +1,5 @@
 # TODOS:
 
-- Mostrar planes para tutor
-
-* Crear una seccion donde el tutor pueda ver el plan que se quiere suscribir
-* Agregar el id del plan en la url, y llamar al id del tutor
-* Checkout donde pueda agregar los datos de su pago
-* Enviar a admin
-* Mostrar seccion donde pueda ver el status de su orden
-* Crear seccion para gestionar la ordenes en el admin
 
 * Suscripcion de tutor
 

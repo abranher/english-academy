@@ -31,9 +31,9 @@ export function OrderStatusBadge({
       label: "Cancelada",
       variant: "destructive" as const,
     },
-    [SubscriptionOrderStatus.COMPLETED]: {
+    [SubscriptionOrderStatus.APPROVED]: {
       icon: <BadgeCheck className="w-4" />,
-      label: "Completada",
+      label: "Aprobada",
       variant: "default" as const,
     },
   };

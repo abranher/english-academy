@@ -14,8 +14,12 @@ import { ThemeSwitcher } from "./ThemeSwitcher";
 import { Button } from "@/components/shadcn/ui/button";
 import {
   Award,
+  BookCheck,
+  BookmarkCheck,
   BookMarked,
+  BookOpenCheck,
   CircleUser,
+  ClipboardCheck,
   CreditCard,
   Files,
   Home,
@@ -278,24 +282,62 @@ export function MainButtons() {
                           </DropdownMenuPortal>
                         </DropdownMenuSub>
 
-                        <DropdownMenuItem>
-                          <CreditCard className="mr-2 h-4 w-4" />
-                          Facturación
-                        </DropdownMenuItem>
-
-                        <DropdownMenuItem asChild>
-                          <Link href="/tutor/subscription-orders">
-                            <BookMarked className="mr-2 h-4 w-4" />
-                            Mis Órdenes de Suscripción
-                          </Link>
-                        </DropdownMenuItem>
-
                         <DropdownMenuItem asChild>
                           <Link href="/student/settings">
                             <Settings className="mr-2 h-4 w-4" />
                             Configuración
                           </Link>
                         </DropdownMenuItem>
+
+                        <DropdownMenuSeparator />
+
+                        <DropdownMenuSub>
+                          <DropdownMenuSubTrigger>
+                            <BookCheck className="mr-2 h-4 w-4" />
+                            <span>Inscripciones</span>
+                          </DropdownMenuSubTrigger>
+                          <DropdownMenuPortal>
+                            <DropdownMenuSubContent>
+                              <DropdownMenuItem asChild>
+                                <Link href="/tutor/profile">
+                                  <BookOpenCheck className="mr-2 h-4 w-4" />
+                                  Inscripciones
+                                </Link>
+                              </DropdownMenuItem>
+
+                              <DropdownMenuItem asChild>
+                                <Link href="/tutor/subscription-orders">
+                                  <ClipboardCheck className="mr-2 h-4 w-4" />
+                                  Órdenes de Inscripción
+                                </Link>
+                              </DropdownMenuItem>
+                            </DropdownMenuSubContent>
+                          </DropdownMenuPortal>
+                        </DropdownMenuSub>
+
+                        <DropdownMenuSub>
+                          <DropdownMenuSubTrigger>
+                            <BookMarked className="mr-2 h-4 w-4" />
+                            <span>Suscripción</span>
+                          </DropdownMenuSubTrigger>
+                          <DropdownMenuPortal>
+                            <DropdownMenuSubContent>
+                              <DropdownMenuItem asChild>
+                                <Link href="/tutor/profile">
+                                  <BookmarkCheck className="mr-2 h-4 w-4" />
+                                  Mi Suscripción
+                                </Link>
+                              </DropdownMenuItem>
+
+                              <DropdownMenuItem asChild>
+                                <Link href="/tutor/subscription-orders">
+                                  <BookMarked className="mr-2 h-4 w-4" />
+                                  Mis Órdenes de Suscripción
+                                </Link>
+                              </DropdownMenuItem>
+                            </DropdownMenuSubContent>
+                          </DropdownMenuPortal>
+                        </DropdownMenuSub>
                       </DropdownMenuGroup>
                       <DropdownMenuSeparator />
 
@@ -409,9 +451,9 @@ export function MainButtons() {
                         </DropdownMenuItem>
 
                         <DropdownMenuItem asChild>
-                          <Link href="/student/settings">
-                            <Settings className="mr-2 h-4 w-4" />
-                            Configuración
+                          <Link href="/student/enrollment-orders">
+                            <BookMarked className="mr-2 h-4 w-4" />
+                            Mis Órdenes de Inscripción
                           </Link>
                         </DropdownMenuItem>
 
