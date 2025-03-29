@@ -6,7 +6,8 @@ export async function validateTutorSession() {
   const session = await auth();
 
   if (!session) redirect("/");
-  if (!session.user.tutor?.activeSubscription) redirect("/tutor/plans");
+  if (!session.user.tutor) redirect("/");
+  if (!session.user.tutor.activeSubscription) redirect("/tutor/plans");
 
   return session;
 }

@@ -306,7 +306,7 @@ export function MainButtons() {
                               </DropdownMenuItem>
 
                               <DropdownMenuItem asChild>
-                                <Link href="/tutor/subscription-orders">
+                                <Link href="/tutor/enrollment-orders">
                                   <ClipboardCheck className="mr-2 h-4 w-4" />
                                   Órdenes de Inscripción
                                 </Link>
