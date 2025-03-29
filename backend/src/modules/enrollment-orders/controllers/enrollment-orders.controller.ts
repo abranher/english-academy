@@ -1,4 +1,4 @@
-import { Body, Controller, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 
 import { EnrollmentOrdersService } from '../providers/enrollment-orders.service';
 import { CreateEnrollmentOrderDto } from '../dto/create-enrollment-order.dto';
@@ -8,6 +8,14 @@ export class EnrollmentOrdersController {
   constructor(
     private readonly enrollmentOrdersService: EnrollmentOrdersService,
   ) {}
+
+  /*
+   * Get tutor enrollment orders
+   */
+  @Get('tutor/:tutorId')
+  getTutorEnrollmentOrders(@Param('tutorId') tutorId: string) {
+    return this.enrollmentOrdersService.getTutorEnrollmentOrders(tutorId);
+  }
 
   /*
    * Create Enrollment Order

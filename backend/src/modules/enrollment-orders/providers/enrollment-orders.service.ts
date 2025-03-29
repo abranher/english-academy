@@ -11,6 +11,30 @@ export class EnrollmentOrdersService {
     private readonly InfrastructureService: InfrastructureService,
   ) {}
 
+  async getTutorEnrollmentOrders(tutorId: string) {
+    await this.InfrastructureService.findTutorOrThrow(tutorId);
+
+    try {
+      const courses = await this.prisma.course.findMany({
+        where: { tutorId },
+        select: { id: true },
+      });
+
+      const courseIds = courses.map((course) => course.id);
+
+      return await this.prisma.enrollmentOrder.findMany({
+        where: { courseId: { in: courseIds } },
+        include: { student: { include: { user: true } }, course: true },
+        orderBy: { createdAt: 'desc' },
+      });
+    } catch (error) {
+      throw new InternalServerErrorException(
+        'Error del servidor. Por favor intenta nuevamente.',
+        error,
+      );
+    }
+  }
+
   async create(
     studentId: string,
     courseId: string,
