@@ -12,18 +12,26 @@ export class TutorOrdersController {
    * Get enrollment orders
    */
   @Get('tutor/:tutorId')
-  findAllForTutor(@Param('tutorId') tutorId: string) {
-    return this.tutorOrdersService.findAllForTutor(tutorId);
+  findAll(@Param('tutorId') tutorId: string) {
+    return this.tutorOrdersService.findAll(tutorId);
+  }
+
+  /*
+   * Get one enrollment order
+   */
+  @Get(':id/tutor/:tutorId')
+  findOne(@Param('id') id: string, @Param('tutorId') tutorId: string) {
+    return this.tutorOrdersService.findOne(id, tutorId);
   }
 
   /*
    * Get enrollment orders by status
    */
   @Get('status/:status/tutor/:tutorId')
-  findAllForTutorByStatus(
+  findAllByStatus(
     @Param('status') status: EnrollmentOrderStatus,
     @Param('tutorId') tutorId: string,
   ) {
-    return this.tutorOrdersService.findAllForTutorByStatus(status, tutorId);
+    return this.tutorOrdersService.findAllByStatus(status, tutorId);
   }
 }

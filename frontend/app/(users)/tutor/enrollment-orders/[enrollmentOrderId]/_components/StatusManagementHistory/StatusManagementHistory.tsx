@@ -1,9 +1,11 @@
 "use client";
 
-import { SubscriptionOrder, SubscriptionOrderHistory } from "@/types/models";
 import { useState } from "react";
+import { EnrollmentOrderStatus } from "@/types/enums";
+import { EnrollmentOrder, EnrollmentOrderHistory } from "@/types/models";
 
 import { StatusHistoryCard } from "./StatusHistoryCard";
+import { ChangeStatusModal } from "./ChangeStatusModal";
 
 import { Button } from "@/components/shadcn/ui/button";
 import {
@@ -14,15 +16,13 @@ import {
   CardTitle,
 } from "@/components/shadcn/ui/card";
 import { ChevronsDown, ChevronsUp, CircleCheck, History } from "lucide-react";
-import { ChangeStatusModal } from "./ChangeStatusModal";
-import { SubscriptionOrderStatus } from "@/types/enums";
 
 export function StatusManagementHistory({
-  subscriptionOrderHistory,
-  subscriptionOrder,
+  enrollmentOrderHistory,
+  enrollmentOrder,
 }: {
-  subscriptionOrderHistory: SubscriptionOrderHistory[] | [];
-  subscriptionOrder: SubscriptionOrder;
+  enrollmentOrderHistory: EnrollmentOrderHistory[] | [];
+  enrollmentOrder: EnrollmentOrder;
 }) {
   const [showAll, setShowAll] = useState(false);
 
@@ -37,15 +37,15 @@ export function StatusManagementHistory({
       <CardContent>
         <section className="flex flex-col gap-5">
           <article className="flex flex-col gap-3">
-            {subscriptionOrderHistory.length === 0 ? (
+            {enrollmentOrderHistory.length === 0 ? (
               <CardDescription>Aun no hay registros</CardDescription>
             ) : (
               <>
                 {showAll
-                  ? subscriptionOrderHistory.map((history) => (
+                  ? enrollmentOrderHistory.map((history) => (
                       <StatusHistoryCard key={history.id} history={history} />
                     ))
-                  : subscriptionOrderHistory
+                  : enrollmentOrderHistory
                       .slice(0, 2)
                       .map((history) => (
                         <StatusHistoryCard key={history.id} history={history} />
@@ -54,7 +54,7 @@ export function StatusManagementHistory({
             )}
           </article>
           <article className="flex justify-center">
-            {subscriptionOrderHistory.length > 2 && (
+            {enrollmentOrderHistory.length > 2 && (
               <>
                 {showAll ? (
                   <Button
@@ -87,15 +87,15 @@ export function StatusManagementHistory({
         </section>
 
         <section className="w-full flex justify-end gap-3 pt-3">
-          {subscriptionOrder.status === SubscriptionOrderStatus.APPROVED ? (
+          {enrollmentOrder.status === EnrollmentOrderStatus.APPROVED ? (
             <Button disabled className="flex gap-1">
               <CircleCheck className="w-4" />
               Aprobado
             </Button>
           ) : (
             <>
-              {subscriptionOrderHistory.length === 0 ||
-              subscriptionOrderHistory[subscriptionOrderHistory.length - 1]
+              {enrollmentOrderHistory.length === 0 ||
+              enrollmentOrderHistory[enrollmentOrderHistory.length - 1]
                 .resubmittedAt ? (
                 <ChangeStatusModal />
               ) : (

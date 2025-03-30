@@ -14,7 +14,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/shadcn/ui/breadcrumb";
 
-export default async function TutorSubscriptionOrderPage() {
+export default async function TutorEnrollmentOrderPage() {
   const session = await auth();
   if (!session) redirect("/");
   if (!session.user.tutor) redirect("/");

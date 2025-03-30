@@ -3,12 +3,13 @@
 import { useParams } from "next/navigation";
 
 import { useQuery } from "@tanstack/react-query";
-import { getSubscriptionOrder } from "../../_services";
+import { getTutorEnrollmentOrder } from "@/services/network/enrollment-orders";
 import {
-  Plan,
-  SubscriptionOrder,
-  SubscriptionOrderHistory,
-  Tutor,
+  Course,
+  EnrollmentOrder,
+  EnrollmentOrderHistory,
+  Price,
+  Student,
   User,
 } from "@/types/models";
 
@@ -19,25 +20,26 @@ import { Separator } from "@/components/shadcn/ui/separator";
 import { OrderCard } from "../OrderCard";
 
 export function Order({ tutorId }: { tutorId: string }) {
-  const { subscriptionOrderId } = useParams();
+  const { enrollmentOrderId } = useParams();
 
   const {
     isPending,
-    data: subscriptionOrder,
+    data: enrollmentOrder,
     isError,
   } = useQuery<
-    SubscriptionOrder & {
-      tutor: Tutor & { user: User };
-      plan: Plan;
-      subscriptionOrderHistory: SubscriptionOrderHistory[] | [];
+    EnrollmentOrder & {
+      student: Student & { user: User };
+      course: Course & { price: Price };
+      enrollmentOrderHistory: EnrollmentOrderHistory[] | [];
     }
   >({
-    queryKey: ["admin_subscription_order", subscriptionOrderId],
-    queryFn: () => getSubscriptionOrder(subscriptionOrderId as string),
+    queryKey: ["tutor_enrollment_orders", enrollmentOrderId],
+    queryFn: () =>
+      getTutorEnrollmentOrder(enrollmentOrderId as string, tutorId),
   });
 
   if (isPending) return <>Cargando...</>;
-  if (isError) return <div>No se pudo cargar la órden de suscripción.</div>;
+  if (isError) return <div>No se pudo cargar la órden de inscripción.</div>;
 
   return (
     <>
@@ -50,13 +52,13 @@ export function Order({ tutorId }: { tutorId: string }) {
 
       <Separator />
 
-      <OrderCard subscriptionOrder={subscriptionOrder} />
+      <OrderCard enrollmentOrder={enrollmentOrder} />
 
       <Separator />
 
       <StatusManagementHistory
-        subscriptionOrderHistory={subscriptionOrder.subscriptionOrderHistory}
-        subscriptionOrder={subscriptionOrder}
+        enrollmentOrderHistory={enrollmentOrder.enrollmentOrderHistory}
+        enrollmentOrder={enrollmentOrder}
       />
     </>
   );

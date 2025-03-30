@@ -1,4 +1,9 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 
 import { EnrollmentOrderStatus } from '@prisma/client';
 
@@ -12,7 +17,7 @@ export class TutorOrdersService {
     private readonly InfrastructureService: InfrastructureService,
   ) {}
 
-  async findAllForTutor(tutorId: string) {
+  async findAll(tutorId: string) {
     await this.InfrastructureService.findTutorOrThrow(tutorId);
 
     try {
@@ -36,10 +41,40 @@ export class TutorOrdersService {
     }
   }
 
-  async findAllForTutorByStatus(
-    status: EnrollmentOrderStatus,
-    tutorId: string,
-  ) {
+  async findOne(id: string, tutorId: string) {
+    await this.InfrastructureService.findTutorOrThrow(tutorId);
+
+    try {
+      const order = await this.prisma.enrollmentOrder.findUnique({
+        where: { id },
+        include: {
+          student: { include: { user: true } },
+          course: { include: { price: true } },
+          enrollmentOrderHistory: true,
+        },
+      });
+
+      if (!order) throw new NotFoundException('Orden no encontrada');
+
+      const courseBelongsToTutor = await this.prisma.course.findFirst({
+        where: { id: order.courseId, tutorId: tutorId },
+      });
+
+      if (!courseBelongsToTutor)
+        throw new ForbiddenException(
+          'No tienes permiso para acceder a esta orden',
+        );
+
+      return order;
+    } catch (error) {
+      throw new InternalServerErrorException(
+        'Error del servidor. Por favor intenta nuevamente.',
+        error,
+      );
+    }
+  }
+
+  async findAllByStatus(status: EnrollmentOrderStatus, tutorId: string) {
     await this.InfrastructureService.findTutorOrThrow(tutorId);
 
     try {

@@ -1,11 +1,11 @@
 "use client";
 
-import { SubscriptionOrderHistory } from "@/types/models";
-import { formatDateNormal } from "@/libs/date";
 import { truncateString } from "@/libs/format";
-import { SubscriptionOrderStatusDecision } from "@/types/enums";
+import { formatDateNormal } from "@/libs/date";
+import { EnrollmentOrderHistory } from "@/types/models";
+import { EnrollmentOrderStatusDecision } from "@/types/enums";
 
-import { OrderStatusBadge } from "@/components/subscription-orders";
+import { OrderStatusBadge } from "@/components/enrollment-orders";
 import { ShowHistoryModal } from "./ShowHistoryModal";
 
 import { CardDescription, CardTitle } from "@/components/shadcn/ui/card";
@@ -21,7 +21,7 @@ import {
 export function StatusHistoryCard({
   history,
 }: {
-  history: SubscriptionOrderHistory;
+  history: EnrollmentOrderHistory;
 }) {
   return (
     <>
@@ -30,14 +30,14 @@ export function StatusHistoryCard({
           <CardTitle>Detalle</CardTitle>
 
           <section className="flex items-center gap-3">
-            {history.decision === SubscriptionOrderStatusDecision.APPROVED && (
+            {history.decision === EnrollmentOrderStatusDecision.APPROVED && (
               <Badge className="flex gap-1 items-center">
                 <CircleCheck className="w-4" />
                 Aprobado
               </Badge>
             )}
             {history.decision ===
-              SubscriptionOrderStatusDecision.NEEDS_CHANGES && (
+              EnrollmentOrderStatusDecision.NEEDS_CHANGES && (
               <>
                 {history.resubmittedAt === null ? (
                   <Badge variant="warning" className="flex gap-1 items-center">

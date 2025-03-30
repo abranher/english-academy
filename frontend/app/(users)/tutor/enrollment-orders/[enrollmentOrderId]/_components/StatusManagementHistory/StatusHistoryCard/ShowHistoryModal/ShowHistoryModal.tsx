@@ -1,9 +1,9 @@
 "use client";
 
 import { formatDate } from "@/libs/date";
-import { SubscriptionOrderHistory } from "@/types/models";
+import { EnrollmentOrderHistory } from "@/types/models";
 
-import { OrderStatusBadge } from "@/components/subscription-orders";
+import { OrderStatusBadge } from "@/components/enrollment-orders";
 
 import {
   Dialog,
@@ -21,7 +21,7 @@ import { CalendarDays, Eye, NotebookPen, UserPen } from "lucide-react";
 export function ShowHistoryModal({
   history,
 }: {
-  history: SubscriptionOrderHistory;
+  history: EnrollmentOrderHistory;
 }) {
   return (
     <Dialog>

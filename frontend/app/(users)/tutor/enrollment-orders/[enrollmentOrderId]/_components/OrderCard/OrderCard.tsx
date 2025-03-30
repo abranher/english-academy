@@ -3,18 +3,18 @@
 import Link from "next/link";
 
 import {
-  Plan,
-  SubscriptionOrder,
-  SubscriptionOrderHistory,
-  Tutor,
+  Course,
+  EnrollmentOrder,
+  EnrollmentOrderHistory,
+  Price,
+  Student,
   User,
 } from "@/types/models";
 import { formatDate } from "@/libs/date";
-import { BillingCycle } from "@/types/enums";
 import { formatPrice, truncateString } from "@/libs/format";
 
 import { Title } from "@/components/common/Title";
-import { OrderStatusBadge } from "@/components/subscription-orders";
+import { OrderStatusBadge } from "@/components/enrollment-orders";
 
 import {
   Card,
@@ -27,12 +27,12 @@ import { Separator } from "@/components/shadcn/ui/separator";
 import { Button } from "@/components/shadcn/ui/button";
 
 export function OrderCard({
-  subscriptionOrder,
+  enrollmentOrder,
 }: {
-  subscriptionOrder: SubscriptionOrder & {
-    tutor: Tutor & { user: User };
-    plan: Plan;
-    subscriptionOrderHistory: SubscriptionOrderHistory[] | [];
+  enrollmentOrder: EnrollmentOrder & {
+    student: Student & { user: User };
+    course: Course & { price: Price };
+    enrollmentOrderHistory: EnrollmentOrderHistory[] | [];
   };
 }) {
   return (
@@ -42,12 +42,12 @@ export function OrderCard({
           <section className="flex items-center gap-3">
             <CardTitle>ID: </CardTitle>
             <CardDescription>
-              {truncateString(subscriptionOrder.id, "xs")}
+              {truncateString(enrollmentOrder.id, "xs")}
             </CardDescription>
           </section>
 
           <section className="flex items-center gap-3">
-            <OrderStatusBadge status={subscriptionOrder.status} />
+            <OrderStatusBadge status={enrollmentOrder.status} />
           </section>
         </section>
       </CardHeader>
@@ -55,30 +55,24 @@ export function OrderCard({
         <section className="flex flex-col gap-5">
           <Title size="lg">Plan seleccionado:</Title>
           <section>
-            <CardTitle>{subscriptionOrder.plan.name}</CardTitle>
+            <CardTitle>{enrollmentOrder.course.title}</CardTitle>
             <section className="flex gap-2 items-center">
               <Title size="lxl">
-                {formatPrice(subscriptionOrder.plan.price)}
+                {formatPrice(enrollmentOrder.course.price.amount)}
               </Title>
-              <span>
-                {subscriptionOrder.plan.billingCycle === BillingCycle.MONTHLY &&
-                  "/mes"}
-                {subscriptionOrder.plan.billingCycle === BillingCycle.ANNUAL &&
-                  "/año"}
-              </span>
             </section>
             <CardDescription>
-              {subscriptionOrder.plan.description}
+              {enrollmentOrder.course.description}
             </CardDescription>
           </section>
         </section>
         <Separator className="my-4" />
 
         <section className="flex items-center gap-3">
-          <Title size="lg">Tutor:</Title>
-          <Link href={`/admin/tutors/${subscriptionOrder.tutor.user.id}`}>
+          <Title size="lg">Estudiante:</Title>
+          <Link href={`/admin/tutors/${enrollmentOrder.student.user.id}`}>
             <Button variant="link" size="sm" className="p-0 h-3">
-              @{subscriptionOrder.tutor.user.username}
+              @{enrollmentOrder.student.user.username}
             </Button>
           </Link>
         </section>
@@ -93,13 +87,13 @@ export function OrderCard({
 
           <CardDescription className="text-lg flex justify-between">
             Referencia o comprobante de pago:{" "}
-            <strong>{subscriptionOrder.paymentReference}</strong>
+            <strong>{enrollmentOrder.paymentReference}</strong>
           </CardDescription>
           <Separator />
 
           <CardDescription className="text-lg flex justify-between">
             Fecha:
-            <strong>{formatDate(subscriptionOrder.createdAt)}</strong>
+            <strong>{formatDate(enrollmentOrder.createdAt)}</strong>
           </CardDescription>
         </section>
       </CardContent>
