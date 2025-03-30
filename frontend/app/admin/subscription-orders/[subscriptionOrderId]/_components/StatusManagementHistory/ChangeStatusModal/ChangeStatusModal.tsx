@@ -86,10 +86,7 @@ export function ChangeStatusModal() {
   });
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
-    createMutation.mutate({
-      comment: data.comment,
-      status: data.status,
-    });
+    createMutation.mutate({ comment: data.comment, status: data.status });
   }
 
   const { isValid, isSubmitting } = form.formState;

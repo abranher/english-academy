@@ -18,9 +18,11 @@ import {
 import { ChevronsDown, ChevronsUp, CircleCheck, History } from "lucide-react";
 
 export function StatusManagementHistory({
+  tutorId,
   enrollmentOrderHistory,
   enrollmentOrder,
 }: {
+  tutorId: string;
   enrollmentOrderHistory: EnrollmentOrderHistory[] | [];
   enrollmentOrder: EnrollmentOrder;
 }) {
@@ -97,7 +99,7 @@ export function StatusManagementHistory({
               {enrollmentOrderHistory.length === 0 ||
               enrollmentOrderHistory[enrollmentOrderHistory.length - 1]
                 .resubmittedAt ? (
-                <ChangeStatusModal />
+                <ChangeStatusModal tutorId={tutorId} />
               ) : (
                 <Button disabled>En espera</Button>
               )}

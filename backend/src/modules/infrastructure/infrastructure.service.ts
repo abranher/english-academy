@@ -67,4 +67,24 @@ export class InfrastructureService {
       );
     return history;
   }
+
+  async findEnrollmentOrderOrThrow(id: string) {
+    const order = await this.prisma.enrollmentOrder.findUnique({
+      where: { id },
+    });
+    if (!order)
+      throw new NotFoundException('Órden de inscripción no encontrada');
+    return order;
+  }
+
+  async findEnrollmentOrderHistoryOrThrow(id: string) {
+    const history = await this.prisma.enrollmentOrderHistory.findUnique({
+      where: { id },
+    });
+    if (!history)
+      throw new NotFoundException(
+        'Historial de Órden de inscripción no encontrado',
+      );
+    return history;
+  }
 }

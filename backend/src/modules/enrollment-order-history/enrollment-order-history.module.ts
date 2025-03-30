@@ -1,9 +1,12 @@
 import { Module } from '@nestjs/common';
-import { EnrollmentOrderHistoryService } from './providers/enrollment-order-history.service';
+
 import { EnrollmentOrderHistoryController } from './controllers/enrollment-order-history.controller';
+import { TutorOrderHistoryController } from './controllers/tutor.order-history.controller';
+import { EnrollmentOrderHistoryService } from './providers/enrollment-order-history.service';
+import { TutorOrderHistoryService } from './providers/tutor.order-history.service';
 
 @Module({
-  controllers: [EnrollmentOrderHistoryController],
-  providers: [EnrollmentOrderHistoryService],
+  controllers: [EnrollmentOrderHistoryController, TutorOrderHistoryController],
+  providers: [EnrollmentOrderHistoryService, TutorOrderHistoryService],
 })
 export class EnrollmentOrderHistoryModule {}

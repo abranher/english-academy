@@ -10,7 +10,7 @@ import { useState } from "react";
 import { FormSchema } from "./FormSchema";
 import { AxiosError } from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { SubscriptionOrderStatus } from "@/types/enums";
+import { EnrollmentOrderStatus } from "@/types/enums";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { LoadingButton } from "@/components/common/LoadingButton";
@@ -35,31 +35,31 @@ import { Button } from "@/components/shadcn/ui/button";
 import { Textarea } from "@/components/shadcn/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/shadcn/ui/radio-group";
 
-export function ChangeStatusModal() {
+export function ChangeStatusModal({ tutorId }: { tutorId: string }) {
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
 
-  const { subscriptionOrderId } = useParams();
+  const { enrollmentOrderId } = useParams();
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
   });
 
   const createMutation = useMutation({
-    mutationFn: (subscriptionOrder: {
+    mutationFn: (enrollmentOrder: {
       comment: string;
-      status: SubscriptionOrderStatus;
+      status: EnrollmentOrderStatus;
     }) =>
       axios.post(
-        `/api/admin/subscription-order-history/subscription-order/${subscriptionOrderId}`,
-        subscriptionOrder
+        `/api/enrollment-order-history/tutor/${tutorId}/enrollment-order/${enrollmentOrderId}`,
+        enrollmentOrder
       ),
     onSuccess: (response) => {
       if (response.status === 200 || response.status === 201) {
         const data = response.data;
         toast.success(data.message);
         queryClient.invalidateQueries({
-          queryKey: ["admin_subscription_order", subscriptionOrderId],
+          queryKey: ["tutor_enrollment_order", enrollmentOrderId],
         });
         setOpen(false);
       }
@@ -71,7 +71,7 @@ export function ChangeStatusModal() {
 
         const errorMessages: { [key: number]: string } = {
           400: "Datos no válidos",
-          404: "Órden de suscripción no encontrada",
+          404: "Órden de inscripción no encontrada",
           500: "Error del servidor",
           "-1": "Error inesperado",
         };
@@ -86,10 +86,7 @@ export function ChangeStatusModal() {
   });
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
-    createMutation.mutate({
-      comment: data.comment,
-      status: data.status,
-    });
+    createMutation.mutate({ comment: data.comment, status: data.status });
   }
 
   const { isValid, isSubmitting } = form.formState;
@@ -117,14 +114,14 @@ export function ChangeStatusModal() {
                     <FormLabel>Comentario</FormLabel>
                     <FormControl>
                       <Textarea
-                        placeholder="p.ej: Bienvenido..."
+                        placeholder="p.ej: Hola..."
                         className="resize-none"
                         {...field}
                       />
                     </FormControl>
                     <FormDescription>
-                      Deja un comentario para informar al tutor del por qué de
-                      tu decisión.
+                      Deja un comentario para informar al estudiante del por qué
+                      de tu decisión.
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -146,7 +143,7 @@ export function ChangeStatusModal() {
                         <FormItem className="flex items-center space-x-3 space-y-0">
                           <FormControl>
                             <RadioGroupItem
-                              value={SubscriptionOrderStatus.NEEDS_REVISION}
+                              value={EnrollmentOrderStatus.NEEDS_REVISION}
                             />
                           </FormControl>
                           <FormLabel className="font-normal">
@@ -157,7 +154,7 @@ export function ChangeStatusModal() {
                         <FormItem className="flex items-center space-x-3 space-y-0">
                           <FormControl>
                             <RadioGroupItem
-                              value={SubscriptionOrderStatus.APPROVED}
+                              value={EnrollmentOrderStatus.APPROVED}
                             />
                           </FormControl>
                           <FormLabel className="font-normal">
@@ -168,7 +165,7 @@ export function ChangeStatusModal() {
                         <FormItem className="flex items-center space-x-3 space-y-0">
                           <FormControl>
                             <RadioGroupItem
-                              value={SubscriptionOrderStatus.CANCELED}
+                              value={EnrollmentOrderStatus.CANCELED}
                             />
                           </FormControl>
                           <FormLabel className="font-normal">

@@ -39,7 +39,7 @@ export function Order({ tutorId }: { tutorId: string }) {
       enrollmentOrderHistory: EnrollmentOrderHistory[] | [];
     }
   >({
-    queryKey: ["tutor_enrollment_orders", enrollmentOrderId],
+    queryKey: ["tutor_enrollment_order", enrollmentOrderId],
     queryFn: () =>
       getTutorEnrollmentOrder(enrollmentOrderId as string, tutorId),
   });
@@ -63,6 +63,7 @@ export function Order({ tutorId }: { tutorId: string }) {
       <Separator />
 
       <StatusManagementHistory
+        tutorId={tutorId}
         enrollmentOrderHistory={enrollmentOrder.enrollmentOrderHistory}
         enrollmentOrder={enrollmentOrder}
       />
