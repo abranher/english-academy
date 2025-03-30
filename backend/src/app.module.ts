@@ -41,6 +41,7 @@ import { InfrastructureModule } from './modules/infrastructure/infrastructure.mo
 import { EnrollmentOrdersModule } from './modules/enrollment-orders/enrollment-orders.module';
 import { EnrollmentsModule } from './modules/enrollments/enrollments.module';
 import { ClassProgressModule } from './modules/class-progress/class-progress.module';
+import { EnrollmentOrderHistoryModule } from './modules/enrollment-order-history/enrollment-order-history.module';
 
 @Module({
   imports: [
@@ -88,6 +89,7 @@ import { ClassProgressModule } from './modules/class-progress/class-progress.mod
     EnrollmentOrdersModule,
     EnrollmentsModule,
     ClassProgressModule,
+    EnrollmentOrderHistoryModule,
   ],
 })
 export class AppModule {}
