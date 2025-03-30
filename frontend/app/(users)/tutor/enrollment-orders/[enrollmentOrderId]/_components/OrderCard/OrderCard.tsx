@@ -2,15 +2,19 @@
 
 import Link from "next/link";
 
+import { assetImg } from "@/libs/asset";
 import {
+  Category,
   Course,
   EnrollmentOrder,
   EnrollmentOrderHistory,
   Price,
   Student,
+  SubCategory,
   User,
 } from "@/types/models";
 import { formatDate } from "@/libs/date";
+import { Chip, Image } from "@heroui/react";
 import { formatPrice, truncateString } from "@/libs/format";
 
 import { Title } from "@/components/common/Title";
@@ -31,7 +35,11 @@ export function OrderCard({
 }: {
   enrollmentOrder: EnrollmentOrder & {
     student: Student & { user: User };
-    course: Course & { price: Price };
+    course: Course & {
+      price: Price;
+      category: Category;
+      subcategory: SubCategory;
+    };
     enrollmentOrderHistory: EnrollmentOrderHistory[] | [];
   };
 }) {
@@ -53,18 +61,35 @@ export function OrderCard({
       </CardHeader>
       <CardContent>
         <section className="flex flex-col gap-5">
-          <Title size="lg">Plan seleccionado:</Title>
-          <section>
-            <CardTitle>{enrollmentOrder.course.title}</CardTitle>
-            <section className="flex gap-2 items-center">
-              <Title size="lxl">
+          <Title size="lg">Curso seleccionado:</Title>
+          <article className="col-span-7 flex items-start gap-4">
+            <div className="aspect-video w-44 shrink-0">
+              <Image
+                src={assetImg(enrollmentOrder.course.image)}
+                alt={enrollmentOrder.course.title}
+                className="w-full h-full object-contain"
+              />
+            </div>
+
+            <div className="flex flex-col gap-3 w-full">
+              <h3 className="text-base font-bold text-gray-800 dark:text-zinc-50">
+                {`${enrollmentOrder.course.title} - ${enrollmentOrder.course.subtitle}`}
+              </h3>
+
+              <CardTitle>
                 {formatPrice(enrollmentOrder.course.price.amount)}
-              </Title>
-            </section>
-            <CardDescription>
-              {enrollmentOrder.course.description}
-            </CardDescription>
-          </section>
+              </CardTitle>
+
+              <div className="flex gap-2">
+                <Chip color="danger" size="lg">
+                  {enrollmentOrder.course.category.title}
+                </Chip>
+                <Chip color="primary" size="lg">
+                  {enrollmentOrder.course.subcategory.title}
+                </Chip>
+              </div>
+            </div>
+          </article>
         </section>
         <Separator className="my-4" />
 

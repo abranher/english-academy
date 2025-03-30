@@ -5,19 +5,21 @@ import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { getTutorEnrollmentOrder } from "@/services/network/enrollment-orders";
 import {
+  Category,
   Course,
   EnrollmentOrder,
   EnrollmentOrderHistory,
   Price,
   Student,
+  SubCategory,
   User,
 } from "@/types/models";
 
+import { OrderCard } from "../OrderCard";
 import { StatusManagementHistory } from "../StatusManagementHistory";
 
 import { CardDescription, CardTitle } from "@/components/shadcn/ui/card";
 import { Separator } from "@/components/shadcn/ui/separator";
-import { OrderCard } from "../OrderCard";
 
 export function Order({ tutorId }: { tutorId: string }) {
   const { enrollmentOrderId } = useParams();
@@ -29,7 +31,11 @@ export function Order({ tutorId }: { tutorId: string }) {
   } = useQuery<
     EnrollmentOrder & {
       student: Student & { user: User };
-      course: Course & { price: Price };
+      course: Course & {
+        price: Price;
+        category: Category;
+        subcategory: SubCategory;
+      };
       enrollmentOrderHistory: EnrollmentOrderHistory[] | [];
     }
   >({
@@ -44,9 +50,9 @@ export function Order({ tutorId }: { tutorId: string }) {
   return (
     <>
       <section className="flex flex-col gap-1">
-        <CardTitle>Órden de suscripción</CardTitle>
+        <CardTitle>Órden de inscripción</CardTitle>
         <CardDescription>
-          Accede y gestiona la información de la órden de suscripción.
+          Accede y gestiona la información de la órden de inscripción.
         </CardDescription>
       </section>
 

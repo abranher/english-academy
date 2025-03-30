@@ -49,7 +49,9 @@ export class TutorOrdersService {
         where: { id },
         include: {
           student: { include: { user: true } },
-          course: { include: { price: true } },
+          course: {
+            include: { price: true, category: true, subcategory: true },
+          },
           enrollmentOrderHistory: true,
         },
       });
