@@ -432,12 +432,29 @@ export function MainButtons() {
                           </Link>
                         </DropdownMenuItem>
 
-                        <DropdownMenuItem asChild>
-                          <Link href="/tutor/courses">
-                            <Award className="mr-2 h-4 w-4" />
-                            Cursos
-                          </Link>
-                        </DropdownMenuItem>
+                        <DropdownMenuSub>
+                          <DropdownMenuSubTrigger>
+                            <BookCheck className="mr-2 h-4 w-4" />
+                            <span>Inscripciones</span>
+                          </DropdownMenuSubTrigger>
+                          <DropdownMenuPortal>
+                            <DropdownMenuSubContent>
+                              <DropdownMenuItem asChild>
+                                <Link href="/tutor/profile">
+                                  <BookOpenCheck className="mr-2 h-4 w-4" />
+                                  Mis Inscripciones
+                                </Link>
+                              </DropdownMenuItem>
+
+                              <DropdownMenuItem asChild>
+                                <Link href="/student/enrollment-orders">
+                                  <ClipboardCheck className="mr-2 h-4 w-4" />
+                                  Mis Órdenes de Inscripción
+                                </Link>
+                              </DropdownMenuItem>
+                            </DropdownMenuSubContent>
+                          </DropdownMenuPortal>
+                        </DropdownMenuSub>
                       </DropdownMenuGroup>
 
                       <DropdownMenuSeparator />
@@ -449,39 +466,9 @@ export function MainButtons() {
                             Perfil
                           </Link>
                         </DropdownMenuItem>
-
-                        <DropdownMenuItem asChild>
-                          <Link href="/student/enrollment-orders">
-                            <BookMarked className="mr-2 h-4 w-4" />
-                            Mis Órdenes de Inscripción
-                          </Link>
-                        </DropdownMenuItem>
-
-                        <DropdownMenuSub>
-                          <DropdownMenuSubTrigger>
-                            <UserPlus className="mr-2 h-4 w-4" />
-                            <span>Invite users</span>
-                          </DropdownMenuSubTrigger>
-                          <DropdownMenuPortal>
-                            <DropdownMenuSubContent>
-                              <DropdownMenuItem>
-                                <Mail className="mr-2 h-4 w-4" />
-                                <span>Email</span>
-                              </DropdownMenuItem>
-                              <DropdownMenuItem>
-                                <MessageSquare className="mr-2 h-4 w-4" />
-                                <span>Message</span>
-                              </DropdownMenuItem>
-                              <DropdownMenuSeparator />
-                              <DropdownMenuItem>
-                                <PlusCircle className="mr-2 h-4 w-4" />
-                                <span>More...</span>
-                              </DropdownMenuItem>
-                            </DropdownMenuSubContent>
-                          </DropdownMenuPortal>
-                        </DropdownMenuSub>
                       </DropdownMenuGroup>
                       <DropdownMenuSeparator />
+
                       <DropdownMenuItem
                         onClick={() => {
                           signOut({ callbackUrl: "/" });

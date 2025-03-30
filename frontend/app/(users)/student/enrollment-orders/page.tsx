@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 
 import { auth } from "@/config/auth";
 
-import { SubscriptionOrders } from "./_components/SubscriptionOrders";
+import { EnrollmentOrders } from "./_components/EnrollmentOrders";
 
 import {
   Breadcrumb,
@@ -14,9 +14,10 @@ import {
   BreadcrumbSeparator,
 } from "@/components/shadcn/ui/breadcrumb";
 
-export default async function AdminSubscriptionOrdersPage() {
+export default async function EnrollmentOrdersPage() {
   const session = await auth();
   if (!session) redirect("/");
+  if (!session.user.student) redirect("/");
 
   return (
     <>
@@ -24,17 +25,17 @@ export default async function AdminSubscriptionOrdersPage() {
         <BreadcrumbList>
           <BreadcrumbItem>
             <BreadcrumbLink asChild>
-              <Link href="/admin">Dashboard</Link>
+              <Link href="/student/home">Home</Link>
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbPage>Órdenes de Suscripción</BreadcrumbPage>
+            <BreadcrumbPage>Mis Órdenes de Inscripción</BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
 
-      <SubscriptionOrders />
+      <EnrollmentOrders studentId={session.user.student.id} />
     </>
   );
 }

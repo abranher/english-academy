@@ -1,5 +1,7 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 
+import { EnrollmentOrderStatus } from '@prisma/client';
+
 import { PrismaService } from 'src/modules/prisma/providers/prisma.service';
 import { InfrastructureService } from 'src/modules/infrastructure/infrastructure.service';
 import { CreateEnrollmentOrderDto } from '../dto/create-enrollment-order.dto';
@@ -10,6 +12,40 @@ export class EnrollmentOrdersService {
     private readonly prisma: PrismaService,
     private readonly InfrastructureService: InfrastructureService,
   ) {}
+
+  async findAll(studentId: string) {
+    await this.InfrastructureService.findStudentOrThrow(studentId);
+
+    try {
+      return await this.prisma.enrollmentOrder.findMany({
+        where: { studentId },
+        include: { course: true },
+        orderBy: { createdAt: 'desc' },
+      });
+    } catch (error) {
+      throw new InternalServerErrorException(
+        'Error del servidor. Por favor intenta nuevamente.',
+        error,
+      );
+    }
+  }
+
+  async findAllByStatus(status: EnrollmentOrderStatus, studentId: string) {
+    await this.InfrastructureService.findStudentOrThrow(studentId);
+
+    try {
+      return await this.prisma.enrollmentOrder.findMany({
+        where: { studentId, status },
+        include: { course: true },
+        orderBy: { createdAt: 'desc' },
+      });
+    } catch (error) {
+      throw new InternalServerErrorException(
+        'Error del servidor. Por favor intenta nuevamente.',
+        error,
+      );
+    }
+  }
 
   async create(
     studentId: string,
