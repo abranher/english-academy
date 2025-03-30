@@ -1,6 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
-
-import { EnrollmentOrderStatus } from '@prisma/client';
+import { Body, Controller, Param, Post } from '@nestjs/common';
 
 import { EnrollmentOrdersService } from '../providers/enrollment-orders.service';
 import { CreateEnrollmentOrderDto } from '../dto/create-enrollment-order.dto';
@@ -10,28 +8,6 @@ export class EnrollmentOrdersController {
   constructor(
     private readonly enrollmentOrdersService: EnrollmentOrdersService,
   ) {}
-
-  /*
-   * Get tutor enrollment orders
-   */
-  @Get('tutor/:tutorId')
-  findAllForTutor(@Param('tutorId') tutorId: string) {
-    return this.enrollmentOrdersService.findAllForTutor(tutorId);
-  }
-
-  /*
-   * Get tutor enrollment orders
-   */
-  @Get('status/:status/tutor/:tutorId')
-  findAllForTutorByStatus(
-    @Param('status') status: EnrollmentOrderStatus,
-    @Param('tutorId') tutorId: string,
-  ) {
-    return this.enrollmentOrdersService.findAllForTutorByStatus(
-      status,
-      tutorId,
-    );
-  }
 
   /*
    * Create Enrollment Order
