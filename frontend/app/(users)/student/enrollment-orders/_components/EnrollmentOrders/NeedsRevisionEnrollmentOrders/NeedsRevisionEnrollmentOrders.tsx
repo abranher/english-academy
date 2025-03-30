@@ -2,8 +2,8 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { EnrollmentOrderStatus } from "@/types/enums";
-import { Course, EnrollmentOrder, Student, User } from "@/types/models";
-import { getTutorEnrollmentOrdersByStatus } from "@/services/network/enrollment-orders";
+import { Course, EnrollmentOrder } from "@/types/models";
+import { getEnrollmentOrdersByStatus } from "@/services/network/enrollment-orders";
 
 import { MiniOrderCard } from "../../MiniOrderCard";
 
@@ -25,18 +25,15 @@ export function NeedsRevisionEnrollmentOrders({
     isPending,
     data: enrollmentOrders,
     isError,
-  } = useQuery<
-    | (EnrollmentOrder & {
-        student: Student & { user: User };
-        course: Course;
-      })[]
-    | []
-  >({
-    queryKey: ["tutor_enrollment_orders", EnrollmentOrderStatus.NEEDS_REVISION],
+  } = useQuery<(EnrollmentOrder & { course: Course })[] | []>({
+    queryKey: [
+      "student_enrollment_orders",
+      EnrollmentOrderStatus.NEEDS_REVISION,
+    ],
     queryFn: () =>
-      getTutorEnrollmentOrdersByStatus(
+      getEnrollmentOrdersByStatus(
         EnrollmentOrderStatus.NEEDS_REVISION,
-        tutorId
+        studentId
       ),
   });
 
@@ -70,7 +67,7 @@ export function NeedsRevisionEnrollmentOrders({
           <section className="w-full text-zinc-700 dark:text-zinc-200 py-4">
             <h2 className="flex justify-center flex-col items-center">
               <FolderOpen className="w-24 h-24" />
-              No hay órdenes que necesitan revisión.
+              No hay órdenes que necesiten de revisión.
             </h2>
           </section>
         )}

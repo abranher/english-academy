@@ -2,8 +2,8 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { EnrollmentOrderStatus } from "@/types/enums";
-import { Course, EnrollmentOrder, Student, User } from "@/types/models";
-import { getTutorEnrollmentOrdersByStatus } from "@/services/network/enrollment-orders";
+import { Course, EnrollmentOrder } from "@/types/models";
+import { getEnrollmentOrdersByStatus } from "@/services/network/enrollment-orders";
 
 import { MiniOrderCard } from "../../MiniOrderCard";
 
@@ -16,24 +16,19 @@ import { Separator } from "@/components/shadcn/ui/separator";
 import { Skeleton } from "@/components/shadcn/ui/skeleton";
 import { FolderOpen } from "lucide-react";
 
-export function ResubmittedEnrollmentOrders({ studentId }: { studentId: string }) {
+export function ResubmittedEnrollmentOrders({
+  studentId,
+}: {
+  studentId: string;
+}) {
   const {
     isPending,
     data: enrollmentOrders,
     isError,
-  } = useQuery<
-    | (EnrollmentOrder & {
-        student: Student & { user: User };
-        course: Course;
-      })[]
-    | []
-  >({
-    queryKey: ["tutor_enrollment_orders", EnrollmentOrderStatus.RESUBMITTED],
+  } = useQuery<(EnrollmentOrder & { course: Course })[] | []>({
+    queryKey: ["student_enrollment_orders", EnrollmentOrderStatus.RESUBMITTED],
     queryFn: () =>
-      getTutorEnrollmentOrdersByStatus(
-        EnrollmentOrderStatus.RESUBMITTED,
-        tutorId
-      ),
+      getEnrollmentOrdersByStatus(EnrollmentOrderStatus.RESUBMITTED, studentId),
   });
 
   if (isError) return <div>Ocurrió un error al cargar las órdenes</div>;
