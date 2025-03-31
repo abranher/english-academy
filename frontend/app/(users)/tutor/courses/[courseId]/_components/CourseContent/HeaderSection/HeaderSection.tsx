@@ -18,7 +18,15 @@ import {
 } from "@/components/shadcn/ui/tooltip";
 import { ChevronLeft } from "lucide-react";
 
-export function HeaderSection({ course }: { course: Course }) {
+export function HeaderSection({
+  course,
+  userId,
+  tutorId,
+}: {
+  course: Course;
+  userId: string;
+  tutorId: string;
+}) {
   const requieredFields = [
     course.title,
     course.description,
@@ -64,7 +72,7 @@ export function HeaderSection({ course }: { course: Course }) {
           </TooltipProvider>
         </p>
 
-        <CourseActions course={course} />
+        <CourseActions course={course} tutorId={tutorId} userId={userId} />
       </section>
     </>
   );

@@ -18,6 +18,7 @@ export default async function CourseIdPage() {
   const session = await auth();
 
   if (!session) redirect("/");
+  if (!session.user.tutor) redirect("/");
 
   return (
     <>
@@ -41,7 +42,7 @@ export default async function CourseIdPage() {
         </BreadcrumbList>
       </Breadcrumb>
 
-      <CourseContent />
+      <CourseContent userId={session.user.id} tutorId={session.user.tutor.id} />
     </>
   );
 }

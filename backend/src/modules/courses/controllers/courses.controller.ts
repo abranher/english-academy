@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Headers,
+  Put,
 } from '@nestjs/common';
 
 import { CoursesService } from '../providers/courses.service';
@@ -42,5 +43,29 @@ export class CoursesController {
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateCourseDto: UpdateCourseDto) {
     return this.coursesService.update(id, updateCourseDto);
+  }
+
+  /**
+   * Publish a course
+   */
+  @Put(':id/tutor/:tutorId/publish')
+  publish(
+    @Headers('X-User-Id-Audit-Log') userHeader: string,
+    @Param('id') id: string,
+    @Param('tutorId') tutorId: string,
+  ) {
+    return this.coursesService.publishCourse(id, tutorId, userHeader);
+  }
+
+  /**
+   * Archive a course
+   */
+  @Put(':id/tutor/:tutorId/archive')
+  archive(
+    @Headers('X-User-Id-Audit-Log') userHeader: string,
+    @Param('id') id: string,
+    @Param('tutorId') tutorId: string,
+  ) {
+    return this.coursesService.archiveCourse(id, tutorId, userHeader);
   }
 }

@@ -40,7 +40,13 @@ const sectionTitles: SectionTitles = {
   STUDY_PLAN: "Plan de estudio",
 };
 
-export function CourseContent() {
+export function CourseContent({
+  userId,
+  tutorId,
+}: {
+  userId: string;
+  tutorId: string;
+}) {
   const { courseId } = useParams();
 
   const {
@@ -63,7 +69,7 @@ export function CourseContent() {
 
   return (
     <>
-      <HeaderSection course={course} />
+      <HeaderSection course={course} tutorId={tutorId} userId={userId} />
 
       <Separator className="mb-3" />
 

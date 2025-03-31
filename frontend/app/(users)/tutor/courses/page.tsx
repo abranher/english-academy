@@ -1,16 +1,11 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 import { validateTutorSession } from "@/libs/middleware/authValidation";
 
 import { CoursesList } from "./_components/CoursesList";
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/shadcn/ui/card";
+import { CardDescription, CardTitle } from "@/components/shadcn/ui/card";
 import { Separator } from "@/components/shadcn/ui/separator";
 import {
   Breadcrumb,
@@ -20,10 +15,12 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/shadcn/ui/breadcrumb";
-import { CreditCard, DollarSign, Users } from "lucide-react";
 
 export default async function TutorCoursesPage() {
   const session = await validateTutorSession();
+
+  if (!session) redirect("/");
+  if (!session.user.tutor) redirect("/");
 
   return (
     <>

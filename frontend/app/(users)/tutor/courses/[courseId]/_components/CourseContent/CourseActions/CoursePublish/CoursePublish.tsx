@@ -19,9 +19,9 @@ import {
   AlertDialogTrigger,
 } from "@/components/shadcn/ui/alert-dialog";
 import { Button } from "@/components/shadcn/ui/button";
-import { FolderLock, Loader2 } from "lucide-react";
+import { FolderOpen, Loader2 } from "lucide-react";
 
-export function CourseArchive({
+export function CoursePublish({
   userId,
   tutorId,
 }: {
@@ -36,7 +36,7 @@ export function CourseArchive({
   const createMutation = useMutation({
     mutationFn: () =>
       axios.put(
-        `/api/courses/${courseId}/tutor/${tutorId}/archive`,
+        `/api/courses/${courseId}/tutor/${tutorId}/publish`,
         {},
         {
           headers: {
@@ -77,9 +77,9 @@ export function CourseArchive({
     <>
       <AlertDialog open={open} onOpenChange={setOpen}>
         <AlertDialogTrigger asChild>
-          <Button className="flex gap-2 items-center" variant="outline">
-            <FolderLock className="w-4" />
-            Archivar
+          <Button className="flex gap-2 items-center">
+            <FolderOpen className="w-4" />
+            Publicar
           </Button>
         </AlertDialogTrigger>
         <AlertDialogContent>

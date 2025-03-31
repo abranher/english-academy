@@ -1,12 +1,14 @@
 import {
+  ForbiddenException,
   Injectable,
   InternalServerErrorException,
-  NotFoundException,
 } from '@nestjs/common';
 
 import { activityLogMessages } from 'src/libs/activity-logs';
+import { CoursePlatformStatus } from '@prisma/client';
 
 import { PrismaService } from 'src/modules/prisma/providers/prisma.service';
+import { InfrastructureService } from 'src/modules/infrastructure/infrastructure.service';
 import { ActivityLogsService } from 'src/modules/activity-logs/providers/activity-logs.service';
 import { CreateCourseDto } from '../dto/create-course.dto';
 import { UpdateCourseDto } from '../dto/update-course.dto';
@@ -15,13 +17,19 @@ import { UpdateCourseDto } from '../dto/update-course.dto';
 export class CoursesService {
   constructor(
     private readonly prisma: PrismaService,
+    private readonly infrastructureService: InfrastructureService,
     private readonly activityLogsService: ActivityLogsService,
   ) {}
 
-  private async findCourseOrThrow(id: string) {
-    const course = await this.prisma.course.findUnique({ where: { id } });
-    if (!course) throw new NotFoundException('Curso no encontrado.');
-    return course;
+  private async verifyCourseOwnership(tutorId: string, courseId: string) {
+    const course = await this.prisma.course.findFirst({
+      where: { id: courseId, tutorId },
+    });
+
+    if (!course)
+      throw new ForbiddenException(
+        'No tienes permiso para modificar este curso.',
+      );
   }
 
   /**
@@ -55,7 +63,7 @@ export class CoursesService {
    * Get Course for landing page
    */
   async findOne(id: string) {
-    await this.findCourseOrThrow(id);
+    await this.infrastructureService.findCourseOrThrow(id);
 
     try {
       return await this.prisma.course.findUnique({
@@ -66,11 +74,7 @@ export class CoursesService {
           price: true,
           chapters: {
             orderBy: { position: 'asc' },
-            include: {
-              lessons: {
-                include: { class: true, quiz: true },
-              },
-            },
+            include: { lessons: { include: { class: true, quiz: true } } },
           },
         },
       });
@@ -86,7 +90,7 @@ export class CoursesService {
    * Update every field
    */
   async update(id: string, updateCourseDto: UpdateCourseDto) {
-    await this.findCourseOrThrow(id);
+    await this.infrastructureService.findCourseOrThrow(id);
 
     try {
       return await this.prisma.course.update({
@@ -97,6 +101,63 @@ export class CoursesService {
       console.error('Error actualizando el curso:', error);
       throw new InternalServerErrorException(
         'Error del servidor. Por favor intenta nuevamente.',
+      );
+    }
+  }
+
+  /**
+   * Publish a course
+   */
+  async publishCourse(id: string, tutorId: string, userHeader: string) {
+    await this.infrastructureService.findTutorOrThrow(tutorId);
+    await this.verifyCourseOwnership(tutorId, id);
+
+    try {
+      await this.prisma.course.update({
+        where: { id },
+        data: {
+          platformStatus: CoursePlatformStatus.PUBLISHED,
+          publishedAt: new Date(),
+        },
+      });
+
+      this.activityLogsService.create(
+        userHeader,
+        activityLogMessages['course_publish'],
+      );
+
+      return { message: 'Curso publicado exitosamente!' };
+    } catch (error) {
+      throw new InternalServerErrorException(
+        'Error del servidor al publicar el curso. Por favor intenta nuevamente.',
+        error,
+      );
+    }
+  }
+
+  /**
+   * Archive a course
+   */
+  async archiveCourse(id: string, tutorId: string, userHeader: string) {
+    await this.infrastructureService.findTutorOrThrow(tutorId);
+    await this.verifyCourseOwnership(tutorId, id);
+
+    try {
+      await this.prisma.course.update({
+        where: { id },
+        data: { platformStatus: CoursePlatformStatus.ARCHIVED },
+      });
+
+      this.activityLogsService.create(
+        userHeader,
+        activityLogMessages['course_archive'],
+      );
+
+      return { message: 'Curso archivado exitosamente!' };
+    } catch (error) {
+      console.error('Error archivando el curso:', error);
+      throw new InternalServerErrorException(
+        'Error del servidor al archivar el curso. Por favor intenta nuevamente.',
       );
     }
   }
