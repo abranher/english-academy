@@ -1,4 +1,4 @@
-import { format, formatDistance } from "date-fns";
+import { differenceInDays, format, formatDistance } from "date-fns";
 import { es } from "date-fns/locale";
 
 export function formatDate(isoDateString: Date): string {
@@ -35,4 +35,18 @@ export function formatDateForHumans(date: Date): string {
     addSuffix: true,
     locale: es,
   });
+}
+
+export function calculateDaysRemaining(endDate: Date): string {
+  const today = new Date();
+  const days = differenceInDays(endDate, today);
+
+  if (days < 0) return "Expirada";
+  else if (days === 0) return "Último día";
+  else if (days === 1) return "1 día restante";
+  else return `${days} días restantes`;
+}
+
+export function formatSubscriptionDate(date: Date): string {
+  return format(date, "dd 'de' MMMM 'de' yyyy", { locale: es });
 }

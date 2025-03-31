@@ -3,6 +3,8 @@
 import { BillingCycle } from "@/types/enums";
 import { Plan, Subscription } from "@/types/models";
 import { formatPrice, truncateString } from "@/libs/format";
+import { calculateDaysRemaining, formatSubscriptionDate } from "@/libs/date";
+import { differenceInDays } from "date-fns";
 
 import { Title } from "@/components/common/Title";
 import { SubscriptionStatusBadge } from "@/components/subscriptions";
@@ -60,23 +62,51 @@ export function SubscriptionCard({
         </section>
         <Separator className="my-4" />
 
-        <Title size="lg">Datos de Pago:</Title>
+        <Title size="lg">Detalles de la Suscripción:</Title>
         <section className="flex flex-col gap-4">
           <CardDescription className="text-lg flex justify-between">
-            Método de pago: <strong>Pago Móvil</strong>
+            Inicio:
+            <strong>
+              {activeSubscription.startDate
+                ? formatSubscriptionDate(activeSubscription.startDate)
+                : "No definido"}
+            </strong>
           </CardDescription>
           <Separator />
 
           <CardDescription className="text-lg flex justify-between">
-            Referencia o comprobante de pago:{" "}
-            {/* <strong>{subscriptionOrder.paymentReference}</strong> */}
+            Fin:
+            <strong>
+              {activeSubscription.endDate
+                ? formatSubscriptionDate(activeSubscription.endDate)
+                : "No definido"}
+            </strong>
           </CardDescription>
           <Separator />
 
-          <CardDescription className="text-lg flex justify-between">
-            Fecha:
-            {/* <strong>{formatDate(subscriptionOrder.createdAt)}</strong> */}
-          </CardDescription>
+          {activeSubscription.startDate && activeSubscription.endDate && (
+            <>
+              <CardDescription className="text-lg flex justify-between">
+                Duración:
+                <strong>
+                  {differenceInDays(
+                    activeSubscription.endDate,
+                    activeSubscription.startDate
+                  )}{" "}
+                  días
+                </strong>
+              </CardDescription>
+              <Separator />
+
+              <CardDescription className="text-lg flex justify-between">
+                Estado:
+                <strong>
+                  {calculateDaysRemaining(activeSubscription.endDate)}
+                </strong>
+              </CardDescription>
+              <Separator />
+            </>
+          )}
         </section>
       </CardContent>
     </Card>
