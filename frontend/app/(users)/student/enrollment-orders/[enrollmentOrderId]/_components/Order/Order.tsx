@@ -36,7 +36,7 @@ export function Order({ studentId }: { studentId: string }) {
       enrollmentOrderHistory: EnrollmentOrderHistory[] | [];
     }
   >({
-    queryKey: ["tutor_subscription_order", enrollmentOrderId],
+    queryKey: ["student_subscription_order", enrollmentOrderId],
     queryFn: () => getEnrollmentOrder(enrollmentOrderId as string, studentId),
   });
 
@@ -48,7 +48,7 @@ export function Order({ studentId }: { studentId: string }) {
       <section className="flex flex-col gap-1">
         <CardTitle>Órden de inscripción</CardTitle>
         <CardDescription>
-          Accede y gestiona la información de la órden de suscripción.
+          Accede y gestiona la información de la órden de inscripción.
         </CardDescription>
       </section>
 
@@ -61,7 +61,6 @@ export function Order({ studentId }: { studentId: string }) {
       <StatusManagementHistory
         studentId={studentId}
         enrollmentOrderHistory={enrollmentOrder.enrollmentOrderHistory}
-        enrollmentOrder={enrollmentOrder}
       />
     </>
   );

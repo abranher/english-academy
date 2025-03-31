@@ -21,11 +21,9 @@ const MAX = 2;
 export function StatusManagementHistory({
   studentId,
   enrollmentOrderHistory,
-  enrollmentOrder,
 }: {
   studentId: string;
   enrollmentOrderHistory: EnrollmentOrderHistory[] | [];
-  enrollmentOrder: EnrollmentOrder;
 }) {
   const [showAll, setShowAll] = useState(false);
 
@@ -49,7 +47,6 @@ export function StatusManagementHistory({
                       <StatusHistoryCard
                         key={history.id}
                         history={history}
-                        enrollmentOrder={enrollmentOrder}
                         studentId={studentId}
                       />
                     ))
@@ -59,7 +56,6 @@ export function StatusManagementHistory({
                         <StatusHistoryCard
                           key={history.id}
                           history={history}
-                          enrollmentOrder={enrollmentOrder}
                           studentId={studentId}
                         />
                       ))}

@@ -42,7 +42,7 @@ export function MiniOrderCard({
             <OrderStatusBadge status={enrollmentOrder.status} />
           </section>
 
-          <Link href={`/tutor/enrollment-orders/${enrollmentOrder.id}`}>
+          <Link href={`/student/enrollment-orders/${enrollmentOrder.id}`}>
             <Button className="flex gap-2">
               Ver más
               <ArrowUpRight className="opacity-90 w-4" />

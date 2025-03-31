@@ -15,11 +15,9 @@ import { Badge } from "@/components/shadcn/ui/badge";
 
 export function StatusHistoryCard({
   history,
-  enrollmentOrder,
   studentId,
 }: {
   history: EnrollmentOrderHistory;
-  enrollmentOrder: EnrollmentOrder;
   studentId: string;
 }) {
   return (
@@ -39,11 +37,7 @@ export function StatusHistoryCard({
               EnrollmentOrderStatusDecision.NEEDS_CHANGES && (
               <>
                 {history.resubmittedAt === null ? (
-                  <ResubmittedAction
-                    history={history}
-                    enrollmentOrder={enrollmentOrder}
-                    studentId={studentId}
-                  />
+                  <ResubmittedAction history={history} studentId={studentId} />
                 ) : (
                   <Badge
                     variant="secondary"

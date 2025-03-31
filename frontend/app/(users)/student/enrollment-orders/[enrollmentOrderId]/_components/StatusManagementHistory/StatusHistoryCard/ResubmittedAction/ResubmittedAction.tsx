@@ -38,17 +38,15 @@ import { Send } from "lucide-react";
 
 export function ResubmittedAction({
   history,
-  enrollmentOrder,
   studentId,
 }: {
   history: EnrollmentOrderHistory;
-  enrollmentOrder: EnrollmentOrder;
   studentId: string;
 }) {
   const [open, setOpen] = useState(false);
   const queryClient = useQueryClient();
 
-  const { subscriptionOrderId } = useParams();
+  const { enrollmentOrderId } = useParams();
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -57,7 +55,7 @@ export function ResubmittedAction({
   const mutation = useMutation({
     mutationFn: (Order: { paymentReference: number }) =>
       axios.post(
-        `/api/subscription-order-history/${history.id}/subscription-order/${subscriptionOrder.id}/tutor/${tutorId}/resubmitted`,
+        `/api/enrollment-order-history/${history.id}/enrollment-order/${enrollmentOrderId}/student/${studentId}/resubmitted`,
         Order
       ),
     onSuccess: (response) => {
@@ -66,7 +64,7 @@ export function ResubmittedAction({
         toast.success(data.message);
         form.reset();
         queryClient.invalidateQueries({
-          queryKey: ["tutor_subscription_order", subscriptionOrderId],
+          queryKey: ["student_subscription_order", enrollmentOrderId],
         });
         setOpen(false);
       }
@@ -78,7 +76,7 @@ export function ResubmittedAction({
 
         const errorMessages: { [key: number]: string } = {
           400: "Datos no válidos",
-          404: "Historial o Órden o Tutor no encontrado",
+          404: "Historial o Órden o Estudiante no encontrado",
           500: "Error del servidor",
           "-1": "Error inesperado",
         };
