@@ -9,10 +9,12 @@ import { InfrastructureService } from 'src/modules/infrastructure/infrastructure
 export class TutorsDashboardService {
   constructor(
     private readonly prisma: PrismaService,
-    private readonly InfrastructureService: InfrastructureService,
+    private readonly infrastructureService: InfrastructureService,
   ) {}
 
   async getTutorEarningsAnalytics(tutorId: string) {
+    await this.infrastructureService.findTutorOrThrow(tutorId);
+
     try {
       const now = new Date();
       const currentMonthStart = new Date(now.getFullYear(), now.getMonth(), 1);
@@ -67,6 +69,61 @@ export class TutorsDashboardService {
     } catch (error) {
       throw new InternalServerErrorException(
         'Error al calcular las métricas de ingresos',
+        error,
+      );
+    }
+  }
+
+  async getActiveStudentsAnalytics(tutorId: string) {
+    await this.infrastructureService.findTutorOrThrow(tutorId);
+
+    try {
+      const now = new Date();
+      const currentMonthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+      const lastMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+      const lastMonthEnd = new Date(now.getFullYear(), now.getMonth(), 0);
+
+      const [totalActive, currentMonthActive, lastMonthActive] =
+        await Promise.all([
+          // Total de estudiantes activos
+          this.prisma.enrollment.count({
+            where: { course: { tutorId }, isActive: true },
+          }),
+
+          // Estudiantes activos este mes
+          this.prisma.enrollment.count({
+            where: {
+              course: { tutorId },
+              isActive: true,
+              enrolledAt: { gte: currentMonthStart },
+            },
+          }),
+
+          // Estudiantes activos mes anterior
+          this.prisma.enrollment.count({
+            where: {
+              course: { tutorId },
+              isActive: true,
+              enrolledAt: { gte: lastMonthStart, lte: lastMonthEnd },
+            },
+          }),
+        ]);
+
+      const percentageChange =
+        lastMonthActive > 0
+          ? ((currentMonthActive - lastMonthActive) / lastMonthActive) * 100
+          : 100;
+
+      return {
+        totalActive,
+        monthlyComparison: {
+          current: currentMonthActive,
+          percentageChange,
+        },
+      };
+    } catch (error) {
+      throw new InternalServerErrorException(
+        'Error al calcular las métricas de estudiantes activos',
         error,
       );
     }

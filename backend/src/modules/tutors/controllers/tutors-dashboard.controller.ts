@@ -12,4 +12,9 @@ export class TutorsDashboardController {
   async getEarningsAnalytics(@Param('tutorId') tutorId: string) {
     return this.tutorsDashboardService.getTutorEarningsAnalytics(tutorId);
   }
+
+  @Get('analytics/active-students/tutor/:tutorId')
+  async getActiveStudentsAnalytics(@Param('tutorId') tutorId: string) {
+    return this.tutorsDashboardService.getActiveStudentsAnalytics(tutorId);
+  }
 }
