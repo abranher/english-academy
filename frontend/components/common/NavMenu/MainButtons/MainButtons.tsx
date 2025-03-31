@@ -20,16 +20,11 @@ import {
   BookOpenCheck,
   CircleUser,
   ClipboardCheck,
-  CreditCard,
   Files,
   Home,
   LogOut,
-  Mail,
-  MessageSquare,
-  PlusCircle,
   Settings,
   User,
-  UserPlus,
   UserSquare,
 } from "lucide-react";
 import {
@@ -323,7 +318,7 @@ export function MainButtons() {
                           <DropdownMenuPortal>
                             <DropdownMenuSubContent>
                               <DropdownMenuItem asChild>
-                                <Link href="/tutor/profile">
+                                <Link href="/tutor/subscription">
                                   <BookmarkCheck className="mr-2 h-4 w-4" />
                                   Mi Suscripción
                                 </Link>
