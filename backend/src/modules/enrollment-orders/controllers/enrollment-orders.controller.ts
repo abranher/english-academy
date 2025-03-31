@@ -19,6 +19,14 @@ export class EnrollmentOrdersController {
   }
 
   /*
+   * Get one enrollment order
+   */
+  @Get(':id/student/:studentId')
+  findOne(@Param('id') id: string, @Param('studentId') studentId: string) {
+    return this.enrollmentOrdersService.findOne(id, studentId);
+  }
+
+  /*
    * Get enrollment orders by status
    */
   @Get('status/:status/student/:studentId')

@@ -1,3 +1,4 @@
+export { getEnrollmentOrder } from "./get-enrollment-order";
 export { getEnrollmentOrders } from "./get-enrollment-orders";
 export { getEnrollmentOrdersByStatus } from "./get-enrollment-orders-by-status";
 export { getTutorEnrollmentOrders } from "./get-tutor-enrollment-orders";

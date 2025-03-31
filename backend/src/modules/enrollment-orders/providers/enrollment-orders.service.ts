@@ -30,6 +30,28 @@ export class EnrollmentOrdersService {
     }
   }
 
+  async findOne(id: string, studentId: string) {
+    await this.InfrastructureService.findEnrollmentOrderOrThrow(id);
+    await this.InfrastructureService.findStudentOrThrow(studentId);
+
+    try {
+      return await this.prisma.enrollmentOrder.findUnique({
+        where: { id, studentId },
+        include: {
+          course: {
+            include: { price: true, category: true, subcategory: true },
+          },
+          enrollmentOrderHistory: true,
+        },
+      });
+    } catch (error) {
+      throw new InternalServerErrorException(
+        'Error del servidor. Por favor intenta nuevamente.',
+        error,
+      );
+    }
+  }
+
   async findAllByStatus(status: EnrollmentOrderStatus, studentId: string) {
     await this.InfrastructureService.findStudentOrThrow(studentId);
 
