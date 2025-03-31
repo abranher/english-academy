@@ -4,6 +4,7 @@ import {
   SubscriptionOrderStatus,
   SubscriptionOrderStatusDecision,
   SubscriptionStatus,
+  BillingCycle,
 } from '@prisma/client';
 
 import { PrismaService } from 'src/modules/prisma/providers/prisma.service';
@@ -14,7 +15,7 @@ import { CreateSubscriptionOrderHistoryDto } from '../dto/create-subscription-or
 export class OrderHistoryAdminService {
   constructor(
     private readonly prisma: PrismaService,
-    private readonly InfrastructureService: InfrastructureService,
+    private readonly infrastructureService: InfrastructureService,
   ) {}
 
   async create(
@@ -22,7 +23,7 @@ export class OrderHistoryAdminService {
     createSubscriptionOrderHistoryDto: CreateSubscriptionOrderHistoryDto,
   ) {
     const subscriptionOrder =
-      await this.InfrastructureService.findSubscriptionOrderOrThrow(
+      await this.infrastructureService.findSubscriptionOrderOrThrow(
         subscriptionOrderId,
       );
 
@@ -30,7 +31,7 @@ export class OrderHistoryAdminService {
       createSubscriptionOrderHistoryDto.status ===
       SubscriptionOrderStatus.NEEDS_REVISION
     ) {
-      const StatusHistory = await this.prisma.subscriptionOrderHistory.create({
+      await this.prisma.subscriptionOrderHistory.create({
         data: {
           comment: createSubscriptionOrderHistoryDto.comment,
           previousStatus: subscriptionOrder.status,
@@ -39,24 +40,31 @@ export class OrderHistoryAdminService {
         },
       });
 
-      const subscriptionOrderUpdated =
-        await this.prisma.subscriptionOrder.update({
-          where: { id: subscriptionOrderId },
-          data: { status: createSubscriptionOrderHistoryDto.status },
-        });
-
-      // await this.updatedTutorStatus.send(
-      //   user,
-      //   tutorStatusHistory.comment,
-      //   tutorUpdated.status,
-      // );
+      await this.prisma.subscriptionOrder.update({
+        where: { id: subscriptionOrderId },
+        data: { status: createSubscriptionOrderHistoryDto.status },
+      });
 
       return { message: 'Órden actualizada.' };
     } else if (
       createSubscriptionOrderHistoryDto.status ===
       SubscriptionOrderStatus.APPROVED
     ) {
-      const StatusHistory = await this.prisma.subscriptionOrderHistory.create({
+      const plan = await this.infrastructureService.findPlanOrThrow(
+        subscriptionOrder.planId,
+      );
+
+      const now = new Date();
+      const endDate = new Date();
+
+      // Calcular endDate según el billingCycle
+      if (plan.billingCycle === BillingCycle.MONTHLY) {
+        endDate.setMonth(now.getMonth() + 1);
+      } else if (plan.billingCycle === BillingCycle.ANNUAL) {
+        endDate.setFullYear(now.getFullYear() + 1);
+      }
+
+      await this.prisma.subscriptionOrderHistory.create({
         data: {
           comment: createSubscriptionOrderHistoryDto.comment,
           previousStatus: subscriptionOrder.status,
@@ -65,25 +73,24 @@ export class OrderHistoryAdminService {
         },
       });
 
-      const subscriptionOrderUpdated =
-        await this.prisma.subscriptionOrder.update({
-          where: { id: subscriptionOrderId },
-          data: {
-            status: createSubscriptionOrderHistoryDto.status,
-            approvedAt: new Date(),
-            subscription: {
-              update: { data: { status: SubscriptionStatus.ACTIVE } },
+      await this.prisma.subscriptionOrder.update({
+        where: { id: subscriptionOrderId },
+        data: {
+          status: createSubscriptionOrderHistoryDto.status,
+          approvedAt: now,
+          subscription: {
+            update: {
+              status: SubscriptionStatus.ACTIVE,
+              startDate: now,
+              endDate: endDate,
             },
           },
-        });
+        },
+      });
 
-      // await this.updatedTutorStatus.send(
-      //   user,
-      //   tutorStatusHistory.comment,
-      //   tutorUpdated.status,
-      // );
-
-      return { message: 'Órden actualizada.' };
+      return {
+        message: 'Órden aprobada y fechas de suscripción establecidas.',
+      };
     }
   }
 }
