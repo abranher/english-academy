@@ -3,11 +3,10 @@
 import Link from "next/link";
 
 import { Course } from "@/types/models";
-import { CourseReviewStatus } from "@/types/enums";
 
-import { AlertBanner } from "@/components/common/AlertBanner";
 import { MiniCoursePreviewCard } from "./MiniCoursePreviewCard";
 import { CourseActions } from "../CourseActions";
+import { CourseStatusBanner } from "./CourseStatusBanner";
 
 import { Separator } from "@/components/shadcn/ui/separator";
 import { Button } from "@/components/shadcn/ui/button";
@@ -42,9 +41,8 @@ export function HeaderSection({ course }: { course: Course }) {
 
       <Separator />
 
-      {course.reviewStatus !== CourseReviewStatus.APPROVED && (
-        <AlertBanner label="Este curso aun no está aprobado, por lo que no será visible para el estudiante." />
-      )}
+      <CourseStatusBanner course={course} />
+
       <section className="flex items-center gap-4">
         <Link href={"/tutor/courses"}>
           <Button variant="outline" size="icon" className="h-7 w-7">
