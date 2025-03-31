@@ -41,9 +41,9 @@ export function EarningsCard({ tutorId }: { tutorId: string }) {
           <DollarSign className="h-4 w-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">
+          <CardTitle className="text-2xl font-bold">
             ${earningsData?.totalEarnings.toFixed(2)}$
-          </div>
+          </CardTitle>
           <p className="text-xs text-muted-foreground">
             {earningsData.monthlyComparison.percentageChange > 0 ? "+" : ""}
             {earningsData.monthlyComparison.percentageChange.toFixed(1)}%

@@ -1,6 +1,6 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 
-import { EnrollmentOrderStatus } from '@prisma/client';
+import { CoursePlatformStatus, EnrollmentOrderStatus } from '@prisma/client';
 
 import { PrismaService } from 'src/modules/prisma/providers/prisma.service';
 import { InfrastructureService } from 'src/modules/infrastructure/infrastructure.service';
@@ -124,6 +124,50 @@ export class TutorsDashboardService {
     } catch (error) {
       throw new InternalServerErrorException(
         'Error al calcular las métricas de estudiantes activos',
+        error,
+      );
+    }
+  }
+
+  async getCoursesStats(tutorId: string) {
+    try {
+      const result = await this.prisma.course.groupBy({
+        by: ['platformStatus'],
+        where: { tutorId },
+        _count: { _all: true },
+      });
+
+      const published =
+        result.find((r) => r.platformStatus === CoursePlatformStatus.PUBLISHED)
+          ?._count._all || 0;
+      const draft =
+        result.find((r) => r.platformStatus === CoursePlatformStatus.DRAFT)
+          ?._count._all || 0;
+      const archived =
+        result.find((r) => r.platformStatus === CoursePlatformStatus.ARCHIVED)
+          ?._count._all || 0;
+      const total = result.reduce((sum, item) => sum + item._count._all, 0);
+
+      const publishedPercentage = total > 0 ? (published / total) * 100 : 0;
+      const draftPercentage = total > 0 ? (draft / total) * 100 : 0;
+      const archivedPercentage = total > 0 ? (archived / total) * 100 : 0;
+
+      return {
+        counts: {
+          published,
+          draft,
+          archived,
+          total,
+        },
+        percentages: {
+          published: parseFloat(publishedPercentage.toFixed(1)),
+          draft: parseFloat(draftPercentage.toFixed(1)),
+          archived: parseFloat(archivedPercentage.toFixed(1)),
+        },
+      };
+    } catch (error) {
+      throw new InternalServerErrorException(
+        'Error al obtener estadísticas de cursos',
         error,
       );
     }

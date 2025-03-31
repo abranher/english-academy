@@ -17,4 +17,9 @@ export class TutorsDashboardController {
   async getActiveStudentsAnalytics(@Param('tutorId') tutorId: string) {
     return this.tutorsDashboardService.getActiveStudentsAnalytics(tutorId);
   }
+
+  @Get('analytics/courses-stats/tutor/:tutorId')
+  async getCoursesStats(@Param('tutorId') tutorId: string) {
+    return this.tutorsDashboardService.getCoursesStats(tutorId);
+  }
 }

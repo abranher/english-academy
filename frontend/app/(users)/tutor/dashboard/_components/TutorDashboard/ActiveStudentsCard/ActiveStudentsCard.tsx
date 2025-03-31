@@ -40,7 +40,9 @@ export function ActiveStudentsCard({ tutorId }: { tutorId: string }) {
         <Users className="h-4 w-4 text-muted-foreground" />
       </CardHeader>
       <CardContent>
-        <div className="text-2xl font-bold">+{studentsData.totalActive}</div>
+        <CardTitle className="text-2xl font-bold">
+          +{studentsData.totalActive}
+        </CardTitle>
         <p className="text-xs text-muted-foreground">
           {studentsData.monthlyComparison.percentageChange > 0 ? "+" : ""}
           {studentsData.monthlyComparison.percentageChange.toFixed(1)}% respecto
