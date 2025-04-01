@@ -632,6 +632,7 @@ model Quiz {
 model QuizQuestion {
   id       String @id @default(uuid())
   question String
+  points   Int    @default(1)
 
   quizId String
   quiz   Quiz   @relation(fields: [quizId], references: [id])
@@ -676,8 +677,9 @@ model ClassProgress {
 }
 
 model QuizProgress {
-  id          String  @id @default(uuid())
-  isCompleted Boolean @default(false)
+  id           String  @id @default(uuid())
+  isCompleted  Boolean @default(false)
+  earnedPoints Int?
 
   studentId String
   student   Student @relation(fields: [studentId], references: [id])
