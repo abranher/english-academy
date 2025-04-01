@@ -20,6 +20,7 @@ export { type Plan } from "./Plan";
 export { type Platform } from "./Platform";
 export { type Price } from "./Price";
 export { type Quiz } from "./Quiz";
+export { type QuizProgress } from "./QuizProgress";
 export { type QuizQuestion } from "./QuizQuestion";
 export { type QuizQuestionOption } from "./QuizQuestionOption";
 export { type Student } from "./Student";
