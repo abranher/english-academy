@@ -25,6 +25,14 @@ export class EnrollmentsController {
     return this.enrollmentsService.findOne(studentId, courseId);
   }
 
+  @Get('metrics/student/:studentId/course/:courseId')
+  async getMetrics(
+    @Param('studentId') studentId: string,
+    @Param('courseId') courseId: string,
+  ) {
+    return this.enrollmentsService.getMetrics(studentId, courseId);
+  }
+
   /*
    * Get Enrollment One
    */

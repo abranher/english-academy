@@ -69,6 +69,65 @@ export class EnrollmentsService {
     }
   }
 
+  async getMetrics(studentId: string, courseId: string) {
+    await this.InfrastructureService.findStudentOrThrow(studentId);
+    await this.InfrastructureService.findCourseOrThrow(courseId);
+
+    try {
+      // Get all lessons for the course
+      const chapters = await this.prisma.chapter.findMany({
+        where: { courseId },
+        include: { lessons: { include: { class: true, quiz: true } } },
+      });
+
+      // Flatten all lessons from all chapters
+      const allLessons = chapters.flatMap((chapter) => chapter.lessons);
+
+      // Get class progress for all classes in the course
+      const classProgress = await this.prisma.classProgress.findMany({
+        where: {
+          studentId,
+          classId: {
+            in: allLessons
+              .filter((lesson) => lesson.type === 'CLASS')
+              .map((lesson) => lesson.class.id),
+          },
+          isCompleted: true,
+        },
+      });
+
+      // Get quiz progress for all quizzes in the course
+      const quizProgress = await this.prisma.quizProgress.findMany({
+        where: {
+          studentId,
+          quizId: {
+            in: allLessons
+              .filter((lesson) => lesson.type === 'QUIZ')
+              .map((lesson) => lesson.quiz.id),
+          },
+          isCompleted: true,
+        },
+      });
+
+      // Calculate total points from completed quizzes
+      const totalPoints = quizProgress.reduce(
+        (sum, quiz) => sum + (quiz.earnedPoints || 0),
+        0,
+      );
+
+      return {
+        completedClasses: classProgress.length,
+        completedQuizzes: quizProgress.length,
+        totalPoints,
+      };
+    } catch (error) {
+      throw new InternalServerErrorException(
+        'Error del servidor. Por favor intenta nuevamente.',
+        error,
+      );
+    }
+  }
+
   async findChapter(studentId: string, chapterId: string) {
     await this.InfrastructureService.findStudentOrThrow(studentId);
     await this.InfrastructureService.findChapterOrThrow(chapterId);

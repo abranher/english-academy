@@ -21,6 +21,9 @@ import { assetImg, assetVideo } from "@/libs/asset";
 import { truncateString } from "@/libs/format";
 import { getEnrollment } from "@/services/network/enrollments";
 
+import { CourseNav } from "@/components/enrollments";
+import { Metrics } from "./Metrics";
+
 import Preview from "@/components/shadcn/ui/preview";
 import {
   Card,
@@ -29,17 +32,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/shadcn/ui/card";
-import {
-  ClipboardList,
-  FileVideo,
-  ImageIcon,
-  Loader2,
-  Medal,
-  Video,
-} from "lucide-react";
+import { ImageIcon, Loader2, Video } from "lucide-react";
 import { Separator } from "@/components/shadcn/ui/separator";
 import { Skeleton } from "@/components/shadcn/ui/skeleton";
-import { CourseNav } from "@/components/enrollments";
 
 export function CourseContent({ studentId }: { studentId: string }) {
   const [playerReady, setPlayerReady] = useState(false);
@@ -115,47 +110,7 @@ export function CourseContent({ studentId }: { studentId: string }) {
       </section>
       <Separator />
 
-      <article className="flex gap-3 items-center">
-        <Card className="w-full">
-          <CardHeader>
-            <section className="flex flex-col items-center gap-2">
-              <CardDescription className="font-bold text-lg text-center">
-                Clases completadas
-              </CardDescription>
-              <CardDescription className="flex items-center gap-3 font-bold text-4xl">
-                <FileVideo className="w-12 h-12" />4
-              </CardDescription>
-            </section>
-          </CardHeader>
-        </Card>
-
-        <Card className="w-full">
-          <CardHeader>
-            <section className="flex flex-col items-center gap-2">
-              <CardDescription className="font-bold text-lg text-center">
-                Puntos
-              </CardDescription>
-              <CardDescription className="flex items-center gap-3 font-bold text-4xl">
-                <Medal className="w-12 h-12" />
-                500
-              </CardDescription>
-            </section>
-          </CardHeader>
-        </Card>
-
-        <Card className="w-full">
-          <CardHeader>
-            <section className="flex flex-col items-center gap-2 ">
-              <CardDescription className="font-bold text-lg text-center">
-                Quizzes completados
-              </CardDescription>
-              <CardDescription className="flex items-center gap-3 font-bold text-4xl">
-                <ClipboardList className="w-12 h-12" />3
-              </CardDescription>
-            </section>
-          </CardHeader>
-        </Card>
-      </article>
+      <Metrics studentId={studentId} />
       <Separator />
 
       <section className="w-full grid grid-cols-1 lg:grid-cols-8 gap-4">
