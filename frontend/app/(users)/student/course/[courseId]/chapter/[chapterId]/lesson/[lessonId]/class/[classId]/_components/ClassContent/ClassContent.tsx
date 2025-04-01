@@ -11,9 +11,9 @@ import { assetAttachments, assetVideo } from "@/libs/asset";
 import { Attachment, Class, ClassProgress } from "@/types/models";
 
 import { CourseNav } from "@/components/enrollments";
+import { MarkAsRead } from "./MarkAsRead";
 
 import Preview from "@/components/shadcn/ui/preview";
-import { Button } from "@/components/shadcn/ui/button";
 import { Skeleton } from "@/components/shadcn/ui/skeleton";
 import {
   Card,
@@ -30,6 +30,7 @@ import {
   Loader2,
   Video,
 } from "lucide-react";
+import { Button } from "@/components/shadcn/ui/button";
 
 export function ClassContent({ studentId }: { studentId: string }) {
   const [playerReady, setPlayerReady] = useState(false);
@@ -41,7 +42,10 @@ export function ClassContent({ studentId }: { studentId: string }) {
     data: lessonClass,
     isError,
   } = useQuery<
-    Class & { classProgress: ClassProgress; attachments: Attachment[] | [] }
+    Class & {
+      classProgress: ClassProgress | null;
+      attachments: Attachment[] | [];
+    }
   >({
     queryKey: ["enrollment_course_class_datails", classId],
     queryFn: () => getClassWithProgress(studentId, classId as string),
@@ -86,10 +90,19 @@ export function ClassContent({ studentId }: { studentId: string }) {
           <section className="flex flex-col py-2 gap-4">
             <article className="flex justify-between items-center">
               <CardTitle>{lessonClass.title}</CardTitle>
-              <Button className="flex gap-2 items-center">
-                <CircleCheck className="w-5 h-5" />
-                Marcar como completado
-              </Button>
+
+              {!lessonClass.classProgress ? (
+                <MarkAsRead studentId={studentId} />
+              ) : (
+                <Button
+                  className="flex gap-2 items-center"
+                  type="button"
+                  disabled
+                >
+                  <CircleCheck className="w-5 h-5" />
+                  Completado
+                </Button>
+              )}
             </article>
             {lessonClass.description && (
               <Card>
