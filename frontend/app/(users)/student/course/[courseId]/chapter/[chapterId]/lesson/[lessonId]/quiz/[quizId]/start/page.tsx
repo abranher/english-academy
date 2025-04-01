@@ -3,8 +3,7 @@ import { redirect } from "next/navigation";
 
 import { auth } from "@/config/auth";
 
-import { QuizContent } from "./_components/QuizContent";
-
+import { StartContent } from "./_components/StartContent";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -14,12 +13,14 @@ import {
   BreadcrumbSeparator,
 } from "@/components/shadcn/ui/breadcrumb";
 
-export default async function QuizPage({
+export default async function QuizStartPage({
   params,
 }: {
   params: {
     courseId: string;
     chapterId: string;
+    lessonId: string;
+    quizId: string;
   };
 }) {
   const session = await auth();
@@ -56,12 +57,23 @@ export default async function QuizPage({
           <BreadcrumbSeparator />
 
           <BreadcrumbItem>
-            <BreadcrumbPage>Quiz</BreadcrumbPage>
+            <BreadcrumbLink asChild>
+              <Link
+                href={`/student/course/${params.courseId}/chapter/${params.chapterId}/lesson/${params.lessonId}/quiz/${params.quizId}`}
+              >
+                Quiz
+              </Link>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+
+          <BreadcrumbItem>
+            <BreadcrumbPage>Comenzar</BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
 
-      <QuizContent studentId={session.user.student.id} />
+      <StartContent studentId={session.user.student.id} />
     </>
   );
 }

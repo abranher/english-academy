@@ -43,6 +43,7 @@ import { EnrollmentsModule } from './modules/enrollments/enrollments.module';
 import { ClassProgressModule } from './modules/class-progress/class-progress.module';
 import { EnrollmentOrderHistoryModule } from './modules/enrollment-order-history/enrollment-order-history.module';
 import { SubscriptionsModule } from './modules/subscriptions/subscriptions.module';
+import { QuizProgressModule } from './modules/quiz-progress/quiz-progress.module';
 
 @Module({
   imports: [
@@ -92,6 +93,7 @@ import { SubscriptionsModule } from './modules/subscriptions/subscriptions.modul
     ClassProgressModule,
     EnrollmentOrderHistoryModule,
     SubscriptionsModule,
+    QuizProgressModule,
   ],
 })
 export class AppModule {}
