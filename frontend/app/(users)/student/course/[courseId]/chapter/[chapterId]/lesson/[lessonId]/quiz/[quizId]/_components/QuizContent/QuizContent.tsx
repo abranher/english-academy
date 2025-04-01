@@ -45,7 +45,7 @@ export function QuizContent({ studentId }: { studentId: string }) {
                 <CardTitle>
                   <section className="flex gap-2 items-center">
                     <FileQuestion />
-                    {lessonQuiz.title}
+                    {`Quiz: ${lessonQuiz.title}`}
                   </section>
                 </CardTitle>
               </article>

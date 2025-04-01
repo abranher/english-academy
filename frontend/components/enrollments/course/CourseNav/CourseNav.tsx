@@ -90,8 +90,12 @@ export function CourseNav({ studentId }: { studentId: string }) {
                     {chapter.title}
                   </CardTitle>
 
-                  <article className="ml-auto flex items-center gap-x-2">
-                    <ArrowUpRight className="w-4 h-4 cursor-pointer hover:opacity-75 transition" />
+                  <article className="ml-auto flex items-center gap-x-4">
+                    <Link
+                      href={`/student/course/${courseId}/chapter/${chapter.id}`}
+                    >
+                      <ArrowUpRight className="w-4 h-4 cursor-pointer hover:opacity-75 transition" />
+                    </Link>
                   </article>
                 </section>
               </CardHeader>

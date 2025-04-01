@@ -69,6 +69,22 @@ export class EnrollmentsService {
     }
   }
 
+  async findChapter(studentId: string, chapterId: string) {
+    await this.InfrastructureService.findStudentOrThrow(studentId);
+    await this.InfrastructureService.findChapterOrThrow(chapterId);
+
+    try {
+      return await this.prisma.chapter.findUnique({
+        where: { id: chapterId },
+      });
+    } catch (error) {
+      throw new InternalServerErrorException(
+        'Error del servidor. Por favor intenta nuevamente.',
+        error,
+      );
+    }
+  }
+
   async findAllTutors(studentId: string) {
     await this.InfrastructureService.findStudentOrThrow(studentId);
 

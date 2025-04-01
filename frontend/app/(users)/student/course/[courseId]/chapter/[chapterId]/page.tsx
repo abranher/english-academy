@@ -3,6 +3,8 @@ import { redirect } from "next/navigation";
 
 import { auth } from "@/config/auth";
 
+import { ChapterContent } from "./_components/ChapterContent";
+
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -45,6 +47,8 @@ export default async function ChapterPage({
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
+
+      <ChapterContent studentId={session.user.student.id} />
     </>
   );
 }

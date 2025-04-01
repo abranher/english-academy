@@ -26,6 +26,17 @@ export class EnrollmentsController {
   }
 
   /*
+   * Get Enrollment One
+   */
+  @Get('student/:studentId/chapter/:chapterId')
+  findChapter(
+    @Param('studentId') studentId: string,
+    @Param('chapterId') chapterId: string,
+  ) {
+    return this.enrollmentsService.findChapter(studentId, chapterId);
+  }
+
+  /*
    * Get Course Enrollment Tutors
    */
   @Get('student/:studentId/tutors')

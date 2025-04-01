@@ -30,6 +30,12 @@ export class InfrastructureService {
     return course;
   }
 
+  async findChapterOrThrow(id: string) {
+    const chapter = await this.prisma.chapter.findUnique({ where: { id } });
+    if (!chapter) throw new NotFoundException('Capítulo no encontrado');
+    return chapter;
+  }
+
   async findClassOrThrow(id: string) {
     const lesson = await this.prisma.class.findUnique({ where: { id } });
     if (!lesson) throw new NotFoundException('Clase no encontrada');
