@@ -1,32 +1,36 @@
 "use client";
 
+import { useParams } from "next/navigation";
+
 import axios from "@/config/axios";
-import { useMutation } from "@tanstack/react-query";
-import { AxiosError } from "axios";
 import { toast } from "sonner";
-import { Session } from "next-auth";
+import { AxiosError } from "axios";
+import { useMutation } from "@tanstack/react-query";
+import { useQuizData } from "@/hooks/useQuizData";
+import { useQuizStore } from "@/services/store/student/quiz";
 
 import { Button } from "@/components/shadcn/ui/button";
 import { Card, CardDescription, CardTitle } from "@/components/shadcn/ui/card";
-import { Check, FileQuestion, PercentCircle } from "lucide-react";
-import { signOut } from "next-auth/react";
-import { useQuizStore } from "@/services/store/student/quiz";
-import { useQuizData } from "@/hooks/useQuizData";
+import { Check, FileQuestion, Medal, PercentCircle } from "lucide-react";
 
-export function QuizResult({ session }: { session: Session }) {
+export function QuizResult({ studentId }: { studentId: string }) {
+  const { quizId } = useParams();
+
   const reset = useQuizStore((state) => state.reset);
 
-  const { exercises, correct, progress } = useQuizData();
+  const { exercises, correct, progress, totalPoints } = useQuizData();
 
   const mutation = useMutation({
-    mutationFn: (user: { levelId: string }) =>
-      axios.post(`/api/students/assign-level/user/${session.user.id}`, user),
+    mutationFn: (quiz: { earnedPoints: number }) =>
+      axios.put(
+        `/api/quiz-progress/student/${studentId}/quiz/${quizId}/mark-as-done`,
+        quiz
+      ),
     onSuccess: (response) => {
       if (response.status === 200 || response.status === 201) {
         const data = response.data;
         toast.success(data.message);
         reset();
-        signOut();
       }
     },
     onError: (error) => {
@@ -36,12 +40,12 @@ export function QuizResult({ session }: { session: Session }) {
 
         const errorMessages: { [key: number]: string } = {
           400: "Datos no válidos",
-          404: "Usuario no encontrado",
+          404: "Estudiante o Quiz no encontrado",
           500: "Error del servidor",
           "-1": "Error inesperado",
         };
 
-        if (status) toast.error(errorMessages[status] || message);
+        if (status) toast.error(message || errorMessages[status]);
         else toast.error(errorMessages["-1"] || message);
       } else {
         toast.error("Error de conexión o error inesperado");
@@ -55,11 +59,16 @@ export function QuizResult({ session }: { session: Session }) {
       <div className="mx-auto max-w-lg flex flex-col gap-4">
         {/* Title */}
         <div className="text-5xl">
-          <CardTitle>¡Felicidades, {session.user.name}!</CardTitle>
+          <CardTitle>¡Felicidades, en hora buena!</CardTitle>
         </div>
 
         {/* Test Results */}
         <article className="w-full my-6 flex flex-col gap-4">
+          <CardDescription className="flex items-center gap-2 text-xl">
+            <Medal aria-hidden="true" />
+            Puntos Totales: {totalPoints}
+          </CardDescription>
+
           <CardDescription className="flex items-center gap-2 text-xl">
             <FileQuestion aria-hidden="true" />
             Total de preguntas: {exercises.length}
@@ -80,10 +89,10 @@ export function QuizResult({ session }: { session: Session }) {
         <div className="flex justify-end gap-4">
           <Button
             onClick={() => {
-              mutation.mutate({ levelId: "" });
+              mutation.mutate({ earnedPoints: totalPoints });
             }}
             disabled={mutation.isPending}
-            aria-label="Guardar nivel asignado"
+            aria-label="Guardar"
           >
             {mutation.isPending ? "Guardando..." : "Guardar"}
           </Button>
