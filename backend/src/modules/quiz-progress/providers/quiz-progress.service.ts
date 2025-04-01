@@ -1,8 +1,4 @@
-import {
-  Injectable,
-  InternalServerErrorException,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 
 import { PrismaService } from 'src/modules/prisma/providers/prisma.service';
 import { InfrastructureService } from 'src/modules/infrastructure/infrastructure.service';
@@ -61,28 +57,30 @@ export class QuizProgressService {
     await this.infrastructureService.findQuizOrThrow(quizId);
 
     try {
-      // Check if progress record already exists
-      const existingProgress = await this.prisma.classProgress.findUnique({
-        where: { studentId_classId: { studentId, classId } },
+      const existingProgress = await this.prisma.quizProgress.findUnique({
+        where: { studentId_quizId: { studentId, quizId } },
       });
 
       if (existingProgress) {
-        // Update existing progress
-        await this.prisma.classProgress.update({
+        await this.prisma.quizProgress.delete({
           where: { id: existingProgress.id },
-          data: { isCompleted: true },
-        });
-      } else {
-        // Create new progress record
-        await this.prisma.classProgress.create({
-          data: { studentId, classId, isCompleted: true },
         });
       }
 
-      return { message: 'Progreso actualizado!' };
+      await this.prisma.quizProgress.create({
+        data: {
+          studentId,
+          quizId,
+          isCompleted: true,
+          earnedPoints: updateQuizProgressDto.earnedPoints,
+        },
+      });
+
+      return { message: 'Progreso del quiz guardado correctamente!' };
     } catch (error) {
-      throw new NotFoundException(
-        'No se pudo actualizar el progreso de la clase. Por favor intenta nuevamente.',
+      throw new InternalServerErrorException(
+        'No se pudo guardar el progreso del quiz. Por favor intenta nuevamente.',
+        error,
       );
     }
   }

@@ -1,26 +1,27 @@
 "use client";
 
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 import axios from "@/config/axios";
 import { toast } from "sonner";
+import { useEffect } from "react";
 import { AxiosError } from "axios";
 import { useMutation } from "@tanstack/react-query";
 import { useQuizData } from "@/hooks/useQuizData";
 import { useQuizStore } from "@/services/store/student/quiz";
-
 import { Button } from "@/components/shadcn/ui/button";
+
 import { Card, CardDescription, CardTitle } from "@/components/shadcn/ui/card";
 import { Check, FileQuestion, Medal, PercentCircle } from "lucide-react";
 
 export function QuizResult({ studentId }: { studentId: string }) {
-  const { quizId } = useParams();
-
+  const { courseId, chapterId, lessonId, quizId } = useParams();
   const reset = useQuizStore((state) => state.reset);
-
   const { exercises, correct, progress, totalPoints } = useQuizData();
 
-  const mutation = useMutation({
+  const router = useRouter();
+
+  const { mutate, isSuccess, isPending, isError } = useMutation({
     mutationFn: (quiz: { earnedPoints: number }) =>
       axios.put(
         `/api/quiz-progress/student/${studentId}/quiz/${quizId}/mark-as-done`,
@@ -30,7 +31,6 @@ export function QuizResult({ studentId }: { studentId: string }) {
       if (response.status === 200 || response.status === 201) {
         const data = response.data;
         toast.success(data.message);
-        reset();
       }
     },
     onError: (error) => {
@@ -54,15 +54,29 @@ export function QuizResult({ studentId }: { studentId: string }) {
     },
   });
 
+  useEffect(() => {
+    if (totalPoints !== undefined && !isSuccess && !isPending) {
+      mutate({ earnedPoints: totalPoints });
+    }
+  }, [totalPoints, isSuccess, isPending, mutate]);
+
   return (
     <Card className="p-8">
-      <div className="mx-auto max-w-lg flex flex-col gap-4">
-        {/* Title */}
-        <div className="text-5xl">
-          <CardTitle>¡Felicidades, en hora buena!</CardTitle>
-        </div>
+      <section className="mx-auto flex flex-col gap-4">
+        <section className="text-center flex flex-col gap-3">
+          <section className="text-5xl">
+            <CardTitle>¡Felicidades, en hora buena!</CardTitle>
+          </section>
 
-        {/* Test Results */}
+          <section className="flex justify-end">
+            {isPending && <CardTitle>Guardando resultados...</CardTitle>}
+            {isSuccess && (
+              <CardTitle>🎉 Resultados guardados correctamente 🎉</CardTitle>
+            )}
+            {isError && <CardTitle>Error al guardar los resultados</CardTitle>}
+          </section>
+        </section>
+
         <article className="w-full my-6 flex flex-col gap-4">
           <CardDescription className="flex items-center gap-2 text-xl">
             <Medal aria-hidden="true" />
@@ -85,19 +99,19 @@ export function QuizResult({ studentId }: { studentId: string }) {
           </CardDescription>
         </article>
 
-        {/* Actions */}
-        <div className="flex justify-end gap-4">
+        <section>
           <Button
             onClick={() => {
-              mutation.mutate({ earnedPoints: totalPoints });
+              reset();
+              router.push(
+                `/student/course/${courseId}/chapter/${chapterId}/lesson/${lessonId}/quiz/${quizId}`
+              );
             }}
-            disabled={mutation.isPending}
-            aria-label="Guardar"
           >
-            {mutation.isPending ? "Guardando..." : "Guardar"}
+            Volver
           </Button>
-        </div>
-      </div>
+        </section>
+      </section>
     </Card>
   );
 }
