@@ -71,7 +71,7 @@ export function CreateQuestionModal() {
           "-1": "Error inesperado",
         };
 
-        if (status) toast.error(errorMessages[status] || message);
+        if (status) toast.error(message || errorMessages[status]);
         else toast.error(errorMessages["-1"] || message);
       } else {
         toast.error("Error de conexión o error inesperado");
