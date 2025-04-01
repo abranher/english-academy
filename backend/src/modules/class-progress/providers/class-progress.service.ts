@@ -17,7 +17,7 @@ export class ClassProgressService {
     try {
       return await this.prisma.class.findUnique({
         where: { id: classId },
-        include: { classProgress: { where: { studentId: studentId } } },
+        include: { classProgress: { where: { studentId } } },
       });
     } catch (error) {
       throw new InternalServerErrorException(

@@ -32,12 +32,4 @@ export class EnrollmentsController {
   findAllTutors(@Param('studentId') studentId: string) {
     return this.enrollmentsService.findAllTutors(studentId);
   }
-
-  @Get('student/:studentId/course/:courseId/progress-navigation')
-  async getNavigation(
-    @Param('studentId') studentId: string,
-    @Param('courseId') courseId: string,
-  ) {
-    return this.enrollmentsService.getCourseProgressNav(studentId, courseId);
-  }
 }
