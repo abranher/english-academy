@@ -87,22 +87,27 @@ export function ClassContent({ studentId }: { studentId: string }) {
         </section>
 
         <section className="flex flex-col py-2 gap-4">
-          <article className="flex justify-between items-center">
-            <CardTitle>{lessonClass.title}</CardTitle>
+          <Card>
+            <CardHeader>
+              <article className="flex justify-between items-center">
+                <CardTitle>{lessonClass.title}</CardTitle>
 
-            {!lessonClass.classProgress ? (
-              <MarkAsRead studentId={studentId} />
-            ) : (
-              <Button
-                className="flex gap-2 items-center"
-                type="button"
-                disabled
-              >
-                <CircleCheck className="w-5 h-5" />
-                Completado
-              </Button>
-            )}
-          </article>
+                {!lessonClass.classProgress ? (
+                  <MarkAsRead studentId={studentId} />
+                ) : (
+                  <Button
+                    className="flex gap-2 items-center"
+                    type="button"
+                    disabled
+                  >
+                    <CircleCheck className="w-5 h-5" />
+                    Completado
+                  </Button>
+                )}
+              </article>
+            </CardHeader>
+          </Card>
+
           {lessonClass.description && (
             <Card>
               <CardHeader>
