@@ -44,7 +44,18 @@ export class EnrollmentsService {
               subcategory: true,
               level: true,
               chapters: {
-                include: { lessons: { include: { class: true, quiz: true } } },
+                include: {
+                  lessons: {
+                    include: {
+                      class: {
+                        include: { classProgress: { where: { studentId } } },
+                      },
+                      quiz: {
+                        include: { quizProgress: { where: { studentId } } },
+                      },
+                    },
+                  },
+                },
               },
             },
           },
