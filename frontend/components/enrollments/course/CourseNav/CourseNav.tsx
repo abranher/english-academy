@@ -34,6 +34,7 @@ import {
   FileVideo,
   TableOfContents,
 } from "lucide-react";
+import { truncateString } from "@/libs/format";
 
 export function CourseNav({ studentId }: { studentId: string }) {
   const { courseId } = useParams();
@@ -109,7 +110,7 @@ export function CourseNav({ studentId }: { studentId: string }) {
                     <section
                       key={lesson.id}
                       className={cn(
-                        "flex items-center gap-x-2 border rounded-md text-sm bg-zinc-100 border-zinc-200 text-zinc-700",
+                        "flex items-center gap-x-2 mt-2 border rounded-md text-sm bg-zinc-100 border-zinc-200 text-zinc-700",
                         isCompleted &&
                           "bg-green-50 border-green-200 text-green-700"
                       )}
@@ -127,7 +128,8 @@ export function CourseNav({ studentId }: { studentId: string }) {
                       {lesson.type === LessonType.CLASS && (
                         <div className="flex items-center gap-2">
                           <h3 className="font-bold">
-                            Clase: {lesson.class?.title ?? "N/A"}
+                            Clase:{" "}
+                            {truncateString(lesson.class?.title ?? "N/A")}
                           </h3>
                           {isCompleted && (
                             <CheckCircle className="h-4 w-4 text-green-500" />
@@ -137,7 +139,7 @@ export function CourseNav({ studentId }: { studentId: string }) {
                       {lesson.type === LessonType.QUIZ && (
                         <div className="flex items-center gap-2">
                           <h3 className="font-bold">
-                            Quiz: {lesson.quiz?.title ?? "N/A"}
+                            Quiz: {truncateString(lesson.quiz?.title ?? "N/A")}
                           </h3>
                           {isCompleted && (
                             <CheckCircle className="h-4 w-4 text-green-500" />
