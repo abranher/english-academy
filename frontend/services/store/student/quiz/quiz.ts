@@ -18,6 +18,7 @@ interface State {
   selectAnswer: (exerciseId: number, answerIndex: number) => void;
   goNextQuestion: () => void;
   goPreviusQuestion: () => void;
+  reset: () => void;
 }
 
 export const useQuizStore = create<State>()(
@@ -58,6 +59,9 @@ export const useQuizStore = create<State>()(
         const { currentExercise } = get();
         const previusQuestion = currentExercise - 1;
         if (previusQuestion >= 0) set({ currentExercise: previusQuestion });
+      },
+      reset: () => {
+        set({ currentExercise: 0, exercises: [] });
       },
     }),
     {
