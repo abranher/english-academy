@@ -4,10 +4,11 @@ import { useParams } from "next/navigation";
 
 import ReactPlayer from "react-player";
 import { useQuery } from "@tanstack/react-query";
-import { assetVideo } from "@/libs/asset";
+import { truncateString } from "@/libs/format";
 import { useEffect, useState } from "react";
-import { Class, ClassProgress } from "@/types/models";
 import { getClassWithProgress } from "@/services/network/enrollments/class";
+import { assetAttachments, assetVideo } from "@/libs/asset";
+import { Attachment, Class, ClassProgress } from "@/types/models";
 
 import { CourseNav } from "@/components/enrollments";
 
@@ -17,10 +18,18 @@ import { Skeleton } from "@/components/shadcn/ui/skeleton";
 import {
   Card,
   CardContent,
+  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/shadcn/ui/card";
-import { CircleCheck, Loader2, Video } from "lucide-react";
+import {
+  CircleCheck,
+  FileIcon,
+  FolderOpen,
+  ImageIcon,
+  Loader2,
+  Video,
+} from "lucide-react";
 
 export function ClassContent({ studentId }: { studentId: string }) {
   const [playerReady, setPlayerReady] = useState(false);
@@ -31,7 +40,9 @@ export function ClassContent({ studentId }: { studentId: string }) {
     isPending,
     data: lessonClass,
     isError,
-  } = useQuery<Class & { classProgress: ClassProgress }>({
+  } = useQuery<
+    Class & { classProgress: ClassProgress; attachments: Attachment[] | [] }
+  >({
     queryKey: ["enrollment_course_class_datails", classId],
     queryFn: () => getClassWithProgress(studentId, classId as string),
   });
@@ -90,6 +101,60 @@ export function ClassContent({ studentId }: { studentId: string }) {
                 </CardContent>
               </Card>
             )}
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Recursos</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <section className="mt-4 flex justify-center sm:justify-start flex-wrap gap-4">
+                  {lessonClass.attachments.length === 0 ? (
+                    <CardDescription className="text-lg w-full">
+                      <p className="flex justify-center flex-col items-center">
+                        <FolderOpen className="w-12 h-12" />
+                        Esta clase no tiene recursos.
+                      </p>
+                    </CardDescription>
+                  ) : (
+                    lessonClass.attachments.map((attachment) => {
+                      const getFileExtension = (url: string) =>
+                        url.split(".").pop()?.toLowerCase();
+
+                      const fileExtension = getFileExtension(attachment.url);
+
+                      const isImage =
+                        fileExtension === "png" ||
+                        fileExtension === "jpg" ||
+                        fileExtension === "jpeg";
+
+                      return (
+                        <Card
+                          key={attachment.id}
+                          className="p-2 w-60 flex justify-between items-center gap-1"
+                        >
+                          <a
+                            href={assetAttachments(attachment.url)}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <section className="flex items-center gap-2 justify-between">
+                              {isImage ? (
+                                <ImageIcon className="text-gray-500" />
+                              ) : (
+                                <FileIcon className="text-gray-500" />
+                              )}
+                              <CardDescription>
+                                {truncateString(attachment.title)}
+                              </CardDescription>
+                            </section>
+                          </a>
+                        </Card>
+                      );
+                    })
+                  )}
+                </section>
+              </CardContent>
+            </Card>
           </section>
         </section>
 

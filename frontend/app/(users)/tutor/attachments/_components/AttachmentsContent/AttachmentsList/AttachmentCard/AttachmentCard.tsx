@@ -28,27 +28,23 @@ export function AttachmentCard({
     fileExtension === "jpeg";
 
   return (
-    <>
-      <Card className="p-2 w-60 flex justify-between items-center gap-1">
-        <a
-          href={assetAttachments(attachment.url)}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <section className="flex items-center gap-2 justify-between">
-            {isImage ? (
-              <ImageIcon className="text-gray-500" />
-            ) : (
-              <FileIcon className="text-gray-500" />
-            )}
-            <CardDescription>
-              {truncateString(attachment.title)}
-            </CardDescription>
-          </section>
-        </a>
+    <Card className="p-2 w-60 flex justify-between items-center gap-1">
+      <a
+        href={assetAttachments(attachment.url)}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <section className="flex items-center gap-2 justify-between">
+          {isImage ? (
+            <ImageIcon className="text-gray-500" />
+          ) : (
+            <FileIcon className="text-gray-500" />
+          )}
+          <CardDescription>{truncateString(attachment.title)}</CardDescription>
+        </section>
+      </a>
 
-        <DeleteAttachment attachment={attachment} userId={userId} />
-      </Card>
-    </>
+      <DeleteAttachment attachment={attachment} userId={userId} />
+    </Card>
   );
 }
