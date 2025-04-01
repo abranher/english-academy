@@ -38,15 +38,20 @@ export function QuizContent({ studentId }: { studentId: string }) {
   return (
     <section className="w-full grid grid-cols-1 lg:grid-cols-8 gap-4">
       <section className="lg:col-span-5 gap-3 flex flex-col">
-        <section className="flex flex-col py-2 gap-4">
-          <article className="flex justify-between items-center">
-            <CardTitle>
-              <section className="flex gap-2 items-center">
-                <FileQuestion />
-                {lessonQuiz.title}
-              </section>
-            </CardTitle>
-          </article>
+        <section className="flex flex-col gap-4">
+          <Card>
+            <CardHeader>
+              <article className="flex justify-between items-center">
+                <CardTitle>
+                  <section className="flex gap-2 items-center">
+                    <FileQuestion />
+                    {lessonQuiz.title}
+                  </section>
+                </CardTitle>
+              </article>
+            </CardHeader>
+          </Card>
+
           {lessonQuiz.description && (
             <Card>
               <CardHeader>
@@ -58,14 +63,24 @@ export function QuizContent({ studentId }: { studentId: string }) {
             </Card>
           )}
 
-          <article className="flex justify-center pt-5">
-            <Link
-              className={cn(buttonVariants({ variant: "default" }))}
-              href={`/student/course/${courseId}/chapter/${chapterId}/lesson/${lessonId}/quiz/${quizId}/start`}
-            >
-              Siguiente
-            </Link>
-          </article>
+          <Card className="p-12">
+            <CardHeader>
+              <section className="text-center">
+                <CardTitle>¿Listo para comenzar?</CardTitle>
+              </section>
+            </CardHeader>
+
+            <CardContent>
+              <article className="flex justify-center pt-5">
+                <Link
+                  className={cn(buttonVariants({ variant: "default" }))}
+                  href={`/student/course/${courseId}/chapter/${chapterId}/lesson/${lessonId}/quiz/${quizId}/start`}
+                >
+                  Siguiente
+                </Link>
+              </article>
+            </CardContent>
+          </Card>
         </section>
       </section>
 
