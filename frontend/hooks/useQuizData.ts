@@ -1,4 +1,4 @@
-import { useInitialTestStore } from "@/services/store/initial-test";
+import { useQuizStore } from "@/services/store/student/quiz";
 
 const calculateProgress = (
   correctAnswer: number,
@@ -10,7 +10,7 @@ const calculateProgress = (
 };
 
 export const useQuizData = () => {
-  const exercises = useInitialTestStore((state) => state.exercises);
+  const exercises = useQuizStore((state) => state.exercises);
 
   let correct = 0;
   let incorrect = 0;
