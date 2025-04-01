@@ -6,7 +6,7 @@ import axios from "@/config/axios";
 import { z } from "zod";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
-import { FormSchema } from "../../../CreateQuestionModal/FormSchema";
+import { FormSchema } from "./FormSchema";
 import { AxiosError } from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { QuizQuestion } from "@/types/models";
@@ -23,7 +23,7 @@ import {
 } from "@/components/shadcn/ui/form";
 import { Input } from "@/components/shadcn/ui/input";
 
-export function QuizQuestionForm({
+export function QuizQuestionPointsForm({
   quizQuestion,
 }: {
   quizQuestion: QuizQuestion;
@@ -33,18 +33,18 @@ export function QuizQuestionForm({
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
-    defaultValues: { question: quizQuestion.question },
+    defaultValues: { points: quizQuestion.points },
   });
 
   const createMutation = useMutation({
-    mutationFn: (QuizQuestion: { question: string }) =>
+    mutationFn: (QuizQuestion: { points: number }) =>
       axios.patch(
         `/api/quiz-questions/${quizQuestion.id}/quiz/${quizId}`,
         QuizQuestion
       ),
     onSuccess: (response) => {
       if (response.status === 200 || response.status === 201) {
-        toast.success("Pregunta actualizada!");
+        toast.success("Puntos de la pregunta actualizados!");
         queryClient.invalidateQueries({
           queryKey: ["get_quiz", quizId, lessonId],
         });
@@ -72,7 +72,7 @@ export function QuizQuestionForm({
   });
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
-    createMutation.mutate({ question: data.question });
+    createMutation.mutate({ points: data.points });
   }
 
   const { isSubmitting, isValid } = form.formState;
@@ -80,7 +80,7 @@ export function QuizQuestionForm({
   return (
     <>
       <section>
-        <CardTitle className="text-base">Pregunta:</CardTitle>
+        <CardTitle className="text-base">Puntos:</CardTitle>
 
         <article>
           <Form {...form}>
@@ -90,13 +90,13 @@ export function QuizQuestionForm({
             >
               <FormField
                 control={form.control}
-                name="question"
+                name="points"
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
                       <Input
                         disabled={isSubmitting}
-                        placeholder="p.ej. 'Como se traduce...'"
+                        placeholder="p.ej. '1 - 15'"
                         {...field}
                       />
                     </FormControl>
