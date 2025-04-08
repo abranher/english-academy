@@ -3,9 +3,9 @@ import { usePathname } from "next/navigation";
 
 import { Roles } from "@/types/enums";
 import { useSession } from "next-auth/react";
-import { NavbarContent, Link, NavbarItem } from "@heroui/react";
+import { NavbarContent, Link, NavbarItem, Image } from "@heroui/react";
 
-import { AcmeLogo } from "@/components/icons/AcmeLogo";
+import { assetPublicImg } from "@/libs/asset";
 
 export function MainLinks() {
   const { data: session, status } = useSession();
@@ -14,106 +14,104 @@ export function MainLinks() {
   const isActive = (href: string) => pathname === href;
 
   return (
-    <>
-      <NavbarContent className="hidden sm:flex gap-3">
-        <NavbarItem className="flex items-center">
-          <AcmeLogo />
-          <NextLink href="/" className="font-bold text-inherit hidden md:block">
-            ACADEMY
-          </NextLink>
-        </NavbarItem>
-        {status === "authenticated" ? (
-          <>
-            {session.user.role === Roles.ADMIN && (
-              <>
-                <NavbarItem className="ml-3" isActive={isActive("/admin")}>
-                  <Link as={NextLink} color="foreground" href="/admin">
-                    Dashboard
-                  </Link>
-                </NavbarItem>
-                <NavbarItem isActive={isActive("/admin/courses")}>
-                  <Link as={NextLink} color="foreground" href="/admin/courses">
-                    Cursos
-                  </Link>
-                </NavbarItem>
-              </>
-            )}
-            {session.user.role === Roles.TUTOR && (
-              <>
-                <NavbarItem
-                  className="ml-3"
-                  isActive={isActive("/tutor/dashboard")}
-                >
-                  <Link
-                    as={NextLink}
-                    color="foreground"
-                    href="/tutor/dashboard"
-                  >
-                    Dashboard
-                  </Link>
-                </NavbarItem>
-                <NavbarItem isActive={isActive("/tutor/courses")}>
-                  <Link as={NextLink} color="foreground" href="/tutor/courses">
-                    Mis Cursos
-                  </Link>
-                </NavbarItem>
-                <NavbarItem>
-                  <Link as={NextLink} color="foreground" href="#">
-                    Contacto
-                  </Link>
-                </NavbarItem>
-              </>
-            )}
-            {session.user.role === Roles.STUDENT && (
-              <>
-                <NavbarItem className="ml-3">
-                  <Link as={NextLink} color="foreground" href="/">
-                    Inicio
-                  </Link>
-                </NavbarItem>
-                <NavbarItem>
-                  <Link color="foreground" href="/home/courses">
-                    Cursos
-                  </Link>
-                </NavbarItem>
-                <NavbarItem isActive>
-                  <Link href="#" aria-current="page" color="foreground">
-                    Tutores
-                  </Link>
-                </NavbarItem>
-                <NavbarItem>
-                  <Link color="foreground" href="#">
-                    Contacto
-                  </Link>
-                </NavbarItem>
-              </>
-            )}
-          </>
-        ) : (
-          <>
-            <NavbarItem className="ml-3">
-              <Link as={NextLink} color="foreground" href="/">
-                Inicio
-              </Link>
-            </NavbarItem>
-            <NavbarItem>
-              <Link color="foreground" href="/home/courses">
-                Cursos
-              </Link>
-            </NavbarItem>
-            <NavbarItem isActive>
-              <Link href="#" aria-current="page" color="foreground">
-                Tutores
-              </Link>
-            </NavbarItem>
-            <NavbarItem>
-              <Link color="foreground" href="#">
-                Contacto
-              </Link>
-            </NavbarItem>
-          </>
-        )}
-      </NavbarContent>
-    </>
+    <NavbarContent className="hidden sm:flex gap-3">
+      <NavbarItem className="flex items-center gap-2">
+        <Image
+          alt="Logo App"
+          src={assetPublicImg("l-2.jpeg")}
+          width={40}
+        />
+        <NextLink href="/" className="font-bold text-inherit hidden md:block">
+          ACADEMY
+        </NextLink>
+      </NavbarItem>
+      {status === "authenticated" ? (
+        <>
+          {session.user.role === Roles.ADMIN && (
+            <>
+              <NavbarItem className="ml-3" isActive={isActive("/admin")}>
+                <Link as={NextLink} color="foreground" href="/admin">
+                  Dashboard
+                </Link>
+              </NavbarItem>
+              <NavbarItem isActive={isActive("/admin/courses")}>
+                <Link as={NextLink} color="foreground" href="/admin/courses">
+                  Cursos
+                </Link>
+              </NavbarItem>
+            </>
+          )}
+          {session.user.role === Roles.TUTOR && (
+            <>
+              <NavbarItem
+                className="ml-3"
+                isActive={isActive("/tutor/dashboard")}
+              >
+                <Link as={NextLink} color="foreground" href="/tutor/dashboard">
+                  Dashboard
+                </Link>
+              </NavbarItem>
+              <NavbarItem isActive={isActive("/tutor/courses")}>
+                <Link as={NextLink} color="foreground" href="/tutor/courses">
+                  Mis Cursos
+                </Link>
+              </NavbarItem>
+              <NavbarItem>
+                <Link as={NextLink} color="foreground" href="#">
+                  Contacto
+                </Link>
+              </NavbarItem>
+            </>
+          )}
+          {session.user.role === Roles.STUDENT && (
+            <>
+              <NavbarItem className="ml-3">
+                <Link as={NextLink} color="foreground" href="/">
+                  Inicio
+                </Link>
+              </NavbarItem>
+              <NavbarItem>
+                <Link color="foreground" href="/home/courses">
+                  Cursos
+                </Link>
+              </NavbarItem>
+              <NavbarItem isActive>
+                <Link href="#" aria-current="page" color="foreground">
+                  Tutores
+                </Link>
+              </NavbarItem>
+              <NavbarItem>
+                <Link color="foreground" href="#">
+                  Contacto
+                </Link>
+              </NavbarItem>
+            </>
+          )}
+        </>
+      ) : (
+        <>
+          <NavbarItem className="ml-3">
+            <Link as={NextLink} color="foreground" href="/">
+              Inicio
+            </Link>
+          </NavbarItem>
+          <NavbarItem>
+            <Link color="foreground" href="/home/courses">
+              Cursos
+            </Link>
+          </NavbarItem>
+          <NavbarItem isActive>
+            <Link href="#" aria-current="page" color="foreground">
+              Tutores
+            </Link>
+          </NavbarItem>
+          <NavbarItem>
+            <Link color="foreground" href="#">
+              Contacto
+            </Link>
+          </NavbarItem>
+        </>
+      )}
+    </NavbarContent>
   );
 }
