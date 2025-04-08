@@ -18,8 +18,8 @@ export function MainLinks() {
       <NavbarItem className="flex items-center gap-2">
         <Image
           alt="Logo App"
-          src={assetPublicImg("l-2.jpeg")}
-          width={40}
+          src={assetPublicImg("mini-logo.jpeg")}
+          width={35}
         />
         <NextLink href="/" className="font-bold text-inherit hidden md:block">
           ACADEMY
