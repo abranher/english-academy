@@ -1,8 +1,12 @@
 "use client";
 
-import { TrendingUp } from "lucide-react";
-import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
+import { useQuery } from "@tanstack/react-query";
+import { getMonthlyRegistrations } from "@/services/network/admin/dashboard";
 
+import { InfoCards } from "./InfoCards";
+
+import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
+import { TrendingUp } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -17,9 +21,6 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/shadcn/ui/chart";
-import { InfoCards } from "./InfoCards";
-import { useQuery } from "@tanstack/react-query";
-import { getMonthlyRegistrations } from "../../_services/get-monthly-registration";
 
 const chartConfig = {
   users: {

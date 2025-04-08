@@ -1,5 +1,7 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 
+import { es } from 'date-fns/locale';
+import { endOfYear, format, getMonth, getYear, startOfYear } from 'date-fns';
 import { CoursePlatformStatus, EnrollmentOrderStatus } from '@prisma/client';
 
 import { PrismaService } from 'src/modules/prisma/providers/prisma.service';
@@ -168,6 +170,86 @@ export class TutorsDashboardService {
     } catch (error) {
       throw new InternalServerErrorException(
         'Error al obtener estadísticas de cursos',
+        error,
+      );
+    }
+  }
+
+  /*
+   * For chart
+   */
+  async getTutorMonthlyRevenue(tutorId: string) {
+    await this.infrastructureService.findTutorOrThrow(tutorId);
+
+    try {
+      const currentYear = getYear(new Date());
+
+      const enrollments = await this.prisma.enrollment.findMany({
+        where: {
+          course: { tutorId },
+          enrolledAt: {
+            gte: startOfYear(new Date(currentYear, 0, 1)),
+            lt: endOfYear(new Date(currentYear, 0, 1)),
+          },
+          isActive: true,
+        },
+        select: { enrolledAt: true, purchasedPrice: true },
+      });
+
+      const monthlyRevenue = enrollments.reduce((acc, enrollment) => {
+        const month = getMonth(enrollment.enrolledAt);
+        acc[month] = (acc[month] || 0) + enrollment.purchasedPrice;
+        return acc;
+      }, {});
+
+      const chartData = Array.from({ length: 12 }, (_, i) => ({
+        month: format(new Date(currentYear, i), 'MMM', { locale: es }),
+        revenue: monthlyRevenue[i] || 0,
+      }));
+
+      const totalRevenue = Object.values(monthlyRevenue).reduce(
+        (sum: number, revenue: number) => sum + revenue,
+        0,
+      );
+
+      return { chartData, totalRevenue };
+    } catch (error) {
+      throw new InternalServerErrorException(
+        'Error al calcular las métricas de ingresos',
+        error,
+      );
+    }
+  }
+
+  async getTutorCoursesStudents(tutorId: string) {
+    await this.infrastructureService.findTutorOrThrow(tutorId);
+
+    try {
+      const courses = await this.prisma.course.findMany({
+        where: { tutorId, platformStatus: CoursePlatformStatus.PUBLISHED },
+        select: {
+          id: true,
+          title: true,
+          enrollments: { where: { isActive: true }, select: { id: true } },
+        },
+      });
+
+      const chartData = courses
+        .map((course) => ({
+          course: course.title,
+          students: course.enrollments.length,
+        }))
+        .sort((a, b) => b.students - a.students);
+
+      const totalStudents = chartData.reduce(
+        (sum, item) => sum + item.students,
+        0,
+      );
+
+      return { chartData, totalStudents };
+    } catch (error) {
+      throw new InternalServerErrorException(
+        'Error al calcular las métricas de ingresos',
         error,
       );
     }

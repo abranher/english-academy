@@ -1,7 +1,9 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { getInfoCards } from "../../../_services/get-info-cards";
+import { getInfoCards } from "@/services/network/admin/dashboard";
+
+import { InfoCardsSkeleton } from "./InfoCardsSkeleton";
 
 import {
   Card,
@@ -10,7 +12,6 @@ import {
   CardTitle,
 } from "@/components/shadcn/ui/card";
 import { Activity, Users } from "lucide-react";
-import { InfoCardsSkeleton } from "./InfoCardsSkeleton";
 
 function calculateGrowthMonthly(current: number, previous: number): string {
   if (previous === 0) return "No hay datos del mes anterior";

@@ -21,6 +21,7 @@ export class TutorCoursesService {
 
       return await this.prisma.course.findMany({
         where: { tutorId: tutor.id },
+        orderBy: { createdAt: 'desc' },
       });
     } catch (error) {
       throw new InternalServerErrorException(
