@@ -1,4 +1,5 @@
 import { Overview } from "./Overview";
+import { Analytics } from "./Analytics";
 
 import { CardDescription, CardTitle } from "@/components/shadcn/ui/card";
 import {
@@ -24,15 +25,14 @@ export function DashboardContent() {
         <Tabs defaultValue="OVERVIEW" className="space-y-4">
           <TabsList>
             <TabsTrigger value="OVERVIEW">Descripción general</TabsTrigger>
-            <TabsTrigger value="ANALYTICS" disabled>
-              Estadísticas
-            </TabsTrigger>
-            <TabsTrigger value="reports" disabled>
-              Reportes
-            </TabsTrigger>
+            <TabsTrigger value="ANALYTICS">Estadísticas</TabsTrigger>
           </TabsList>
           <TabsContent value="OVERVIEW" className="space-y-4">
             <Overview />
+          </TabsContent>
+
+          <TabsContent value="ANALYTICS" className="space-y-4">
+            <Analytics />
           </TabsContent>
         </Tabs>
       </section>

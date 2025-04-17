@@ -1,8 +1,11 @@
 "use client";
 
-import { TrendingUp } from "lucide-react";
-import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
+import { useQuery } from "@tanstack/react-query";
+import { getCourseMetrics } from "@/services/network/admin/dashboard";
+import { CoursePlatformStatus } from "@/types/enums";
+import { Cell, Legend, Pie, PieChart, Tooltip } from "recharts";
 
+import { ChartConfig, ChartContainer } from "@/components/shadcn/ui/chart";
 import {
   Card,
   CardContent,
@@ -11,67 +14,162 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/shadcn/ui/card";
+import { Skeleton } from "@/components/shadcn/ui/skeleton";
 import {
-  ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@/components/shadcn/ui/chart";
-const chartData = [
-  { month: "January", desktop: 186, mobile: 80 },
-  { month: "February", desktop: 305, mobile: 200 },
-  { month: "March", desktop: 237, mobile: 120 },
-  { month: "April", desktop: 73, mobile: 190 },
-  { month: "May", desktop: 209, mobile: 130 },
-  { month: "June", desktop: 214, mobile: 140 },
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/shadcn/ui/table";
+
+export const CHART_COLORS = [
+  "#3b82f6", // blue-500
+  "#10b981", // emerald-500
+  "#f59e0b", // amber-500
+  "#ef4444", // red-500
+  "#8b5cf6", // violet-500
+  "#ec4899", // pink-500
+  "#14b8a6", // teal-500
+  "#f97316", // orange-500
+  "#64748b", // slate-500
+  "#d946ef", // fuchsia-500
 ];
 
-const chartConfig = {
-  desktop: {
-    label: "Desktop",
+export const chartConfig = {
+  users: {
+    label: "Registros",
     color: "hsl(var(--chart-1))",
   },
-  mobile: {
-    label: "Mobile",
+  courses: {
+    label: "Cursos",
     color: "hsl(var(--chart-2))",
   },
 } satisfies ChartConfig;
 
 export function Analytics() {
+  const { isPending, data, isError } = useQuery<{
+    statusDistribution: {
+      status: CoursePlatformStatus;
+      count: number;
+    }[];
+    popularCourses: {
+      id: string;
+      title: string;
+      enrollments: number;
+    }[];
+  }>({
+    queryKey: ["course-metrics"],
+    queryFn: getCourseMetrics,
+  });
+
+  if (isPending)
+    return (
+      <div className="space-y-4">
+        <Skeleton className="h-10 w-1/3" />
+        <Skeleton className="h-[420px]" />
+        <Skeleton className="h-[420px]" />
+      </div>
+    );
+
+  if (isError)
+    return (
+      <div className="text-destructive p-4 border border-destructive rounded-lg">
+        Error al cargar los datos
+      </div>
+    );
+
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Bar Chart - Multiple</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <ChartContainer config={chartConfig}>
-          <BarChart accessibilityLayer data={chartData}>
-            <CartesianGrid vertical={false} />
-            <XAxis
-              dataKey="month"
-              tickLine={false}
-              tickMargin={10}
-              axisLine={false}
-              tickFormatter={(value) => value.slice(0, 3)}
-            />
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent indicator="dashed" />}
-            />
-            <Bar dataKey="desktop" fill="var(--color-desktop)" radius={4} />
-            <Bar dataKey="mobile" fill="var(--color-mobile)" radius={4} />
-          </BarChart>
-        </ChartContainer>
-      </CardContent>
-      <CardFooter className="flex-col items-start gap-2 text-sm">
-        <div className="flex gap-2 font-medium leading-none">
-          Tendencia al alza del 5,2% este mes <TrendingUp className="h-4 w-4" />
-        </div>
-        <div className="leading-none text-muted-foreground">
-          Mostrando el total de visitantes de los últimos 6 meses
-        </div>
-      </CardFooter>
-    </Card>
+    <>
+      <CardTitle>Métricas de cursos</CardTitle>
+
+      <section className="grid gap-6 xl:grid-cols-2">
+        {/* Gráfico de distribución por estado */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Distribución por estado</CardTitle>
+            <CardDescription>
+              Estado actual de los cursos en la plataforma
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ChartContainer
+              title="Estados de cursos"
+              config={chartConfig}
+              className="w-full h-80"
+            >
+              <PieChart width={400} height={300}>
+                <Pie
+                  data={data.statusDistribution}
+                  dataKey="count"
+                  nameKey="status"
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={80}
+                  label={({ name, percent }) =>
+                    `${name}: ${(percent * 100).toFixed(0)}%`
+                  }
+                >
+                  {data.statusDistribution.map((entry, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={CHART_COLORS[index % CHART_COLORS.length]}
+                    />
+                  ))}
+                </Pie>
+                <Legend />
+                <Tooltip
+                  formatter={(value, name, props) => [
+                    value,
+                    props.payload.status,
+                  ]}
+                />
+              </PieChart>
+            </ChartContainer>
+          </CardContent>
+          <CardFooter>
+            <div className="text-sm text-muted-foreground">
+              Distribución de cursos según su estado actual
+            </div>
+          </CardFooter>
+        </Card>
+
+        {/* Tabla de cursos populares */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Cursos más populares</CardTitle>
+            <CardDescription>Cursos con más matriculaciones</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Curso</TableHead>
+                  <TableHead className="text-right">Matriculaciones</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {data.popularCourses.map((course) => (
+                  <TableRow key={course.id}>
+                    <TableCell className="font-medium">
+                      {course.title}
+                    </TableCell>
+                    <TableCell className="text-right">
+                      {course.enrollments.toLocaleString()}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </CardContent>
+          <CardFooter>
+            <div className="text-sm text-muted-foreground">
+              Los cursos con mayor número de matriculaciones
+            </div>
+          </CardFooter>
+        </Card>
+      </section>
+    </>
   );
 }

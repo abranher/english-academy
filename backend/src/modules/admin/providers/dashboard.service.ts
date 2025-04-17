@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { Roles } from '@prisma/client';
 
 import {
@@ -116,5 +116,46 @@ export class DashboardService {
       month: Number(month),
       count: count as number,
     }));
+  }
+
+  async getCourseMetrics() {
+    try {
+      const [statusDistribution, popularCourses] = await Promise.all([
+        // Distribución por estado
+        this.prisma.course.groupBy({
+          by: ['platformStatus'],
+          _count: true,
+          orderBy: { _count: { id: 'desc' } },
+        }),
+
+        // Cursos populares
+        this.prisma.course.findMany({
+          select: {
+            id: true,
+            title: true,
+            _count: { select: { enrollments: true } },
+          },
+          orderBy: { enrollments: { _count: 'desc' } },
+          take: 5,
+        }),
+      ]);
+
+      return {
+        statusDistribution: statusDistribution.map((item) => ({
+          status: item.platformStatus,
+          count: item._count,
+        })),
+        popularCourses: popularCourses.map((course) => ({
+          id: course.id,
+          title: course.title,
+          enrollments: course._count.enrollments,
+        })),
+      };
+    } catch (error) {
+      throw new InternalServerErrorException(
+        'Error del servidor. Por favor intenta nuevamente.',
+        error,
+      );
+    }
   }
 }

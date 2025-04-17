@@ -15,4 +15,9 @@ export class DashboardController {
   async getMonthlyRegistrations() {
     return this.dashboardService.getMonthlyRegistrations();
   }
+
+  @Get('analytics/courses-metrics')
+  async getCourseMetrics() {
+    return this.dashboardService.getCourseMetrics();
+  }
 }
