@@ -1,0 +1,1 @@
+export { MonthlyRegistrationsChart } from "./MonthlyRegistrationsChart";
