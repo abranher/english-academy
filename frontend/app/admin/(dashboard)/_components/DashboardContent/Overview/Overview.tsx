@@ -39,7 +39,7 @@ export function Overview() {
     <>
       <InfoCards />
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+      <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
         <section className="col-span-4">
           <Card>
             <CardHeader>
@@ -90,7 +90,7 @@ export function Overview() {
       <RecentSales />*/}
           </CardContent>
         </Card>
-      </div>
+      </section>
     </>
   );
 }

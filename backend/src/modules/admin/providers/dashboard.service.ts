@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { Roles } from '@prisma/client';
 
 import {
   startOfMonth,
@@ -53,11 +54,18 @@ export class DashboardService {
         }),
       ]);
 
+    const [students, tutors] = await Promise.all([
+      this.prisma.user.count({ where: { role: Roles.STUDENT } }),
+      this.prisma.user.count({ where: { role: Roles.TUTOR } }),
+    ]);
+
     return {
       totalUsers,
       previousMonthUsers,
       currentYearUsers,
       lastYearUsers,
+      students,
+      tutors,
     };
   }
 

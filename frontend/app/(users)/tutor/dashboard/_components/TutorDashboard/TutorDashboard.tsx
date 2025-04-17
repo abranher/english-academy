@@ -1,8 +1,6 @@
 "use client";
 
-import { EarningsCard } from "./EarningsCard";
-import { ActiveStudentsCard } from "./ActiveStudentsCard";
-import { CoursesStatsCard } from "./CoursesStatsCard";
+import { InfoCards } from "./InfoCards";
 import { TutorRevenueChart } from "./TutorRevenueChart";
 import { TutorStudentsChart } from "./TutorStudentsChart";
 
@@ -19,14 +17,9 @@ export function TutorDashboard({ tutorId }: { tutorId: string }) {
           cursos.
         </CardDescription>
       </section>
-
       <Separator />
 
-      <section className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
-        <EarningsCard tutorId={tutorId} />
-        <ActiveStudentsCard tutorId={tutorId} />
-        <CoursesStatsCard tutorId={tutorId} />
-      </section>
+      <InfoCards tutorId={tutorId} />
 
       <section className="flex flex-col gap-6 lg:flex-row">
         <TutorRevenueChart tutorId={tutorId} />
