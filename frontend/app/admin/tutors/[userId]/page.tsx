@@ -1,4 +1,8 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
+
+import { auth } from "@/config/auth";
+import { Roles } from "@/types/enums";
 
 import {
   Breadcrumb,
@@ -11,7 +15,12 @@ import {
 
 import { TutorProfile } from "./_components/TutorProfile";
 
-export default function TutorDescriptionAdminPage() {
+export default async function TutorDescriptionAdminPage() {
+  const session = await auth();
+
+  if (!session) redirect("/");
+  if (session.user.role !== Roles.ADMIN) redirect("/");
+
   return (
     <>
       <Breadcrumb>

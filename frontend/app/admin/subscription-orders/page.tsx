@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { auth } from "@/config/auth";
+import { Roles } from "@/types/enums";
 
 import { SubscriptionOrders } from "./_components/SubscriptionOrders";
 
@@ -16,7 +17,9 @@ import {
 
 export default async function AdminSubscriptionOrdersPage() {
   const session = await auth();
+
   if (!session) redirect("/");
+  if (session.user.role !== Roles.ADMIN) redirect("/");
 
   return (
     <>

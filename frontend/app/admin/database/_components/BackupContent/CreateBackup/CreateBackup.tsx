@@ -27,7 +27,7 @@ import {
 } from "@/components/shadcn/ui/card";
 import { toast } from "sonner";
 
-export default function CreateBackup({
+export function CreateBackup({
   onBackupCreated,
 }: {
   onBackupCreated: () => void;

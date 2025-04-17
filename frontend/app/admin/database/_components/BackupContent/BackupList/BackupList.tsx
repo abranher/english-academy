@@ -5,7 +5,7 @@ import { AxiosError } from "axios";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { getBackups } from "../_services/getBackups";
+import { getBackups } from "../../../_services/getBackups";
 
 import { Label } from "@/components/shadcn/ui/label";
 import {
@@ -27,7 +27,7 @@ import { Button } from "@/components/shadcn/ui/button";
 import { DatabaseBackup } from "lucide-react";
 import { toast } from "sonner";
 
-export default function BackupList() {
+export function BackupList() {
   const [selectedBackup, setSelectedBackup] = useState<string | null>(null);
 
   const {

@@ -1,4 +1,8 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
+
+import { auth } from "@/config/auth";
+import { Roles } from "@/types/enums";
 
 import { CourseReviewsList } from "./_components/CourseReviewsList";
 
@@ -13,7 +17,12 @@ import {
 } from "@/components/shadcn/ui/breadcrumb";
 import { CardDescription, CardTitle } from "@/components/shadcn/ui/card";
 
-export default function CourseReviewsAdminPage() {
+export default async function CourseReviewsAdminPage() {
+  const session = await auth();
+
+  if (!session) redirect("/");
+  if (session.user.role !== Roles.ADMIN) redirect("/");
+
   return (
     <>
       <Breadcrumb>

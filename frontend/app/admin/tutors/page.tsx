@@ -1,4 +1,8 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
+
+import { auth } from "@/config/auth";
+import { Roles } from "@/types/enums";
 
 import { TutorsContent } from "./_components/TutorsContent";
 
@@ -10,9 +14,13 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/shadcn/ui/breadcrumb";
-import { CardDescription, CardTitle } from "@/components/shadcn/ui/card";
 
-export default function TurorsAdminPage() {
+export default async function TutorsAdminPage() {
+  const session = await auth();
+
+  if (!session) redirect("/");
+  if (session.user.role !== Roles.ADMIN) redirect("/");
+
   return (
     <>
       <Breadcrumb>
@@ -28,9 +36,6 @@ export default function TurorsAdminPage() {
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-
-      <CardTitle>Tutores</CardTitle>
-      <CardDescription>Listados de Tutores</CardDescription>
 
       <TutorsContent />
     </>

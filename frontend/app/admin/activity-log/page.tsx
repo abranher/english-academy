@@ -1,8 +1,9 @@
-import { redirect } from "next/navigation";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
+import axios from "@/config/axios";
 import { auth } from "@/config/auth";
-import { Roles } from "@/types/enums/Roles";
+import { Roles } from "@/types/enums";
 
 import {
   Card,
@@ -21,14 +22,12 @@ import {
 } from "@/components/shadcn/ui/breadcrumb";
 import { DataTable } from "./_components/data-table";
 import { columns } from "./_components/columns";
-import axios from "@/config/axios";
 
 export default async function ActivityLogPage() {
   const session = await auth();
 
-  if (session!.user.role !== Roles.ADMIN) {
-    redirect("/");
-  }
+  if (!session) redirect("/");
+  if (session.user.role !== Roles.ADMIN) redirect("/");
 
   const { data: activityLogs } = await axios.get(`/api/activity-logs`);
 
